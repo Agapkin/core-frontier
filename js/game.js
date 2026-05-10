@@ -1,5 +1,5 @@
-// CORE FRONTIER — Stage 02.3
-// Баланс, скорость игры, статус волны, плотный spawn, подготовка к gameplay pressure
+// CORE FRONTIER — Stage 02.4
+// Core Gameplay Stabilization: Game Over, Restart, balance, tower selection, range, selling, cleaner UI
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -16,12 +16,18 @@ const map = {
 };
 
 const gameBalance = {
-  startWood: 42,
+  startWood: 72,
   startStone: 20,
   startFood: 10,
+
   baseHp: 100,
-  baseDamagePerEnemy: 6,
-  towerCostWood: 18
+  baseDamagePerEnemy: 8,
+
+  towerCostWood: 14,
+  towerSellReturnRate: 0.55,
+
+  firstWaveEnemyCount: 5,
+  waveGrowth: 2
 };
 
 const towerTypes = {
@@ -30,39 +36,41 @@ const towerTypes = {
     name: "Базовая башня",
     icon: "🏹",
     cost: { wood: gameBalance.towerCostWood },
-    range: 145,
-    damage: 0.28,
-    color: "#55e0e0"
+    sellReturnRate: gameBalance.towerSellReturnRate,
+    range: 155,
+    damage: 0.36,
+    color: "#55e0e0",
+    description: "Универсальная башня для первых волн."
   }
 };
 
 const enemyTypes = {
   runner: {
     id: "runner",
-    name: "Быстрый враг",
+    name: "Бегун",
     shape: "circle",
     color: "#ff3d3d",
-    hp: 38,
-    speed: 1.75,
-    reward: { wood: 3 }
+    hp: 34,
+    speed: 1.55,
+    reward: { wood: 5 }
   },
   scout: {
     id: "scout",
-    name: "Лёгкий быстрый враг",
+    name: "Разведчик",
     shape: "triangle",
     color: "#ff4fd8",
-    hp: 28,
-    speed: 2.25,
-    reward: { wood: 2 }
+    hp: 25,
+    speed: 2.05,
+    reward: { wood: 4 }
   },
   tank: {
     id: "tank",
-    name: "Тяжёлый враг",
+    name: "Тяжёлый",
     shape: "square",
     color: "#ff9f1c",
-    hp: 95,
-    speed: 1.05,
-    reward: { wood: 6 }
+    hp: 82,
+    speed: 1.0,
+    reward: { wood: 8 }
   }
 };
 
@@ -96,7 +104,9 @@ const uiState = {
   selectedMode: null,
   selectedTowerType: "basic",
   hoveredTile: null,
-  message: ""
+  selectedTower: null,
+  message: "",
+  infoPanelOpen: false
 };
 
 let resources = {
@@ -120,6 +130,10 @@ let waveState = {
   reachedBase: 0
 };
 
+let gameState = {
+  gameOver: false
+};
+
 let gameSpeed = 1;
 
 const towers = [];
@@ -137,6 +151,9 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
 createSpeedControls();
+createRestartButton();
+createSellButton();
+createInfoButton();
 updateUI();
 
 // ---------- UI ----------
@@ -163,10 +180,13 @@ function showMessage(text) {
     if (uiState.message === text) {
       uiState.message = "";
     }
-  }, 2000);
+  }, 2200);
 }
 
 function createSpeedControls() {
+  const oldPanel = document.getElementById("speed-panel");
+  if (oldPanel) oldPanel.remove();
+
   const panel = document.createElement("div");
   panel.id = "speed-panel";
   panel.style.position = "fixed";
@@ -187,6 +207,8 @@ function createSpeedControls() {
     button.style.fontWeight = "bold";
 
     button.onclick = () => {
+      if (gameState.gameOver) return;
+
       gameSpeed = speed;
 
       Array.from(panel.children).forEach(child => {
@@ -203,9 +225,91 @@ function createSpeedControls() {
   document.body.appendChild(panel);
 }
 
+function createRestartButton() {
+  const oldButton = document.getElementById("restart-button");
+  if (oldButton) oldButton.remove();
+
+  const button = document.createElement("button");
+  button.id = "restart-button";
+  button.innerText = "↻ Restart";
+  button.style.position = "fixed";
+  button.style.left = "10px";
+  button.style.bottom = "90px";
+  button.style.zIndex = "20";
+  button.style.padding = "8px 12px";
+  button.style.borderRadius = "8px";
+  button.style.border = "none";
+  button.style.background = "#8a2d2d";
+  button.style.color = "white";
+  button.style.fontWeight = "bold";
+
+  button.onclick = () => {
+    restartGame();
+  };
+
+  document.body.appendChild(button);
+}
+
+function createSellButton() {
+  const oldButton = document.getElementById("sell-button");
+  if (oldButton) oldButton.remove();
+
+  const button = document.createElement("button");
+  button.id = "sell-button";
+  button.innerText = "Продать башню";
+  button.style.position = "fixed";
+  button.style.left = "115px";
+  button.style.bottom = "90px";
+  button.style.zIndex = "20";
+  button.style.padding = "8px 12px";
+  button.style.borderRadius = "8px";
+  button.style.border = "none";
+  button.style.background = "#2f6b3c";
+  button.style.color = "white";
+  button.style.fontWeight = "bold";
+
+  button.onclick = () => {
+    sellSelectedTower();
+  };
+
+  document.body.appendChild(button);
+}
+
+function createInfoButton() {
+  const oldButton = document.getElementById("info-button");
+  if (oldButton) oldButton.remove();
+
+  const button = document.createElement("button");
+  button.id = "info-button";
+  button.innerText = "ℹ Info";
+  button.style.position = "fixed";
+  button.style.right = "10px";
+  button.style.bottom = "132px";
+  button.style.zIndex = "20";
+  button.style.padding = "8px 12px";
+  button.style.borderRadius = "8px";
+  button.style.border = "none";
+  button.style.background = "#33445f";
+  button.style.color = "white";
+  button.style.fontWeight = "bold";
+
+  button.onclick = () => {
+    uiState.infoPanelOpen = !uiState.infoPanelOpen;
+  };
+
+  document.body.appendChild(button);
+}
+
 // ---------- BUTTON ACTIONS ----------
 
 function buildTower() {
+  if (gameState.gameOver) {
+    showMessage("Игра окончена. Нажми Restart");
+    return;
+  }
+
+  uiState.selectedTower = null;
+
   if (uiState.selectedMode === "tower") {
     uiState.selectedMode = null;
     showMessage("Режим строительства выключен");
@@ -218,10 +322,18 @@ function buildTower() {
 }
 
 function startWave() {
+  if (gameState.gameOver) {
+    showMessage("Игра окончена. Нажми Restart");
+    return;
+  }
+
   if (waveState.active) {
     showMessage("Текущая волна еще не завершена");
     return;
   }
+
+  uiState.selectedMode = null;
+  uiState.selectedTower = null;
 
   waveState.active = true;
   waveState.number += 1;
@@ -240,14 +352,66 @@ function startWave() {
   showMessage("Волна #" + waveState.number + " запущена");
 }
 
+// ---------- RESTART / GAME OVER ----------
+
+function restartGame() {
+  resources = {
+    wood: gameBalance.startWood,
+    stone: gameBalance.startStone,
+    food: gameBalance.startFood
+  };
+
+  base = {
+    hp: gameBalance.baseHp,
+    tileX: 26,
+    tileY: 10
+  };
+
+  waveState = {
+    active: false,
+    number: 0,
+    totalEnemies: 0,
+    spawnedEnemies: 0,
+    killedEnemies: 0,
+    reachedBase: 0
+  };
+
+  gameState.gameOver = false;
+  gameSpeed = 1;
+
+  towers.length = 0;
+  enemies.length = 0;
+
+  uiState.selectedMode = null;
+  uiState.selectedTower = null;
+  uiState.message = "";
+
+  createSpeedControls();
+  updateUI();
+  showMessage("Игра перезапущена");
+}
+
+function triggerGameOver() {
+  if (gameState.gameOver) return;
+
+  gameState.gameOver = true;
+  waveState.active = false;
+  base.hp = 0;
+  enemies.length = 0;
+  uiState.selectedMode = null;
+
+  updateUI();
+  showMessage("База уничтожена");
+}
+
 // ---------- WAVE MANAGER ----------
 
 function createWave(number) {
   const wave = [];
 
-  const runnerCount = 5 + number * 2;
-  const scoutCount = number >= 2 ? 2 + Math.floor(number / 2) : 0;
-  const tankCount = number >= 3 ? 1 + Math.floor(number / 3) : 0;
+  const runnerCount = gameBalance.firstWaveEnemyCount + number * gameBalance.waveGrowth;
+  const scoutCount = number >= 2 ? 1 + Math.floor(number / 2) : 0;
+  const tankCount = number >= 3 ? Math.floor(number / 3) : 0;
 
   for (let i = 0; i < runnerCount; i++) {
     wave.push({ type: "runner" });
@@ -261,7 +425,6 @@ function createWave(number) {
     wave.push({ type: "tank" });
   }
 
-  // перемешиваем врагов, чтобы тяжёлые не появлялись слишком поздно
   return shuffleWave(wave);
 }
 
@@ -279,8 +442,8 @@ function shuffleWave(wave) {
 function spawnEnemy(typeId, index) {
   const type = enemyTypes[typeId];
 
-  const waveHpBonus = waveState.number * 7;
-  const spawnSpacing = 38;
+  const waveHpBonus = waveState.number * 5;
+  const spawnSpacing = 34;
 
   enemies.push({
     typeId,
@@ -289,7 +452,7 @@ function spawnEnemy(typeId, index) {
     y: enemyPath[0].y * TILE_SIZE + TILE_SIZE / 2,
     hp: type.hp + waveHpBonus,
     maxHp: type.hp + waveHpBonus,
-    speed: type.speed + waveState.number * 0.04,
+    speed: type.speed + waveState.number * 0.035,
     reachedBase: false
   });
 
@@ -392,7 +555,19 @@ function screenToTile(screenX, screenY) {
 }
 
 function handleTap(screenX, screenY) {
+  if (gameState.gameOver) {
+    showMessage("Игра окончена. Нажми Restart");
+    return;
+  }
+
   const tile = screenToTile(screenX, screenY);
+
+  const tower = getTowerAtTile(tile.tileX, tile.tileY);
+
+  if (tower && uiState.selectedMode !== "tower") {
+    selectTower(tower);
+    return;
+  }
 
   if (uiState.selectedMode === "tower") {
     placeTower(tile.tileX, tile.tileY);
@@ -442,7 +617,8 @@ function placeTower(tileX, tileY) {
 
   payCost(towerType.cost);
 
-  towers.push({
+  const tower = {
+    id: Date.now() + Math.random(),
     typeId: towerType.id,
     tileX,
     tileY,
@@ -450,8 +626,12 @@ function placeTower(tileX, tileY) {
     y: tileY * TILE_SIZE + TILE_SIZE / 2,
     range: towerType.range,
     damage: towerType.damage,
-    target: null
-  });
+    target: null,
+    level: 1
+  };
+
+  towers.push(tower);
+  uiState.selectedTower = tower;
 
   updateUI();
   showMessage("Башня построена");
@@ -481,6 +661,49 @@ function validateBuildTile(tileX, tileY, towerType) {
   return { ok: true, reason: "" };
 }
 
+function selectTower(tower) {
+  uiState.selectedTower = tower;
+  uiState.selectedMode = null;
+
+  const towerType = towerTypes[tower.typeId];
+  showMessage("Выбрана башня: " + towerType.name);
+}
+
+function sellSelectedTower() {
+  if (gameState.gameOver) {
+    showMessage("Игра окончена");
+    return;
+  }
+
+  if (!uiState.selectedTower) {
+    showMessage("Башня не выбрана");
+    return;
+  }
+
+  const tower = uiState.selectedTower;
+  const towerType = towerTypes[tower.typeId];
+
+  Object.entries(towerType.cost).forEach(([resource, amount]) => {
+    const returned = Math.floor(amount * towerType.sellReturnRate);
+    resources[resource] = (resources[resource] || 0) + returned;
+  });
+
+  const index = towers.findIndex(t => t.id === tower.id);
+
+  if (index >= 0) {
+    towers.splice(index, 1);
+  }
+
+  uiState.selectedTower = null;
+
+  updateUI();
+  showMessage("Башня продана");
+}
+
+function getTowerAtTile(tileX, tileY) {
+  return towers.find(tower => tower.tileX === tileX && tower.tileY === tileY);
+}
+
 function isRoadTile(tileX, tileY) {
   return roadTiles.has(tileKey(tileX, tileY));
 }
@@ -508,6 +731,8 @@ function payCost(cost) {
 // ---------- UPDATE ----------
 
 function updateEnemies(multiplier) {
+  if (gameState.gameOver) return;
+
   enemies.forEach(enemy => {
     const target = enemyPath[enemy.pathIndex + 1];
 
@@ -515,6 +740,11 @@ function updateEnemies(multiplier) {
       enemy.reachedBase = true;
       base.hp -= gameBalance.baseDamagePerEnemy;
       waveState.reachedBase += 1;
+
+      if (base.hp <= 0) {
+        triggerGameOver();
+      }
+
       updateUI();
       return;
     }
@@ -552,7 +782,7 @@ function updateEnemies(multiplier) {
     }
   }
 
-  if (waveState.active && enemies.length === 0) {
+  if (waveState.active && enemies.length === 0 && !gameState.gameOver) {
     waveState.active = false;
     showMessage("Волна завершена");
   }
@@ -565,6 +795,8 @@ function applyReward(reward) {
 }
 
 function updateTowers(multiplier) {
+  if (gameState.gameOver) return;
+
   towers.forEach(tower => {
     const target = enemies.find(enemy => {
       const dx = enemy.x - tower.x;
@@ -652,6 +884,26 @@ function drawBase() {
   ctx.fillText("🏠", x + 16, y + 42);
 }
 
+function drawTowerRange(tower) {
+  if (!tower) return;
+
+  ctx.beginPath();
+  ctx.arc(
+    tower.x - camera.x,
+    tower.y - camera.y,
+    tower.range,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fillStyle = "rgba(85, 224, 224, 0.12)";
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(85, 224, 224, 0.8)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
 function drawHoveredTile() {
   if (!uiState.hoveredTile) return;
   if (uiState.selectedMode !== "tower") return;
@@ -679,6 +931,14 @@ function drawHoveredTile() {
   ctx.lineWidth = 2;
   ctx.strokeRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
 
+  const previewTower = {
+    x: tileX * TILE_SIZE + TILE_SIZE / 2,
+    y: tileY * TILE_SIZE + TILE_SIZE / 2,
+    range: towerType.range
+  };
+
+  drawTowerRange(previewTower);
+
   ctx.globalAlpha = 0.6;
 
   ctx.fillStyle = towerType.color;
@@ -696,6 +956,12 @@ function drawTowers() {
 
     const x = tower.tileX * TILE_SIZE - camera.x;
     const y = tower.tileY * TILE_SIZE - camera.y;
+
+    if (uiState.selectedTower && uiState.selectedTower.id === tower.id) {
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+    }
 
     ctx.fillStyle = towerType.color;
     ctx.fillRect(x + 10, y + 10, TILE_SIZE - 20, TILE_SIZE - 20);
@@ -766,25 +1032,85 @@ function drawWaveStatus() {
   const total = waveState.totalEnemies;
 
   ctx.fillStyle = "rgba(0,0,0,0.65)";
-  ctx.fillRect(20, 82, 290, 72);
+  ctx.fillRect(20, 82, 320, 72);
 
   ctx.fillStyle = "white";
   ctx.font = "16px Arial";
 
   ctx.fillText("Волна: " + waveState.number, 35, 108);
-  ctx.fillText("Статус: " + (waveState.active ? "идёт" : "ожидание"), 35, 130);
+  ctx.fillText("Статус: " + (waveState.active ? "идёт" : "подготовка"), 35, 130);
   ctx.fillText("Враги: " + remaining + " / " + total + " | Скорость: x" + gameSpeed, 35, 150);
+}
+
+function drawSelectedTowerPanel() {
+  if (!uiState.selectedTower) return;
+
+  const tower = uiState.selectedTower;
+  const towerType = towerTypes[tower.typeId];
+
+  ctx.fillStyle = "rgba(0,0,0,0.72)";
+  ctx.fillRect(20, 165, 320, 130);
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px Arial";
+
+  ctx.fillText("Башня: " + towerType.name, 35, 193);
+  ctx.fillText("Уровень: " + tower.level, 35, 218);
+  ctx.fillText("Урон: " + tower.damage.toFixed(2), 35, 243);
+  ctx.fillText("Радиус: " + tower.range, 35, 268);
+  ctx.fillText("Продажа: " + Math.floor(towerType.cost.wood * towerType.sellReturnRate) + " дерева", 35, 288);
+}
+
+function drawInfoPanel() {
+  if (!uiState.infoPanelOpen) return;
+
+  ctx.fillStyle = "rgba(0,0,0,0.82)";
+  ctx.fillRect(canvas.width - 360, 80, 340, 360);
+
+  ctx.fillStyle = "white";
+  ctx.font = "18px Arial";
+  ctx.fillText("Справка", canvas.width - 340, 115);
+
+  ctx.font = "14px Arial";
+  ctx.fillText("Башня:", canvas.width - 340, 150);
+  ctx.fillText("- Базовая башня: 14 дерева", canvas.width - 330, 172);
+  ctx.fillText("- Урон: 0.36", canvas.width - 330, 192);
+  ctx.fillText("- Радиус: 155", canvas.width - 330, 212);
+
+  ctx.fillText("Враги:", canvas.width - 340, 250);
+  ctx.fillText("- Бегун: средний враг", canvas.width - 330, 272);
+  ctx.fillText("- Разведчик: быстрый и слабый", canvas.width - 330, 292);
+  ctx.fillText("- Тяжёлый: медленный и крепкий", canvas.width - 330, 312);
+
+  ctx.fillText("Механики:", canvas.width - 340, 350);
+  ctx.fillText("- Выбери башню и тапни по клетке", canvas.width - 330, 372);
+  ctx.fillText("- Тап по башне показывает радиус", canvas.width - 330, 392);
+  ctx.fillText("- Продажа возвращает часть дерева", canvas.width - 330, 412);
 }
 
 function drawMessage() {
   if (!uiState.message) return;
 
   ctx.fillStyle = "rgba(0,0,0,0.7)";
-  ctx.fillRect(20, canvas.height - 70, 520, 40);
+  ctx.fillRect(20, canvas.height - 70, 540, 40);
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
   ctx.fillText(uiState.message, 35, canvas.height - 43);
+}
+
+function drawGameOver() {
+  if (!gameState.gameOver) return;
+
+  ctx.fillStyle = "rgba(0,0,0,0.78)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "white";
+  ctx.font = "42px Arial";
+  ctx.fillText("БАЗА УНИЧТОЖЕНА", canvas.width / 2 - 210, canvas.height / 2 - 30);
+
+  ctx.font = "22px Arial";
+  ctx.fillText("Нажми Restart, чтобы начать заново", canvas.width / 2 - 185, canvas.height / 2 + 15);
 }
 
 // ---------- LOOP ----------
@@ -800,13 +1126,20 @@ function gameLoop() {
   drawPathLine();
   drawBase();
 
+  if (uiState.selectedTower) {
+    drawTowerRange(uiState.selectedTower);
+  }
+
   drawHoveredTile();
 
   drawTowers();
   drawEnemies();
 
   drawWaveStatus();
+  drawSelectedTowerPanel();
+  drawInfoPanel();
   drawMessage();
+  drawGameOver();
 
   requestAnimationFrame(gameLoop);
 }
