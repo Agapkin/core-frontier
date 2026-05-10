@@ -1,5 +1,6 @@
-// CORE FRONTIER — Stage 02.4.1
-// Fix Core Gameplay Stabilization: HUD, Retry Wave, safer Restart, tower menu, Codex, difficulty, power limit
+// CORE FRONTIER — Stage 02.4.2
+// UX / UI Overhaul & Gameplay Readability
+// Build confirm, notification layer, zoom camera, cleaner HUD, Energy UX, locked upgrades
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -58,15 +59,12 @@ const gameBalance = {
   startWood: 78,
   startStone: 20,
   startFood: 10,
-
   baseHp: 100,
   baseDamagePerEnemy: 8,
-
   startPowerCapacity: 10,
   towerCostWood: 14,
   towerPowerUsage: 2,
   towerSellReturnRate: 0.55,
-
   firstWaveEnemyCount: 5,
   waveGrowth: 2
 };
@@ -88,12 +86,14 @@ const towerTypes = {
         id: "damage_1",
         name: "Урон +1",
         locked: true,
+        cost: { wood: 35 },
         reason: "Требуется технология: усиленные механизмы"
       },
       {
         id: "range_1",
         name: "Радиус +1",
         locked: true,
+        cost: { wood: 30 },
         reason: "Требуется технология: дальномер"
       }
     ]
@@ -154,22 +154,30 @@ const roadTiles = buildRoadTiles(enemyPath);
 const camera = {
   x: 0,
   y: 0,
+  zoom: 1,
+  minZoom: 0.55,
+  maxZoom: 1.65,
   dragging: false,
   moved: false,
   startX: 0,
   startY: 0,
   lastX: 0,
-  lastY: 0
+  lastY: 0,
+  pinchActive: false,
+  pinchDistance: 0,
+  pinchZoom: 1
 };
 
 const uiState = {
   selectedMode: null,
   selectedTowerType: "basic",
   hoveredTile: null,
+  pendingBuildTile: null,
   selectedTower: null,
-  message: "",
   infoPanelOpen: false,
-  menuOpen: false
+  menuOpen: false,
+  codexTab: "towers",
+  notifications: []
 };
 
 let resources = {
@@ -224,52 +232,50 @@ setupInitialDom();
 createDynamicUI();
 updatePower();
 updateUI();
+notify("Stage 02.4.2: режим UX/UI активен", "info");
 
 // ---------- DOM / UI ----------
 
 function setupInitialDom() {
   const oldButtons = document.querySelector(".buttons");
-  if (oldButtons) {
-    oldButtons.style.display = "none";
-  }
+  if (oldButtons) oldButtons.style.display = "none";
 
   const topbar = document.querySelector(".topbar");
+  if (!topbar) return;
 
-  if (topbar && !document.getElementById("wave-chip")) {
-    const waveChip = document.createElement("div");
-    waveChip.className = "resource";
-    waveChip.id = "wave-chip";
-    waveChip.innerHTML = "🌊 Волна: <span id='wave'>0</span>";
-    topbar.appendChild(waveChip);
-  }
+  ensureTopbarChip("wave-chip", "🌊 Волна: <span id='wave'>0</span>");
+  ensureTopbarChip("power-chip", "⚡ <span id='power'>0/10</span>");
+  ensureTopbarChip("difficulty-chip", "🎚 <span id='difficulty'>Нормальная</span>");
+  ensureTopbarChip("zoom-chip", "🔍 <span id='zoom'>100%</span>");
+}
 
-  if (topbar && !document.getElementById("power-chip")) {
-    const powerChip = document.createElement("div");
-    powerChip.className = "resource";
-    powerChip.id = "power-chip";
-    powerChip.innerHTML = "⚡ <span id='power'>0/10</span>";
-    topbar.appendChild(powerChip);
-  }
+function ensureTopbarChip(id, html) {
+  const topbar = document.querySelector(".topbar");
+  if (!topbar || document.getElementById(id)) return;
 
-  if (topbar && !document.getElementById("difficulty-chip")) {
-    const difficultyChip = document.createElement("div");
-    difficultyChip.className = "resource";
-    difficultyChip.id = "difficulty-chip";
-    difficultyChip.innerHTML = "🎚 <span id='difficulty'>Нормальная</span>";
-    topbar.appendChild(difficultyChip);
-  }
+  const chip = document.createElement("div");
+  chip.className = "resource";
+  chip.id = id;
+  chip.innerHTML = html;
+  topbar.appendChild(chip);
 }
 
 function createDynamicUI() {
-  removeElement("bottom-control-panel");
-  removeElement("speed-panel");
-  removeElement("tower-action-panel");
-  removeElement("menu-panel");
-  removeElement("game-over-panel");
+  [
+    "bottom-control-panel",
+    "speed-panel",
+    "zoom-panel",
+    "tower-action-panel",
+    "build-confirm-panel",
+    "menu-panel",
+    "game-over-panel"
+  ].forEach(removeElement);
 
   createBottomControlPanel();
   createSpeedControls();
+  createZoomControls();
   createTowerActionPanel();
+  createBuildConfirmPanel();
   createMenuPanel();
   createGameOverPanel();
 }
@@ -282,27 +288,25 @@ function removeElement(id) {
 function createBottomControlPanel() {
   const panel = document.createElement("div");
   panel.id = "bottom-control-panel";
-  panel.style.position = "fixed";
-  panel.style.left = "10px";
-  panel.style.right = "10px";
-  panel.style.bottom = "10px";
-  panel.style.zIndex = "20";
-  panel.style.display = "flex";
-  panel.style.gap = "8px";
+  applyFixedStyle(panel, {
+    left: "10px",
+    right: "10px",
+    bottom: "10px",
+    display: "flex",
+    gap: "8px",
+    zIndex: "20"
+  });
 
-  const buildButton = createUIButton("🏹 Башня", "#2f6b3c", () => buildTower());
-  const waveButton = createUIButton("⚔️ Волна", "#8a5a2b", () => startWave());
-  const infoButton = createUIButton("ℹ Info", "#33445f", () => {
+  panel.appendChild(createUIButton("🏹 Башня", "#2f6b3c", () => buildTower()));
+  panel.appendChild(createUIButton("⚔️ Волна", "#8a5a2b", () => startWave()));
+  panel.appendChild(createUIButton("ℹ Codex", "#33445f", () => {
     uiState.infoPanelOpen = !uiState.infoPanelOpen;
-  });
-  const menuButton = createUIButton("☰ Меню", "#444444", () => {
+    if (uiState.infoPanelOpen) uiState.menuOpen = false;
+  }));
+  panel.appendChild(createUIButton("☰ Меню", "#444444", () => {
     uiState.menuOpen = !uiState.menuOpen;
-  });
-
-  panel.appendChild(buildButton);
-  panel.appendChild(waveButton);
-  panel.appendChild(infoButton);
-  panel.appendChild(menuButton);
+    if (uiState.menuOpen) uiState.infoPanelOpen = false;
+  }));
 
   document.body.appendChild(panel);
 }
@@ -310,29 +314,46 @@ function createBottomControlPanel() {
 function createSpeedControls() {
   const panel = document.createElement("div");
   panel.id = "speed-panel";
-  panel.style.position = "fixed";
-  panel.style.right = "10px";
-  panel.style.bottom = "80px";
-  panel.style.zIndex = "20";
-  panel.style.display = "flex";
-  panel.style.gap = "6px";
+  applyFixedStyle(panel, {
+    right: "10px",
+    bottom: "82px",
+    display: "flex",
+    gap: "6px",
+    zIndex: "20"
+  });
 
   [1, 2, 3].forEach(speed => {
-    const button = createUIButton("x" + speed, speed === 1 ? "#d9a441" : "#2f6b3c", () => {
+    const button = createUIButton("x" + speed, speed === gameSpeed ? "#d9a441" : "#2f6b3c", () => {
       if (gameState.gameOver) return;
-
       gameSpeed = speed;
-
-      Array.from(panel.children).forEach(child => {
-        child.style.background = "#2f6b3c";
-      });
-
-      button.style.background = "#d9a441";
-      showMessage("Скорость игры: x" + speed);
+      createDynamicUI();
+      notify("Скорость игры: x" + speed, "info");
     });
-
     button.style.padding = "8px 10px";
     panel.appendChild(button);
+  });
+
+  document.body.appendChild(panel);
+}
+
+function createZoomControls() {
+  const panel = document.createElement("div");
+  panel.id = "zoom-panel";
+  applyFixedStyle(panel, {
+    right: "10px",
+    bottom: "126px",
+    display: "flex",
+    gap: "6px",
+    zIndex: "20"
+  });
+
+  const minus = createUIButton("−", "#33445f", () => zoomAt(canvas.width / 2, canvas.height / 2, camera.zoom - 0.12));
+  const plus = createUIButton("+", "#33445f", () => zoomAt(canvas.width / 2, canvas.height / 2, camera.zoom + 0.12));
+  const reset = createUIButton("100%", "#444444", () => zoomAt(canvas.width / 2, canvas.height / 2, 1));
+
+  [minus, plus, reset].forEach(btn => {
+    btn.style.padding = "8px 10px";
+    panel.appendChild(btn);
   });
 
   document.body.appendChild(panel);
@@ -341,70 +362,90 @@ function createSpeedControls() {
 function createTowerActionPanel() {
   const panel = document.createElement("div");
   panel.id = "tower-action-panel";
-  panel.style.position = "fixed";
-  panel.style.left = "10px";
-  panel.style.bottom = "80px";
-  panel.style.zIndex = "20";
-  panel.style.display = "none";
-  panel.style.gap = "6px";
-
-  const sellButton = createUIButton("Продать", "#2f6b3c", () => sellSelectedTower());
-  const upgradeButton = createUIButton("Улучшить", "#555555", () => {
-    showMessage("Улучшение недоступно: нужна технология");
+  applyFixedStyle(panel, {
+    left: "10px",
+    bottom: "82px",
+    display: "none",
+    gap: "6px",
+    zIndex: "20"
   });
 
-  panel.appendChild(sellButton);
-  panel.appendChild(upgradeButton);
+  panel.appendChild(createUIButton("Продать", "#2f6b3c", () => sellSelectedTower()));
+  panel.appendChild(createUIButton("Улучшить", "#555555", () => {
+    notify("Улучшение недоступно: нужна технология", "warning");
+  }));
+
+  document.body.appendChild(panel);
+}
+
+function createBuildConfirmPanel() {
+  const panel = document.createElement("div");
+  panel.id = "build-confirm-panel";
+  applyFixedStyle(panel, {
+    left: "10px",
+    right: "10px",
+    bottom: "82px",
+    display: "none",
+    gap: "8px",
+    zIndex: "21",
+    padding: "8px",
+    borderRadius: "12px",
+    background: "rgba(0,0,0,0.72)"
+  });
+
+  const text = document.createElement("div");
+  text.id = "build-confirm-text";
+  text.style.color = "white";
+  text.style.fontSize = "14px";
+  text.style.flex = "1";
+  text.style.alignSelf = "center";
+  text.innerText = "Выбери клетку";
+
+  panel.appendChild(text);
+  panel.appendChild(createUIButton("Построить", "#2f6b3c", () => confirmBuild()));
+  panel.appendChild(createUIButton("Отмена", "#8a2d2d", () => cancelBuildMode()));
+
   document.body.appendChild(panel);
 }
 
 function createMenuPanel() {
   const panel = document.createElement("div");
   panel.id = "menu-panel";
-  panel.style.position = "fixed";
-  panel.style.right = "10px";
-  panel.style.top = "78px";
-  panel.style.width = "260px";
-  panel.style.zIndex = "25";
-  panel.style.display = "none";
-  panel.style.padding = "12px";
-  panel.style.borderRadius = "12px";
-  panel.style.background = "rgba(0,0,0,0.82)";
-  panel.style.color = "white";
+  applyFixedStyle(panel, {
+    right: "10px",
+    top: "78px",
+    width: "270px",
+    display: "none",
+    padding: "12px",
+    borderRadius: "12px",
+    background: "rgba(0,0,0,0.84)",
+    color: "white",
+    zIndex: "25"
+  });
 
-  const title = document.createElement("div");
-  title.innerText = "Меню";
-  title.style.fontWeight = "bold";
-  title.style.marginBottom = "8px";
-
-  const difficultyTitle = document.createElement("div");
-  difficultyTitle.innerText = "Сложность:";
-  difficultyTitle.style.margin = "8px 0";
-
+  const title = createPanelTitle("Меню");
   panel.appendChild(title);
-  panel.appendChild(difficultyTitle);
+  panel.appendChild(createSmallText("Сложность можно менять только до первой волны."));
 
   Object.values(difficultyProfiles).forEach(profile => {
-    const button = createUIButton(profile.name, profile.id === gameState.difficulty ? "#d9a441" : "#33445f", () => {
+    const active = profile.id === gameState.difficulty;
+    const button = createUIButton(profile.name, active ? "#d9a441" : "#33445f", () => {
       if (waveState.number > 0 || waveState.active) {
-        showMessage("Сложность можно менять только до первой волны");
+        notify("Сложность можно менять только до первой волны", "warning");
         return;
       }
-
       gameState.difficulty = profile.id;
       updateUI();
-      createMenuPanel();
-      showMessage("Сложность: " + profile.name);
+      createDynamicUI();
+      notify("Сложность: " + profile.name, "info");
     });
-
     button.style.width = "100%";
-    button.style.marginBottom = "6px";
+    button.style.marginTop = "6px";
     panel.appendChild(button);
   });
 
-  const restartTitle = document.createElement("div");
-  restartTitle.innerText = "Опасная зона:";
-  restartTitle.style.margin = "12px 0 6px 0";
+  const restartTitle = createSmallText("Опасная зона:");
+  restartTitle.style.marginTop = "12px";
   panel.appendChild(restartTitle);
 
   const fullRestart = createUIButton("Новая игра", "#8a2d2d", () => {
@@ -420,25 +461,25 @@ function createMenuPanel() {
 function createGameOverPanel() {
   const panel = document.createElement("div");
   panel.id = "game-over-panel";
-  panel.style.position = "fixed";
-  panel.style.left = "50%";
-  panel.style.top = "50%";
-  panel.style.transform = "translate(-50%, -50%)";
-  panel.style.zIndex = "40";
-  panel.style.display = "none";
-  panel.style.padding = "18px";
-  panel.style.borderRadius = "14px";
-  panel.style.background = "rgba(0,0,0,0.86)";
-  panel.style.color = "white";
-  panel.style.textAlign = "center";
-  panel.style.minWidth = "280px";
+  applyFixedStyle(panel, {
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    display: "none",
+    padding: "18px",
+    borderRadius: "14px",
+    background: "rgba(0,0,0,0.88)",
+    color: "white",
+    textAlign: "center",
+    minWidth: "280px",
+    zIndex: "40"
+  });
 
   const title = document.createElement("div");
   title.innerText = "БАЗА УНИЧТОЖЕНА";
   title.style.fontSize = "24px";
   title.style.fontWeight = "bold";
   title.style.marginBottom = "12px";
-  panel.appendChild(title);
 
   const retry = createUIButton("↩ Повторить волну", "#2f6b3c", () => retryLastWave());
   retry.style.width = "100%";
@@ -447,10 +488,18 @@ function createGameOverPanel() {
   const restart = createUIButton("⟲ Новая игра", "#8a2d2d", () => restartGame());
   restart.style.width = "100%";
 
+  panel.appendChild(title);
   panel.appendChild(retry);
   panel.appendChild(restart);
 
   document.body.appendChild(panel);
+}
+
+function applyFixedStyle(element, styleMap) {
+  element.style.position = "fixed";
+  Object.entries(styleMap).forEach(([key, value]) => {
+    element.style[key] = value;
+  });
 }
 
 function createUIButton(text, background, onClick) {
@@ -467,21 +516,39 @@ function createUIButton(text, background, onClick) {
   return button;
 }
 
+function createPanelTitle(text) {
+  const title = document.createElement("div");
+  title.innerText = text;
+  title.style.fontWeight = "bold";
+  title.style.fontSize = "18px";
+  title.style.marginBottom = "8px";
+  return title;
+}
+
+function createSmallText(text) {
+  const element = document.createElement("div");
+  element.innerText = text;
+  element.style.fontSize = "13px";
+  element.style.opacity = "0.85";
+  element.style.marginBottom = "6px";
+  return element;
+}
+
 function updateDomVisibility() {
   const towerPanel = document.getElementById("tower-action-panel");
-  if (towerPanel) {
-    towerPanel.style.display = uiState.selectedTower && !gameState.gameOver ? "flex" : "none";
-  }
+  if (towerPanel) towerPanel.style.display = uiState.selectedTower && !gameState.gameOver ? "flex" : "none";
+
+  const buildPanel = document.getElementById("build-confirm-panel");
+  if (buildPanel) buildPanel.style.display = uiState.selectedMode === "tower" && !gameState.gameOver ? "flex" : "none";
+
+  const buildText = document.getElementById("build-confirm-text");
+  if (buildText) buildText.innerText = getBuildPanelText();
 
   const menuPanel = document.getElementById("menu-panel");
-  if (menuPanel) {
-    menuPanel.style.display = uiState.menuOpen ? "block" : "none";
-  }
+  if (menuPanel) menuPanel.style.display = uiState.menuOpen ? "block" : "none";
 
   const gameOverPanel = document.getElementById("game-over-panel");
-  if (gameOverPanel) {
-    gameOverPanel.style.display = gameState.gameOver ? "block" : "none";
-  }
+  if (gameOverPanel) gameOverPanel.style.display = gameState.gameOver ? "block" : "none";
 }
 
 function updateUI() {
@@ -492,6 +559,7 @@ function updateUI() {
   setText("wave", waveState.number);
   setText("power", power.used + "/" + power.capacity);
   setText("difficulty", difficultyProfiles[gameState.difficulty].name);
+  setText("zoom", Math.round(camera.zoom * 100) + "%");
 }
 
 function setText(id, value) {
@@ -499,49 +567,67 @@ function setText(id, value) {
   if (element) element.innerText = value;
 }
 
-function showMessage(text) {
-  uiState.message = text;
+function notify(text, type = "info") {
+  uiState.notifications.push({
+    text,
+    type,
+    life: 180
+  });
 
-  setTimeout(() => {
-    if (uiState.message === text) uiState.message = "";
-  }, 2200);
+  if (uiState.notifications.length > 4) uiState.notifications.shift();
 }
 
 // ---------- BUTTON ACTIONS ----------
 
 function buildTower() {
   if (gameState.gameOver) {
-    showMessage("Игра окончена");
+    notify("Игра окончена", "warning");
     return;
   }
 
   uiState.selectedTower = null;
 
   if (uiState.selectedMode === "tower") {
-    uiState.selectedMode = null;
-    showMessage("Режим строительства выключен");
+    cancelBuildMode();
     return;
   }
 
   uiState.selectedMode = "tower";
   uiState.selectedTowerType = "basic";
-  showMessage("Выбран режим строительства башни");
+  uiState.pendingBuildTile = null;
+  notify("Режим строительства: выбери клетку", "info");
+}
+
+function cancelBuildMode() {
+  uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
+  notify("Строительство отменено", "info");
+}
+
+function confirmBuild() {
+  if (!uiState.pendingBuildTile) {
+    notify("Сначала выбери клетку", "warning");
+    return;
+  }
+
+  placeTower(uiState.pendingBuildTile.tileX, uiState.pendingBuildTile.tileY);
 }
 
 function startWave() {
   if (gameState.gameOver) {
-    showMessage("Игра окончена");
+    notify("Игра окончена", "warning");
     return;
   }
 
   if (waveState.active) {
-    showMessage("Текущая волна еще не завершена");
+    notify("Текущая волна ещё не завершена", "warning");
     return;
   }
 
   saveCheckpoint();
 
   uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
 
   waveState.active = true;
@@ -556,7 +642,7 @@ function startWave() {
   wave.forEach((enemyConfig, index) => spawnEnemy(enemyConfig.type, index));
 
   updateUI();
-  showMessage("Волна #" + waveState.number + " запущена");
+  notify("Волна #" + waveState.number + " запущена", "info");
 }
 
 // ---------- CHECKPOINT / RESTART ----------
@@ -569,13 +655,14 @@ function saveCheckpoint() {
     waveState: clone(waveState),
     towers: clone(towers),
     difficulty: gameState.difficulty,
-    gameSpeed
+    gameSpeed,
+    camera: clone({ x: camera.x, y: camera.y, zoom: camera.zoom })
   };
 }
 
 function retryLastWave() {
   if (!checkpoint) {
-    showMessage("Checkpoint отсутствует");
+    notify("Checkpoint отсутствует", "warning");
     return;
   }
 
@@ -587,19 +674,26 @@ function retryLastWave() {
   gameState.difficulty = checkpoint.difficulty;
   gameSpeed = checkpoint.gameSpeed;
 
+  camera.x = checkpoint.camera.x;
+  camera.y = checkpoint.camera.y;
+  camera.zoom = checkpoint.camera.zoom;
+  clampCamera();
+
   towers.length = 0;
   checkpoint.towers.forEach(tower => towers.push(clone(tower)));
 
   enemies.length = 0;
 
   uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
-  uiState.message = "";
+  uiState.infoPanelOpen = false;
+  uiState.menuOpen = false;
 
   createDynamicUI();
   updatePower();
   updateUI();
-  showMessage("Откат к подготовке перед волной");
+  notify("Откат к подготовке перед волной", "info");
 }
 
 function restartGame() {
@@ -634,19 +728,23 @@ function restartGame() {
   checkpoint = null;
   gameSpeed = 1;
 
+  camera.zoom = 1;
+  camera.x = 0;
+  camera.y = 0;
+
   towers.length = 0;
   enemies.length = 0;
 
   uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
-  uiState.message = "";
   uiState.infoPanelOpen = false;
   uiState.menuOpen = false;
 
   createDynamicUI();
   updatePower();
   updateUI();
-  showMessage("Новая игра начата");
+  notify("Новая игра начата", "info");
 }
 
 function triggerGameOver() {
@@ -657,10 +755,11 @@ function triggerGameOver() {
   base.hp = 0;
   enemies.length = 0;
   uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
 
   updateUI();
-  showMessage("База уничтожена");
+  notify("База уничтожена", "danger");
 }
 
 function clone(value) {
@@ -725,19 +824,20 @@ canvas.addEventListener("pointerdown", pointerStart);
 canvas.addEventListener("pointermove", pointerMove);
 canvas.addEventListener("pointerup", pointerEnd);
 canvas.addEventListener("pointercancel", pointerEnd);
+canvas.addEventListener("wheel", wheelZoom, { passive: false });
+canvas.addEventListener("touchstart", touchStart, { passive: false });
+canvas.addEventListener("touchmove", touchMove, { passive: false });
+canvas.addEventListener("touchend", touchEnd, { passive: false });
 
 function getPointer(event) {
-  return {
-    x: event.clientX,
-    y: event.clientY
-  };
+  return { x: event.clientX, y: event.clientY };
 }
 
 function pointerStart(event) {
+  if (camera.pinchActive) return;
   event.preventDefault();
 
   const pos = getPointer(event);
-
   camera.dragging = true;
   camera.moved = false;
   camera.startX = pos.x;
@@ -749,10 +849,10 @@ function pointerStart(event) {
 }
 
 function pointerMove(event) {
+  if (camera.pinchActive) return;
   event.preventDefault();
 
   const pos = getPointer(event);
-
   updateHoveredTile(pos.x, pos.y);
 
   if (!camera.dragging) return;
@@ -766,9 +866,8 @@ function pointerMove(event) {
     const dx = pos.x - camera.lastX;
     const dy = pos.y - camera.lastY;
 
-    camera.x -= dx;
-    camera.y -= dy;
-
+    camera.x -= dx / camera.zoom;
+    camera.y -= dy / camera.zoom;
     clampCamera();
   }
 
@@ -777,6 +876,7 @@ function pointerMove(event) {
 }
 
 function pointerEnd(event) {
+  if (camera.pinchActive) return;
   event.preventDefault();
 
   const pos = getPointer(event);
@@ -786,9 +886,73 @@ function pointerEnd(event) {
   camera.dragging = false;
 }
 
+function touchStart(event) {
+  if (event.touches.length === 2) {
+    event.preventDefault();
+    camera.pinchActive = true;
+    camera.dragging = false;
+    camera.pinchDistance = touchDistance(event);
+    camera.pinchZoom = camera.zoom;
+  }
+}
+
+function touchMove(event) {
+  if (event.touches.length === 2) {
+    event.preventDefault();
+    const center = touchCenter(event);
+    const distance = touchDistance(event);
+    const ratio = distance / Math.max(1, camera.pinchDistance);
+    zoomAt(center.x, center.y, camera.pinchZoom * ratio);
+  }
+}
+
+function touchEnd(event) {
+  if (event.touches.length < 2) {
+    camera.pinchActive = false;
+  }
+}
+
+function touchDistance(event) {
+  const a = event.touches[0];
+  const b = event.touches[1];
+  return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+}
+
+function touchCenter(event) {
+  const a = event.touches[0];
+  const b = event.touches[1];
+  return {
+    x: (a.clientX + b.clientX) / 2,
+    y: (a.clientY + b.clientY) / 2
+  };
+}
+
+function wheelZoom(event) {
+  event.preventDefault();
+  const delta = event.deltaY > 0 ? -0.1 : 0.1;
+  zoomAt(event.clientX, event.clientY, camera.zoom + delta);
+}
+
+function zoomAt(screenX, screenY, newZoom) {
+  const oldZoom = camera.zoom;
+  const clampedZoom = Math.max(camera.minZoom, Math.min(camera.maxZoom, newZoom));
+  if (Math.abs(clampedZoom - oldZoom) < 0.001) return;
+
+  const worldBefore = screenToWorld(screenX, screenY);
+  camera.zoom = clampedZoom;
+  camera.x = worldBefore.x - screenX / camera.zoom;
+  camera.y = worldBefore.y - screenY / camera.zoom;
+
+  clampCamera();
+  updateUI();
+}
+
 function clampCamera() {
-  camera.x = Math.max(0, Math.min(camera.x, map.width - canvas.width));
-  camera.y = Math.max(0, Math.min(camera.y, map.height - canvas.height));
+  const visibleWidth = canvas.width / camera.zoom;
+  const visibleHeight = canvas.height / camera.zoom;
+
+  camera.x = Math.max(0, Math.min(camera.x, Math.max(0, map.width - visibleWidth)));
+  camera.y = Math.max(0, Math.min(camera.y, Math.max(0, map.height - visibleHeight)));
 }
 
 // ---------- TILE HELPERS ----------
@@ -797,33 +961,77 @@ function updateHoveredTile(screenX, screenY) {
   uiState.hoveredTile = screenToTile(screenX, screenY);
 }
 
-function screenToTile(screenX, screenY) {
-  const worldX = screenX + camera.x;
-  const worldY = screenY + camera.y;
-
+function screenToWorld(screenX, screenY) {
   return {
-    tileX: Math.floor(worldX / TILE_SIZE),
-    tileY: Math.floor(worldY / TILE_SIZE)
+    x: camera.x + screenX / camera.zoom,
+    y: camera.y + screenY / camera.zoom
   };
+}
+
+function screenToTile(screenX, screenY) {
+  const world = screenToWorld(screenX, screenY);
+  return {
+    tileX: Math.floor(world.x / TILE_SIZE),
+    tileY: Math.floor(world.y / TILE_SIZE)
+  };
+}
+
+function worldToScreen(worldX, worldY) {
+  return {
+    x: (worldX - camera.x) * camera.zoom,
+    y: (worldY - camera.y) * camera.zoom
+  };
+}
+
+function scaled(value) {
+  return value * camera.zoom;
 }
 
 function handleTap(screenX, screenY) {
   if (gameState.gameOver) {
-    showMessage("Игра окончена");
+    notify("Игра окончена", "warning");
     return;
   }
 
   const tile = screenToTile(screenX, screenY);
   const tower = getTowerAtTile(tile.tileX, tile.tileY);
 
-  if (tower && uiState.selectedMode !== "tower") {
+  if (uiState.selectedMode === "tower") {
+    selectBuildTile(tile.tileX, tile.tileY);
+    return;
+  }
+
+  if (tower) {
     selectTower(tower);
     return;
   }
 
-  if (uiState.selectedMode === "tower") {
-    placeTower(tile.tileX, tile.tileY);
+  uiState.selectedTower = null;
+}
+
+function selectBuildTile(tileX, tileY) {
+  const towerType = towerTypes[uiState.selectedTowerType];
+  const validation = validateBuildTile(tileX, tileY, towerType);
+
+  uiState.pendingBuildTile = { tileX, tileY };
+
+  if (!validation.ok) {
+    notify(validation.reason, "warning");
+  } else {
+    notify("Клетка выбрана. Подтверди строительство", "info");
   }
+}
+
+function getBuildPanelText() {
+  if (uiState.selectedMode !== "tower") return "";
+
+  const towerType = towerTypes[uiState.selectedTowerType];
+  const cost = "🌲 " + towerType.cost.wood + " | ⚡ " + towerType.powerUsage;
+
+  if (!uiState.pendingBuildTile) return "Выбери клетку для башни — " + cost;
+
+  const validation = validateBuildTile(uiState.pendingBuildTile.tileX, uiState.pendingBuildTile.tileY, towerType);
+  return validation.ok ? "Можно строить — " + cost : validation.reason + " — " + cost;
 }
 
 function tileKey(tileX, tileY) {
@@ -857,12 +1065,21 @@ function buildRoadTiles(path) {
 
 // ---------- BUILDING ----------
 
+function confirmBuild() {
+  if (!uiState.pendingBuildTile) {
+    notify("Сначала выбери клетку", "warning");
+    return;
+  }
+
+  placeTower(uiState.pendingBuildTile.tileX, uiState.pendingBuildTile.tileY);
+}
+
 function placeTower(tileX, tileY) {
   const towerType = towerTypes[uiState.selectedTowerType];
   const validation = validateBuildTile(tileX, tileY, towerType);
 
   if (!validation.ok) {
-    showMessage(validation.reason);
+    notify(validation.reason, "warning");
     return;
   }
 
@@ -885,55 +1102,38 @@ function placeTower(tileX, tileY) {
   towers.push(tower);
   uiState.selectedTower = tower;
   uiState.selectedMode = null;
+  uiState.pendingBuildTile = null;
 
   updateUI();
-  showMessage("Башня построена");
+  notify("Башня построена", "success");
 }
 
 function validateBuildTile(tileX, tileY, towerType) {
   if (tileX < 0 || tileY < 0 || tileX >= map.cols || tileY >= map.rows) {
     return { ok: false, reason: "Нельзя строить за пределами карты" };
   }
-
-  if (isRoadTile(tileX, tileY)) {
-    return { ok: false, reason: "Нельзя строить на дороге" };
-  }
-
-  if (isBaseTile(tileX, tileY)) {
-    return { ok: false, reason: "Нельзя строить на базе" };
-  }
-
-  if (isTowerTile(tileX, tileY)) {
-    return { ok: false, reason: "Клетка уже занята" };
-  }
-
-  if (power.used + towerType.powerUsage > power.capacity) {
-    return { ok: false, reason: "Не хватает энергии обслуживания" };
-  }
-
-  if (!hasCost(towerType.cost)) {
-    return { ok: false, reason: "Недостаточно ресурсов" };
-  }
-
+  if (isRoadTile(tileX, tileY)) return { ok: false, reason: "Нельзя строить на дороге" };
+  if (isBaseTile(tileX, tileY)) return { ok: false, reason: "Нельзя строить на базе" };
+  if (isTowerTile(tileX, tileY)) return { ok: false, reason: "Клетка уже занята" };
+  if (power.used + towerType.powerUsage > power.capacity) return { ok: false, reason: "Не хватает энергии. Нужен генератор" };
+  if (!hasCost(towerType.cost)) return { ok: false, reason: "Недостаточно ресурсов" };
   return { ok: true, reason: "" };
 }
 
 function selectTower(tower) {
   uiState.selectedTower = tower;
   uiState.selectedMode = null;
-
-  const towerType = towerTypes[tower.typeId];
-  showMessage("Выбрана башня: " + towerType.name);
+  uiState.pendingBuildTile = null;
+  notify("Выбрана башня: " + towerTypes[tower.typeId].name, "info");
 }
 
 function sellSelectedTower() {
   if (gameState.gameOver) {
-    showMessage("Игра окончена");
+    notify("Игра окончена", "warning");
     return;
   }
-
   if (!uiState.selectedTower) {
-    showMessage("Башня не выбрана");
+    notify("Башня не выбрана", "warning");
     return;
   }
 
@@ -948,13 +1148,12 @@ function sellSelectedTower() {
   power.used = Math.max(0, power.used - towerType.powerUsage);
 
   const index = towers.findIndex(t => t.id === tower.id);
-
   if (index >= 0) towers.splice(index, 1);
 
   uiState.selectedTower = null;
 
   updateUI();
-  showMessage("Башня продана");
+  notify("Башня продана", "success");
 }
 
 function getTowerAtTile(tileX, tileY) {
@@ -974,9 +1173,7 @@ function isTowerTile(tileX, tileY) {
 }
 
 function hasCost(cost) {
-  return Object.entries(cost).every(([resource, amount]) => {
-    return (resources[resource] || 0) >= amount;
-  });
+  return Object.entries(cost).every(([resource, amount]) => (resources[resource] || 0) >= amount);
 }
 
 function payCost(cost) {
@@ -986,9 +1183,7 @@ function payCost(cost) {
 }
 
 function updatePower() {
-  power.used = towers.reduce((sum, tower) => {
-    return sum + towerTypes[tower.typeId].powerUsage;
-  }, 0);
+  power.used = towers.reduce((sum, tower) => sum + towerTypes[tower.typeId].powerUsage, 0);
 }
 
 // ---------- UPDATE ----------
@@ -1006,7 +1201,6 @@ function updateEnemies(multiplier) {
       waveState.reachedBase += 1;
 
       if (base.hp <= 0) triggerGameOver();
-
       updateUI();
       return;
     }
@@ -1016,7 +1210,6 @@ function updateEnemies(multiplier) {
 
     const dx = targetX - enemy.x;
     const dy = targetY - enemy.y;
-
     const distance = Math.sqrt(dx * dx + dy * dy);
     const moveSpeed = enemy.speed * multiplier;
 
@@ -1046,13 +1239,12 @@ function updateEnemies(multiplier) {
 
   if (waveState.active && enemies.length === 0 && !gameState.gameOver) {
     waveState.active = false;
-    showMessage("Волна завершена");
+    notify("Волна завершена", "success");
   }
 }
 
 function applyReward(reward) {
   const profile = difficultyProfiles[gameState.difficulty];
-
   Object.entries(reward).forEach(([resource, amount]) => {
     resources[resource] = (resources[resource] || 0) + Math.ceil(amount * profile.reward);
   });
@@ -1065,8 +1257,7 @@ function updateTowers(multiplier) {
     const target = enemies.find(enemy => {
       const dx = enemy.x - tower.x;
       const dy = enemy.y - tower.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      return distance <= tower.range;
+      return Math.sqrt(dx * dx + dy * dy) <= tower.range;
     });
 
     if (target) {
@@ -1078,27 +1269,54 @@ function updateTowers(multiplier) {
   });
 }
 
+function updateNotifications() {
+  for (let i = uiState.notifications.length - 1; i >= 0; i--) {
+    uiState.notifications[i].life -= 1;
+    if (uiState.notifications[i].life <= 0) uiState.notifications.splice(i, 1);
+  }
+}
+
+// ---------- DRAW HELPERS ----------
+
+function drawRectWorld(worldX, worldY, width, height, fillStyle, strokeStyle = null, lineWidth = 1) {
+  const p = worldToScreen(worldX, worldY);
+  ctx.fillStyle = fillStyle;
+  ctx.fillRect(p.x, p.y, scaled(width), scaled(height));
+
+  if (strokeStyle) {
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeRect(p.x, p.y, scaled(width), scaled(height));
+  }
+}
+
+function drawTextWorld(text, worldX, worldY, size = 24) {
+  const p = worldToScreen(worldX, worldY);
+  ctx.font = scaled(size) + "px Arial";
+  ctx.fillText(text, p.x, p.y);
+}
+
 // ---------- DRAW ----------
 
 function drawMap() {
   ctx.fillStyle = "#183b22";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const startCol = Math.floor(camera.x / TILE_SIZE);
-  const endCol = Math.ceil((camera.x + canvas.width) / TILE_SIZE);
+  const visibleWidth = canvas.width / camera.zoom;
+  const visibleHeight = canvas.height / camera.zoom;
 
+  const startCol = Math.floor(camera.x / TILE_SIZE);
+  const endCol = Math.ceil((camera.x + visibleWidth) / TILE_SIZE);
   const startRow = Math.floor(camera.y / TILE_SIZE);
-  const endRow = Math.ceil((camera.y + canvas.height) / TILE_SIZE);
+  const endRow = Math.ceil((camera.y + visibleHeight) / TILE_SIZE);
 
   for (let row = startRow; row < endRow; row++) {
     for (let col = startCol; col < endCol; col++) {
       if (col < 0 || row < 0 || col >= map.cols || row >= map.rows) continue;
-
-      const screenX = col * TILE_SIZE - camera.x;
-      const screenY = row * TILE_SIZE - camera.y;
-
+      const p = worldToScreen(col * TILE_SIZE, row * TILE_SIZE);
       ctx.strokeStyle = "rgba(255,255,255,0.08)";
-      ctx.strokeRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+      ctx.lineWidth = 1;
+      ctx.strokeRect(p.x, p.y, scaled(TILE_SIZE), scaled(TILE_SIZE));
     }
   }
 }
@@ -1106,126 +1324,107 @@ function drawMap() {
 function drawRoadTiles() {
   roadTiles.forEach(key => {
     const [tileX, tileY] = key.split(",").map(Number);
-    const x = tileX * TILE_SIZE - camera.x;
-    const y = tileY * TILE_SIZE - camera.y;
-
-    ctx.fillStyle = "#6f5231";
-    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+    drawRectWorld(tileX * TILE_SIZE, tileY * TILE_SIZE, TILE_SIZE, TILE_SIZE, "#6f5231");
   });
 }
 
 function drawPathLine() {
   ctx.strokeStyle = "#8a673d";
-  ctx.lineWidth = 18;
+  ctx.lineWidth = scaled(18);
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
-
   ctx.beginPath();
 
   enemyPath.forEach((point, index) => {
-    const x = point.x * TILE_SIZE + TILE_SIZE / 2 - camera.x;
-    const y = point.y * TILE_SIZE + TILE_SIZE / 2 - camera.y;
-
-    if (index === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    const p = worldToScreen(point.x * TILE_SIZE + TILE_SIZE / 2, point.y * TILE_SIZE + TILE_SIZE / 2);
+    if (index === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
   });
 
   ctx.stroke();
 }
 
 function drawBase() {
-  const x = base.tileX * TILE_SIZE - camera.x;
-  const y = base.tileY * TILE_SIZE - camera.y;
-
-  ctx.fillStyle = "#8a5a2b";
-  ctx.fillRect(x + 8, y + 8, TILE_SIZE - 16, TILE_SIZE - 16);
-
-  ctx.font = "28px Arial";
-  ctx.fillText("🏠", x + 16, y + 42);
+  const x = base.tileX * TILE_SIZE;
+  const y = base.tileY * TILE_SIZE;
+  drawRectWorld(x + 8, y + 8, TILE_SIZE - 16, TILE_SIZE - 16, "#8a5a2b");
+  ctx.fillStyle = "white";
+  drawTextWorld("🏠", x + 16, y + 42, 28);
 }
 
 function drawTowerRange(tower) {
   if (!tower) return;
+  const p = worldToScreen(tower.x, tower.y);
 
   ctx.beginPath();
-  ctx.arc(tower.x - camera.x, tower.y - camera.y, tower.range, 0, Math.PI * 2);
-
+  ctx.arc(p.x, p.y, scaled(tower.range), 0, Math.PI * 2);
   ctx.fillStyle = "rgba(85, 224, 224, 0.12)";
   ctx.fill();
-
   ctx.strokeStyle = "rgba(85, 224, 224, 0.8)";
   ctx.lineWidth = 2;
   ctx.stroke();
 }
 
-function drawHoveredTile() {
-  if (!uiState.hoveredTile) return;
-  if (uiState.selectedMode !== "tower") return;
-
-  const tileX = uiState.hoveredTile.tileX;
-  const tileY = uiState.hoveredTile.tileY;
-
-  if (tileX < 0 || tileY < 0 || tileX >= map.cols || tileY >= map.rows) return;
+function drawBuildTile(tile, isPending = false) {
+  if (!tile) return;
 
   const towerType = towerTypes[uiState.selectedTowerType];
-
-  const screenX = tileX * TILE_SIZE - camera.x;
-  const screenY = tileY * TILE_SIZE - camera.y;
-
-  const validation = validateBuildTile(tileX, tileY, towerType);
+  const validation = validateBuildTile(tile.tileX, tile.tileY, towerType);
   const valid = validation.ok;
 
-  ctx.fillStyle = valid ? "rgba(0,255,0,0.25)" : "rgba(255,0,0,0.25)";
-  ctx.fillRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+  const x = tile.tileX * TILE_SIZE;
+  const y = tile.tileY * TILE_SIZE;
+  const p = worldToScreen(x, y);
 
-  ctx.strokeStyle = valid ? "lime" : "red";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+  ctx.fillStyle = valid ? "rgba(0,255,0,0.22)" : "rgba(255,0,0,0.22)";
+  ctx.fillRect(p.x, p.y, scaled(TILE_SIZE), scaled(TILE_SIZE));
+
+  ctx.strokeStyle = isPending ? "yellow" : (valid ? "lime" : "red");
+  ctx.lineWidth = isPending ? 4 : 2;
+  ctx.strokeRect(p.x, p.y, scaled(TILE_SIZE), scaled(TILE_SIZE));
 
   const previewTower = {
-    x: tileX * TILE_SIZE + TILE_SIZE / 2,
-    y: tileY * TILE_SIZE + TILE_SIZE / 2,
+    x: x + TILE_SIZE / 2,
+    y: y + TILE_SIZE / 2,
     range: towerType.range
   };
-
   drawTowerRange(previewTower);
 
-  ctx.globalAlpha = 0.6;
-
-  ctx.fillStyle = towerType.color;
-  ctx.fillRect(screenX + 10, screenY + 10, TILE_SIZE - 20, TILE_SIZE - 20);
-
-  ctx.font = "24px Arial";
-  ctx.fillText(towerType.icon, screenX + 18, screenY + 40);
-
+  ctx.globalAlpha = 0.58;
+  drawRectWorld(x + 10, y + 10, TILE_SIZE - 20, TILE_SIZE - 20, towerType.color);
   ctx.globalAlpha = 1;
+
+  ctx.fillStyle = "white";
+  drawTextWorld(towerType.icon, x + 18, y + 40, 24);
+}
+
+function drawBuildOverlay() {
+  if (uiState.selectedMode !== "tower") return;
+
+  if (uiState.hoveredTile) drawBuildTile(uiState.hoveredTile, false);
+  if (uiState.pendingBuildTile) drawBuildTile(uiState.pendingBuildTile, true);
 }
 
 function drawTowers() {
   towers.forEach(tower => {
     const towerType = towerTypes[tower.typeId];
-
-    const x = tower.tileX * TILE_SIZE - camera.x;
-    const y = tower.tileY * TILE_SIZE - camera.y;
+    const x = tower.tileX * TILE_SIZE;
+    const y = tower.tileY * TILE_SIZE;
 
     if (uiState.selectedTower && uiState.selectedTower.id === tower.id) {
-      ctx.strokeStyle = "yellow";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+      drawRectWorld(x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10, "rgba(255,255,0,0.06)", "yellow", 3);
     }
 
-    ctx.fillStyle = towerType.color;
-    ctx.fillRect(x + 10, y + 10, TILE_SIZE - 20, TILE_SIZE - 20);
-
-    ctx.font = "24px Arial";
-    ctx.fillText(towerType.icon, x + 18, y + 40);
+    drawRectWorld(x + 10, y + 10, TILE_SIZE - 20, TILE_SIZE - 20, towerType.color);
+    ctx.fillStyle = "white";
+    drawTextWorld(towerType.icon, x + 18, y + 40, 24);
 
     if (tower.target) {
+      const a = worldToScreen(tower.x, tower.y);
+      const b = worldToScreen(tower.target.x, tower.target.y);
       ctx.beginPath();
-
-      ctx.moveTo(tower.x - camera.x, tower.y - camera.y);
-      ctx.lineTo(tower.target.x - camera.x, tower.target.y - camera.y);
-
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
       ctx.strokeStyle = "#00ffff";
       ctx.lineWidth = 2;
       ctx.stroke();
@@ -1236,36 +1435,35 @@ function drawTowers() {
 function drawEnemies() {
   enemies.forEach(enemy => {
     const enemyType = enemyTypes[enemy.typeId];
-
-    const x = enemy.x - camera.x;
-    const y = enemy.y - camera.y;
+    const p = worldToScreen(enemy.x, enemy.y);
+    const size = scaled(15);
 
     ctx.fillStyle = enemyType.color;
 
     if (enemyType.shape === "circle") {
       ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
       ctx.fill();
     }
 
     if (enemyType.shape === "square") {
-      ctx.fillRect(x - 15, y - 15, 30, 30);
+      ctx.fillRect(p.x - size, p.y - size, size * 2, size * 2);
     }
 
     if (enemyType.shape === "triangle") {
       ctx.beginPath();
-      ctx.moveTo(x, y - 18);
-      ctx.lineTo(x - 16, y + 14);
-      ctx.lineTo(x + 16, y + 14);
+      ctx.moveTo(p.x, p.y - scaled(18));
+      ctx.lineTo(p.x - scaled(16), p.y + scaled(14));
+      ctx.lineTo(p.x + scaled(16), p.y + scaled(14));
       ctx.closePath();
       ctx.fill();
     }
 
     ctx.fillStyle = "black";
-    ctx.fillRect(x - 18, y - 25, 36, 5);
+    ctx.fillRect(p.x - scaled(18), p.y - scaled(25), scaled(36), scaled(5));
 
     ctx.fillStyle = "lime";
-    ctx.fillRect(x - 18, y - 25, 36 * (enemy.hp / enemy.maxHp), 5);
+    ctx.fillRect(p.x - scaled(18), p.y - scaled(25), scaled(36) * (enemy.hp / enemy.maxHp), scaled(5));
   });
 }
 
@@ -1273,15 +1471,14 @@ function drawWaveStatus() {
   const remaining = enemies.length;
   const total = waveState.totalEnemies;
 
-  ctx.fillStyle = "rgba(0,0,0,0.65)";
-  ctx.fillRect(20, 82, 320, 72);
+  ctx.fillStyle = "rgba(0,0,0,0.62)";
+  ctx.fillRect(20, 78, 330, 72);
 
   ctx.fillStyle = "white";
   ctx.font = "16px Arial";
-
-  ctx.fillText("Волна: " + waveState.number, 35, 108);
-  ctx.fillText("Статус: " + (waveState.active ? "идёт" : "подготовка"), 35, 130);
-  ctx.fillText("Враги: " + remaining + " / " + total + " | Скорость: x" + gameSpeed, 35, 150);
+  ctx.fillText("Волна: " + waveState.number, 35, 104);
+  ctx.fillText("Статус: " + (waveState.active ? "идёт" : "подготовка"), 35, 126);
+  ctx.fillText("Враги: " + remaining + " / " + total + " | Скорость: x" + gameSpeed, 35, 146);
 }
 
 function drawSelectedTowerPanel() {
@@ -1291,69 +1488,84 @@ function drawSelectedTowerPanel() {
   const towerType = towerTypes[tower.typeId];
 
   ctx.fillStyle = "rgba(0,0,0,0.72)";
-  ctx.fillRect(20, 165, 340, 150);
+  ctx.fillRect(20, 160, 360, 185);
 
   ctx.fillStyle = "white";
   ctx.font = "16px Arial";
+  ctx.fillText("Башня: " + towerType.name, 35, 188);
+  ctx.fillText("Уровень: " + tower.level, 35, 213);
+  ctx.fillText("Урон: " + tower.damage.toFixed(2), 35, 238);
+  ctx.fillText("Радиус: " + tower.range, 35, 263);
+  ctx.fillText("Энергия: " + towerType.powerUsage, 35, 288);
 
-  ctx.fillText("Башня: " + towerType.name, 35, 193);
-  ctx.fillText("Уровень: " + tower.level, 35, 218);
-  ctx.fillText("Урон: " + tower.damage.toFixed(2), 35, 243);
-  ctx.fillText("Радиус: " + tower.range, 35, 268);
-  ctx.fillText("Энергия: " + towerType.powerUsage, 35, 293);
+  ctx.fillStyle = "#999";
+  ctx.fillText("Улучшения:", 35, 316);
+  ctx.fillText("• Урон +1 — нужна технология", 55, 338);
 }
 
 function drawInfoPanel() {
   if (!uiState.infoPanelOpen) return;
 
-  const x = Math.max(20, canvas.width - 390);
+  const x = Math.max(12, canvas.width - 390);
+  const y = 78;
+  const w = Math.min(370, canvas.width - 24);
 
-  ctx.fillStyle = "rgba(0,0,0,0.86)";
-  ctx.fillRect(x, 80, 370, 500);
+  ctx.fillStyle = "rgba(0,0,0,0.88)";
+  ctx.fillRect(x, y, w, 505);
 
   ctx.fillStyle = "white";
   ctx.font = "18px Arial";
-  ctx.fillText("Codex / Справка", x + 20, 115);
+  ctx.fillText("Codex / Справка", x + 18, y + 34);
 
   ctx.font = "14px Arial";
+  ctx.fillText("Башни:", x + 18, y + 70);
 
-  ctx.fillText("Башни:", x + 20, 150);
   Object.values(towerTypes).forEach((tower, index) => {
-    const y = 175 + index * 80;
-    ctx.fillText("- " + tower.name, x + 30, y);
-    ctx.fillText("  Стоимость: " + tower.cost.wood + " дерева", x + 30, y + 18);
-    ctx.fillText("  Урон: " + tower.damage + " | Радиус: " + tower.range, x + 30, y + 36);
-    ctx.fillText("  Энергия: " + tower.powerUsage, x + 30, y + 54);
+    const rowY = y + 95 + index * 80;
+    ctx.fillText("- " + tower.name, x + 28, rowY);
+    ctx.fillText("  Стоимость: " + tower.cost.wood + " дерева | Энергия: " + tower.powerUsage, x + 28, rowY + 18);
+    ctx.fillText("  Урон: " + tower.damage + " | Радиус: " + tower.range, x + 28, rowY + 36);
   });
 
-  ctx.fillText("Враги:", x + 20, 260);
+  ctx.fillText("Враги:", x + 18, y + 185);
+
   Object.values(enemyTypes).forEach((enemy, index) => {
-    const y = 285 + index * 70;
-    ctx.fillText("- " + enemy.name + " (" + enemy.class + ")", x + 30, y);
-    ctx.fillText("  HP: " + enemy.hp + " | Скорость: " + enemy.speed, x + 30, y + 18);
-    ctx.fillText("  Награда: " + enemy.reward.wood + " дерева", x + 30, y + 36);
+    const rowY = y + 210 + index * 68;
+    ctx.fillText("- " + enemy.name + " (" + enemy.class + ")", x + 28, rowY);
+    ctx.fillText("  HP: " + enemy.hp + " | Скорость: " + enemy.speed, x + 28, rowY + 18);
+    ctx.fillText("  Награда: " + enemy.reward.wood + " дерева", x + 28, rowY + 36);
   });
 
-  ctx.fillText("Механики:", x + 20, 510);
-  ctx.fillText("- Retry Wave возвращает к подготовке перед волной", x + 30, 532);
-  ctx.fillText("- Новая игра полностью сбрасывает прогресс", x + 30, 552);
+  ctx.fillText("Механики:", x + 18, y + 425);
+  ctx.fillText("- Retry Wave возвращает к подготовке", x + 28, y + 447);
+  ctx.fillText("- Энергия ограничивает спам башен", x + 28, y + 469);
+  ctx.fillText("- Zoom: кнопки +/- или pinch", x + 28, y + 491);
 }
 
-function drawMessage() {
-  if (!uiState.message) return;
+function drawNotifications() {
+  const startX = Math.max(20, canvas.width - 390);
+  let y = 20;
 
-  ctx.fillStyle = "rgba(0,0,0,0.7)";
-  ctx.fillRect(20, canvas.height - 70, 560, 40);
+  uiState.notifications.forEach(note => {
+    const color = note.type === "danger" ? "rgba(138,45,45,0.88)" :
+      note.type === "warning" ? "rgba(160,110,25,0.9)" :
+      note.type === "success" ? "rgba(47,107,60,0.9)" :
+      "rgba(0,0,0,0.78)";
 
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText(uiState.message, 35, canvas.height - 43);
+    ctx.fillStyle = color;
+    ctx.fillRect(startX, y, 370, 34);
+
+    ctx.fillStyle = "white";
+    ctx.font = "15px Arial";
+    ctx.fillText(note.text, startX + 12, y + 22);
+
+    y += 40;
+  });
 }
 
 function drawGameOver() {
   if (!gameState.gameOver) return;
-
-  ctx.fillStyle = "rgba(0,0,0,0.78)";
+  ctx.fillStyle = "rgba(0,0,0,0.66)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -1364,6 +1576,7 @@ function gameLoop() {
 
   updateEnemies(multiplier);
   updateTowers(multiplier);
+  updateNotifications();
 
   drawMap();
   drawRoadTiles();
@@ -1372,18 +1585,17 @@ function gameLoop() {
 
   if (uiState.selectedTower) drawTowerRange(uiState.selectedTower);
 
-  drawHoveredTile();
+  drawBuildOverlay();
   drawTowers();
   drawEnemies();
 
   drawWaveStatus();
   drawSelectedTowerPanel();
   drawInfoPanel();
-  drawMessage();
+  drawNotifications();
   drawGameOver();
 
   updateDomVisibility();
-
   requestAnimationFrame(gameLoop);
 }
 
