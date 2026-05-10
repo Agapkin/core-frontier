@@ -1,0 +1,2 @@
+# core-frontier
+Проект игры
