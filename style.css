@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #0f1720;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  display: block;
+  background: #18361f;
+}
+
+#ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  color: white;
+}
+
+.topbar {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(0,0,0,0.5);
+  font-size: 18px;
+}
+
+.buttons {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: #2f6b3c;
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+}
