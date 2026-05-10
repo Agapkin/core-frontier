@@ -1,5 +1,4 @@
-// CORE FRONTIER — Stage 02
-// Карта, камера, сетка, строительство по клеткам, путь врагов
+// CORE FRONTIER — Stage 02.1
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -19,11 +18,19 @@ const camera = {
   x: 0,
   y: 0,
   dragging: false,
+  moved: false,
+  startX: 0,
+  startY: 0,
   lastX: 0,
   lastY: 0
 };
 
-let selectedMode = null;
+const uiState = {
+  selectedMode: null,
+  hoveredTile: null,
+  message: ""
+};
+
 let waveActive = false;
 let waveNumber = 0;
 
@@ -42,7 +49,7 @@ let base = {
 const towers = [];
 const enemies = [];
 
-// ---------- ПУТЬ ВРАГОВ ----------
+// ---------- ПУТЬ ----------
 
 const enemyPath = [
   { x: 0, y: 10 },
@@ -55,7 +62,7 @@ const enemyPath = [
   { x: 26, y: 10 }
 ];
 
-// ---------- ИНИЦИАЛИЗАЦИЯ ----------
+// ---------- CANVAS ----------
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -65,6 +72,8 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
+// ---------- UI ----------
+
 function updateUI() {
   document.getElementById("wood").innerText = resources.wood;
   document.getElementById("stone").innerText = resources.stone;
@@ -72,16 +81,38 @@ function updateUI() {
   document.getElementById("hp").innerText = base.hp;
 }
 
-updateUI();
+function showMessage(text) {
+  uiState.message = text;
 
-// ---------- УПРАВЛЕНИЕ ----------
-
-function buildTower() {
-  selectedMode = "tower";
+  setTimeout(() => {
+    if (uiState.message === text) {
+      uiState.message = "";
+    }
+  }, 2000);
 }
 
+updateUI();
+
+// ---------- BUILD MODE ----------
+
+function buildTower() {
+  if (uiState.selectedMode === "tower") {
+    uiState.selectedMode = null;
+    showMessage("Режим строительства выключен");
+    return;
+  }
+
+  uiState.selectedMode = "tower";
+  showMessage("Выбран режим строительства башни");
+}
+
+// ---------- WAVE ----------
+
 function startWave() {
-  if (waveActive) return;
+  if (waveActive) {
+    showMessage("Текущая волна еще не завершена");
+    return;
+  }
 
   waveActive = true;
   waveNumber++;
@@ -99,24 +130,32 @@ function startWave() {
       rewardWood: 5
     });
   }
+
+  showMessage("Волна #" + waveNumber + " запущена");
 }
 
-canvas.addEventListener("mousedown", startDrag);
-canvas.addEventListener("mousemove", dragCamera);
-canvas.addEventListener("mouseup", endDrag);
-canvas.addEventListener("mouseleave", endDrag);
+// ---------- INPUT ----------
 
-canvas.addEventListener("touchstart", startDrag, { passive: false });
-canvas.addEventListener("touchmove", dragCamera, { passive: false });
-canvas.addEventListener("touchend", endDrag);
+canvas.addEventListener("mousedown", pointerStart);
+canvas.addEventListener("mousemove", pointerMove);
+canvas.addEventListener("mouseup", pointerEnd);
 
-canvas.addEventListener("click", handleCanvasClick);
+canvas.addEventListener("touchstart", pointerStart, { passive: false });
+canvas.addEventListener("touchmove", pointerMove, { passive: false });
+canvas.addEventListener("touchend", pointerEnd);
 
-function getPointerPosition(event) {
+function getPointer(event) {
   if (event.touches && event.touches.length > 0) {
     return {
       x: event.touches[0].clientX,
       y: event.touches[0].clientY
+    };
+  }
+
+  if (event.changedTouches && event.changedTouches.length > 0) {
+    return {
+      x: event.changedTouches[0].clientX,
+      y: event.changedTouches[0].clientY
     };
   }
 
@@ -126,36 +165,51 @@ function getPointerPosition(event) {
   };
 }
 
-function startDrag(event) {
+function pointerStart(event) {
   event.preventDefault();
 
-  const pos = getPointerPosition(event);
+  const pos = getPointer(event);
 
   camera.dragging = true;
+  camera.moved = false;
+
+  camera.startX = pos.x;
+  camera.startY = pos.y;
+
   camera.lastX = pos.x;
   camera.lastY = pos.y;
 }
 
-function dragCamera(event) {
-  if (!camera.dragging) return;
-
-  event.preventDefault();
-
-  const pos = getPointerPosition(event);
+function pointerMove(event) {
+  const pos = getPointer(event);
 
   const dx = pos.x - camera.lastX;
   const dy = pos.y - camera.lastY;
 
-  camera.x -= dx;
-  camera.y -= dy;
+  if (Math.abs(pos.x - camera.startX) > 6 || Math.abs(pos.y - camera.startY) > 6) {
+    camera.moved = true;
+  }
+
+  if (camera.dragging && camera.moved) {
+    camera.x -= dx;
+    camera.y -= dy;
+
+    clampCamera();
+  }
 
   camera.lastX = pos.x;
   camera.lastY = pos.y;
 
-  clampCamera();
+  updateHoveredTile(pos.x, pos.y);
 }
 
-function endDrag() {
+function pointerEnd(event) {
+  const pos = getPointer(event);
+
+  if (!camera.moved) {
+    handleTap(pos.x, pos.y);
+  }
+
   camera.dragging = false;
 }
 
@@ -164,30 +218,58 @@ function clampCamera() {
   camera.y = Math.max(0, Math.min(camera.y, map.height - canvas.height));
 }
 
-function handleCanvasClick(event) {
-  if (camera.dragging) return;
+// ---------- TILE ----------
 
-  const rect = canvas.getBoundingClientRect();
-
-  const screenX = event.clientX - rect.left;
-  const screenY = event.clientY - rect.top;
-
+function updateHoveredTile(screenX, screenY) {
   const worldX = screenX + camera.x;
   const worldY = screenY + camera.y;
 
   const tileX = Math.floor(worldX / TILE_SIZE);
   const tileY = Math.floor(worldY / TILE_SIZE);
 
-  if (selectedMode === "tower") {
+  uiState.hoveredTile = { tileX, tileY };
+}
+
+function handleTap(screenX, screenY) {
+  const worldX = screenX + camera.x;
+  const worldY = screenY + camera.y;
+
+  const tileX = Math.floor(worldX / TILE_SIZE);
+  const tileY = Math.floor(worldY / TILE_SIZE);
+
+  if (uiState.selectedMode === "tower") {
     placeTower(tileX, tileY);
   }
 }
 
+// ---------- BUILD ----------
+
 function placeTower(tileX, tileY) {
-  if (resources.wood < 10) return;
-  if (isPathTile(tileX, tileY)) return;
-  if (isBaseTile(tileX, tileY)) return;
-  if (isTowerTile(tileX, tileY)) return;
+
+  if (resources.wood < 10) {
+    showMessage("Недостаточно дерева");
+    return;
+  }
+
+  if (tileX < 0 || tileY < 0 || tileX >= map.cols || tileY >= map.rows) {
+    showMessage("Нельзя строить за пределами карты");
+    return;
+  }
+
+  if (isPathTile(tileX, tileY)) {
+    showMessage("Нельзя строить на дороге");
+    return;
+  }
+
+  if (isBaseTile(tileX, tileY)) {
+    showMessage("Нельзя строить на базе");
+    return;
+  }
+
+  if (isTowerTile(tileX, tileY)) {
+    showMessage("Клетка уже занята");
+    return;
+  }
 
   resources.wood -= 10;
 
@@ -201,9 +283,11 @@ function placeTower(tileX, tileY) {
   });
 
   updateUI();
+
+  showMessage("Башня построена");
 }
 
-// ---------- ПРОВЕРКИ ----------
+// ---------- CHECKS ----------
 
 function isPathTile(tileX, tileY) {
   return enemyPath.some(point => point.x === tileX && point.y === tileY);
@@ -217,10 +301,20 @@ function isTowerTile(tileX, tileY) {
   return towers.some(tower => tower.tileX === tileX && tower.tileY === tileY);
 }
 
-// ---------- ОБНОВЛЕНИЕ ИГРЫ ----------
+function canBuild(tileX, tileY) {
+  if (tileX < 0 || tileY < 0 || tileX >= map.cols || tileY >= map.rows) return false;
+  if (isPathTile(tileX, tileY)) return false;
+  if (isBaseTile(tileX, tileY)) return false;
+  if (isTowerTile(tileX, tileY)) return false;
+  return true;
+}
+
+// ---------- UPDATE ----------
 
 function updateEnemies() {
+
   enemies.forEach(enemy => {
+
     const target = enemyPath[enemy.pathIndex + 1];
 
     if (!target) {
@@ -249,26 +343,35 @@ function updateEnemies() {
   });
 
   for (let i = enemies.length - 1; i >= 0; i--) {
+
     if (enemies[i].hp <= 0) {
       resources.wood += enemies[i].rewardWood;
       enemies.splice(i, 1);
       updateUI();
-    } else if (enemies[i].reachedBase) {
+    }
+
+    else if (enemies[i].reachedBase) {
       enemies.splice(i, 1);
     }
   }
 
   if (waveActive && enemies.length === 0) {
     waveActive = false;
+    showMessage("Волна завершена");
   }
 }
 
 function updateTowers() {
+
   towers.forEach(tower => {
+
     const target = enemies.find(enemy => {
+
       const dx = enemy.x - tower.x;
       const dy = enemy.y - tower.y;
+
       const distance = Math.sqrt(dx * dx + dy * dy);
+
       return distance <= tower.range;
     });
 
@@ -281,10 +384,11 @@ function updateTowers() {
   });
 }
 
-// ---------- РЕНДЕР ----------
+// ---------- DRAW ----------
 
 function drawMap() {
-  ctx.fillStyle = "#16371f";
+
+  ctx.fillStyle = "#183b22";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const startCol = Math.floor(camera.x / TILE_SIZE);
@@ -294,7 +398,9 @@ function drawMap() {
   const endRow = Math.ceil((camera.y + canvas.height) / TILE_SIZE);
 
   for (let row = startRow; row < endRow; row++) {
+
     for (let col = startCol; col < endCol; col++) {
+
       if (col < 0 || row < 0 || col >= map.cols || row >= map.rows) continue;
 
       const screenX = col * TILE_SIZE - camera.x;
@@ -307,6 +413,7 @@ function drawMap() {
 }
 
 function drawPath() {
+
   ctx.strokeStyle = "#7b5a35";
   ctx.lineWidth = 28;
   ctx.lineCap = "round";
@@ -315,6 +422,7 @@ function drawPath() {
   ctx.beginPath();
 
   enemyPath.forEach((point, index) => {
+
     const x = point.x * TILE_SIZE + TILE_SIZE / 2 - camera.x;
     const y = point.y * TILE_SIZE + TILE_SIZE / 2 - camera.y;
 
@@ -329,6 +437,7 @@ function drawPath() {
 }
 
 function drawBase() {
+
   const x = base.tileX * TILE_SIZE - camera.x;
   const y = base.tileY * TILE_SIZE - camera.y;
 
@@ -339,8 +448,44 @@ function drawBase() {
   ctx.fillText("🏠", x + 16, y + 42);
 }
 
+function drawHoveredTile() {
+
+  if (!uiState.hoveredTile) return;
+  if (uiState.selectedMode !== "tower") return;
+
+  const tileX = uiState.hoveredTile.tileX;
+  const tileY = uiState.hoveredTile.tileY;
+
+  const screenX = tileX * TILE_SIZE - camera.x;
+  const screenY = tileY * TILE_SIZE - camera.y;
+
+  const valid = canBuild(tileX, tileY);
+
+  ctx.fillStyle = valid
+    ? "rgba(0,255,0,0.25)"
+    : "rgba(255,0,0,0.25)";
+
+  ctx.fillRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+
+  ctx.strokeStyle = valid ? "lime" : "red";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+
+  ctx.globalAlpha = 0.6;
+
+  ctx.fillStyle = "#55e0e0";
+  ctx.fillRect(screenX + 10, screenY + 10, TILE_SIZE - 20, TILE_SIZE - 20);
+
+  ctx.font = "24px Arial";
+  ctx.fillText("🏹", screenX + 18, screenY + 40);
+
+  ctx.globalAlpha = 1;
+}
+
 function drawTowers() {
+
   towers.forEach(tower => {
+
     const x = tower.tileX * TILE_SIZE - camera.x;
     const y = tower.tileY * TILE_SIZE - camera.y;
 
@@ -351,9 +496,16 @@ function drawTowers() {
     ctx.fillText("🏹", x + 18, y + 40);
 
     if (tower.target) {
+
       ctx.beginPath();
+
       ctx.moveTo(tower.x - camera.x, tower.y - camera.y);
-      ctx.lineTo(tower.target.x - camera.x, tower.target.y - camera.y);
+
+      ctx.lineTo(
+        tower.target.x - camera.x,
+        tower.target.y - camera.y
+      );
+
       ctx.strokeStyle = "#00ffff";
       ctx.lineWidth = 2;
       ctx.stroke();
@@ -362,11 +514,14 @@ function drawTowers() {
 }
 
 function drawEnemies() {
+
   enemies.forEach(enemy => {
+
     const x = enemy.x - camera.x;
     const y = enemy.y - camera.y;
 
     ctx.fillStyle = "red";
+
     ctx.beginPath();
     ctx.arc(x, y, 15, 0, Math.PI * 2);
     ctx.fill();
@@ -375,30 +530,44 @@ function drawEnemies() {
     ctx.fillRect(x - 18, y - 25, 36, 5);
 
     ctx.fillStyle = "lime";
-    ctx.fillRect(x - 18, y - 25, 36 * (enemy.hp / enemy.maxHp), 5);
+    ctx.fillRect(
+      x - 18,
+      y - 25,
+      36 * (enemy.hp / enemy.maxHp),
+      5
+    );
   });
 }
 
-function drawBuildPreview() {
-  if (selectedMode !== "tower") return;
+function drawMessage() {
 
-  ctx.fillStyle = "rgba(255,255,255,0.8)";
-  ctx.font = "16px Arial";
-  ctx.fillText("Режим строительства: нажми на свободную клетку", 20, 100);
+  if (!uiState.message) return;
+
+  ctx.fillStyle = "rgba(0,0,0,0.7)";
+  ctx.fillRect(20, canvas.height - 70, 420, 40);
+
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText(uiState.message, 35, canvas.height - 43);
 }
 
-// ---------- ГЛАВНЫЙ ЦИКЛ ----------
+// ---------- LOOP ----------
 
 function gameLoop() {
+
   updateEnemies();
   updateTowers();
 
   drawMap();
   drawPath();
   drawBase();
+
+  drawHoveredTile();
+
   drawTowers();
   drawEnemies();
-  drawBuildPreview();
+
+  drawMessage();
 
   requestAnimationFrame(gameLoop);
 }
