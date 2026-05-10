@@ -1,5 +1,5 @@
-// CORE FRONTIER — Stage 02.2
-// Stabilization: дорога, типы башен, типы врагов, wave manager, build validation
+// CORE FRONTIER — Stage 02.3
+// Баланс, скорость игры, статус волны, плотный spawn, подготовка к gameplay pressure
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -15,14 +15,23 @@ const map = {
   height: 22 * TILE_SIZE
 };
 
+const gameBalance = {
+  startWood: 42,
+  startStone: 20,
+  startFood: 10,
+  baseHp: 100,
+  baseDamagePerEnemy: 6,
+  towerCostWood: 18
+};
+
 const towerTypes = {
   basic: {
     id: "basic",
     name: "Базовая башня",
     icon: "🏹",
-    cost: { wood: 10 },
-    range: 160,
-    damage: 0.45,
+    cost: { wood: gameBalance.towerCostWood },
+    range: 145,
+    damage: 0.28,
     color: "#55e0e0"
   }
 };
@@ -32,28 +41,28 @@ const enemyTypes = {
     id: "runner",
     name: "Быстрый враг",
     shape: "circle",
-    color: "red",
-    hp: 30,
-    speed: 1.45,
-    reward: { wood: 5 }
-  },
-  tank: {
-    id: "tank",
-    name: "Крепкий враг",
-    shape: "square",
-    color: "orange",
-    hp: 65,
-    speed: 0.9,
-    reward: { wood: 10 }
+    color: "#ff3d3d",
+    hp: 38,
+    speed: 1.75,
+    reward: { wood: 3 }
   },
   scout: {
     id: "scout",
-    name: "Лёгкий враг",
+    name: "Лёгкий быстрый враг",
     shape: "triangle",
     color: "#ff4fd8",
-    hp: 20,
-    speed: 1.9,
-    reward: { wood: 4 }
+    hp: 28,
+    speed: 2.25,
+    reward: { wood: 2 }
+  },
+  tank: {
+    id: "tank",
+    name: "Тяжёлый враг",
+    shape: "square",
+    color: "#ff9f1c",
+    hp: 95,
+    speed: 1.05,
+    reward: { wood: 6 }
   }
 };
 
@@ -91,21 +100,27 @@ const uiState = {
 };
 
 let resources = {
-  wood: 50,
-  stone: 20,
-  food: 10
+  wood: gameBalance.startWood,
+  stone: gameBalance.startStone,
+  food: gameBalance.startFood
 };
 
 let base = {
-  hp: 100,
+  hp: gameBalance.baseHp,
   tileX: 26,
   tileY: 10
 };
 
 let waveState = {
   active: false,
-  number: 0
+  number: 0,
+  totalEnemies: 0,
+  spawnedEnemies: 0,
+  killedEnemies: 0,
+  reachedBase: 0
 };
+
+let gameSpeed = 1;
 
 const towers = [];
 const enemies = [];
@@ -121,15 +136,16 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
+createSpeedControls();
 updateUI();
 
 // ---------- UI ----------
 
 function updateUI() {
-  setText("wood", resources.wood);
-  setText("stone", resources.stone);
-  setText("food", resources.food);
-  setText("hp", base.hp);
+  setText("wood", Math.floor(resources.wood));
+  setText("stone", Math.floor(resources.stone));
+  setText("food", Math.floor(resources.food));
+  setText("hp", Math.floor(base.hp));
   setText("wave", waveState.number);
 }
 
@@ -148,6 +164,43 @@ function showMessage(text) {
       uiState.message = "";
     }
   }, 2000);
+}
+
+function createSpeedControls() {
+  const panel = document.createElement("div");
+  panel.id = "speed-panel";
+  panel.style.position = "fixed";
+  panel.style.right = "10px";
+  panel.style.bottom = "90px";
+  panel.style.zIndex = "20";
+  panel.style.display = "flex";
+  panel.style.gap = "6px";
+
+  [1, 2, 3].forEach(speed => {
+    const button = document.createElement("button");
+    button.innerText = "x" + speed;
+    button.style.padding = "8px 10px";
+    button.style.borderRadius = "8px";
+    button.style.border = "none";
+    button.style.background = speed === 1 ? "#d9a441" : "#2f6b3c";
+    button.style.color = "white";
+    button.style.fontWeight = "bold";
+
+    button.onclick = () => {
+      gameSpeed = speed;
+
+      Array.from(panel.children).forEach(child => {
+        child.style.background = "#2f6b3c";
+      });
+
+      button.style.background = "#d9a441";
+      showMessage("Скорость игры: x" + speed);
+    };
+
+    panel.appendChild(button);
+  });
+
+  document.body.appendChild(panel);
 }
 
 // ---------- BUTTON ACTIONS ----------
@@ -172,8 +225,12 @@ function startWave() {
 
   waveState.active = true;
   waveState.number += 1;
+  waveState.spawnedEnemies = 0;
+  waveState.killedEnemies = 0;
+  waveState.reachedBase = 0;
 
   const wave = createWave(waveState.number);
+  waveState.totalEnemies = wave.length;
 
   wave.forEach((enemyConfig, index) => {
     spawnEnemy(enemyConfig.type, index);
@@ -188,9 +245,9 @@ function startWave() {
 function createWave(number) {
   const wave = [];
 
-  const runnerCount = 4 + number * 2;
-  const scoutCount = number >= 3 ? Math.floor(number / 2) : 0;
-  const tankCount = number >= 5 ? Math.floor(number / 3) : 0;
+  const runnerCount = 5 + number * 2;
+  const scoutCount = number >= 2 ? 2 + Math.floor(number / 2) : 0;
+  const tankCount = number >= 3 ? 1 + Math.floor(number / 3) : 0;
 
   for (let i = 0; i < runnerCount; i++) {
     wave.push({ type: "runner" });
@@ -204,22 +261,39 @@ function createWave(number) {
     wave.push({ type: "tank" });
   }
 
-  return wave;
+  // перемешиваем врагов, чтобы тяжёлые не появлялись слишком поздно
+  return shuffleWave(wave);
+}
+
+function shuffleWave(wave) {
+  const result = [...wave];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
 }
 
 function spawnEnemy(typeId, index) {
   const type = enemyTypes[typeId];
 
+  const waveHpBonus = waveState.number * 7;
+  const spawnSpacing = 38;
+
   enemies.push({
     typeId,
     pathIndex: 0,
-    x: enemyPath[0].x * TILE_SIZE + TILE_SIZE / 2 - index * 80,
+    x: enemyPath[0].x * TILE_SIZE + TILE_SIZE / 2 - index * spawnSpacing,
     y: enemyPath[0].y * TILE_SIZE + TILE_SIZE / 2,
-    hp: type.hp + waveState.number * 4,
-    maxHp: type.hp + waveState.number * 4,
-    speed: type.speed + waveState.number * 0.03,
+    hp: type.hp + waveHpBonus,
+    maxHp: type.hp + waveHpBonus,
+    speed: type.speed + waveState.number * 0.04,
     reachedBase: false
   });
+
+  waveState.spawnedEnemies += 1;
 }
 
 // ---------- INPUT ----------
@@ -433,13 +507,14 @@ function payCost(cost) {
 
 // ---------- UPDATE ----------
 
-function updateEnemies() {
+function updateEnemies(multiplier) {
   enemies.forEach(enemy => {
     const target = enemyPath[enemy.pathIndex + 1];
 
     if (!target) {
       enemy.reachedBase = true;
-      base.hp -= 5;
+      base.hp -= gameBalance.baseDamagePerEnemy;
+      waveState.reachedBase += 1;
       updateUI();
       return;
     }
@@ -451,14 +526,15 @@ function updateEnemies() {
     const dy = targetY - enemy.y;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
+    const moveSpeed = enemy.speed * multiplier;
 
-    if (distance < enemy.speed) {
+    if (distance < moveSpeed) {
       enemy.x = targetX;
       enemy.y = targetY;
       enemy.pathIndex++;
     } else {
-      enemy.x += (dx / distance) * enemy.speed;
-      enemy.y += (dy / distance) * enemy.speed;
+      enemy.x += (dx / distance) * moveSpeed;
+      enemy.y += (dy / distance) * moveSpeed;
     }
   });
 
@@ -468,6 +544,7 @@ function updateEnemies() {
 
     if (enemy.hp <= 0) {
       applyReward(enemyType.reward);
+      waveState.killedEnemies += 1;
       enemies.splice(i, 1);
       updateUI();
     } else if (enemy.reachedBase) {
@@ -487,7 +564,7 @@ function applyReward(reward) {
   });
 }
 
-function updateTowers() {
+function updateTowers(multiplier) {
   towers.forEach(tower => {
     const target = enemies.find(enemy => {
       const dx = enemy.x - tower.x;
@@ -497,7 +574,7 @@ function updateTowers() {
     });
 
     if (target) {
-      target.hp -= tower.damage;
+      target.hp -= tower.damage * multiplier;
       tower.target = target;
     } else {
       tower.target = null;
@@ -684,11 +761,26 @@ function drawEnemies() {
   });
 }
 
+function drawWaveStatus() {
+  const remaining = enemies.length;
+  const total = waveState.totalEnemies;
+
+  ctx.fillStyle = "rgba(0,0,0,0.65)";
+  ctx.fillRect(20, 82, 290, 72);
+
+  ctx.fillStyle = "white";
+  ctx.font = "16px Arial";
+
+  ctx.fillText("Волна: " + waveState.number, 35, 108);
+  ctx.fillText("Статус: " + (waveState.active ? "идёт" : "ожидание"), 35, 130);
+  ctx.fillText("Враги: " + remaining + " / " + total + " | Скорость: x" + gameSpeed, 35, 150);
+}
+
 function drawMessage() {
   if (!uiState.message) return;
 
   ctx.fillStyle = "rgba(0,0,0,0.7)";
-  ctx.fillRect(20, canvas.height - 70, 460, 40);
+  ctx.fillRect(20, canvas.height - 70, 520, 40);
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
@@ -698,8 +790,10 @@ function drawMessage() {
 // ---------- LOOP ----------
 
 function gameLoop() {
-  updateEnemies();
-  updateTowers();
+  const multiplier = gameSpeed;
+
+  updateEnemies(multiplier);
+  updateTowers(multiplier);
 
   drawMap();
   drawRoadTiles();
@@ -711,6 +805,7 @@ function gameLoop() {
   drawTowers();
   drawEnemies();
 
+  drawWaveStatus();
   drawMessage();
 
   requestAnimationFrame(gameLoop);
