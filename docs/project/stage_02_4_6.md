@@ -462,3 +462,599 @@ stage document
 → ZIP validation
 → QA test
 → documentation update
+
+---
+
+# TECHNICAL IMPLEMENTATION MAP
+## Stage 02.4.6 — HUD / Camera / FTUE Refactor
+
+Актуальный ZIP репозитория был загружен и проанализирован перед началом выполнения Stage 02.4.6.
+
+Данный блок фиксирует:
+- текущее техническое состояние проекта;
+- связи между файлами;
+- проблемные зоны;
+- список затрагиваемых файлов;
+- риски;
+- выбранную стратегию исполнения;
+- порядок выполнения Stage 02.4.6.
+
+Этот блок создаётся ДО выдачи кода.
+
+---
+
+# Текущее состояние проекта
+
+Проект уже находится в рабочем playable-состоянии.
+
+После Stage 02.4.5-A:
+- строительство работает;
+- выбор клетки работает;
+- build confirm работает;
+- продажа башни работает;
+- волны работают;
+- retry wave работает;
+- mobile input стабилизирован;
+- responsive foundation существует;
+- UI уже разделён на модули.
+
+Проект больше не находится в стадии:
+“сломанный prototype”.
+
+Теперь основные проблемы проекта:
+- HUD;
+- camera;
+- onboarding;
+- gameplay readability;
+- mobile UX;
+- FTUE;
+- visual communication.
+
+---
+
+# Главный bottleneck проекта
+
+Текущий bottleneck:
+не core gameplay logic,
+а UX architecture.
+
+Игроки:
+- не понимают как начать игру;
+- не понимают gameplay loop;
+- не понимают ресурсы;
+- не понимают дорогу;
+- не понимают что означают панели;
+- не понимают что нужно делать первым.
+
+Это означает, что проекту теперь нужна:
+- gameplay communication layer;
+- onboarding architecture;
+- unified HUD system;
+- readability architecture.
+
+---
+
+# Текущая UI архитектура
+
+Проект уже использует модульную UI-структуру:
+
+- js/ui/helpers.js
+- js/ui/layout.js
+- js/ui/controls.js
+- js/ui/panels.js
+- js/ui/canvas_world.js
+- js/ui/canvas_entities.js
+- js/ui/notifications.js
+
+Старый ui.js уже удалён.
+
+---
+
+# Основные проблемные зоны
+
+---
+
+# A — HUD Fragmentation
+
+Сейчас HUD состоит из независимых панелей:
+
+- topbar;
+- wave panel;
+- speed panel;
+- zoom panel;
+- build panel;
+- tower panel;
+- codex;
+- menu;
+- notifications.
+
+Эти панели проектировались поэтапно и теперь конфликтуют spatially.
+
+Проблемы:
+- перекрытие gameplay-space;
+- competition за место;
+- перегруженный экран;
+- неудобство на mobile.
+
+---
+
+# B — Camera & Zoom Scaling
+
+Текущее scaling поведение зависит от:
+
+- camera.zoom;
+- canvas.width;
+- canvas.height;
+- CSS scaling;
+- scaled();
+- worldToScreen();
+- screenToWorld().
+
+Проблемы:
+- circles/range становятся oval;
+- zoom ощущается нестабильным;
+- min/max zoom недостаточны;
+- scaling непредсказуем на разных устройствах.
+
+---
+
+# C — Mobile Gameplay Space
+
+На телефоне и планшете HUD перекрывает gameplay-area.
+
+Особенно:
+- wave panel;
+- speed controls;
+- build confirm panel.
+
+---
+
+# D — FTUE отсутствует
+
+В проекте пока отсутствуют:
+
+- tutorial layer;
+- onboarding system;
+- contextual hints;
+- CTA hierarchy;
+- guided interaction;
+- gameplay explanation.
+
+Blind playtests показали, что новый игрок не понимает:
+- как начать игру;
+- как запускать волну;
+- что означает дорога;
+- зачем строятся башни;
+- что означают ресурсы;
+- какая цель игры.
+
+---
+
+# Файлы Stage 02.4.6
+
+После анализа ZIP определён предварительный список файлов Stage 02.4.6.
+
+---
+
+# CORE FILES
+
+---
+
+## index.html
+
+### Причина
+
+Stage 02.4.6 затрагивает:
+- HUD hierarchy;
+- overlay layers;
+- onboarding layers;
+- safe-area wrappers;
+- mobile overlay containers.
+
+### Планируемые изменения
+
+- tutorial root container;
+- overlay containers;
+- HUD wrapper structure;
+- onboarding layers.
+
+### Риск
+
+LOW
+
+---
+
+## js/state.js
+
+### Причина
+
+Нужно хранить:
+- tutorial state;
+- FTUE flags;
+- hint visibility;
+- HUD compact state;
+- camera scaling flags.
+
+### Планируемые новые state блоки
+
+- tutorialState;
+- hudState;
+- cameraState additions.
+
+### Риск
+
+MEDIUM
+
+Потому что state используется почти всеми UI-модулями.
+
+---
+
+## js/game.js
+
+### Причина
+
+Stage 02.4.6 затрагивает:
+- camera;
+- zoom;
+- pointer mapping;
+- tutorial triggers;
+- HUD refresh timing.
+
+### Планируемые изменения
+
+- camera scaling normalization;
+- DPR normalization;
+- zoom range update;
+- tutorial progression triggers;
+- gameplay event hooks.
+
+### Риск
+
+HIGH
+
+Это центральный runtime файл проекта.
+
+---
+
+## js/systems.js
+
+### Причина
+
+Нужно интегрировать:
+- tutorial progression;
+- onboarding hooks;
+- contextual gameplay notifications;
+- wave CTA logic.
+
+### Планируемые изменения
+
+- first-build trigger;
+- first-wave trigger;
+- onboarding progression hooks;
+- gameplay tutorial events.
+
+### Риск
+
+MEDIUM
+
+---
+
+# UI FILES
+
+---
+
+## js/ui/layout.js
+
+### Главный файл Stage 02.4.6
+
+### Причина
+
+Здесь находятся:
+- responsive схемы;
+- panel positioning;
+- compact mode;
+- HUD generation;
+- mobile layout logic.
+
+### Планируемые изменения
+
+- unified HUD zones;
+- portrait/landscape redesign;
+- gameplay-safe layout;
+- compact HUD generation;
+- safe-area normalization.
+
+### Риск
+
+VERY HIGH
+
+Это core HUD architecture file.
+
+---
+
+## js/ui/controls.js
+
+### Причина
+
+Stage 02.4.6 полностью затрагивает:
+- speed controls;
+- zoom controls;
+- build controls;
+- contextual actions;
+- bottom HUD;
+- onboarding highlights.
+
+### Планируемые изменения
+
+- speed relocation;
+- compact controls;
+- contextual build interaction;
+- button hierarchy;
+- onboarding highlights.
+
+### Риск
+
+VERY HIGH
+
+---
+
+## js/ui/panels.js
+
+### Причина
+
+Тут находятся:
+- wave panel;
+- codex;
+- menu;
+- selected tower panel;
+- game over panels.
+
+### Планируемые изменения
+
+- compact wave indicators;
+- codex compact mode;
+- onboarding overlays;
+- readability improvements.
+
+### Риск
+
+HIGH
+
+---
+
+## js/ui/canvas_world.js
+
+### Причина
+
+Игроки плохо понимают:
+- дорогу;
+- маршрут врагов;
+- базу;
+- направление движения.
+
+### Планируемые изменения
+
+- clearer road rendering;
+- path direction hints;
+- spawn emphasis;
+- base emphasis.
+
+### Риск
+
+LOW-MEDIUM
+
+---
+
+## js/ui/canvas_entities.js
+
+### Причина
+
+Игроки плохо понимают:
+- атаки башен;
+- попадания;
+- урон;
+- уничтожение врагов.
+
+### Планируемые изменения
+
+- projectile readability;
+- hit feedback;
+- enemy death feedback;
+- target feedback.
+
+### Риск
+
+MEDIUM
+
+---
+
+## js/ui/notifications.js
+
+### Причина
+
+Нужно усилить:
+- feedback;
+- tutorial prompts;
+- contextual warnings;
+- gameplay CTA.
+
+### Планируемые изменения
+
+- tutorial notifications;
+- contextual hints;
+- stronger warnings.
+
+### Риск
+
+LOW
+
+---
+
+# Выбранная стратегия исполнения
+
+После анализа ZIP выбран безопасный вариант исполнения.
+
+Принято решение:
+НЕ делать giant rewrite.
+
+Причина:
+слишком высокий риск регрессии.
+
+---
+
+# Новый workflow Stage 02.4.6
+
+Stage 02.4.6 будет выполняться через PASSES.
+
+Каждый PASS:
+- имеет отдельный набор файлов;
+- проходит ZIP validation;
+- проходит QA;
+- только потом начинается следующий PASS.
+
+---
+
+# PASS STRUCTURE
+
+---
+
+# PASS A — HUD REFACTOR
+
+## Цель
+
+Освободить gameplay-space и создать unified HUD architecture.
+
+## Предварительные файлы PASS A
+
+- index.html
+- js/ui/layout.js
+- js/ui/controls.js
+- js/ui/panels.js
+
+---
+
+# PASS B — CAMERA & ZOOM
+
+## Цель
+
+Стабилизировать scaling и camera behavior.
+
+## Предварительные файлы PASS B
+
+- js/game.js
+- js/ui/layout.js
+
+---
+
+# PASS C — GAMEPLAY READABILITY
+
+## Цель
+
+Сделать gameplay визуально понятным.
+
+## Предварительные файлы PASS C
+
+- js/ui/canvas_world.js
+- js/ui/canvas_entities.js
+- js/ui/notifications.js
+
+---
+
+# PASS D — FTUE FOUNDATION
+
+## Цель
+
+Создать onboarding architecture.
+
+## Предварительные файлы PASS D
+
+- js/state.js
+- js/systems.js
+- js/ui/controls.js
+- js/ui/notifications.js
+
+---
+
+# Главные риски Stage 02.4.6
+
+---
+
+# HIGH RISK — layout.js
+
+Если ошибиться:
+- HUD исчезнет;
+- панели налезут друг на друга;
+- controls сломаются.
+
+---
+
+# HIGH RISK — game.js
+
+Если ошибиться:
+- zoom сломается;
+- pointer mapping поплывёт;
+- circles снова станут oval.
+
+---
+
+# HIGH RISK — controls.js
+
+Если ошибиться:
+- игрок потеряет gameplay flow;
+- onboarding станет неудобным;
+- controls начнут конфликтовать.
+
+---
+
+# Что НЕ входит в Stage 02.4.6
+
+На этом этапе специально НЕ добавляются:
+
+- новые башни;
+- генераторы;
+- технологии;
+- новые враги;
+- новые ресурсы;
+- новые карты;
+- economy expansion;
+- tech tree.
+
+---
+
+# Причина
+
+Главный bottleneck проекта сейчас —
+не количество механик,
+а понятность происходящего игроку.
+
+---
+
+# Главная цель Stage 02.4.6
+
+Перевести проект из состояния:
+
+“playable prototype”
+
+в состояние:
+
+“понятная и читаемая mobile tower defense игра”.
+
+---
+
+# Итог анализа Stage 02.4.6
+
+После анализа актуального ZIP подтверждено:
+
+Проект перешёл из стадии:
+“core systems stabilization”
+
+в стадию:
+“UX architecture and gameplay communication”.
+
+Это означает, что:
+- gameplay foundation уже существует;
+- теперь проекту нужна readability architecture;
+- mobile-first UX;
+- onboarding;
+- gameplay communication layer;
+- unified HUD system.
