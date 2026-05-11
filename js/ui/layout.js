@@ -1,123 +1,308 @@
-// CORE FRONTIER — Stage 02.4.5
-// ui/layout.js — responsive UI layout system
+// CORE FRONTIER — Stage 02.4.5-A
+// ui/layout.js — responsive layout and topbar system
+
+function updateResponsiveLayout() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  uiLayout.width = width;
+  uiLayout.height = height;
+
+  uiLayout.isMobile = width <= 768;
+
+  uiLayout.isTablet =
+    width > 768 && width <= 1200;
+
+  uiLayout.isLandscape = width > height;
+
+  uiLayout.compact =
+    uiLayout.isMobile ||
+    (uiLayout.isTablet && uiLayout.isLandscape);
+}
 
 function updateUILayout() {
-  const compact = window.innerWidth < 760;
-  const landscape = window.innerWidth > window.innerHeight;
-
-  uiLayout.compact = compact;
-  uiLayout.landscape = landscape;
-
-  uiLayout.safeTop = 10;
-  uiLayout.safeBottom = 10;
-
-  uiLayout.hudHeight = compact ? 48 : 64;
-  uiLayout.bottomHeight = compact ? 58 : 72;
+  updateResponsiveLayout();
 }
 
 function setupInitialDom() {
-  const oldButtons = document.querySelector(".buttons");
-
-  if (oldButtons) {
-    oldButtons.style.display = "none";
-  }
-
-  const topbar = document.querySelector(".topbar");
+  const topbar = document.getElementById("topbar");
 
   if (!topbar) return;
 
   topbar.innerHTML = "";
 
-  ensureTopbarChip("wood-chip", "🌲 <span id='wood'>0</span>");
-  ensureTopbarChip("stone-chip", "🪨 <span id='stone'>0</span>");
-  ensureTopbarChip("food-chip", "🍖 <span id='food'>0</span>");
-  ensureTopbarChip("hp-chip", "❤️ <span id='hp'>100</span>");
+  createTopbarChip(
+    topbar,
+    "wood-chip",
+    "🌲",
+    "wood",
+    "0"
+  );
 
-  ensureTopbarChip("wave-chip", "🌊 <span id='wave'>0</span>");
-  ensureTopbarChip("power-chip", "⚡ <span id='power'>0/10</span>");
-  ensureTopbarChip("difficulty-chip", "🎚 <span id='difficulty'>Нормальная</span>");
-  ensureTopbarChip("zoom-chip", "🔍 <span id='zoom'>100%</span>");
+  createTopbarChip(
+    topbar,
+    "stone-chip",
+    "🪨",
+    "stone",
+    "0"
+  );
+
+  createTopbarChip(
+    topbar,
+    "food-chip",
+    "🍖",
+    "food",
+    "0"
+  );
+
+  createTopbarChip(
+    topbar,
+    "power-chip",
+    "⚡",
+    "power",
+    "0/10"
+  );
+
+  createTopbarChip(
+    topbar,
+    "hp-chip",
+    "❤️",
+    "hp",
+    "100"
+  );
+
+  createTopbarChip(
+    topbar,
+    "wave-chip",
+    "🌊",
+    "wave",
+    "0"
+  );
+
+  createTopbarChip(
+    topbar,
+    "difficulty-chip",
+    "🎚",
+    "difficulty",
+    "Нормальная"
+  );
+
+  createTopbarChip(
+    topbar,
+    "zoom-chip",
+    "🔍",
+    "zoom",
+    "100%"
+  );
+
+  updateTopbarVisibility();
 }
 
-function ensureTopbarChip(id, html) {
-  const topbar = document.querySelector(".topbar");
-
-  if (!topbar || document.getElementById(id)) return;
-
+function createTopbarChip(
+  parent,
+  chipId,
+  icon,
+  valueId,
+  defaultValue
+) {
   const chip = document.createElement("div");
 
   chip.className = "resource";
-  chip.id = id;
-  chip.innerHTML = html;
+  chip.id = chipId;
 
-  topbar.appendChild(chip);
+  chip.innerHTML =
+    icon +
+    ' <span id="' +
+    valueId +
+    '">' +
+    defaultValue +
+    "</span>";
+
+  parent.appendChild(chip);
 }
 
 function updateTopbarVisibility() {
-  const topbar = document.querySelector(".topbar");
+  const topbar = document.getElementById("topbar");
 
   if (!topbar) return;
 
-  if (uiLayout.compact && uiLayout.landscape) {
-    topbar.style.maxWidth = "calc(100vw - 160px)";
-  } else {
-    topbar.style.maxWidth = "100vw";
-  }
+  topbar.style.display = "flex";
+  topbar.style.flexWrap = "wrap";
+
+  topbar.style.gap = uiLayout.compact
+    ? "4px"
+    : "6px";
+
+  topbar.style.position = "fixed";
+
+  topbar.style.left = "10px";
+  topbar.style.top = "10px";
+
+  topbar.style.right = uiLayout.compact
+    ? "10px"
+    : "auto";
+
+  topbar.style.zIndex = "20";
+
+  topbar.style.maxWidth = uiLayout.compact
+    ? "calc(100vw - 20px)"
+    : "unset";
+
+  topbar.style.pointerEvents = "none";
 }
 
+// ---------- PANELS ----------
+
 function getBottomPanelStyle() {
-  const compactLandscape = uiLayout.compact && uiLayout.landscape;
+  if (uiLayout.isLandscape && uiLayout.compact) {
+    return {
+      right: "10px",
+      bottom: "10px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "6px",
+      padding: "8px",
+      borderRadius: "12px",
+      background: "rgba(0,0,0,0.72)",
+      zIndex: "20"
+    };
+  }
 
   return {
-    left: compactLandscape ? "8px" : "8px",
-    right: compactLandscape ? "auto" : "8px",
-    bottom: "8px",
+    left: "50%",
+    bottom: "10px",
+    transform: "translateX(-50%)",
     display: "flex",
-    flexDirection: compactLandscape ? "column" : "row",
+    gap: uiLayout.compact ? "6px" : "8px",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    padding: uiLayout.compact ? "8px" : "10px",
+    borderRadius: "14px",
+    background: "rgba(0,0,0,0.72)",
+    zIndex: "20",
+    maxWidth: "calc(100vw - 20px)"
+  };
+}
+
+function getSpeedPanelStyle() {
+  if (uiLayout.isLandscape && uiLayout.compact) {
+    return {
+      right: "96px",
+      bottom: "10px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "6px",
+      padding: "6px",
+      borderRadius: "10px",
+      background: "rgba(0,0,0,0.72)",
+      zIndex: "20"
+    };
+  }
+
+  return {
+    right: "10px",
+    bottom: uiLayout.compact ? "86px" : "96px",
+    display: "flex",
     gap: "6px",
+    padding: "6px",
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.72)",
     zIndex: "20"
   };
 }
 
-function getUtilityPanelStyle(bottomOffset) {
-  const compactLandscape = uiLayout.compact && uiLayout.landscape;
+function getZoomPanelStyle() {
+  if (uiLayout.isLandscape && uiLayout.compact) {
+    return {
+      right: "164px",
+      bottom: "10px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "6px",
+      padding: "6px",
+      borderRadius: "10px",
+      background: "rgba(0,0,0,0.72)",
+      zIndex: "20"
+    };
+  }
 
   return {
-    right: "8px",
-    bottom: bottomOffset + "px",
+    right: "10px",
+    bottom: uiLayout.compact ? "38px" : "46px",
     display: "flex",
-    flexDirection: compactLandscape ? "column" : "row",
     gap: "6px",
+    padding: "6px",
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.72)",
     zIndex: "20"
   };
 }
 
 function getBuildPanelStyle() {
-  const compactLandscape = uiLayout.compact && uiLayout.landscape;
+  if (uiLayout.isLandscape && uiLayout.compact) {
+    return {
+      left: "10px",
+      bottom: "10px",
+      display: "flex",
+      alignItems: "center",
+      gap: "6px",
+      padding: "8px",
+      borderRadius: "12px",
+      background: "rgba(0,0,0,0.82)",
+      maxWidth: "48vw",
+      zIndex: "22"
+    };
+  }
 
   return {
-    left: compactLandscape ? "58px" : "8px",
-    right: compactLandscape ? "108px" : "8px",
-    bottom: "8px",
-    display: "none",
-    gap: "8px",
-    zIndex: "24",
-    padding: "8px",
+    left: "50%",
+    bottom: uiLayout.compact ? "82px" : "92px",
+    transform: "translateX(-50%)",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    padding: uiLayout.compact ? "8px" : "10px",
     borderRadius: "12px",
-    background: "rgba(0,0,0,0.76)"
+    background: "rgba(0,0,0,0.82)",
+    width: uiLayout.compact
+      ? "calc(100vw - 20px)"
+      : "auto",
+    maxWidth: uiLayout.compact
+      ? "420px"
+      : "unset",
+    zIndex: "22"
+  };
+}
+
+function getTowerActionPanelStyle() {
+  return {
+    left: "10px",
+    bottom: uiLayout.compact ? "10px" : "14px",
+    display: "flex",
+    gap: "6px",
+    padding: uiLayout.compact ? "8px" : "10px",
+    borderRadius: "12px",
+    background: "rgba(0,0,0,0.72)",
+    zIndex: "21"
   };
 }
 
 function getSidePanelStyle() {
   return {
-    right: "8px",
-    top: uiLayout.hudHeight + "px",
-    width: uiLayout.compact ? "240px" : "270px",
-    display: "none",
-    padding: "12px",
-    borderRadius: "12px",
-    background: "rgba(0,0,0,0.84)",
+    left: uiLayout.compact ? "10px" : "20px",
+    top: uiLayout.compact ? "64px" : "82px",
+    width: uiLayout.compact
+      ? "260px"
+      : "320px",
+    maxWidth: "calc(100vw - 20px)",
+    maxHeight: uiLayout.compact
+      ? "70vh"
+      : "78vh",
+    overflowY: "auto",
+    padding: uiLayout.compact ? "12px" : "16px",
+    borderRadius: "14px",
+    background: "rgba(0,0,0,0.88)",
     color: "white",
-    zIndex: "25"
+    zIndex: "30"
   };
 }
