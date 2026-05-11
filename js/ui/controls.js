@@ -1,525 +1,296 @@
+// CORE FRONTIER — Stage 02.4.5-A
+// ui/controls.js — gameplay controls and action panels
+
 function createDynamicUI() {
-  removeElement(
-    "bottom-controls"
-  );
+  updateUILayout();
 
-  removeElement(
-    "speed-controls"
-  );
+  [
+    "bottom-control-panel",
+    "speed-panel",
+    "zoom-panel",
+    "tower-action-panel",
+    "build-confirm-panel",
+    "menu-panel",
+    "game-over-panel"
+  ].forEach(removeElement);
 
-  removeElement(
-    "zoom-controls"
-  );
+  createBottomControlPanel();
+  createUtilityControls();
+  createTowerActionPanel();
+  createBuildConfirmPanel();
+  createMenuPanel();
+  createGameOverPanel();
 
-  removeElement(
-    "build-panel"
-  );
-
-  createBottomControls();
-
-  createSpeedControls();
-
-  createZoomControls();
-
-  createBuildPanel();
+  updateTopbarVisibility();
 }
 
-// ---------- MAIN CONTROLS ----------
+function createBottomControlPanel() {
+  const panel = document.createElement("div");
 
-function createBottomControls() {
-  const panel =
-    document.createElement(
-      "div"
-    );
+  panel.id = "bottom-control-panel";
 
-  panel.id =
-    "bottom-controls";
+  applyFixedStyle(
+    panel,
+    getBottomPanelStyle()
+  );
 
-  applyFixedStyle(panel, {
-    left: "50%",
+  const buildButton = createUIButton(
+    uiLayout.compact
+      ? "🏹"
+      : "🏹 Башня",
 
-    bottom:
-      getBottomOffset(),
+    uiState.selectedMode === "tower"
+      ? "#d9a441"
+      : "#2f6b3c",
 
-    transform:
-      "translateX(-50%)",
+    () => buildTower()
+  );
 
-    display: "flex",
+  const waveButton = createUIButton(
+    uiLayout.compact
+      ? "⚔️"
+      : "⚔️ Волна",
 
-    gap:
-      uiLayout.compact
-        ? "6px"
-        : "8px",
+    "#8a5a2b",
 
-    padding:
-      uiLayout.compact
-        ? "8px"
-        : "10px",
+    () => startWave()
+  );
 
-    borderRadius: "14px",
+  const codexButton = createUIButton(
+    uiLayout.compact
+      ? "ℹ"
+      : "ℹ Codex",
 
-    background:
-      "rgba(0,0,0,0.72)",
+    uiState.infoPanelOpen
+      ? "#d9a441"
+      : "#33445f",
 
-    zIndex: "30",
+    () => {
+      uiState.infoPanelOpen =
+        !uiState.infoPanelOpen;
 
-    maxWidth:
-      "calc(100vw - 20px)"
-  });
+      if (uiState.infoPanelOpen) {
+        uiState.menuOpen = false;
+      }
+    }
+  );
 
-  // ---------- BUILD ----------
+  const menuButton = createUIButton(
+    uiLayout.compact
+      ? "☰"
+      : "☰ Меню",
 
-  const buildButton =
-    createUIButton(
-      uiLayout.compact
-        ? "🏹"
-        : "🏹 Башня",
+    uiState.menuOpen
+      ? "#d9a441"
+      : "#444444",
 
-      uiState.mode ===
-      UI_MODES.BUILD
+    () => {
+      uiState.menuOpen =
+        !uiState.menuOpen;
+
+      if (uiState.menuOpen) {
+        uiState.infoPanelOpen = false;
+      }
+    }
+  );
+
+  panel.appendChild(buildButton);
+  panel.appendChild(waveButton);
+  panel.appendChild(codexButton);
+  panel.appendChild(menuButton);
+
+  document.body.appendChild(panel);
+}
+
+function createUtilityControls() {
+  createSpeedControls();
+  createZoomControls();
+}
+
+function createSpeedControls() {
+  const panel = document.createElement("div");
+
+  panel.id = "speed-panel";
+
+  applyFixedStyle(
+    panel,
+    getSpeedPanelStyle()
+  );
+
+  [1, 2, 3].forEach(speed => {
+    const button = createUIButton(
+      "x" + speed,
+
+      speed === gameSpeed
         ? "#d9a441"
         : "#2f6b3c",
 
       () => {
-        // Если открыто меню/codex —
-        // сначала закрываем.
-        uiState.menuOpen =
-          false;
+        if (gameState.gameOver) return;
 
-        uiState.infoPanelOpen =
-          false;
-
-        if (
-          uiState.mode ===
-          UI_MODES.BUILD
-        ) {
-          resetUIMode();
-
-          uiState.selectedMode =
-            null;
-
-          uiState.pendingBuildTile =
-            null;
-        } else {
-          setUIMode(
-            UI_MODES.BUILD
-          );
-
-          uiState.selectedMode =
-            "build";
-        }
+        gameSpeed = speed;
 
         createDynamicUI();
+
+        notify(
+          "Скорость игры: x" + speed,
+          "info"
+        );
       }
     );
 
-  // ---------- WAVE ----------
-
-  const waveButton =
-    createUIButton(
+    button.style.padding =
       uiLayout.compact
-        ? "⚔️"
-        : "⚔️ Бой",
+        ? "7px 8px"
+        : "8px 10px";
 
-      "#8a5a2b",
-
-      () => {
-        // Во время menu/codex
-        // бой не стартует.
-        if (
-          uiState.menuOpen ||
-          uiState.infoPanelOpen
-        ) {
-          return;
-        }
-
-        startWave();
-      }
-    );
-
-  // ---------- CODEX ----------
-
-  const codexButton =
-    createUIButton(
-      uiLayout.compact
-        ? "📘"
-        : "📘 Codex",
-
-      uiState.infoPanelOpen
-        ? "#d9a441"
-        : "#33445f",
-
-      () => {
-        uiState.menuOpen =
-          false;
-
-        if (
-          uiState.infoPanelOpen
-        ) {
-          uiState.infoPanelOpen =
-            false;
-
-          resetUIMode();
-        } else {
-          uiState.infoPanelOpen =
-            true;
-
-          setUIMode(
-            UI_MODES.CODEX
-          );
-        }
-
-        createDynamicUI();
-      }
-    );
-
-  // ---------- MENU ----------
-
-  const menuButton =
-    createUIButton(
-      uiLayout.compact
-        ? "☰"
-        : "☰ Меню",
-
-      uiState.menuOpen
-        ? "#d9a441"
-        : "#444444",
-
-      () => {
-        uiState.infoPanelOpen =
-          false;
-
-        if (
-          uiState.menuOpen
-        ) {
-          uiState.menuOpen =
-            false;
-
-          resetUIMode();
-        } else {
-          uiState.menuOpen =
-            true;
-
-          setUIMode(
-            UI_MODES.MENU
-          );
-        }
-
-        createDynamicUI();
-      }
-    );
-
-  panel.appendChild(
-    buildButton
-  );
-
-  panel.appendChild(
-    waveButton
-  );
-
-  panel.appendChild(
-    codexButton
-  );
-
-  panel.appendChild(
-    menuButton
-  );
-
-  document.body.appendChild(
-    panel
-  );
-}
-
-// ---------- SPEED ----------
-
-function createSpeedControls() {
-  const panel =
-    document.createElement(
-      "div"
-    );
-
-  panel.id =
-    "speed-controls";
-
-  applyFixedStyle(panel, {
-    right:
-      getRightOffset(),
-
-    top:
-      getTopOffset(),
-
-    display: "flex",
-
-    flexDirection:
-      uiLayout.isLandscape
-        ? "column"
-        : "row",
-
-    gap: "6px",
-
-    padding: "6px",
-
-    borderRadius: "12px",
-
-    background:
-      "rgba(0,0,0,0.72)",
-
-    zIndex: "25"
+    panel.appendChild(button);
   });
 
-  [1, 2, 3].forEach(
-    speed => {
-      const button =
-        createUIButton(
-          "x" + speed,
+  document.body.appendChild(panel);
+}
 
-          gameSpeed ===
-          speed
-            ? "#d9a441"
-            : "#2f6b3c",
+function createZoomControls() {
+  const panel = document.createElement("div");
 
-          () => {
-            gameSpeed =
-              speed;
+  panel.id = "zoom-panel";
 
-            updateTopbar();
+  applyFixedStyle(
+    panel,
+    getZoomPanelStyle()
+  );
 
-            notify(
-              "Скорость x" +
-                speed,
-              "info"
-            );
+  const minus = createUIButton(
+    "−",
+    "#33445f",
 
-            createDynamicUI();
-          }
-        );
+    () =>
+      zoomAt(
+        canvas.width / 2,
+        canvas.height / 2,
+        camera.zoom - 0.12
+      )
+  );
 
-      panel.appendChild(
-        button
+  const plus = createUIButton(
+    "+",
+    "#33445f",
+
+    () =>
+      zoomAt(
+        canvas.width / 2,
+        canvas.height / 2,
+        camera.zoom + 0.12
+      )
+  );
+
+  const reset = createUIButton(
+    "⟲",
+    "#444444",
+
+    () => resetZoom(true)
+  );
+
+  [minus, plus, reset].forEach(button => {
+    button.style.padding =
+      uiLayout.compact
+        ? "7px 8px"
+        : "8px 10px";
+
+    panel.appendChild(button);
+  });
+
+  document.body.appendChild(panel);
+}
+
+function createTowerActionPanel() {
+  const panel = document.createElement("div");
+
+  panel.id = "tower-action-panel";
+
+  applyFixedStyle(
+    panel,
+    getTowerActionPanelStyle()
+  );
+
+  const sellButton = createUIButton(
+    "Продать",
+    "#2f6b3c",
+
+    () => sellSelectedTower()
+  );
+
+  const upgradeButton = createUIButton(
+    "Улучшить",
+    "#555555",
+
+    () => {
+      notify(
+        "Улучшение недоступно: нужна технология",
+        "warning"
       );
     }
   );
 
-  document.body.appendChild(
-    panel
-  );
+  panel.appendChild(sellButton);
+  panel.appendChild(upgradeButton);
+
+  document.body.appendChild(panel);
 }
 
-// ---------- ZOOM ----------
+function createBuildConfirmPanel() {
+  const panel = document.createElement("div");
 
-function createZoomControls() {
-  const panel =
-    document.createElement(
-      "div"
-    );
+  panel.id = "build-confirm-panel";
 
-  panel.id =
-    "zoom-controls";
-
-  applyFixedStyle(panel, {
-    right:
-      getRightOffset(),
-
-    top:
-      getZoomTopOffset(),
-
-    display: "flex",
-
-    flexDirection:
-      uiLayout.isLandscape
-        ? "column"
-        : "row",
-
-    gap: "6px",
-
-    padding: "6px",
-
-    borderRadius: "12px",
-
-    background:
-      "rgba(0,0,0,0.72)",
-
-    zIndex: "25"
-  });
-
-  const minus =
-    createUIButton(
-      "−",
-      "#33445f",
-
-      () => {
-        zoomAt(
-          canvas.width / 2,
-          canvas.height / 2,
-          camera.zoom - 0.1
-        );
-      }
-    );
-
-  const plus =
-    createUIButton(
-      "+",
-      "#33445f",
-
-      () => {
-        zoomAt(
-          canvas.width / 2,
-          canvas.height / 2,
-          camera.zoom + 0.1
-        );
-      }
-    );
-
-  const reset =
-    createUIButton(
-      "⟲",
-      "#444444",
-
-      () => {
-        resetZoom(true);
-      }
-    );
-
-  panel.appendChild(minus);
-  panel.appendChild(plus);
-  panel.appendChild(reset);
-
-  document.body.appendChild(
-    panel
+  applyFixedStyle(
+    panel,
+    getBuildPanelStyle()
   );
-}
 
-// ---------- BUILD PANEL ----------
+  const text = document.createElement("div");
 
-function createBuildPanel() {
-  const oldPanel =
-    document.getElementById(
-      "build-panel"
-    );
+  text.id = "build-confirm-text";
 
-  if (oldPanel) {
-    oldPanel.remove();
-  }
-
-  // Важно:
-  // panel создается
-  // только в BUILD mode.
-  if (
-    uiState.mode !==
-    UI_MODES.BUILD
-  ) {
-    return;
-  }
-
-  const panel =
-    document.createElement(
-      "div"
-    );
-
-  panel.id =
-    "build-panel";
-
-  applyFixedStyle(panel, {
-    left: "50%",
-
-    bottom:
-      uiLayout.compact
-        ? "78px"
-        : "92px",
-
-    transform:
-      "translateX(-50%)",
-
-    display: "flex",
-
-    alignItems:
-      "center",
-
-    gap: "6px",
-
-    padding:
-      uiLayout.compact
-        ? "8px"
-        : "10px",
-
-    borderRadius: "12px",
-
-    background:
-      "rgba(0,0,0,0.82)",
-
-    zIndex: "35",
-
-    maxWidth:
-      "calc(100vw - 20px)"
-  });
-
-  const text =
-    document.createElement(
-      "div"
-    );
-
-  text.style.color =
-    "white";
+  text.style.color = "white";
 
   text.style.fontSize =
     uiLayout.compact
-      ? "11px"
-      : "13px";
+      ? "12px"
+      : "14px";
 
-  text.style.minWidth =
-    "120px";
+  text.style.flex = "1";
 
-  if (
-    !uiState.pendingBuildTile
-  ) {
-    text.innerText =
-      "Выбери клетку";
-  } else {
-    text.innerText =
-      "Построить башню";
-  }
+  text.style.alignSelf = "center";
 
-  const confirm =
-    createUIButton(
-      uiLayout.compact
-        ? "✔"
-        : "Построить",
+  text.style.minWidth = "0";
 
-      "#2f6b3c",
+  text.style.overflow = "hidden";
 
-      () => {
-        confirmBuild();
-      }
-    );
+  text.style.textOverflow = "ellipsis";
 
-  const cancel =
-    createUIButton(
-      uiLayout.compact
-        ? "✖"
-        : "Отмена",
+  text.style.whiteSpace = "nowrap";
 
-      "#8a2d2d",
+  text.innerText =
+    "Выбери клетку";
 
-      () => {
-        uiState.pendingBuildTile =
-          null;
+  const confirmButton = createUIButton(
+    "Построить",
+    "#2f6b3c",
 
-        uiState.selectedMode =
-          null;
+    () => confirmBuild()
+  );
 
-        resetUIMode();
+  const cancelButton = createUIButton(
+    "Отмена",
+    "#8a2d2d",
 
-        createDynamicUI();
-      }
-    );
+    () => cancelBuildMode()
+  );
 
   panel.appendChild(text);
+  panel.appendChild(confirmButton);
+  panel.appendChild(cancelButton);
 
-  panel.appendChild(confirm);
-
-  panel.appendChild(cancel);
-
-  document.body.appendChild(
-    panel
-  );
+  document.body.appendChild(panel);
 }
