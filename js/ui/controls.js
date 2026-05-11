@@ -1,102 +1,161 @@
-// CORE FRONTIER — Stage 02.4.6-A
-// ui/controls.js — compact HUD controls and gameplay actions
+// CORE FRONTIER — Stage 02.4.6-A1
+// ui/controls.js — deterministic interaction controls
 
 function createDynamicUI() {
-  updateUILayout();
-
   [
     "bottom-control-panel",
     "speed-panel",
     "zoom-panel",
     "tower-action-panel",
-    "build-confirm-panel",
-    "menu-panel",
-    "game-over-panel",
-    "compact-wave-panel"
+    "build-confirm-panel"
   ].forEach(removeElement);
 
   createBottomControlPanel();
-  createUtilityControls();
-  createTowerActionPanel();
-  createBuildConfirmPanel();
-  createCompactWavePanel();
-  createMenuPanel();
-  createGameOverPanel();
 
-  updateTopbarVisibility();
+  createSpeedControls();
+
+  createZoomControls();
+
+  createTowerActionPanel();
+
+  createBuildConfirmPanel();
+
+  updateDomVisibility();
 }
 
-// ---------- MAIN ACTIONS ----------
+// ---------- MAIN HUD ----------
 
 function createBottomControlPanel() {
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
-  panel.id = "bottom-control-panel";
+  panel.id =
+    "bottom-control-panel";
 
-  applyFixedStyle(
-    panel,
-    getBottomPanelStyle()
-  );
+  applyFixedStyle(panel, {
+    left: "50%",
+    bottom: uiLayout.compact
+      ? "10px"
+      : "14px",
 
-  const buildButton = createUIButton(
-    uiLayout.compact
-      ? "🏹"
-      : "🏹 Башня",
+    transform:
+      "translateX(-50%)",
 
-    uiState.selectedMode === "tower"
-      ? "#d9a441"
-      : "#2f6b3c",
+    display: "flex",
 
-    () => buildTower()
-  );
+    gap: uiLayout.compact
+      ? "6px"
+      : "8px",
 
-  const waveButton = createUIButton(
-    uiLayout.compact
-      ? "⚔"
-      : "⚔ Волна",
+    padding: uiLayout.compact
+      ? "8px"
+      : "10px",
 
-    "#8a5a2b",
+    borderRadius: "14px",
 
-    () => startWave()
-  );
+    background:
+      "rgba(0,0,0,0.72)",
 
-  const codexButton = createUIButton(
-    uiLayout.compact
-      ? "📘"
-      : "📘 Codex",
+    zIndex: "20",
 
-    uiState.infoPanelOpen
-      ? "#d9a441"
-      : "#33445f",
+    maxWidth:
+      "calc(100vw - 20px)"
+  });
 
-    () => {
-      uiState.infoPanelOpen =
-        !uiState.infoPanelOpen;
+  // ---------- BUILD ----------
 
-      if (uiState.infoPanelOpen) {
-        uiState.menuOpen = false;
+  const buildButton =
+    createUIButton(
+      uiLayout.compact
+        ? "🏹"
+        : "🏹 Башня",
+
+      uiState.mode ===
+      UI_MODES.BUILD
+        ? "#d9a441"
+        : "#2f6b3c",
+
+      () => {
+        if (
+          uiState.mode ===
+          UI_MODES.BUILD
+        ) {
+          cancelBuildMode();
+
+          createDynamicUI();
+
+          return;
+        }
+
+        enterBuildMode();
+
+        createDynamicUI();
       }
-    }
-  );
+    );
 
-  const menuButton = createUIButton(
-    uiLayout.compact
-      ? "☰"
-      : "☰ Меню",
+  // ---------- WAVE ----------
 
-    uiState.menuOpen
-      ? "#d9a441"
-      : "#444444",
+  const waveButton =
+    createUIButton(
+      uiLayout.compact
+        ? "⚔️"
+        : "⚔️ Бой",
 
-    () => {
-      uiState.menuOpen =
-        !uiState.menuOpen;
+      "#8a5a2b",
 
-      if (uiState.menuOpen) {
-        uiState.infoPanelOpen = false;
+      () => {
+        if (
+          uiState.mode ===
+            UI_MODES.MENU ||
+          uiState.mode ===
+            UI_MODES.CODEX
+        ) {
+          return;
+        }
+
+        startWave();
       }
-    }
-  );
+    );
+
+  // ---------- CODEX ----------
+
+  const codexButton =
+    createUIButton(
+      uiLayout.compact
+        ? "📘"
+        : "📘 Codex",
+
+      uiState.mode ===
+      UI_MODES.CODEX
+        ? "#d9a441"
+        : "#33445f",
+
+      () => {
+        toggleCodex();
+
+        createDynamicUI();
+      }
+    );
+
+  // ---------- MENU ----------
+
+  const menuButton =
+    createUIButton(
+      uiLayout.compact
+        ? "☰"
+        : "☰ Меню",
+
+      uiState.mode ===
+      UI_MODES.MENU
+        ? "#d9a441"
+        : "#444444",
+
+      () => {
+        toggleMenu();
+
+        createDynamicUI();
+      }
+    );
 
   [
     buildButton,
@@ -104,65 +163,69 @@ function createBottomControlPanel() {
     codexButton,
     menuButton
   ].forEach(button => {
-    button.style.minWidth =
-      uiLayout.compact
-        ? "44px"
-        : "unset";
-
     panel.appendChild(button);
   });
 
   document.body.appendChild(panel);
 }
 
-// ---------- SPEED / ZOOM ----------
-
-function createUtilityControls() {
-  createSpeedControls();
-  createZoomControls();
-}
+// ---------- SPEED ----------
 
 function createSpeedControls() {
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
   panel.id = "speed-panel";
 
-  applyFixedStyle(
-    panel,
-    getSpeedPanelStyle()
-  );
+  applyFixedStyle(panel, {
+    right: "10px",
+
+    top: uiLayout.compact
+      ? "70px"
+      : "90px",
+
+    display: "flex",
+
+    flexDirection:
+      uiLayout.isLandscape
+        ? "column"
+        : "row",
+
+    gap: "6px",
+
+    padding: "6px",
+
+    borderRadius: "12px",
+
+    background:
+      "rgba(0,0,0,0.72)",
+
+    zIndex: "20"
+  });
 
   [1, 2, 3].forEach(speed => {
-    const button = createUIButton(
-      "x" + speed,
+    const button =
+      createUIButton(
+        "x" + speed,
 
-      speed === gameSpeed
-        ? "#d9a441"
-        : "#2f6b3c",
+        gameSpeed === speed
+          ? "#d9a441"
+          : "#2f6b3c",
 
-      () => {
-        if (gameState.gameOver) return;
+        () => {
+          gameSpeed = speed;
 
-        gameSpeed = speed;
+          updateUI();
 
-        createDynamicUI();
+          createDynamicUI();
 
-        notify(
-          "Скорость игры: x" + speed,
-          "info"
-        );
-      }
-    );
-
-    button.style.padding =
-      uiLayout.compact
-        ? "6px 8px"
-        : "8px 10px";
-
-    button.style.fontSize =
-      uiLayout.compact
-        ? "11px"
-        : "13px";
+          notify(
+            "Скорость: x" +
+              speed,
+            "info"
+          );
+        }
+      );
 
     panel.appendChild(button);
   });
@@ -170,79 +233,136 @@ function createSpeedControls() {
   document.body.appendChild(panel);
 }
 
+// ---------- ZOOM ----------
+
 function createZoomControls() {
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
   panel.id = "zoom-panel";
 
-  applyFixedStyle(
-    panel,
-    getZoomPanelStyle()
-  );
+  applyFixedStyle(panel, {
+    right: "10px",
 
-  const minus = createUIButton(
-    "−",
-    "#33445f",
+    top: uiLayout.compact
+      ? "150px"
+      : "210px",
 
-    () =>
-      zoomAt(
-        canvas.width / 2,
-        canvas.height / 2,
-        camera.zoom - 0.12
-      )
-  );
+    display: "flex",
 
-  const plus = createUIButton(
-    "+",
-    "#33445f",
+    flexDirection:
+      uiLayout.isLandscape
+        ? "column"
+        : "row",
 
-    () =>
-      zoomAt(
-        canvas.width / 2,
-        canvas.height / 2,
-        camera.zoom + 0.12
-      )
-  );
+    gap: "6px",
 
-  const reset = createUIButton(
-    "⟲",
-    "#444444",
+    padding: "6px",
 
-    () => resetZoom(true)
-  );
+    borderRadius: "12px",
 
-  [minus, plus, reset].forEach(button => {
-    button.style.padding =
-      uiLayout.compact
-        ? "6px 8px"
-        : "8px 10px";
+    background:
+      "rgba(0,0,0,0.72)",
 
-    button.style.fontSize =
-      uiLayout.compact
-        ? "11px"
-        : "13px";
-
-    panel.appendChild(button);
+    zIndex: "20"
   });
+
+  const minus =
+    createUIButton(
+      "−",
+      "#33445f",
+
+      () => {
+        zoomAt(
+          canvas.width / 2,
+          canvas.height / 2,
+          camera.zoom - 0.1
+        );
+
+        updateUI();
+      }
+    );
+
+  const plus =
+    createUIButton(
+      "+",
+      "#33445f",
+
+      () => {
+        zoomAt(
+          canvas.width / 2,
+          canvas.height / 2,
+          camera.zoom + 0.1
+        );
+
+        updateUI();
+      }
+    );
+
+  const reset =
+    createUIButton(
+      "⟲",
+      "#444444",
+
+      () => {
+        resetZoom(true);
+
+        updateUI();
+      }
+    );
+
+  panel.appendChild(minus);
+  panel.appendChild(plus);
+  panel.appendChild(reset);
 
   document.body.appendChild(panel);
 }
 
-// ---------- BUILD ----------
+// ---------- BUILD PANEL ----------
 
 function createBuildConfirmPanel() {
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
-  panel.id = "build-confirm-panel";
+  panel.id =
+    "build-confirm-panel";
 
-  applyFixedStyle(
-    panel,
-    getBuildPanelStyle()
-  );
+  applyFixedStyle(panel, {
+    left: "50%",
 
-  const text = document.createElement("div");
+    bottom: uiLayout.compact
+      ? "82px"
+      : "96px",
 
-  text.id = "build-confirm-text";
+    transform:
+      "translateX(-50%)",
+
+    display: "flex",
+
+    alignItems: "center",
+
+    gap: "6px",
+
+    padding: uiLayout.compact
+      ? "8px"
+      : "10px",
+
+    borderRadius: "12px",
+
+    background:
+      "rgba(0,0,0,0.82)",
+
+    zIndex: "22",
+
+    maxWidth:
+      "calc(100vw - 20px)"
+  });
+
+  const text =
+    document.createElement("div");
+
+  text.id =
+    "build-confirm-text";
 
   text.style.color = "white";
 
@@ -251,127 +371,115 @@ function createBuildConfirmPanel() {
       ? "11px"
       : "13px";
 
-  text.style.flex = "1";
-
-  text.style.alignSelf = "center";
-
-  text.style.minWidth = "0";
-
-  text.style.overflow = "hidden";
-
-  text.style.textOverflow = "ellipsis";
-
-  text.style.whiteSpace = "nowrap";
+  text.style.minWidth =
+    "120px";
 
   text.innerText =
-    "Выбери клетку";
+    getBuildPanelText();
 
-  const confirmButton = createUIButton(
-    uiLayout.compact
-      ? "✔"
-      : "Построить",
+  const confirm =
+    createUIButton(
+      uiLayout.compact
+        ? "✔"
+        : "Построить",
 
-    "#2f6b3c",
+      "#2f6b3c",
 
-    () => confirmBuild()
-  );
+      () => {
+        confirmBuild();
+      }
+    );
 
-  const cancelButton = createUIButton(
-    uiLayout.compact
-      ? "✖"
-      : "Отмена",
+  const cancel =
+    createUIButton(
+      uiLayout.compact
+        ? "✖"
+        : "Отмена",
 
-    "#8a2d2d",
+      "#8a2d2d",
 
-    () => cancelBuildMode()
-  );
+      () => {
+        cancelBuildMode();
+
+        createDynamicUI();
+      }
+    );
 
   panel.appendChild(text);
-  panel.appendChild(confirmButton);
-  panel.appendChild(cancelButton);
+  panel.appendChild(confirm);
+  panel.appendChild(cancel);
 
   document.body.appendChild(panel);
 }
 
-// ---------- TOWER PANEL ----------
+// ---------- TOWER ACTIONS ----------
 
 function createTowerActionPanel() {
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
-  panel.id = "tower-action-panel";
+  panel.id =
+    "tower-action-panel";
 
-  applyFixedStyle(
-    panel,
-    getTowerActionPanelStyle()
+  applyFixedStyle(panel, {
+    left: "10px",
+
+    bottom: uiLayout.compact
+      ? "10px"
+      : "14px",
+
+    display: "flex",
+
+    gap: "6px",
+
+    padding: uiLayout.compact
+      ? "8px"
+      : "10px",
+
+    borderRadius: "12px",
+
+    background:
+      "rgba(0,0,0,0.72)",
+
+    zIndex: "21"
+  });
+
+  const sellButton =
+    createUIButton(
+      uiLayout.compact
+        ? "💰"
+        : "Продать",
+
+      "#2f6b3c",
+
+      () => {
+        sellSelectedTower();
+      }
+    );
+
+  const upgradeButton =
+    createUIButton(
+      uiLayout.compact
+        ? "🔒"
+        : "Улучшить",
+
+      "#555555",
+
+      () => {
+        notify(
+          "Улучшения пока недоступны",
+          "warning"
+        );
+      }
+    );
+
+  panel.appendChild(
+    sellButton
   );
 
-  const sellButton = createUIButton(
-    uiLayout.compact
-      ? "💰"
-      : "Продать",
-
-    "#2f6b3c",
-
-    () => sellSelectedTower()
+  panel.appendChild(
+    upgradeButton
   );
-
-  const upgradeButton = createUIButton(
-    uiLayout.compact
-      ? "🔒"
-      : "Улучшить",
-
-    "#555555",
-
-    () => {
-      notify(
-        "Улучшения пока недоступны",
-        "warning"
-      );
-    }
-  );
-
-  panel.appendChild(sellButton);
-  panel.appendChild(upgradeButton);
-
-  document.body.appendChild(panel);
-}
-
-// ---------- COMPACT WAVE HUD ----------
-
-function createCompactWavePanel() {
-  const panel = document.createElement("div");
-
-  panel.id = "compact-wave-panel";
-
-  applyFixedStyle(
-    panel,
-    getCompactWavePanelStyle()
-  );
-
-  panel.style.color = "white";
-
-  panel.style.fontSize =
-    uiLayout.compact
-      ? "11px"
-      : "13px";
-
-  panel.style.pointerEvents = "none";
-
-  const wave = document.createElement("div");
-
-  wave.id = "compact-wave-text";
-
-  const enemies = document.createElement("div");
-
-  enemies.id = "compact-enemies-text";
-
-  const speed = document.createElement("div");
-
-  speed.id = "compact-speed-text";
-
-  panel.appendChild(wave);
-  panel.appendChild(enemies);
-  panel.appendChild(speed);
 
   document.body.appendChild(panel);
 }
