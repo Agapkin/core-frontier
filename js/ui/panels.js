@@ -1,20 +1,56 @@
-// CORE FRONTIER — Stage 02.4.6-A
-// ui/panels.js — compact HUD panels and overlays
+// CORE FRONTIER — Stage 02.4.6-A1
+// ui/panels.js — deterministic panels and visibility system
+
+// ---------- MENU PANEL ----------
 
 function createMenuPanel() {
-  const panel = document.createElement("div");
+  removeElement("menu-panel");
+
+  const panel =
+    document.createElement("div");
 
   panel.id = "menu-panel";
 
-  applyFixedStyle(
-    panel,
-    getSidePanelStyle()
+  applyFixedStyle(panel, {
+    left: uiLayout.compact
+      ? "10px"
+      : "20px",
+
+    top: uiLayout.compact
+      ? "70px"
+      : "90px",
+
+    width: uiLayout.compact
+      ? "260px"
+      : "320px",
+
+    maxWidth:
+      "calc(100vw - 20px)",
+
+    maxHeight:
+      "70vh",
+
+    overflowY: "auto",
+
+    padding: uiLayout.compact
+      ? "12px"
+      : "16px",
+
+    borderRadius: "14px",
+
+    background:
+      "rgba(0,0,0,0.88)",
+
+    color: "white",
+
+    zIndex: "40"
+  });
+
+  // ---------- TITLE ----------
+
+  panel.appendChild(
+    createPanelTitle("Меню")
   );
-
-  const title =
-    createPanelTitle("Меню");
-
-  panel.appendChild(title);
 
   panel.appendChild(
     createSmallText(
@@ -22,16 +58,17 @@ function createMenuPanel() {
     )
   );
 
-  Object.values(difficultyProfiles).forEach(
-    profile => {
-      const active =
-        profile.id ===
-        gameState.difficulty;
+  // ---------- DIFFICULTIES ----------
 
-      const button = createUIButton(
+  Object.values(
+    difficultyProfiles
+  ).forEach(profile => {
+    const button =
+      createUIButton(
         profile.name,
 
-        active
+        gameState.difficulty ===
+        profile.id
           ? "#d9a441"
           : "#33445f",
 
@@ -52,7 +89,6 @@ function createMenuPanel() {
             profile.id;
 
           updateUI();
-          createDynamicUI();
 
           notify(
             "Сложность: " +
@@ -62,44 +98,68 @@ function createMenuPanel() {
         }
       );
 
-      button.style.width = "100%";
-      button.style.marginTop = "6px";
+    button.style.width = "100%";
 
-      panel.appendChild(button);
-    }
-  );
+    button.style.marginTop =
+      "6px";
 
-  const restartTitle =
+    panel.appendChild(button);
+  });
+
+  // ---------- SYSTEM ----------
+
+  const systemLabel =
     createSmallText("Система");
 
-  restartTitle.style.marginTop = "12px";
+  systemLabel.style.marginTop =
+    "14px";
 
-  panel.appendChild(restartTitle);
+  panel.appendChild(
+    systemLabel
+  );
 
   const restartButton =
     createUIButton(
       "⟲ Новая игра",
+
       "#8a2d2d",
 
       () => {
         restartGame();
-        uiState.menuOpen = false;
+
+        resetUIState();
+
+        createDynamicUI();
       }
     );
 
-  restartButton.style.width = "100%";
+  restartButton.style.width =
+    "100%";
 
-  panel.appendChild(restartButton);
+  restartButton.style.marginTop =
+    "6px";
 
-  document.body.appendChild(panel);
+  panel.appendChild(
+    restartButton
+  );
+
+  document.body.appendChild(
+    panel
+  );
 }
 
 // ---------- GAME OVER ----------
 
 function createGameOverPanel() {
-  const panel = document.createElement("div");
+  removeElement(
+    "game-over-panel"
+  );
 
-  panel.id = "game-over-panel";
+  const panel =
+    document.createElement("div");
+
+  panel.id =
+    "game-over-panel";
 
   applyFixedStyle(panel, {
     left: "50%",
@@ -108,16 +168,14 @@ function createGameOverPanel() {
     transform:
       "translate(-50%, -50%)",
 
-    display: "none",
+    padding: uiLayout.compact
+      ? "14px"
+      : "18px",
 
-    padding:
-      uiLayout.compact
-        ? "14px"
-        : "18px",
+    borderRadius: "16px",
 
-    borderRadius: "14px",
-
-    background: "rgba(0,0,0,0.88)",
+    background:
+      "rgba(0,0,0,0.9)",
 
     color: "white",
 
@@ -126,11 +184,9 @@ function createGameOverPanel() {
     minWidth:
       uiLayout.compact
         ? "240px"
-        : "280px",
+        : "300px",
 
-    maxWidth: "92vw",
-
-    zIndex: "40"
+    zIndex: "60"
   });
 
   const title =
@@ -139,56 +195,84 @@ function createGameOverPanel() {
   title.innerText =
     "БАЗА УНИЧТОЖЕНА";
 
+  title.style.fontWeight =
+    "bold";
+
   title.style.fontSize =
     uiLayout.compact
       ? "20px"
       : "24px";
 
-  title.style.fontWeight = "bold";
-
-  title.style.marginBottom = "12px";
+  title.style.marginBottom =
+    "14px";
 
   const retryButton =
     createUIButton(
-      "↩ Повторить",
+      "↩ Повторить волну",
+
       "#2f6b3c",
 
-      () => retryLastWave()
+      () => {
+        retryLastWave();
+
+        resetUIState();
+
+        createDynamicUI();
+      }
     );
 
-  retryButton.style.width = "100%";
-  retryButton.style.marginBottom = "8px";
+  retryButton.style.width =
+    "100%";
+
+  retryButton.style.marginBottom =
+    "8px";
 
   const restartButton =
     createUIButton(
       "⟲ Новая игра",
+
       "#8a2d2d",
 
-      () => restartGame()
+      () => {
+        restartGame();
+
+        resetUIState();
+
+        createDynamicUI();
+      }
     );
 
-  restartButton.style.width = "100%";
+  restartButton.style.width =
+    "100%";
 
   panel.appendChild(title);
-  panel.appendChild(retryButton);
-  panel.appendChild(restartButton);
 
-  document.body.appendChild(panel);
+  panel.appendChild(
+    retryButton
+  );
+
+  panel.appendChild(
+    restartButton
+  );
+
+  document.body.appendChild(
+    panel
+  );
 }
 
-// ---------- DOM VISIBILITY ----------
+// ---------- VISIBILITY ----------
 
 function updateDomVisibility() {
-  const towerPanel =
+  const menuPanel =
     document.getElementById(
-      "tower-action-panel"
+      "menu-panel"
     );
 
-  if (towerPanel) {
-    towerPanel.style.display =
-      uiState.selectedTower &&
-      !gameState.gameOver
-        ? "flex"
+  if (menuPanel) {
+    menuPanel.style.display =
+      uiState.mode ===
+      UI_MODES.MENU
+        ? "block"
         : "none";
   }
 
@@ -199,10 +283,36 @@ function updateDomVisibility() {
 
   if (buildPanel) {
     buildPanel.style.display =
-      uiState.selectedMode ===
-        "tower" &&
-      !gameState.gameOver
+      uiState.mode ===
+      UI_MODES.BUILD
         ? "flex"
+        : "none";
+  }
+
+  const towerPanel =
+    document.getElementById(
+      "tower-action-panel"
+    );
+
+  if (towerPanel) {
+    towerPanel.style.display =
+      uiState.selectedTower &&
+      uiState.mode ===
+        UI_MODES.IDLE
+        ? "flex"
+        : "none";
+  }
+
+  const gameOverPanel =
+    document.getElementById(
+      "game-over-panel"
+    );
+
+  if (gameOverPanel) {
+    gameOverPanel.style.display =
+      uiState.mode ===
+      UI_MODES.GAME_OVER
+        ? "block"
         : "none";
   }
 
@@ -215,35 +325,9 @@ function updateDomVisibility() {
     buildText.innerText =
       getBuildPanelText();
   }
-
-  const menuPanel =
-    document.getElementById(
-      "menu-panel"
-    );
-
-  if (menuPanel) {
-    menuPanel.style.display =
-      uiState.menuOpen
-        ? "block"
-        : "none";
-  }
-
-  const gameOverPanel =
-    document.getElementById(
-      "game-over-panel"
-    );
-
-  if (gameOverPanel) {
-    gameOverPanel.style.display =
-      gameState.gameOver
-        ? "block"
-        : "none";
-  }
-
-  updateCompactWaveHUD();
 }
 
-// ---------- HUD TEXT ----------
+// ---------- HUD ----------
 
 function updateUI() {
   setText(
@@ -262,6 +346,13 @@ function updateUI() {
   );
 
   setText(
+    "power",
+    power.used +
+      "/" +
+      power.capacity
+  );
+
+  setText(
     "hp",
     Math.max(
       0,
@@ -272,13 +363,6 @@ function updateUI() {
   setText(
     "wave",
     waveState.number
-  );
-
-  setText(
-    "power",
-    power.used +
-      "/" +
-      power.capacity
   );
 
   setText(
@@ -294,75 +378,46 @@ function updateUI() {
       camera.zoom * 100
     ) + "%"
   );
-
-  updateCompactWaveHUD();
 }
 
-function updateCompactWaveHUD() {
-  const wave =
-    document.getElementById(
-      "compact-wave-text"
-    );
-
-  const enemies =
-    document.getElementById(
-      "compact-enemies-text"
-    );
-
-  const speed =
-    document.getElementById(
-      "compact-speed-text"
-    );
-
-  if (wave) {
-    wave.innerText =
-      "🌊 " + waveState.number;
-  }
-
-  if (enemies) {
-    enemies.innerText =
-      "👾 " +
-      enemiesAlive() +
-      "/" +
-      waveState.totalEnemies;
-  }
-
-  if (speed) {
-    speed.innerText =
-      "⏩ x" + gameSpeed;
-  }
-}
-
-// ---------- SELECTED TOWER ----------
+// ---------- TOWER PANEL ----------
 
 function drawSelectedTowerPanel() {
-  if (!uiState.selectedTower) return;
+  if (
+    !uiState.selectedTower ||
+    uiState.mode !==
+      UI_MODES.IDLE
+  ) {
+    return;
+  }
 
   const tower =
     uiState.selectedTower;
 
-  const towerType =
-    towerTypes[tower.typeId];
+  const type =
+    towerTypes[
+      tower.typeId
+    ];
 
   const width =
     uiLayout.compact
       ? 230
-      : 300;
+      : 290;
 
   const height =
     uiLayout.compact
-      ? 118
-      : 150;
+      ? 110
+      : 138;
 
   const x = 12;
 
   const y =
     uiLayout.compact
-      ? 108
-      : 130;
+      ? 88
+      : 110;
 
   ctx.fillStyle =
-    "rgba(0,0,0,0.68)";
+    "rgba(0,0,0,0.7)";
 
   ctx.fillRect(
     x,
@@ -371,7 +426,8 @@ function drawSelectedTowerPanel() {
     height
   );
 
-  ctx.fillStyle = "white";
+  ctx.fillStyle =
+    "white";
 
   ctx.font =
     uiLayout.compact
@@ -379,7 +435,7 @@ function drawSelectedTowerPanel() {
       : "14px Arial";
 
   ctx.fillText(
-    towerType.name,
+    type.name,
     x + 12,
     y + 22
   );
@@ -398,41 +454,47 @@ function drawSelectedTowerPanel() {
   );
 
   ctx.fillText(
-    "RNG " + tower.range,
+    "RNG " +
+      tower.range,
     x + 12,
     y + 82
   );
 
-  ctx.fillStyle = "#aaa";
+  ctx.fillStyle =
+    "#aaaaaa";
 
   ctx.fillText(
     "Улучшения позже",
     x + 12,
-    y + 104
+    y + 102
   );
 }
 
 // ---------- CODEX ----------
 
 function drawInfoPanel() {
-  if (!uiState.infoPanelOpen) return;
+  if (
+    uiState.mode !==
+    UI_MODES.CODEX
+  ) {
+    return;
+  }
 
-  const compact =
-    uiLayout.compact;
+  const width =
+    uiLayout.compact
+      ? Math.min(
+          canvas.width - 20,
+          300
+        )
+      : 360;
 
-  const width = compact
-    ? Math.min(
-        canvas.width - 20,
-        300
-      )
-    : 360;
-
-  const height = compact
-    ? Math.min(
-        canvas.height - 120,
-        360
-      )
-    : 480;
+  const height =
+    uiLayout.compact
+      ? Math.min(
+          canvas.height - 100,
+          360
+        )
+      : 480;
 
   const x =
     canvas.width -
@@ -440,12 +502,12 @@ function drawInfoPanel() {
     10;
 
   const y =
-    compact
-      ? 54
-      : 74;
+    uiLayout.compact
+      ? 56
+      : 76;
 
   ctx.fillStyle =
-    "rgba(0,0,0,0.88)";
+    "rgba(0,0,0,0.9)";
 
   ctx.fillRect(
     x,
@@ -454,10 +516,11 @@ function drawInfoPanel() {
     height
   );
 
-  ctx.fillStyle = "white";
+  ctx.fillStyle =
+    "white";
 
   ctx.font =
-    compact
+    uiLayout.compact
       ? "15px Arial"
       : "18px Arial";
 
@@ -468,86 +531,30 @@ function drawInfoPanel() {
   );
 
   ctx.font =
-    compact
+    uiLayout.compact
       ? "11px Arial"
       : "13px Arial";
 
   let lineY = y + 48;
 
   ctx.fillText(
-    "Башни:",
+    "⚔️ Начни бой кнопкой Бой",
     x + 14,
     lineY
   );
 
-  lineY += compact
-    ? 18
-    : 24;
-
-  Object.values(towerTypes).forEach(
-    tower => {
-      ctx.fillText(
-        tower.name +
-          " | ⚡ " +
-          tower.powerUsage,
-        x + 18,
-        lineY
-      );
-
-      lineY += compact
-        ? 16
-        : 20;
-    }
-  );
-
-  lineY += compact
-    ? 8
-    : 12;
+  lineY += 24;
 
   ctx.fillText(
-    "Враги:",
+    "🏹 Строй башни",
     x + 14,
     lineY
   );
 
-  lineY += compact
-    ? 18
-    : 24;
-
-  Object.values(enemyTypes).forEach(
-    enemy => {
-      ctx.fillText(
-        enemy.name +
-          " | HP " +
-          enemy.hp,
-        x + 18,
-        lineY
-      );
-
-      lineY += compact
-        ? 16
-        : 20;
-    }
-  );
-
-  lineY += compact
-    ? 10
-    : 14;
-
-  ctx.fillStyle = "#aaa";
+  lineY += 24;
 
   ctx.fillText(
-    "Построй башни и защити базу",
-    x + 14,
-    lineY
-  );
-
-  lineY += compact
-    ? 16
-    : 20;
-
-  ctx.fillText(
-    "⚔ запускает волну врагов",
+    "🛡️ Защити базу",
     x + 14,
     lineY
   );
@@ -556,10 +563,15 @@ function drawInfoPanel() {
 // ---------- GAME OVER OVERLAY ----------
 
 function drawGameOver() {
-  if (!gameState.gameOver) return;
+  if (
+    uiState.mode !==
+    UI_MODES.GAME_OVER
+  ) {
+    return;
+  }
 
   ctx.fillStyle =
-    "rgba(0,0,0,0.66)";
+    "rgba(0,0,0,0.65)";
 
   ctx.fillRect(
     0,
