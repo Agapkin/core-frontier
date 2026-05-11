@@ -1,43 +1,190 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
 body {
   margin: 0;
+  padding: 0;
   overflow: hidden;
-  background: #0f1720;
-  font-family: Arial, sans-serif;
+
+  width: 100%;
+  height: 100%;
+
+  background: #111;
+  color: white;
+
+  touch-action: none;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+
+  overscroll-behavior: none;
+
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 
 canvas {
   display: block;
-  background: #18361f;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: #183b22;
 }
 
-#ui {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  color: white;
-}
+/* ---------- TOPBAR ---------- */
 
 .topbar {
+  position: fixed;
+
+  top: calc(6px + env(safe-area-inset-top));
+  left: calc(6px + env(safe-area-inset-left));
+  right: calc(6px + env(safe-area-inset-right));
+
+  z-index: 100;
+
   display: flex;
-  gap: 12px;
-  padding: 12px;
-  background: rgba(0,0,0,0.5);
-  font-size: 18px;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  pointer-events: none;
 }
 
-.buttons {
-  padding: 10px;
+.cf-chip {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  min-height: 28px;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.62);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  font-size: 13px;
+  font-weight: bold;
+
+  color: white;
+
+  pointer-events: auto;
 }
+
+/* ---------- BUTTONS ---------- */
 
 button {
-  background: #2f6b3c;
-  border: none;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* ---------- PANELS ---------- */
+
+#bottom-control-panel,
+#utility-control-panel,
+#tower-action-panel,
+#build-confirm-panel,
+#menu-panel,
+#game-over-panel {
+  pointer-events: auto;
+}
+
+/* ---------- SCROLL ---------- */
+
+#menu-panel {
+  scrollbar-width: thin;
+}
+
+#menu-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+#menu-panel::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.22);
+  border-radius: 999px;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 768px) {
+
+  .topbar {
+    gap: 4px;
+  }
+
+  .cf-chip {
+    min-height: 24px;
+
+    padding: 4px 8px;
+
+    font-size: 11px;
+  }
+
+  button {
+    font-size: 13px !important;
+  }
+}
+
+/* ---------- MOBILE LANDSCAPE ---------- */
+
+@media (max-width: 950px) and (orientation: landscape) {
+
+  .topbar {
+    left: calc(8px + env(safe-area-inset-left));
+    right: calc(76px + env(safe-area-inset-right));
+  }
+
+  .cf-chip {
+    min-height: 22px;
+
+    padding: 3px 7px;
+
+    font-size: 10px;
+  }
+}
+
+/* ---------- TABLET ---------- */
+
+@media (min-width: 769px) and (max-width: 1180px) {
+
+  .cf-chip {
+    font-size: 12px;
+  }
+}
+
+/* ---------- DESKTOP ---------- */
+
+@media (min-width: 1181px) {
+
+  .cf-chip {
+    font-size: 14px;
+  }
 }
