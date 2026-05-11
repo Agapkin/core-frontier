@@ -1,15 +1,6 @@
 // CORE FRONTIER — Stage 02.4.5
 // ui/layout.js — responsive UI layout system
 
-const uiLayout = {
-  compact: false,
-  landscape: false,
-  safeTop: 0,
-  safeBottom: 0,
-  hudHeight: 64,
-  bottomHeight: 72
-};
-
 function updateUILayout() {
   const compact = window.innerWidth < 760;
   const landscape = window.innerWidth > window.innerHeight;
@@ -92,8 +83,8 @@ function getUtilityPanelStyle(bottomOffset) {
   const compactLandscape = uiLayout.compact && uiLayout.landscape;
 
   return {
-    right: compactLandscape ? "8px" : "8px",
-    bottom: compactLandscape ? bottomOffset + "px" : bottomOffset + "px",
+    right: "8px",
+    bottom: bottomOffset + "px",
     display: "flex",
     flexDirection: compactLandscape ? "column" : "row",
     gap: "6px",
