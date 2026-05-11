@@ -1058,3 +1058,278 @@ Stage 02.4.6 будет выполняться через PASSES.
 - onboarding;
 - gameplay communication layer;
 - unified HUD system.
+
+---
+
+# DEVELOPER REPORT — Stage 02.4.6-A
+## HUD REFACTOR PASS
+
+PASS A был выполнен после:
+- анализа blind playtests;
+- анализа mobile QA;
+- анализа iPad/iPhone layout проблем;
+- анализа gameplay-space conflicts;
+- анализа Stage 02.4.5-A regression risks;
+- анализа актуального ZIP репозитория.
+
+PASS A стал первым этапом нового workflow:
+
+stage
+→ ZIP analysis
+→ technical implementation map
+→ PASS execution
+→ validation
+→ QA.
+
+---
+
+# Главная цель PASS A
+
+PASS A НЕ добавлял новые механики.
+
+Главная задача PASS A:
+
+уменьшить HUD clutter и освободить gameplay-space.
+
+---
+
+# Что было проблемой до PASS A
+
+До PASS A HUD представлял собой набор независимых панелей:
+
+- wave panel;
+- speed panel;
+- zoom panel;
+- build panel;
+- action panel;
+- topbar;
+- codex;
+- menu.
+
+Эти панели:
+- конкурировали за место;
+- перекрывали gameplay;
+- плохо работали на mobile;
+- особенно конфликтовали в landscape.
+
+Blind playtests также показали:
+игроки не понимают:
+- gameplay flow;
+- кнопку волны;
+- HUD;
+- ресурсы;
+- gameplay hierarchy.
+
+---
+
+# Что было выполнено в PASS A
+
+---
+
+# 1. Layered HUD Architecture
+
+В index.html была подготовлена layered HUD architecture.
+
+Добавлены:
+- hud-root;
+- overlay-root;
+- tutorial-root.
+
+Это создаёт foundation для:
+- onboarding overlays;
+- FTUE;
+- tutorial layers;
+- contextual highlights;
+- gameplay overlays.
+
+---
+
+# 2. Unified HUD Zones
+
+В layout.js была переработана HUD zone system.
+
+Созданы:
+- compact HUD zones;
+- gameplay-safe layout zones;
+- отдельные схемы portrait/landscape;
+- compact wave HUD positioning.
+
+---
+
+# 3. Landscape Cleanup
+
+В landscape mobile:
+- speed controls перенесены вверх вправо;
+- zoom controls отделены;
+- action controls собраны справа;
+- уменьшено перекрытие gameplay-space.
+
+---
+
+# 4. Compact Wave HUD
+
+Большой wave panel был удалён.
+
+Вместо него создан compact HUD:
+
+- 🌊 wave
+- 👾 enemies
+- ⏩ speed
+
+Это:
+- уменьшает визуальный шум;
+- освобождает экран;
+- делает gameplay-area чище.
+
+---
+
+# 5. Build Panel Cleanup
+
+Build confirm panel уменьшен.
+
+Для compact mode:
+- кнопки сокращены;
+- footprint уменьшен;
+- перекрытие gameplay-space снижено.
+
+При этом:
+существующий build flow сохранён,
+чтобы не ломать уже рабочую механику.
+
+---
+
+# 6. Compact Codex
+
+Codex был переработан:
+- уменьшен;
+- упрощён;
+- стал более mobile-friendly.
+
+Также в Codex появились первые gameplay hints:
+- “Построй башни и защити базу”;
+- “⚔ запускает волну врагов”.
+
+Это первый шаг к gameplay communication layer.
+
+---
+
+# 7. Selected Tower Panel Cleanup
+
+Tower panel уменьшен:
+- меньше перекрывает карту;
+- компактнее на mobile;
+- меньше визуального шума.
+
+---
+
+# 8. Responsive HUD Improvements
+
+Topbar:
+- адаптирован под compact mode;
+- ограничен по ширине в landscape;
+- меньше конфликтует с gameplay-space.
+
+---
+
+# Что специально НЕ трогалось
+
+PASS A специально НЕ затрагивал:
+
+- camera math;
+- worldToScreen;
+- screenToWorld;
+- zoom scaling;
+- onboarding logic;
+- tutorial progression;
+- gameplay balance;
+- новые механики.
+
+Причина:
+слишком высокий риск giant regression.
+
+---
+
+# Почему PASS A был разделён отдельно
+
+Stage 02.4.6 оказался слишком большим для giant rewrite.
+
+Поэтому проект перешёл на PASS architecture.
+
+PASS A:
+HUD cleanup.
+
+PASS B:
+camera & zoom.
+
+PASS C:
+gameplay readability.
+
+PASS D:
+FTUE foundation.
+
+Это снижает:
+- риск регрессии;
+- потерю gameplay stability;
+- повторные переписывания файлов.
+
+---
+
+# Главный инженерный вывод PASS A
+
+Проект окончательно вышел из стадии:
+
+“core systems stabilization”.
+
+Теперь основной bottleneck проекта:
+не gameplay logic,
+а UX architecture.
+
+Это означает, что:
+- gameplay foundation уже существует;
+- теперь проекту нужны:
+  - gameplay communication;
+  - onboarding;
+  - readability;
+  - visual hierarchy;
+  - mobile UX polish.
+
+---
+
+# Новый workflow подтверждён
+
+PASS A стал первым этапом,
+выполненным через новый production workflow:
+
+stage
+→ ZIP analysis
+→ technical implementation map
+→ PASS execution
+→ validation
+→ QA
+→ reports.
+
+Это значительно уменьшило:
+- хаотичные переписывания;
+- потерю зависимостей;
+- giant regressions;
+- необходимость повторно выдавать файлы.
+
+---
+
+# Следующий этап после PASS A
+
+После:
+- ZIP validation;
+- QA testing;
+- mobile testing;
+
+следующим этапом станет:
+
+Stage 02.4.6-B — Camera & Zoom Refactor.
+
+Потому что после очистки HUD
+главным bottleneck остаётся:
+- camera scaling;
+- zoom behavior;
+- distorted circles;
+- gameplay visibility.
