@@ -1,5 +1,5 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// ui/controls.js — gameplay controls and action panels
+// CORE FRONTIER — Stage 02.4.6-A
+// ui/controls.js — compact HUD controls and gameplay actions
 
 function createDynamicUI() {
   updateUILayout();
@@ -11,18 +11,22 @@ function createDynamicUI() {
     "tower-action-panel",
     "build-confirm-panel",
     "menu-panel",
-    "game-over-panel"
+    "game-over-panel",
+    "compact-wave-panel"
   ].forEach(removeElement);
 
   createBottomControlPanel();
   createUtilityControls();
   createTowerActionPanel();
   createBuildConfirmPanel();
+  createCompactWavePanel();
   createMenuPanel();
   createGameOverPanel();
 
   updateTopbarVisibility();
 }
+
+// ---------- MAIN ACTIONS ----------
 
 function createBottomControlPanel() {
   const panel = document.createElement("div");
@@ -48,8 +52,8 @@ function createBottomControlPanel() {
 
   const waveButton = createUIButton(
     uiLayout.compact
-      ? "⚔️"
-      : "⚔️ Волна",
+      ? "⚔"
+      : "⚔ Волна",
 
     "#8a5a2b",
 
@@ -58,8 +62,8 @@ function createBottomControlPanel() {
 
   const codexButton = createUIButton(
     uiLayout.compact
-      ? "ℹ"
-      : "ℹ Codex",
+      ? "📘"
+      : "📘 Codex",
 
     uiState.infoPanelOpen
       ? "#d9a441"
@@ -94,13 +98,24 @@ function createBottomControlPanel() {
     }
   );
 
-  panel.appendChild(buildButton);
-  panel.appendChild(waveButton);
-  panel.appendChild(codexButton);
-  panel.appendChild(menuButton);
+  [
+    buildButton,
+    waveButton,
+    codexButton,
+    menuButton
+  ].forEach(button => {
+    button.style.minWidth =
+      uiLayout.compact
+        ? "44px"
+        : "unset";
+
+    panel.appendChild(button);
+  });
 
   document.body.appendChild(panel);
 }
+
+// ---------- SPEED / ZOOM ----------
 
 function createUtilityControls() {
   createSpeedControls();
@@ -141,8 +156,13 @@ function createSpeedControls() {
 
     button.style.padding =
       uiLayout.compact
-        ? "7px 8px"
+        ? "6px 8px"
         : "8px 10px";
+
+    button.style.fontSize =
+      uiLayout.compact
+        ? "11px"
+        : "13px";
 
     panel.appendChild(button);
   });
@@ -194,8 +214,13 @@ function createZoomControls() {
   [minus, plus, reset].forEach(button => {
     button.style.padding =
       uiLayout.compact
-        ? "7px 8px"
+        ? "6px 8px"
         : "8px 10px";
+
+    button.style.fontSize =
+      uiLayout.compact
+        ? "11px"
+        : "13px";
 
     panel.appendChild(button);
   });
@@ -203,40 +228,7 @@ function createZoomControls() {
   document.body.appendChild(panel);
 }
 
-function createTowerActionPanel() {
-  const panel = document.createElement("div");
-
-  panel.id = "tower-action-panel";
-
-  applyFixedStyle(
-    panel,
-    getTowerActionPanelStyle()
-  );
-
-  const sellButton = createUIButton(
-    "Продать",
-    "#2f6b3c",
-
-    () => sellSelectedTower()
-  );
-
-  const upgradeButton = createUIButton(
-    "Улучшить",
-    "#555555",
-
-    () => {
-      notify(
-        "Улучшение недоступно: нужна технология",
-        "warning"
-      );
-    }
-  );
-
-  panel.appendChild(sellButton);
-  panel.appendChild(upgradeButton);
-
-  document.body.appendChild(panel);
-}
+// ---------- BUILD ----------
 
 function createBuildConfirmPanel() {
   const panel = document.createElement("div");
@@ -256,8 +248,8 @@ function createBuildConfirmPanel() {
 
   text.style.fontSize =
     uiLayout.compact
-      ? "12px"
-      : "14px";
+      ? "11px"
+      : "13px";
 
   text.style.flex = "1";
 
@@ -275,14 +267,20 @@ function createBuildConfirmPanel() {
     "Выбери клетку";
 
   const confirmButton = createUIButton(
-    "Построить",
+    uiLayout.compact
+      ? "✔"
+      : "Построить",
+
     "#2f6b3c",
 
     () => confirmBuild()
   );
 
   const cancelButton = createUIButton(
-    "Отмена",
+    uiLayout.compact
+      ? "✖"
+      : "Отмена",
+
     "#8a2d2d",
 
     () => cancelBuildMode()
@@ -291,6 +289,89 @@ function createBuildConfirmPanel() {
   panel.appendChild(text);
   panel.appendChild(confirmButton);
   panel.appendChild(cancelButton);
+
+  document.body.appendChild(panel);
+}
+
+// ---------- TOWER PANEL ----------
+
+function createTowerActionPanel() {
+  const panel = document.createElement("div");
+
+  panel.id = "tower-action-panel";
+
+  applyFixedStyle(
+    panel,
+    getTowerActionPanelStyle()
+  );
+
+  const sellButton = createUIButton(
+    uiLayout.compact
+      ? "💰"
+      : "Продать",
+
+    "#2f6b3c",
+
+    () => sellSelectedTower()
+  );
+
+  const upgradeButton = createUIButton(
+    uiLayout.compact
+      ? "🔒"
+      : "Улучшить",
+
+    "#555555",
+
+    () => {
+      notify(
+        "Улучшения пока недоступны",
+        "warning"
+      );
+    }
+  );
+
+  panel.appendChild(sellButton);
+  panel.appendChild(upgradeButton);
+
+  document.body.appendChild(panel);
+}
+
+// ---------- COMPACT WAVE HUD ----------
+
+function createCompactWavePanel() {
+  const panel = document.createElement("div");
+
+  panel.id = "compact-wave-panel";
+
+  applyFixedStyle(
+    panel,
+    getCompactWavePanelStyle()
+  );
+
+  panel.style.color = "white";
+
+  panel.style.fontSize =
+    uiLayout.compact
+      ? "11px"
+      : "13px";
+
+  panel.style.pointerEvents = "none";
+
+  const wave = document.createElement("div");
+
+  wave.id = "compact-wave-text";
+
+  const enemies = document.createElement("div");
+
+  enemies.id = "compact-enemies-text";
+
+  const speed = document.createElement("div");
+
+  speed.id = "compact-speed-text";
+
+  panel.appendChild(wave);
+  panel.appendChild(enemies);
+  panel.appendChild(speed);
 
   document.body.appendChild(panel);
 }
