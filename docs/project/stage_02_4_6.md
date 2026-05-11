@@ -1333,3 +1333,237 @@ Stage 02.4.6-B — Camera & Zoom Refactor.
 - zoom behavior;
 - distorted circles;
 - gameplay visibility.
+
+## QA + USER TEST + DEV CONCLUSION REPORT — STAGE 02.4.6 PASS A
+
+Источник тестирования:
+- iPad Safari
+- iPhone Safari
+- cold-user tests (2 пользователя без объяснений)
+
+Статус:
+CRITICAL REGRESSION
+
+Итог:
+PASS A признан нерабочим билдом.
+После HUD/UI refactor игра потеряла стабильный interaction flow и стала частично неиграбельной.
+
+---
+
+# 1. QA REPORT — TECHNICAL TESTING
+
+## 1.1 UI STATE COLLISION
+
+Выявлены конфликты UI-состояний:
+
+Одновременно отображаются:
+- menu
+- build mode
+- action panel
+- speed controls
+- bottom HUD
+
+Проблемы:
+- интерфейс накладывается друг на друга
+- панели не скрываются при смене режима
+- отсутствует единый active state
+- одновременно активны несколько interaction layers
+
+Вывод:
+Отсутствует полноценный UI State Manager.
+
+---
+
+## 1.2 INPUT FAILURE
+
+Выявлены проблемы взаимодействия:
+- часть кнопок перестала реагировать
+- speed controls работают нестабильно
+- при переключении скорости происходит перестройка HUD
+- interaction flow становится непредсказуемым
+
+На ряде экранов:
+- работают только speed controls
+- остальной HUD становится неактивным
+
+---
+
+## 1.3 MOBILE / TABLET BREAKAGE
+
+Выявлены критические проблемы adaptive layout:
+
+### iPad:
+- HUD перекрывает карту
+- build panel конфликтует с menu
+- панели занимают игровое пространство
+
+### iPhone:
+- layout ломается полностью
+- панели наслаиваются
+- bottom HUD конфликтует с build controls
+- speed panel перестраивает весь интерфейс
+- часть элементов выходит за safe-area
+
+---
+
+## 1.4 CAMERA / MAP ISSUES
+
+Проблемы:
+- карта визуально “исчезает”
+- HUD перекрывает игровое поле
+- gameplay space сокращается
+- build panel мешает обзору
+
+Дополнительно:
+- при zoom ellipse/range circles деформируются
+- круги становятся овальными
+
+---
+
+## 1.5 GAMEPLAY UX ISSUES
+
+Пользователь не понимает:
+- как начать игру
+- как вызвать волну
+- что означают ресурсы
+- что означают speed x1/x2/x3
+- что означает дорога
+- что необходимо защищать
+
+Также выявлено:
+- 🌊 плохо считывается как “запуск боя”
+- пользователи воспринимают значок буквально как “вода/волна”
+
+Рекомендуется:
+- ⚔️
+- ▶
+- 👾
+- BATTLE/START icon
+
+---
+
+# 2. USER TEST REPORT — FIRST CONTACT TESTING
+
+Тестеры:
+- User #1
+- User #2
+
+Условия:
+Игрокам не объяснялись механики.
+Устройства передавались без инструкций.
+
+---
+
+## 2.1 CORE LOOP НЕ СЧИТЫВАЕТСЯ
+
+Пользователи не понимают:
+- как начать игру
+- как запускать бой
+- зачем строить
+- как развиваться
+- что означают панели
+- что означают цифры
+
+---
+
+## 2.2 ONBOARDING REQUIRED
+
+Игроки напрямую предложили:
+- tutorial
+- стрелку на кнопку запуска боя
+- обучение при первом запуске
+- возможность повторного обучения
+
+Вывод:
+Без onboarding пользователь не понимает gameplay flow.
+
+---
+
+## 2.3 VISUAL READABILITY PROBLEM
+
+Текущие placeholder башни воспринимаются как:
+- квадраты
+- стики
+- непонятные объекты
+
+Требуется:
+- читаемый tower silhouette
+- более понятный visual language
+
+---
+
+# 3. DEV CONCLUSION
+
+Стратегия:
+ZIP → analysis → implementation
+улучшила:
+- структурность
+- документирование
+- фиксацию стадий
+- контроль regression
+
+Однако проблема повторного переписывания кода сохранилась.
+
+Причина:
+Перед кодом отсутствует:
+- architecture simulation
+- interaction conflict analysis
+- UI state mapping
+- adaptive conflict testing
+
+PASS A был реализован без:
+- UI State Manager
+- panel priority system
+- interaction ownership system
+
+---
+
+# 4. ROOT CAUSE
+
+Главная причина regression:
+
+Отсутствие системы управления состояниями интерфейса.
+
+Текущая система позволяет:
+- одновременно активировать несколько UI modes
+- конфликтовать interaction layers
+- ломать adaptive layout
+
+---
+
+# 5. REQUIRED NEXT STEP
+
+Следующая стадия:
+02.4.6-A1 — UI State Recovery / Interaction Lock Fix
+
+Приоритет:
+CRITICAL
+
+---
+
+# 6. REQUIRED SYSTEMS
+
+Необходимо внедрить:
+
+- UI State Manager
+  - IDLE
+  - BUILD
+  - MENU
+  - CODEX
+  - GAME_OVER
+
+- interaction lock system
+- panel priority system
+- mobile safe-zone logic
+- onboarding foundation
+- adaptive conflict prevention
+
+---
+
+# 7. FINAL CONCLUSION
+
+PASS A нельзя считать рабочим билдом.
+
+Следующий шаг:
+не продолжение gameplay,
+а восстановление стабильности интерфейса и interaction architecture.
