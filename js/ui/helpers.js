@@ -1,10 +1,6 @@
-// CORE FRONTIER — Stage 02.4.6-A1
-// ui/helpers.js — shared helpers and UI state authority
-
-// ---------- DOM ----------
-
 function removeElement(id) {
-  const el = document.getElementById(id);
+  const el =
+    document.getElementById(id);
 
   if (el) {
     el.remove();
@@ -12,21 +8,56 @@ function removeElement(id) {
 }
 
 function setText(id, value) {
-  const el = document.getElementById(id);
+  const el =
+    document.getElementById(id);
 
   if (!el) return;
 
   el.innerText = value;
 }
 
-function applyFixedStyle(element, styles) {
-  element.style.position = "fixed";
+function notify(
+  text,
+  type = "info"
+) {
+  uiState.notifications.push({
+    text,
+    type,
+    created: Date.now()
+  });
+}
 
-  Object.entries(styles).forEach(
-    ([key, value]) => {
-      element.style[key] = value;
-    }
-  );
+// ---------- SAFE UI MODE HELPERS ----------
+
+function setUIMode(mode) {
+  uiState.mode = mode;
+
+  if (
+    mode !== UI_MODES.MENU
+  ) {
+    uiState.menuOpen = false;
+  }
+
+  if (
+    mode !== UI_MODES.CODEX
+  ) {
+    uiState.infoPanelOpen = false;
+  }
+
+  if (
+    mode !== UI_MODES.BUILD
+  ) {
+    uiState.pendingBuildTile = null;
+  }
+}
+
+function resetUIMode() {
+  uiState.mode =
+    UI_MODES.IDLE;
+
+  uiState.menuOpen = false;
+
+  uiState.infoPanelOpen = false;
 }
 
 // ---------- BUTTONS ----------
@@ -37,18 +68,35 @@ function createUIButton(
   onClick
 ) {
   const button =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
   button.innerText = text;
 
   button.style.background =
     background;
 
-  button.style.color = "white";
+  button.style.color =
+    "white";
 
-  button.style.border = "none";
+  button.style.border =
+    "none";
 
-  button.style.borderRadius = "10px";
+  button.style.borderRadius =
+    "10px";
+
+  button.style.cursor =
+    "pointer";
+
+  button.style.fontWeight =
+    "bold";
+
+  button.style.pointerEvents =
+    "auto";
+
+  button.style.touchAction =
+    "manipulation";
 
   button.style.padding =
     uiLayout.compact
@@ -60,27 +108,10 @@ function createUIButton(
       ? "12px"
       : "14px";
 
-  button.style.fontWeight = "bold";
-
-  button.style.cursor = "pointer";
-
-  button.style.pointerEvents = "auto";
-
-  button.style.touchAction =
-    "manipulation";
-
-  button.style.userSelect = "none";
-
-  button.style.webkitUserSelect =
-    "none";
-
   button.onclick = event => {
     event.preventDefault();
-    event.stopPropagation();
 
-    if (isInteractionLocked()) {
-      return;
-    }
+    event.stopPropagation();
 
     onClick();
   };
@@ -90,176 +121,53 @@ function createUIButton(
 
 // ---------- PANELS ----------
 
-function createPanelTitle(text) {
+function createPanelTitle(
+  text
+) {
   const title =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   title.innerText = text;
+
+  title.style.fontWeight =
+    "bold";
+
+  title.style.color =
+    "white";
+
+  title.style.marginBottom =
+    "10px";
 
   title.style.fontSize =
     uiLayout.compact
       ? "16px"
       : "20px";
 
-  title.style.fontWeight = "bold";
-
-  title.style.marginBottom = "10px";
-
-  title.style.color = "white";
-
   return title;
 }
 
-function createSmallText(text) {
+function createSmallText(
+  text
+) {
   const label =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   label.innerText = text;
+
+  label.style.color =
+    "#cccccc";
+
+  label.style.lineHeight =
+    "1.45";
 
   label.style.fontSize =
     uiLayout.compact
       ? "11px"
       : "13px";
 
-  label.style.lineHeight = "1.4";
-
-  label.style.color = "#cccccc";
-
   return label;
-}
-
-// ---------- UI STATE AUTHORITY ----------
-
-function setUIMode(mode) {
-  uiState.mode = mode;
-
-  uiState.menuOpen =
-    mode === UI_MODES.MENU;
-
-  uiState.infoPanelOpen =
-    mode === UI_MODES.CODEX;
-
-  if (mode !== UI_MODES.BUILD) {
-    uiState.selectedMode = null;
-    uiState.hoveredTile = null;
-  }
-
-  if (
-    mode !== UI_MODES.IDLE &&
-    mode !== UI_MODES.BUILD
-  ) {
-    uiState.selectedTower = null;
-  }
-
-  updateDomVisibility();
-}
-
-function resetUIState() {
-  uiState.mode =
-    UI_MODES.IDLE;
-
-  uiState.selectedMode = null;
-
-  uiState.selectedTower = null;
-
-  uiState.hoveredTile = null;
-
-  uiState.menuOpen = false;
-
-  uiState.infoPanelOpen = false;
-
-  updateDomVisibility();
-}
-
-function closeAllPanels() {
-  uiState.menuOpen = false;
-
-  uiState.infoPanelOpen = false;
-
-  uiState.selectedTower = null;
-}
-
-function isInteractionLocked() {
-  return (
-    uiState.mode ===
-      UI_MODES.GAME_OVER
-  );
-}
-
-// ---------- BUILD HELPERS ----------
-
-function enterBuildMode() {
-  closeAllPanels();
-
-  uiState.selectedMode = "tower";
-
-  setUIMode(UI_MODES.BUILD);
-}
-
-function cancelBuildMode() {
-  selectedBuildTower = null;
-
-  uiState.selectedMode = null;
-
-  uiState.hoveredTile = null;
-
-  setUIMode(UI_MODES.IDLE);
-}
-
-// ---------- MENU HELPERS ----------
-
-function toggleMenu() {
-  if (
-    uiState.mode ===
-    UI_MODES.MENU
-  ) {
-    setUIMode(UI_MODES.IDLE);
-
-    return;
-  }
-
-  closeAllPanels();
-
-  setUIMode(UI_MODES.MENU);
-}
-
-function toggleCodex() {
-  if (
-    uiState.mode ===
-    UI_MODES.CODEX
-  ) {
-    setUIMode(UI_MODES.IDLE);
-
-    return;
-  }
-
-  closeAllPanels();
-
-  setUIMode(UI_MODES.CODEX);
-}
-
-// ---------- BUILD PANEL ----------
-
-function getBuildPanelText() {
-  if (
-    uiState.mode !==
-    UI_MODES.BUILD
-  ) {
-    return "";
-  }
-
-  if (!selectedBuildTower) {
-    return "Выбери башню";
-  }
-
-  if (!uiState.hoveredTile) {
-    return "Выбери клетку";
-  }
-
-  return (
-    "Построить: " +
-    towerTypes[
-      selectedBuildTower
-    ].name
-  );
 }
