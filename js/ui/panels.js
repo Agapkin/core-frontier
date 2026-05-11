@@ -1,423 +1,47 @@
-// CORE FRONTIER — Stage 02.4.6-A1
-// ui/panels.js — deterministic panels and visibility system
-
-// ---------- MENU PANEL ----------
-
-function createMenuPanel() {
-  removeElement("menu-panel");
-
-  const panel =
-    document.createElement("div");
-
-  panel.id = "menu-panel";
-
-  applyFixedStyle(panel, {
-    left: uiLayout.compact
-      ? "10px"
-      : "20px",
-
-    top: uiLayout.compact
-      ? "70px"
-      : "90px",
-
-    width: uiLayout.compact
-      ? "260px"
-      : "320px",
-
-    maxWidth:
-      "calc(100vw - 20px)",
-
-    maxHeight:
-      "70vh",
-
-    overflowY: "auto",
-
-    padding: uiLayout.compact
-      ? "12px"
-      : "16px",
-
-    borderRadius: "14px",
-
-    background:
-      "rgba(0,0,0,0.88)",
-
-    color: "white",
-
-    zIndex: "40"
-  });
-
-  // ---------- TITLE ----------
-
-  panel.appendChild(
-    createPanelTitle("Меню")
-  );
-
-  panel.appendChild(
-    createSmallText(
-      "Сложность можно менять только до первой волны."
-    )
-  );
-
-  // ---------- DIFFICULTIES ----------
-
-  Object.values(
-    difficultyProfiles
-  ).forEach(profile => {
-    const button =
-      createUIButton(
-        profile.name,
-
-        gameState.difficulty ===
-        profile.id
-          ? "#d9a441"
-          : "#33445f",
-
-        () => {
-          if (
-            waveState.number > 0 ||
-            waveState.active
-          ) {
-            notify(
-              "Сложность можно менять только до первой волны",
-              "warning"
-            );
-
-            return;
-          }
-
-          gameState.difficulty =
-            profile.id;
-
-          updateUI();
-
-          notify(
-            "Сложность: " +
-              profile.name,
-            "info"
-          );
-        }
-      );
-
-    button.style.width = "100%";
-
-    button.style.marginTop =
-      "6px";
-
-    panel.appendChild(button);
-  });
-
-  // ---------- SYSTEM ----------
-
-  const systemLabel =
-    createSmallText("Система");
-
-  systemLabel.style.marginTop =
-    "14px";
-
-  panel.appendChild(
-    systemLabel
-  );
-
-  const restartButton =
-    createUIButton(
-      "⟲ Новая игра",
-
-      "#8a2d2d",
-
-      () => {
-        restartGame();
-
-        resetUIState();
-
-        createDynamicUI();
-      }
-    );
-
-  restartButton.style.width =
-    "100%";
-
-  restartButton.style.marginTop =
-    "6px";
-
-  panel.appendChild(
-    restartButton
-  );
-
-  document.body.appendChild(
-    panel
-  );
-}
-
-// ---------- GAME OVER ----------
-
-function createGameOverPanel() {
-  removeElement(
-    "game-over-panel"
-  );
-
-  const panel =
-    document.createElement("div");
-
-  panel.id =
-    "game-over-panel";
-
-  applyFixedStyle(panel, {
-    left: "50%",
-    top: "50%",
-
-    transform:
-      "translate(-50%, -50%)",
-
-    padding: uiLayout.compact
-      ? "14px"
-      : "18px",
-
-    borderRadius: "16px",
-
-    background:
-      "rgba(0,0,0,0.9)",
-
-    color: "white",
-
-    textAlign: "center",
-
-    minWidth:
-      uiLayout.compact
-        ? "240px"
-        : "300px",
-
-    zIndex: "60"
-  });
-
-  const title =
-    document.createElement("div");
-
-  title.innerText =
-    "БАЗА УНИЧТОЖЕНА";
-
-  title.style.fontWeight =
-    "bold";
-
-  title.style.fontSize =
-    uiLayout.compact
-      ? "20px"
-      : "24px";
-
-  title.style.marginBottom =
-    "14px";
-
-  const retryButton =
-    createUIButton(
-      "↩ Повторить волну",
-
-      "#2f6b3c",
-
-      () => {
-        retryLastWave();
-
-        resetUIState();
-
-        createDynamicUI();
-      }
-    );
-
-  retryButton.style.width =
-    "100%";
-
-  retryButton.style.marginBottom =
-    "8px";
-
-  const restartButton =
-    createUIButton(
-      "⟲ Новая игра",
-
-      "#8a2d2d",
-
-      () => {
-        restartGame();
-
-        resetUIState();
-
-        createDynamicUI();
-      }
-    );
-
-  restartButton.style.width =
-    "100%";
-
-  panel.appendChild(title);
-
-  panel.appendChild(
-    retryButton
-  );
-
-  panel.appendChild(
-    restartButton
-  );
-
-  document.body.appendChild(
-    panel
-  );
-}
-
-// ---------- VISIBILITY ----------
-
-function updateDomVisibility() {
-  const menuPanel =
-    document.getElementById(
-      "menu-panel"
-    );
-
-  if (menuPanel) {
-    menuPanel.style.display =
-      uiState.mode ===
-      UI_MODES.MENU
-        ? "block"
-        : "none";
-  }
-
-  const buildPanel =
-    document.getElementById(
-      "build-confirm-panel"
-    );
-
-  if (buildPanel) {
-    buildPanel.style.display =
-      uiState.mode ===
-      UI_MODES.BUILD
-        ? "flex"
-        : "none";
-  }
-
-  const towerPanel =
-    document.getElementById(
-      "tower-action-panel"
-    );
-
-  if (towerPanel) {
-    towerPanel.style.display =
-      uiState.selectedTower &&
-      uiState.mode ===
-        UI_MODES.IDLE
-        ? "flex"
-        : "none";
-  }
-
-  const gameOverPanel =
-    document.getElementById(
-      "game-over-panel"
-    );
-
-  if (gameOverPanel) {
-    gameOverPanel.style.display =
-      uiState.mode ===
-      UI_MODES.GAME_OVER
-        ? "block"
-        : "none";
-  }
-
-  const buildText =
-    document.getElementById(
-      "build-confirm-text"
-    );
-
-  if (buildText) {
-    buildText.innerText =
-      getBuildPanelText();
-  }
-}
-
-// ---------- HUD ----------
-
 function updateUI() {
-  setText(
-    "wood",
-    Math.floor(resources.wood)
-  );
+  updateTopbar();
 
-  setText(
-    "stone",
-    Math.floor(resources.stone)
-  );
+  drawSelectedTowerPanel();
 
-  setText(
-    "food",
-    Math.floor(resources.food)
-  );
+  drawInfoPanel();
 
-  setText(
-    "power",
-    power.used +
-      "/" +
-      power.capacity
-  );
+  drawMenuPanel();
 
-  setText(
-    "hp",
-    Math.max(
-      0,
-      Math.floor(base.hp)
-    )
-  );
-
-  setText(
-    "wave",
-    waveState.number
-  );
-
-  setText(
-    "difficulty",
-    difficultyProfiles[
-      gameState.difficulty
-    ].name
-  );
-
-  setText(
-    "zoom",
-    Math.round(
-      camera.zoom * 100
-    ) + "%"
-  );
+  drawNotifications();
 }
 
-// ---------- TOWER PANEL ----------
+// ---------- MENU ----------
 
-function drawSelectedTowerPanel() {
-  if (
-    !uiState.selectedTower ||
-    uiState.mode !==
-      UI_MODES.IDLE
-  ) {
+function drawMenuPanel() {
+  if (!uiState.menuOpen) {
     return;
   }
 
-  const tower =
-    uiState.selectedTower;
-
-  const type =
-    towerTypes[
-      tower.typeId
-    ];
-
   const width =
     uiLayout.compact
-      ? 230
-      : 290;
+      ? Math.min(
+          canvas.width - 20,
+          280
+        )
+      : 320;
 
   const height =
     uiLayout.compact
-      ? 110
-      : 138;
+      ? Math.min(
+          canvas.height - 100,
+          340
+        )
+      : 420;
 
-  const x = 12;
+  const x = 10;
 
   const y =
     uiLayout.compact
-      ? 88
-      : 110;
+      ? 58
+      : 76;
 
   ctx.fillStyle =
-    "rgba(0,0,0,0.7)";
+    "rgba(0,0,0,0.88)";
 
   ctx.fillRect(
     x,
@@ -431,42 +55,73 @@ function drawSelectedTowerPanel() {
 
   ctx.font =
     uiLayout.compact
+      ? "15px Arial"
+      : "18px Arial";
+
+  ctx.fillText(
+    "☰ Меню",
+    x + 14,
+    y + 24
+  );
+
+  ctx.font =
+    uiLayout.compact
       ? "11px Arial"
-      : "14px Arial";
+      : "13px Arial";
+
+  let lineY = y + 54;
 
   ctx.fillText(
-    type.name,
-    x + 12,
-    y + 22
+    "Сложность:",
+    x + 14,
+    lineY
   );
 
-  ctx.fillText(
-    "LVL " + tower.level,
-    x + 12,
-    y + 42
-  );
+  lineY += 24;
 
-  ctx.fillText(
-    "DMG " +
-      tower.damage.toFixed(1),
-    x + 12,
-    y + 62
-  );
+  Object.values(
+    difficultyProfiles
+  ).forEach(profile => {
+    const active =
+      gameState.difficulty ===
+      profile.id;
 
-  ctx.fillText(
-    "RNG " +
-      tower.range,
-    x + 12,
-    y + 82
-  );
+    ctx.fillStyle = active
+      ? "#d9a441"
+      : "#cccccc";
+
+    ctx.fillText(
+      active
+        ? "● " + profile.name
+        : "○ " + profile.name,
+
+      x + 20,
+      lineY
+    );
+
+    lineY += 22;
+  });
+
+  lineY += 12;
 
   ctx.fillStyle =
     "#aaaaaa";
 
   ctx.fillText(
-    "Улучшения позже",
-    x + 12,
-    y + 102
+    "Новая игра:",
+    x + 14,
+    lineY
+  );
+
+  lineY += 22;
+
+  ctx.fillStyle =
+    "#ffffff";
+
+  ctx.fillText(
+    "↻ Перезапусти через кнопку",
+    x + 20,
+    lineY
   );
 }
 
@@ -474,8 +129,7 @@ function drawSelectedTowerPanel() {
 
 function drawInfoPanel() {
   if (
-    uiState.mode !==
-    UI_MODES.CODEX
+    !uiState.infoPanelOpen
   ) {
     return;
   }
@@ -494,7 +148,7 @@ function drawInfoPanel() {
           canvas.height - 100,
           360
         )
-      : 480;
+      : 460;
 
   const x =
     canvas.width -
@@ -535,10 +189,10 @@ function drawInfoPanel() {
       ? "11px Arial"
       : "13px Arial";
 
-  let lineY = y + 48;
+  let lineY = y + 50;
 
   ctx.fillText(
-    "⚔️ Начни бой кнопкой Бой",
+    "⚔️ Нажми Бой для запуска волны",
     x + 14,
     lineY
   );
@@ -546,7 +200,7 @@ function drawInfoPanel() {
   lineY += 24;
 
   ctx.fillText(
-    "🏹 Строй башни",
+    "🏹 Построй башни",
     x + 14,
     lineY
   );
@@ -558,25 +212,118 @@ function drawInfoPanel() {
     x + 14,
     lineY
   );
+
+  lineY += 24;
+
+  ctx.fillText(
+    "🌲 🪨 🥩 ⚡ — ресурсы",
+    x + 14,
+    lineY
+  );
+
+  lineY += 24;
+
+  ctx.fillText(
+    "❤️ — здоровье базы",
+    x + 14,
+    lineY
+  );
 }
 
-// ---------- GAME OVER OVERLAY ----------
+// ---------- SELECTED TOWER ----------
 
-function drawGameOver() {
+function drawSelectedTowerPanel() {
   if (
-    uiState.mode !==
-    UI_MODES.GAME_OVER
+    !uiState.selectedTower
   ) {
     return;
   }
 
+  // Во время menu/codex
+  // tower panel скрываем.
+  if (
+    uiState.menuOpen ||
+    uiState.infoPanelOpen
+  ) {
+    return;
+  }
+
+  const tower =
+    uiState.selectedTower;
+
+  const type =
+    towerTypes[
+      tower.typeId
+    ];
+
+  const width =
+    uiLayout.compact
+      ? 220
+      : 280;
+
+  const height =
+    uiLayout.compact
+      ? 100
+      : 132;
+
+  const x = 12;
+
+  const y =
+    uiLayout.compact
+      ? 84
+      : 104;
+
   ctx.fillStyle =
-    "rgba(0,0,0,0.65)";
+    "rgba(0,0,0,0.72)";
 
   ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
+    x,
+    y,
+    width,
+    height
+  );
+
+  ctx.fillStyle =
+    "white";
+
+  ctx.font =
+    uiLayout.compact
+      ? "11px Arial"
+      : "14px Arial";
+
+  ctx.fillText(
+    type.name,
+    x + 12,
+    y + 22
+  );
+
+  ctx.fillText(
+    "Уровень: " +
+      tower.level,
+    x + 12,
+    y + 46
+  );
+
+  ctx.fillText(
+    "Урон: " +
+      tower.damage.toFixed(1),
+    x + 12,
+    y + 68
+  );
+
+  ctx.fillText(
+    "Радиус: " +
+      tower.range,
+    x + 12,
+    y + 90
+  );
+
+  ctx.fillStyle =
+    "#aaaaaa";
+
+  ctx.fillText(
+    "Улучшения позже",
+    x + 12,
+    y + 112
   );
 }
