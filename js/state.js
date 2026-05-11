@@ -9,74 +9,43 @@ const camera = {
   zoom: 1,
   minZoom: 0.55,
   maxZoom: 1.65,
-
   dragging: false,
   moved: false,
-
   startX: 0,
   startY: 0,
-
   lastX: 0,
   lastY: 0,
-
   pinchActive: false,
   pinchDistance: 0,
   pinchZoom: 1
 };
 
-// ---------- RESPONSIVE ----------
+// ---------- RESPONSIVE UI ----------
 
 const uiLayout = {
   deviceMode: "desktop",
-
   orientation: "landscape",
-
   isMobile: false,
   isTablet: false,
   isDesktop: true,
-
   isLandscape: true,
-  isPortrait: false,
-
-  compact: false,
-
-  width: window.innerWidth,
-  height: window.innerHeight
+  isPortrait: false
 };
 
 function updateResponsiveLayout() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  uiLayout.width = width;
-  uiLayout.height = height;
+  uiLayout.orientation = width > height
+    ? "landscape"
+    : "portrait";
 
-  uiLayout.orientation =
-    width > height
-      ? "landscape"
-      : "portrait";
-
-  uiLayout.isLandscape =
-    uiLayout.orientation === "landscape";
-
-  uiLayout.isPortrait =
-    uiLayout.orientation === "portrait";
+  uiLayout.isLandscape = uiLayout.orientation === "landscape";
+  uiLayout.isPortrait = uiLayout.orientation === "portrait";
 
   uiLayout.isMobile = width <= 768;
-
-  uiLayout.isTablet =
-    width > 768 &&
-    width <= 1180;
-
-  uiLayout.isDesktop =
-    width > 1180;
-
-  uiLayout.compact =
-    uiLayout.isMobile ||
-    (
-      uiLayout.isTablet &&
-      uiLayout.isLandscape
-    );
+  uiLayout.isTablet = width > 768 && width <= 1180;
+  uiLayout.isDesktop = width > 1180;
 
   if (uiLayout.isMobile) {
     uiLayout.deviceMode = "mobile";
@@ -89,38 +58,17 @@ function updateResponsiveLayout() {
 
 updateResponsiveLayout();
 
-// ---------- SAFE UI MODES ----------
-
-const UI_MODES = {
-  IDLE: "idle",
-  BUILD: "build",
-  MENU: "menu",
-  CODEX: "codex"
-};
-
-// ---------- UI ----------
+// ---------- UI STATE ----------
 
 const uiState = {
-  // Новый режим.
-  // Добавлен совместимо.
-  mode: UI_MODES.IDLE,
-
   selectedMode: null,
-
   selectedTowerType: "basic",
-
   hoveredTile: null,
-
   pendingBuildTile: null,
-
   selectedTower: null,
-
   infoPanelOpen: false,
-
   menuOpen: false,
-
   codexTab: "towers",
-
   notifications: []
 };
 
@@ -136,7 +84,6 @@ let resources = {
 
 let base = {
   hp: gameBalance.baseHp,
-
   tileX: 26,
   tileY: 10
 };
@@ -145,24 +92,17 @@ let base = {
 
 let power = {
   used: 0,
-
-  capacity:
-    gameBalance.startPowerCapacity
+  capacity: gameBalance.startPowerCapacity
 };
 
-// ---------- WAVES ----------
+// ---------- WAVE ----------
 
 let waveState = {
   active: false,
-
   number: 0,
-
   totalEnemies: 0,
-
   spawnedEnemies: 0,
-
   killedEnemies: 0,
-
   reachedBase: 0
 };
 
@@ -170,38 +110,25 @@ let waveState = {
 
 let gameState = {
   gameOver: false,
-
   difficulty: "normal"
 };
 
 let checkpoint = null;
-
 let gameSpeed = 1;
 
 // ---------- ENTITIES ----------
 
 const towers = [];
-
 const enemies = [];
 
 // ---------- HELPERS ----------
 
 function clone(value) {
-  return JSON.parse(
-    JSON.stringify(value)
-  );
+  return JSON.parse(JSON.stringify(value));
 }
 
 function updatePower() {
-  power.used = towers.reduce(
-    (sum, tower) => {
-      return (
-        sum +
-        towerTypes[
-          tower.typeId
-        ].powerUsage
-      );
-    },
-    0
-  );
+  power.used = towers.reduce((sum, tower) => {
+    return sum + towerTypes[tower.typeId].powerUsage;
+  }, 0);
 }
