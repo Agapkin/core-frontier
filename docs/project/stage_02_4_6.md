@@ -1889,3 +1889,218 @@ Regression подтвердил:
 Следующий этап —
 не косметический UI pass,
 а построение interaction framework.
+
+## DEVELOPMENT STATUS REPORT — STAGE 02.4.6
+## ARCHITECTURE STALL / RUNTIME COMPATIBILITY DISCOVERY
+
+Во время выполнения Stage 02.4.6 проект столкнулся с критическим инженерным переходом.
+
+Разработка существенно замедлилась из-за того, что проект вышел из стадии:
+“изолированных файлов”.
+
+Проект перешёл в стадию:
+runtime dependency architecture.
+
+---
+
+# 1. ЧТО ПРОИЗОШЛО
+
+Во время выполнения:
+- PASS A (HUD REFACTOR)
+- PASS A1 (UI STATE RECOVERY)
+
+были произведены:
+- изменения HUD;
+- изменения index.html;
+- изменения state architecture;
+- попытки внедрения uiMode system;
+- adaptive layout changes.
+
+В результате:
+часть runtime начала ожидать новую архитектуру,
+а часть файлов продолжила использовать старую.
+
+---
+
+# 2. ПОЧЕМУ ПРОЕКТ ЗАБУКСОВАЛ
+
+Основная проблема оказалась НЕ:
+- HUD;
+- camera;
+- mobile layout.
+
+Главная проблема:
+runtime compatibility.
+
+Проект уже содержит:
+- связанные gameplay systems;
+- связанные UI systems;
+- state dependencies;
+- camera dependencies;
+- wave dependencies;
+- runtime references между файлами.
+
+Из-за этого:
+полная замена одного файла
+может ломать остальные системы.
+
+---
+
+# 3. ВАЖНОЕ ИНЖЕНЕРНОЕ ОТКРЫТИЕ
+
+Ошибка была НЕ в том,
+что файлы заменялись целиком.
+
+Полная замена файлов допустима.
+
+Ошибка была в том,
+что новые версии файлов:
+не сохраняли compatibility со старым runtime.
+
+Например:
+старые gameplay systems продолжали ожидать:
+- старые uiState поля;
+- старые camera flags;
+- старые waveState структуры.
+
+Однако новые файлы:
+- удаляли;
+- переименовывали;
+- переписывали эти структуры.
+
+---
+
+# 4. ROOT CAUSE
+
+Главный root cause Stage 02.4.6:
+
+Попытка перейти к:
+NEW ARCHITECTURE
+
+без:
+COMPATIBILITY LAYER.
+
+---
+
+# 5. ЧТО БЫЛО ПОНЯТО
+
+Проект больше нельзя развивать через:
+“полное переписывание логики”.
+
+Теперь требуется:
+- additive architecture;
+- compatibility-safe migration;
+- staged runtime evolution.
+
+---
+
+# 6. НОВОЕ ПРАВИЛО ПРОЕКТА
+
+Разрешено:
+- полностью заменять файлы.
+
+НО:
+новые файлы обязаны:
+- сохранять старые runtime структуры;
+- сохранять старые поля;
+- сохранять старые зависимости;
+- расширять архитектуру,
+  а не уничтожать её.
+
+---
+
+# 7. ПОЧЕМУ ЭТО ВАЖНО
+
+Проект уже перестал быть:
+“набором независимых файлов”.
+
+Теперь это:
+единая runtime ecosystem.
+
+Изменение:
+- state.js
+или
+- camera
+или
+- ui systems
+
+влияет:
+на весь gameplay runtime.
+
+---
+
+# 8. ЧТО ДАЛ STAGE 02.4.6
+
+Несмотря на regression,
+Stage 02.4.6 дал крайне важные инженерные выводы:
+
+Выявлены:
+- UI state conflicts;
+- HUD interaction conflicts;
+- mobile safe-zone issues;
+- onboarding problems;
+- runtime dependency problems;
+- migration architecture requirements.
+
+---
+
+# 9. ПОДТВЕРЖДЁННЫЕ UX ПРОБЛЕМЫ
+
+Blind tests подтвердили:
+
+Игроки не понимают:
+- как начать игру;
+- как вызвать бой;
+- что означает 🌊;
+- что означают ресурсы;
+- что защищать;
+- как устроен gameplay loop.
+
+Также подтверждено:
+необходим:
+- onboarding;
+- tutorial;
+- gameplay communication layer.
+
+---
+
+# 10. НОВАЯ СТРАТЕГИЯ РАЗРАБОТКИ
+
+Следующая стратегия:
+
+1. ZIP ANALYSIS
+2. DEPENDENCY ANALYSIS
+3. RUNTIME MAPPING
+4. COMPATIBILITY PLAN
+5. SAFE PATCH PASS
+6. QA
+7. USER TESTS
+
+Без giant rewrites.
+
+---
+
+# 11. ТЕКУЩЕЕ СОСТОЯНИЕ ПРОЕКТА
+
+Проект находится в transitional architecture stage.
+
+Это означает:
+- gameplay foundation уже существует;
+- теперь главная задача:
+  стабилизировать runtime evolution.
+
+---
+
+# 12. FINAL CONCLUSION
+
+Stage 02.4.6 стал не просто UI стадией.
+
+Он стал:
+точкой перехода проекта
+из prototype-phase
+в dependency-aware game architecture.
+
+Именно поэтому:
+разработка резко усложнилась,
+а требования к совместимости
+стали критически важными.
