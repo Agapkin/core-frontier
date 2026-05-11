@@ -1,173 +1,65 @@
+// CORE FRONTIER — Stage 02.4.5
+// ui/helpers.js — shared UI helper functions
+
 function removeElement(id) {
-  const el =
-    document.getElementById(id);
-
-  if (el) {
-    el.remove();
-  }
+  const element = document.getElementById(id);
+  if (element) element.remove();
 }
 
-function setText(id, value) {
-  const el =
-    document.getElementById(id);
+function applyFixedStyle(element, styleMap) {
+  element.style.position = "fixed";
 
-  if (!el) return;
-
-  el.innerText = value;
-}
-
-function notify(
-  text,
-  type = "info"
-) {
-  uiState.notifications.push({
-    text,
-    type,
-    created: Date.now()
+  Object.entries(styleMap).forEach(([key, value]) => {
+    element.style[key] = value;
   });
 }
 
-// ---------- SAFE UI MODE HELPERS ----------
-
-function setUIMode(mode) {
-  uiState.mode = mode;
-
-  if (
-    mode !== UI_MODES.MENU
-  ) {
-    uiState.menuOpen = false;
-  }
-
-  if (
-    mode !== UI_MODES.CODEX
-  ) {
-    uiState.infoPanelOpen = false;
-  }
-
-  if (
-    mode !== UI_MODES.BUILD
-  ) {
-    uiState.pendingBuildTile = null;
-  }
-}
-
-function resetUIMode() {
-  uiState.mode =
-    UI_MODES.IDLE;
-
-  uiState.menuOpen = false;
-
-  uiState.infoPanelOpen = false;
-}
-
-// ---------- BUTTONS ----------
-
-function createUIButton(
-  text,
-  background,
-  onClick
-) {
-  const button =
-    document.createElement(
-      "button"
-    );
+function createUIButton(text, background, onClick) {
+  const button = document.createElement("button");
 
   button.innerText = text;
+  button.style.background = background;
+  button.style.border = "none";
+  button.style.color = "white";
+  button.style.padding = uiLayout.compact ? "8px 10px" : "10px 12px";
+  button.style.borderRadius = "10px";
+  button.style.fontSize = uiLayout.compact ? "14px" : "15px";
+  button.style.fontWeight = "bold";
+  button.style.minWidth = uiLayout.compact ? "40px" : "auto";
+  button.style.touchAction = "manipulation";
+  button.style.pointerEvents = "auto";
 
-  button.style.background =
-    background;
-
-  button.style.color =
-    "white";
-
-  button.style.border =
-    "none";
-
-  button.style.borderRadius =
-    "10px";
-
-  button.style.cursor =
-    "pointer";
-
-  button.style.fontWeight =
-    "bold";
-
-  button.style.pointerEvents =
-    "auto";
-
-  button.style.touchAction =
-    "manipulation";
-
-  button.style.padding =
-    uiLayout.compact
-      ? "8px 10px"
-      : "10px 14px";
-
-  button.style.fontSize =
-    uiLayout.compact
-      ? "12px"
-      : "14px";
-
-  button.onclick = event => {
-    event.preventDefault();
-
-    event.stopPropagation();
-
-    onClick();
-  };
+  button.onclick = onClick;
 
   return button;
 }
 
-// ---------- PANELS ----------
-
-function createPanelTitle(
-  text
-) {
-  const title =
-    document.createElement(
-      "div"
-    );
+function createPanelTitle(text) {
+  const title = document.createElement("div");
 
   title.innerText = text;
-
-  title.style.fontWeight =
-    "bold";
-
-  title.style.color =
-    "white";
-
-  title.style.marginBottom =
-    "10px";
-
-  title.style.fontSize =
-    uiLayout.compact
-      ? "16px"
-      : "20px";
+  title.style.fontWeight = "bold";
+  title.style.fontSize = uiLayout.compact ? "16px" : "18px";
+  title.style.marginBottom = "8px";
 
   return title;
 }
 
-function createSmallText(
-  text
-) {
-  const label =
-    document.createElement(
-      "div"
-    );
+function createSmallText(text) {
+  const element = document.createElement("div");
 
-  label.innerText = text;
+  element.innerText = text;
+  element.style.fontSize = "13px";
+  element.style.opacity = "0.85";
+  element.style.marginBottom = "6px";
 
-  label.style.color =
-    "#cccccc";
+  return element;
+}
 
-  label.style.lineHeight =
-    "1.45";
+function setText(id, value) {
+  const element = document.getElementById(id);
 
-  label.style.fontSize =
-    uiLayout.compact
-      ? "11px"
-      : "13px";
-
-  return label;
+  if (element) {
+    element.innerText = value;
+  }
 }
