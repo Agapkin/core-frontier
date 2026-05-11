@@ -1567,3 +1567,325 @@ PASS A нельзя считать рабочим билдом.
 Следующий шаг:
 не продолжение gameplay,
 а восстановление стабильности интерфейса и interaction architecture.
+
+## TECHNICAL EXECUTION MAPPING — STAGE 02.4.6-A1
+## SOURCE: LAST STABLE PRE-REGRESSION BUILD
+
+Основа анализа:
+- working gameplay build
+- stable interaction flow
+- рабочий gameplay loop
+- regression произошёл после HUD refactor
+
+---
+
+# 1. CURRENT STABLE FOUNDATION
+
+Последний стабильный билд уже содержит:
+
+✅ zoom
+✅ tower placement
+✅ build restrictions
+✅ wave system
+✅ speed controls
+✅ codex/menu
+✅ retry/new game
+✅ mobile gameplay
+✅ tablet gameplay
+
+Проблема не в gameplay logic.
+Проблема в:
+- interaction architecture
+- adaptive HUD hierarchy
+- UI state ownership
+
+---
+
+# 2. ROOT CAUSE ANALYSIS
+
+Regression возник после попытки:
+- одновременно перестроить HUD
+- добавить adaptive behaviour
+- вынести панели
+- менять orientation logic
+
+Без:
+- UI state manager
+- render priority
+- panel ownership
+- interaction locking
+
+В результате:
+- несколько интерфейсов активны одновременно
+- элементы не знают кто главный
+- adaptive layout ломает visibility
+- interaction зоны пересекаются
+
+---
+
+# 3. MAIN TECHNICAL ERROR
+
+Критическая ошибка:
+
+HUD был изменён раньше,
+чем была построена архитектура состояний интерфейса.
+
+Фактически:
+UI начал жить как независимые блоки,
+а не как единая state machine.
+
+---
+
+# 4. REQUIRED ARCHITECTURE
+
+Перед следующим кодом требуется:
+
+## 4.1 UI STATE MANAGER
+
+Ввести единое состояние интерфейса:
+
+- IDLE
+- BUILD_SELECT
+- BUILD_CONFIRM
+- MENU
+- CODEX
+- GAME_OVER
+- WAVE_RUNNING
+
+---
+
+## 4.2 SINGLE ACTIVE MODE RULE
+
+В каждый момент времени:
+активен только один interaction mode.
+
+Например:
+
+MENU:
+- блокирует build
+- блокирует codex
+- блокирует placement
+
+BUILD_CONFIRM:
+- блокирует menu
+- блокирует codex
+- блокирует camera gestures
+
+---
+
+## 4.3 PANEL PRIORITY SYSTEM
+
+Приоритет интерфейсов:
+
+1. GAME_OVER
+2. MENU
+3. BUILD_CONFIRM
+4. CODEX
+5. BASE HUD
+6. SPEED PANEL
+
+Нижние слои не могут перекрывать верхние.
+
+---
+
+## 4.4 MOBILE SAFE ZONES
+
+Нужно ввести:
+- safe margins
+- orientation zones
+- reserved HUD space
+
+Запрещено:
+- перекрывать карту bottom HUD
+- накладывать speed panel на gameplay controls
+- выводить несколько floating panels рядом
+
+---
+
+# 5. REQUIRED UX FIXES
+
+## 5.1 BATTLE ICON
+
+🌊 заменить.
+
+Причина:
+пользователь не считывает wave как бой.
+
+Замена:
+⚔️
+▶
+👾
+BATTLE
+
+---
+
+## 5.2 FIRST CONTACT UX
+
+Игроки не понимают:
+- что защищать
+- что такое дорога
+- как начать
+
+Требуется foundation onboarding system:
+
+Минимум:
+- стрелка на кнопку боя
+- toast tutorial
+- first-run hints
+
+---
+
+## 5.3 RESOURCE READABILITY
+
+Игроки не понимают:
+🌲 🪨 🥩 ⚡ ❤️
+
+Требуется:
+- tooltip
+или
+- codex onboarding
+или
+- short labels
+
+---
+
+# 6. CAMERA RULES
+
+Запрещено:
+- deform range circles
+- ломать aspect ratio
+- изменять circle geometry при zoom
+
+Требуется:
+- uniform scaling
+- camera clamp
+- zoom bounds
+
+---
+
+# 7. BUILD MODE RULES
+
+Build mode должен иметь:
+
+## BUILD_SELECT
+игрок выбирает башню
+
+## BUILD_PREVIEW
+показывается ghost placement
+
+## BUILD_CONFIRM
+только confirm/cancel
+
+В этот момент:
+- menu hidden
+- codex hidden
+- unrelated HUD minimized
+
+---
+
+# 8. HUD DESIGN RULES
+
+## DESKTOP/TABLET LANDSCAPE
+
+RIGHT:
+- speed
+- utility buttons
+
+BOTTOM:
+- primary actions
+
+TOP:
+- resources
+
+LEFT:
+- contextual panels
+
+---
+
+## MOBILE PORTRAIT
+
+TOP:
+- compact resources
+
+BOTTOM:
+- only primary actions
+
+FLOATING:
+- temporary contextual windows only
+
+Запрещено:
+- постоянное наложение floating HUD
+- overlapping button groups
+
+---
+
+# 9. IMPLEMENTATION STRATEGY
+
+Следующий PASS:
+НЕ visual redesign.
+
+Следующий PASS:
+interaction stabilization.
+
+---
+
+# 10. REQUIRED IMPLEMENTATION ORDER
+
+PASS A1:
+UI State Recovery
+
+PASS A2:
+HUD stabilization
+
+PASS A3:
+mobile safe-zones
+
+PASS A4:
+onboarding foundation
+
+PASS A5:
+visual readability
+
+Только после этого:
+новые gameplay systems.
+
+---
+
+# 11. FILE EXECUTION PLAN
+
+Ожидаемые изменения:
+
+- index.html
+  HUD structure cleanup
+
+- styles/ui.css
+  safe-zones
+  adaptive hierarchy
+  panel priority
+
+- js/uiState.js
+  NEW
+  state machine
+
+- js/hud.js
+  interaction ownership
+
+- js/input.js
+  mode locking
+
+- js/camera.js
+  zoom stabilization
+
+---
+
+# 12. FINAL TECHNICAL CONCLUSION
+
+Regression подтвердил:
+проект перешёл из стадии
+“canvas prototype”
+в стадию,
+где требуется полноценная UI architecture.
+
+Следующий этап —
+не косметический UI pass,
+а построение interaction framework.
