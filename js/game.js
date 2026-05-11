@@ -1,8 +1,15 @@
+// CORE FRONTIER — Stage 02.4.5-A
+// game.js — input, camera, zoom, coordinate mapping, game loop
+
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
   updateResponsiveLayout();
+
+  if (typeof updateUILayout === "function") {
+    updateUILayout();
+  }
 
   clampCamera();
 
@@ -22,7 +29,8 @@ window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", () => {
   setTimeout(() => {
     resizeCanvas();
-  }, 120);
+    resetZoom(false);
+  }, 160);
 });
 
 // ---------- INIT ----------
@@ -32,7 +40,7 @@ createDynamicUI();
 updatePower();
 updateUI();
 
-notify("Stage 02.4.4: responsive mobile UX активен", "info");
+notify("Stage 02.4.5-A: mobile fix pack активен", "info");
 
 // ---------- INPUT ----------
 
@@ -57,13 +65,27 @@ canvas.addEventListener("touchend", touchEnd, {
   passive: false
 });
 
-// ---------- POINTER ----------
+// ---------- POINTER HELPERS ----------
+
+function getCanvasPoint(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
 
 function getPointer(event) {
-  return {
-    x: event.clientX,
-    y: event.clientY
-  };
+  return getCanvasPoint(event.clientX, event.clientY);
+}
+
+function getTapThreshold() {
+  if (uiState.selectedMode === "tower") {
+    return uiLayout.isMobile || uiLayout.isTablet ? 22 : 12;
+  }
+
+  return uiLayout.isMobile || uiLayout.isTablet ? 12 : 7;
 }
 
 function pointerStart(event) {
@@ -99,9 +121,11 @@ function pointerMove(event) {
   const totalDx = pos.x - camera.startX;
   const totalDy = pos.y - camera.startY;
 
+  const threshold = getTapThreshold();
+
   if (
-    Math.abs(totalDx) > 7 ||
-    Math.abs(totalDy) > 7
+    Math.abs(totalDx) > threshold ||
+    Math.abs(totalDy) > threshold
   ) {
     camera.moved = true;
   }
@@ -127,7 +151,14 @@ function pointerEnd(event) {
 
   const pos = getPointer(event);
 
-  if (!camera.moved) {
+  const totalDx = pos.x - camera.startX;
+  const totalDy = pos.y - camera.startY;
+
+  const distance = Math.hypot(totalDx, totalDy);
+
+  const threshold = getTapThreshold();
+
+  if (!camera.moved || distance <= threshold) {
     handleTap(pos.x, pos.y);
   }
 
@@ -155,7 +186,8 @@ function touchMove(event) {
     const center = touchCenter(event);
     const distance = touchDistance(event);
 
-    const ratio = distance / Math.max(1, camera.pinchDistance);
+    const ratio =
+      distance / Math.max(1, camera.pinchDistance);
 
     zoomAt(
       center.x,
@@ -185,10 +217,10 @@ function touchCenter(event) {
   const a = event.touches[0];
   const b = event.touches[1];
 
-  return {
-    x: (a.clientX + b.clientX) / 2,
-    y: (a.clientY + b.clientY) / 2
-  };
+  return getCanvasPoint(
+    (a.clientX + b.clientX) / 2,
+    (a.clientY + b.clientY) / 2
+  );
 }
 
 // ---------- ZOOM ----------
@@ -196,13 +228,16 @@ function touchCenter(event) {
 function wheelZoom(event) {
   event.preventDefault();
 
-  const delta = event.deltaY > 0
-    ? -0.1
-    : 0.1;
+  const pos = getPointer(event);
+
+  const delta =
+    event.deltaY > 0
+      ? -0.1
+      : 0.1;
 
   zoomAt(
-    event.clientX,
-    event.clientY,
+    pos.x,
+    pos.y,
     camera.zoom + delta
   );
 }
@@ -219,7 +254,10 @@ function zoomAt(screenX, screenY, newZoom) {
     return;
   }
 
-  const worldBefore = screenToWorld(screenX, screenY);
+  const worldBefore = screenToWorld(
+    screenX,
+    screenY
+  );
 
   camera.zoom = clampedZoom;
 
@@ -234,6 +272,19 @@ function zoomAt(screenX, screenY, newZoom) {
   clampCamera();
 
   updateUI();
+}
+
+function resetZoom(showNotification = true) {
+  camera.zoom = 1;
+  camera.x = 0;
+  camera.y = 0;
+
+  clampCamera();
+  updateUI();
+
+  if (showNotification) {
+    notify("Масштаб сброшен", "info");
+  }
 }
 
 function clampCamera() {
@@ -299,6 +350,39 @@ function scaled(value) {
   return value * camera.zoom;
 }
 
+function handleTap(screenX, screenY) {
+  if (gameState.gameOver) {
+    notify("Игра окончена", "warning");
+    return;
+  }
+
+  const tile = screenToTile(
+    screenX,
+    screenY
+  );
+
+  const tower = getTowerAtTile(
+    tile.tileX,
+    tile.tileY
+  );
+
+  if (uiState.selectedMode === "tower") {
+    selectBuildTile(
+      tile.tileX,
+      tile.tileY
+    );
+
+    return;
+  }
+
+  if (tower) {
+    selectTower(tower);
+    return;
+  }
+
+  uiState.selectedTower = null;
+}
+
 // ---------- MAIN LOOP ----------
 
 function gameLoop() {
@@ -318,12 +402,14 @@ function gameLoop() {
   }
 
   drawBuildOverlay();
+
   drawTowers();
   drawEnemies();
 
   drawWaveStatus();
   drawSelectedTowerPanel();
   drawInfoPanel();
+
   drawNotifications();
   drawGameOver();
 
