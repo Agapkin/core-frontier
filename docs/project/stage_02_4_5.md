@@ -442,3 +442,217 @@ Stage 02.4.5 — это UI / UX / architecture stabilization stage.
 - expansion systems;
 - new tower types;
 - new enemy types.
+
+---
+
+# Дополнение к Stage 02.4.5 — Ошибки первой попытки UI Split и новые архитектурные правила
+
+Во время выполнения Stage 02.4.5 были проведены первые попытки разделения `ui.js` на отдельные модули.
+
+В процессе стало понятно, что текущий `ui.js` уже перестал быть обычным UI-файлом и фактически превратился в отдельную UI-подсистему проекта.
+
+Из-за этого механическая разрезка файла оказалась недостаточной и привела к потере скрытых зависимостей.
+
+---
+
+# Что произошло
+
+Во время первой попытки split:
+
+- часть функций была перенесена;
+- часть helper-функций осталась внутри старого `ui.js`;
+- часть responsive layout логики потерялась;
+- часть panel factory функций не была перенесена;
+- часть canvas rendering зависимостей оказалась скрытой;
+- часть UI state зависимостей не была учтена.
+
+В результате:
+
+- новый split оказался неполным;
+- удаление старого `ui.js` приводило к поломке интерфейса;
+- gameplay loop терял UI-функции;
+- часть панелей переставала работать;
+- mobile layout ломался.
+
+---
+
+# Главная причина ошибки
+
+Главная проблема заключалась не в разрезке файла как таковой, а в отсутствии dependency mapping.
+
+Ранее предполагалось, что UI можно разделить по визуальным блокам.
+
+Но фактически:
+
+- функции внутри `ui.js` имеют скрытые cross-dependencies;
+- многие функции используют shared state;
+- многие helper-функции используются в нескольких подсистемах одновременно;
+- responsive layout распределён между разными участками кода;
+- canvas rendering частично зависит от DOM layout;
+- panel logic зависит от gameplay state;
+- UI использует shared `uiLayout` state.
+
+---
+
+# Вывод после неудачной попытки split
+
+Stage 02.4.5 показал, что проект достиг уровня, где:
+
+- большие файлы становятся подсистемами;
+- подсистемы имеют скрытые зависимости;
+- GPT не может безопасно выполнять split без предварительного dependency analysis.
+
+Это нормальный этап роста архитектуры проекта.
+
+---
+
+# Новое обязательное правило проекта
+
+Теперь перед разделением любого крупного файла необходимо:
+
+1. Выполнить dependency mapping;
+2. Построить dependency graph;
+3. Определить hidden dependencies;
+4. Определить shared state;
+5. Определить helper chains;
+6. Определить безопасные границы split;
+7. Только после этого выполнять modular split.
+
+---
+
+# Новая предварительная структура UI
+
+После дополнительного анализа стало понятно, что деление UI всего на 3 файла создаёт риск появления новых монолитов.
+
+Поэтому предварительно принята следующая UI-структура:
+
+~~~text
+js/ui/
+├── helpers.js
+├── layout.js
+├── controls.js
+├── panels.js
+├── canvas_world.js
+├── canvas_entities.js
+└── notifications.js
+~~~
+
+---
+
+# Назначение будущих UI-модулей
+
+## helpers.js
+
+Общие helper-функции:
+
+- createUIButton
+- applyFixedStyle
+- createPanelTitle
+- createSmallText
+- removeElement
+- setText
+
+## layout.js
+
+Responsive layout:
+
+- uiLayout
+- compact mode
+- landscape mode
+- safe-area
+- topbar
+- adaptive positioning
+
+## controls.js
+
+Игровые controls:
+
+- speed controls
+- zoom controls
+- build controls
+- bottom controls
+- tower controls
+
+## panels.js
+
+Информационные панели:
+
+- menu panel
+- Codex
+- Game Over
+- wave status
+- selected tower panel
+- updateUI
+- updateDomVisibility
+
+## canvas_world.js
+
+Отрисовка мира:
+
+- карта
+- сетка
+- дорога
+- база
+- радиусы
+- build overlay
+
+## canvas_entities.js
+
+Игровые сущности:
+
+- башни
+- враги
+- HP bars
+- attack lines
+- future effects / projectiles
+
+## notifications.js
+
+Система уведомлений:
+
+- notify
+- notification lifecycle
+- drawNotifications
+
+---
+
+# Новый принцип UI split
+
+Теперь split выполняется не механически, а dependency-aware способом.
+
+Главная цель:
+не просто уменьшить размер `ui.js`,
+а построить устойчивую UI-архитектуру, которую GPT сможет безопасно поддерживать и масштабировать дальше.
+
+---
+
+# Новый workflow Stage 02.4.5
+
+Теперь выполнение Stage 02.4.5 делится на этапы:
+
+## Этап A — Dependency Mapping
+
+- анализ полного `ui.js`;
+- построение dependency graph;
+- поиск hidden dependencies;
+- поиск shared state;
+- определение helper chains;
+- определение безопасных границ split.
+
+## Этап B — Safe Modular Split
+
+- создание новых UI-модулей;
+- перенос функций;
+- проверка runtime связей;
+- проверка mobile layout;
+- проверка gameplay loop;
+- обновление `index.html`;
+- удаление старого `ui.js` только после полной проверки.
+
+---
+
+# Новый инженерный принцип проекта
+
+После Stage 02.4.5 проект официально переходит от simple file splitting к dependency-aware modular architecture.
+
+Это становится обязательным правилом для всех будущих крупных файлов проекта.
