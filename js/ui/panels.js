@@ -1,5 +1,5 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// ui/panels.js — panels, codex, HUD overlays, game over
+// CORE FRONTIER — Stage 02.4.6-A
+// ui/panels.js — compact HUD panels and overlays
 
 function createMenuPanel() {
   const panel = document.createElement("div");
@@ -70,7 +70,7 @@ function createMenuPanel() {
   );
 
   const restartTitle =
-    createSmallText("Опасная зона:");
+    createSmallText("Система");
 
   restartTitle.style.marginTop = "12px";
 
@@ -78,7 +78,7 @@ function createMenuPanel() {
 
   const restartButton =
     createUIButton(
-      "Новая игра",
+      "⟲ Новая игра",
       "#8a2d2d",
 
       () => {
@@ -93,6 +93,8 @@ function createMenuPanel() {
 
   document.body.appendChild(panel);
 }
+
+// ---------- GAME OVER ----------
 
 function createGameOverPanel() {
   const panel = document.createElement("div");
@@ -148,7 +150,7 @@ function createGameOverPanel() {
 
   const retryButton =
     createUIButton(
-      "↩ Повторить волну",
+      "↩ Повторить",
       "#2f6b3c",
 
       () => retryLastWave()
@@ -173,6 +175,8 @@ function createGameOverPanel() {
 
   document.body.appendChild(panel);
 }
+
+// ---------- DOM VISIBILITY ----------
 
 function updateDomVisibility() {
   const towerPanel =
@@ -235,7 +239,11 @@ function updateDomVisibility() {
         ? "block"
         : "none";
   }
+
+  updateCompactWaveHUD();
 }
+
+// ---------- HUD TEXT ----------
 
 function updateUI() {
   setText(
@@ -286,76 +294,46 @@ function updateUI() {
       camera.zoom * 100
     ) + "%"
   );
+
+  updateCompactWaveHUD();
 }
 
-function drawWaveStatus() {
-  const remaining =
-    enemies.length;
+function updateCompactWaveHUD() {
+  const wave =
+    document.getElementById(
+      "compact-wave-text"
+    );
 
-  const total =
-    waveState.totalEnemies;
+  const enemies =
+    document.getElementById(
+      "compact-enemies-text"
+    );
 
-  const width =
-    uiLayout.compact
-      ? 250
-      : 330;
+  const speed =
+    document.getElementById(
+      "compact-speed-text"
+    );
 
-  const height =
-    uiLayout.compact
-      ? 62
-      : 72;
+  if (wave) {
+    wave.innerText =
+      "🌊 " + waveState.number;
+  }
 
-  const x = 20;
+  if (enemies) {
+    enemies.innerText =
+      "👾 " +
+      enemiesAlive() +
+      "/" +
+      waveState.totalEnemies;
+  }
 
-  const y =
-    uiLayout.compact
-      ? 70
-      : 78;
-
-  ctx.fillStyle =
-    "rgba(0,0,0,0.62)";
-
-  ctx.fillRect(
-    x,
-    y,
-    width,
-    height
-  );
-
-  ctx.fillStyle = "white";
-
-  ctx.font =
-    uiLayout.compact
-      ? "13px Arial"
-      : "16px Arial";
-
-  ctx.fillText(
-    "Волна: " +
-      waveState.number,
-    x + 14,
-    y + 22
-  );
-
-  ctx.fillText(
-    "Статус: " +
-      (waveState.active
-        ? "идёт"
-        : "подготовка"),
-    x + 14,
-    y + 42
-  );
-
-  ctx.fillText(
-    "Враги: " +
-      remaining +
-      " / " +
-      total +
-      " | x" +
-      gameSpeed,
-    x + 14,
-    y + 60
-  );
+  if (speed) {
+    speed.innerText =
+      "⏩ x" + gameSpeed;
+  }
 }
+
+// ---------- SELECTED TOWER ----------
 
 function drawSelectedTowerPanel() {
   if (!uiState.selectedTower) return;
@@ -368,23 +346,23 @@ function drawSelectedTowerPanel() {
 
   const width =
     uiLayout.compact
-      ? 270
-      : 360;
+      ? 230
+      : 300;
 
   const height =
     uiLayout.compact
-      ? 155
-      : 185;
+      ? 118
+      : 150;
 
-  const x = 20;
+  const x = 12;
 
   const y =
     uiLayout.compact
-      ? 140
-      : 160;
+      ? 108
+      : 130;
 
   ctx.fillStyle =
-    "rgba(0,0,0,0.72)";
+    "rgba(0,0,0,0.68)";
 
   ctx.fillRect(
     x,
@@ -397,52 +375,44 @@ function drawSelectedTowerPanel() {
 
   ctx.font =
     uiLayout.compact
-      ? "13px Arial"
-      : "16px Arial";
+      ? "11px Arial"
+      : "14px Arial";
 
   ctx.fillText(
-    "Башня: " +
-      towerType.name,
-    x + 14,
-    y + 24
+    towerType.name,
+    x + 12,
+    y + 22
   );
 
   ctx.fillText(
-    "Уровень: " +
-      tower.level,
-    x + 14,
-    y + 46
+    "LVL " + tower.level,
+    x + 12,
+    y + 42
   );
 
   ctx.fillText(
-    "Урон: " +
-      tower.damage.toFixed(2),
-    x + 14,
-    y + 68
+    "DMG " +
+      tower.damage.toFixed(1),
+    x + 12,
+    y + 62
   );
 
   ctx.fillText(
-    "Радиус: " +
-      tower.range,
-    x + 14,
-    y + 90
+    "RNG " + tower.range,
+    x + 12,
+    y + 82
   );
 
-  ctx.fillText(
-    "Энергия: " +
-      towerType.powerUsage,
-    x + 14,
-    y + 112
-  );
-
-  ctx.fillStyle = "#999";
+  ctx.fillStyle = "#aaa";
 
   ctx.fillText(
-    "Улучшения: нужны технологии",
-    x + 14,
-    y + 138
+    "Улучшения позже",
+    x + 12,
+    y + 104
   );
 }
+
+// ---------- CODEX ----------
 
 function drawInfoPanel() {
   if (!uiState.infoPanelOpen) return;
@@ -453,19 +423,16 @@ function drawInfoPanel() {
   const width = compact
     ? Math.min(
         canvas.width - 20,
-        320
+        300
       )
-    : Math.min(
-        canvas.width - 24,
-        370
-      );
+    : 360;
 
   const height = compact
     ? Math.min(
         canvas.height - 120,
-        420
+        360
       )
-    : 505;
+    : 480;
 
   const x =
     canvas.width -
@@ -474,8 +441,8 @@ function drawInfoPanel() {
 
   const y =
     compact
-      ? 64
-      : 78;
+      ? 54
+      : 74;
 
   ctx.fillStyle =
     "rgba(0,0,0,0.88)";
@@ -489,21 +456,23 @@ function drawInfoPanel() {
 
   ctx.fillStyle = "white";
 
-  ctx.font = compact
-    ? "16px Arial"
-    : "18px Arial";
+  ctx.font =
+    compact
+      ? "15px Arial"
+      : "18px Arial";
 
   ctx.fillText(
-    "Codex / Справка",
+    "📘 Codex",
     x + 14,
-    y + 28
+    y + 24
   );
 
-  ctx.font = compact
-    ? "11px Arial"
-    : "14px Arial";
+  ctx.font =
+    compact
+      ? "11px Arial"
+      : "13px Arial";
 
-  let lineY = y + 56;
+  let lineY = y + 48;
 
   ctx.fillText(
     "Башни:",
@@ -512,48 +481,28 @@ function drawInfoPanel() {
   );
 
   lineY += compact
-    ? 20
-    : 26;
+    ? 18
+    : 24;
 
   Object.values(towerTypes).forEach(
     tower => {
       ctx.fillText(
-        "- " + tower.name,
-        x + 20,
-        lineY
-      );
-
-      lineY += compact
-        ? 16
-        : 20;
-
-      ctx.fillText(
-        "  🌲 " +
-          tower.cost.wood +
+        tower.name +
           " | ⚡ " +
           tower.powerUsage,
-        x + 20,
+        x + 18,
         lineY
       );
 
       lineY += compact
         ? 16
         : 20;
-
-      ctx.fillText(
-        "  DMG " +
-          tower.damage +
-          " | RNG " +
-          tower.range,
-        x + 20,
-        lineY
-      );
-
-      lineY += compact
-        ? 24
-        : 34;
     }
   );
+
+  lineY += compact
+    ? 8
+    : 12;
 
   ctx.fillText(
     "Враги:",
@@ -562,79 +511,49 @@ function drawInfoPanel() {
   );
 
   lineY += compact
-    ? 20
-    : 26;
+    ? 18
+    : 24;
 
   Object.values(enemyTypes).forEach(
     enemy => {
       ctx.fillText(
-        "- " + enemy.name,
-        x + 20,
+        enemy.name +
+          " | HP " +
+          enemy.hp,
+        x + 18,
         lineY
       );
 
       lineY += compact
         ? 16
         : 20;
-
-      ctx.fillText(
-        "  HP " +
-          enemy.hp +
-          " | SPD " +
-          enemy.speed,
-        x + 20,
-        lineY
-      );
-
-      lineY += compact
-        ? 16
-        : 20;
-
-      ctx.fillText(
-        "  🌲 +" +
-          enemy.reward.wood,
-        x + 20,
-        lineY
-      );
-
-      lineY += compact
-        ? 24
-        : 32;
     }
   );
 
-  if (!compact) {
-    ctx.fillText(
-      "Механики:",
-      x + 14,
-      lineY
-    );
+  lineY += compact
+    ? 10
+    : 14;
 
-    lineY += 24;
+  ctx.fillStyle = "#aaa";
 
-    ctx.fillText(
-      "- Retry Wave возвращает к подготовке",
-      x + 20,
-      lineY
-    );
+  ctx.fillText(
+    "Построй башни и защити базу",
+    x + 14,
+    lineY
+  );
 
-    lineY += 20;
+  lineY += compact
+    ? 16
+    : 20;
 
-    ctx.fillText(
-      "- Энергия ограничивает спам башен",
-      x + 20,
-      lineY
-    );
-
-    lineY += 20;
-
-    ctx.fillText(
-      "- Zoom: pinch или кнопки",
-      x + 20,
-      lineY
-    );
-  }
+  ctx.fillText(
+    "⚔ запускает волну врагов",
+    x + 14,
+    lineY
+  );
 }
+
+// ---------- GAME OVER OVERLAY ----------
 
 function drawGameOver() {
   if (!gameState.gameOver) return;
