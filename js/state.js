@@ -1,134 +1,133 @@
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+// CORE FRONTIER — Stage 02.4.6-A1
+// state.js — centralized runtime state
+
+// ---------- GAME ----------
+
+const gameState = {
+  running: true,
+  paused: false,
+  gameOver: false,
+
+  difficulty: "normal"
+};
+
+// ---------- UI MODES ----------
+
+const UI_MODES = {
+  IDLE: "idle",
+
+  BUILD: "build",
+
+  MENU: "menu",
+
+  CODEX: "codex",
+
+  GAME_OVER: "game_over"
+};
+
+// ---------- UI ----------
+
+const uiState = {
+  mode: UI_MODES.IDLE,
+
+  selectedMode: null,
+
+  selectedTower: null,
+
+  hoveredTile: null,
+
+  menuOpen: false,
+
+  infoPanelOpen: false,
+
+  dragging: false,
+
+  pointerDown: false,
+
+  lastPointerX: 0,
+  lastPointerY: 0
+};
 
 // ---------- CAMERA ----------
 
 const camera = {
   x: 0,
   y: 0,
+
   zoom: 1,
+
   minZoom: 0.55,
-  maxZoom: 1.65,
-  dragging: false,
-  moved: false,
-  startX: 0,
-  startY: 0,
-  lastX: 0,
-  lastY: 0,
-  pinchActive: false,
-  pinchDistance: 0,
-  pinchZoom: 1
+  maxZoom: 2.2
 };
 
-// ---------- RESPONSIVE UI ----------
+// ---------- RESPONSIVE ----------
 
 const uiLayout = {
-  deviceMode: "desktop",
-  orientation: "landscape",
+  width: window.innerWidth,
+  height: window.innerHeight,
+
   isMobile: false,
   isTablet: false,
-  isDesktop: true,
-  isLandscape: true,
-  isPortrait: false
-};
+  isLandscape: false,
 
-function updateResponsiveLayout() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  uiLayout.orientation = width > height
-    ? "landscape"
-    : "portrait";
-
-  uiLayout.isLandscape = uiLayout.orientation === "landscape";
-  uiLayout.isPortrait = uiLayout.orientation === "portrait";
-
-  uiLayout.isMobile = width <= 768;
-  uiLayout.isTablet = width > 768 && width <= 1180;
-  uiLayout.isDesktop = width > 1180;
-
-  if (uiLayout.isMobile) {
-    uiLayout.deviceMode = "mobile";
-  } else if (uiLayout.isTablet) {
-    uiLayout.deviceMode = "tablet";
-  } else {
-    uiLayout.deviceMode = "desktop";
-  }
-}
-
-updateResponsiveLayout();
-
-// ---------- UI STATE ----------
-
-const uiState = {
-  selectedMode: null,
-  selectedTowerType: "basic",
-  hoveredTile: null,
-  pendingBuildTile: null,
-  selectedTower: null,
-  infoPanelOpen: false,
-  menuOpen: false,
-  codexTab: "towers",
-  notifications: []
+  compact: false
 };
 
 // ---------- RESOURCES ----------
 
-let resources = {
-  wood: gameBalance.startWood,
-  stone: gameBalance.startStone,
-  food: gameBalance.startFood
-};
-
-// ---------- BASE ----------
-
-let base = {
-  hp: gameBalance.baseHp,
-  tileX: 26,
-  tileY: 10
+const resources = {
+  wood: 120,
+  stone: 80,
+  food: 60
 };
 
 // ---------- POWER ----------
 
-let power = {
+const power = {
   used: 0,
-  capacity: gameBalance.startPowerCapacity
+  capacity: 10
 };
 
-// ---------- WAVE ----------
+// ---------- BASE ----------
 
-let waveState = {
+const base = {
+  hp: 100,
+  maxHp: 100
+};
+
+// ---------- WAVES ----------
+
+const waveState = {
   active: false,
+
   number: 0,
+
   totalEnemies: 0,
-  spawnedEnemies: 0,
-  killedEnemies: 0,
-  reachedBase: 0
+
+  spawned: 0,
+
+  completed: false
 };
 
-// ---------- GAME ----------
+// ---------- RUNTIME ----------
 
-let gameState = {
-  gameOver: false,
-  difficulty: "normal"
-};
+let enemies = [];
 
-let checkpoint = null;
+let towers = [];
+
+let projectiles = [];
+
+let particles = [];
+
+let selectedBuildTower = null;
+
+// ---------- GAME SPEED ----------
+
 let gameSpeed = 1;
 
-// ---------- ENTITIES ----------
+// ---------- INPUT ----------
 
-const towers = [];
-const enemies = [];
-
-// ---------- HELPERS ----------
-
-function clone(value) {
-  return JSON.parse(JSON.stringify(value));
-}
-
-function updatePower() {
-  power.used = towers.reduce((sum, tower) => {
-    return sum + towerTypes[tower.typeId].powerUsage;
-  }, 0);
-}
+let pointerWorld = {
+  x: 0,
+  y: 0
+};
