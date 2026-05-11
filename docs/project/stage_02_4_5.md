@@ -656,3 +656,387 @@ Responsive layout:
 После Stage 02.4.5 проект официально переходит от simple file splitting к dependency-aware modular architecture.
 
 Это становится обязательным правилом для всех будущих крупных файлов проекта.
+
+# REPORT — DEVELOPER LOG
+## Stage 02.4.5 — UI Split & Responsive Refactor
+
+### Цель стадии
+На этапе 02.4.5 выполнен переход от монолитного UI-файла к модульной структуре интерфейса.
+
+Основная задача:
+- уменьшить размер ui.js;
+- разделить интерфейс на независимые подсистемы;
+- подготовить архитектуру под дальнейший рост мобильного UX;
+- снизить риск потери логики при последующих изменениях;
+- упростить сопровождение проекта.
+
+---
+
+# Выполненные изменения
+
+## 1. Полностью удалён монолитный ui.js
+
+Старый файл:
+- js/ui.js
+
+Был удалён из системы.
+
+---
+
+## 2. Создана новая структура UI-модулей
+
+Создан каталог:
+
+js/ui/
+
+Внутри него выделены отдельные подсистемы:
+
+- helpers.js
+- layout.js
+- controls.js
+- panels.js
+- canvas_world.js
+- canvas_entities.js
+- notifications.js
+
+---
+
+# Назначение файлов
+
+## helpers.js
+Содержит:
+- UI helper-функции;
+- createUIButton;
+- applyFixedStyle;
+- createPanelTitle;
+- createSmallText;
+- draw helpers.
+
+---
+
+## layout.js
+Содержит:
+- responsive layout system;
+- portrait / landscape rules;
+- compact mode;
+- mobile safe-area handling;
+- topbar layout;
+- panel positioning logic.
+
+---
+
+## controls.js
+Содержит:
+- нижние панели управления;
+- speed controls;
+- zoom controls;
+- build confirm panel;
+- mobile interaction buttons.
+
+---
+
+## panels.js
+Содержит:
+- menu panel;
+- codex panel;
+- selected tower panel;
+- game over panel;
+- wave status rendering.
+
+---
+
+## canvas_world.js
+Содержит:
+- drawMap;
+- drawRoadTiles;
+- drawBase;
+- drawBuildOverlay;
+- drawTowerRange;
+- world rendering helpers.
+
+---
+
+## canvas_entities.js
+Содержит:
+- drawTowers;
+- drawEnemies;
+- HP bars;
+- attack beams.
+
+---
+
+## notifications.js
+Содержит:
+- notification system;
+- updateNotifications;
+- drawNotifications;
+- UI alert lifecycle.
+
+---
+
+# Обновлён index.html
+
+Из index.html:
+- удалён ui.js;
+- подключены новые UI-модули;
+- сохранён корректный порядок загрузки JS.
+
+---
+
+# Выполнена адаптация под mobile/tablet
+
+Добавлены:
+- compact mode;
+- landscape rules;
+- responsive topbar;
+- mobile spacing;
+- adaptive control placement.
+
+---
+
+# Архитектурные выводы
+
+Stage 02.4.5 подтвердил:
+- монолитный UI больше невозможно безопасно поддерживать;
+- модульная архитектура обязательна для дальнейшего роста проекта;
+- mobile UX требует отдельного этапа стабилизации;
+- UI split успешно подготовил систему к дальнейшему расширению.
+
+---
+
+# Обнаруженные проблемы после split
+
+Во время тестов выявлены:
+- build confirm bug;
+- coordinate mapping issues;
+- unstable mobile zoom behavior;
+- oversized codex panel on phones;
+- landscape overlap problems;
+- non-dynamic lower zoom label.
+
+---
+
+# Принятые решения
+
+Следующий этап:
+- выполнить Fix Pack внутри новой архитектуры;
+- не возвращаться к монолитному UI;
+- все будущие изменения выполнять только через отдельные UI-модули.
+
+---
+
+# Новые правила разработки
+
+После Stage 02.4.5 введены обязательные правила:
+
+1. Перед изменением логики определяется конкретный файл-модуль.
+2. Изменения вносятся только в соответствующий файл.
+3. Полное содержимое файлов выдаётся в чат.
+4. Замена файлов выполняется вручную полной вставкой.
+5. Каждый файл сопровождается отдельным commit message.
+6. Ведётся учёт:
+   - количества файлов;
+   - порядка выдачи;
+   - завершённых замен.
+7. После завершения этапа обязательно выполняется ZIP-проверка репозитория.
+8. После каждой стадии обновляются:
+   - architecture.md
+   - roadmap.md
+   - mechanics.md
+   - stage documentation.
+
+---
+
+# Статус стадии
+
+Stage 02.4.5:
+- UI split выполнен;
+- архитектура стабилизирована;
+- проект готов к Fix Pack стадии.
+
+# REPORT — QA TEST LOG
+## Stage 02.4.5 — UI Split Validation
+
+### Цель тестирования
+Проверить:
+- работоспособность игры после UI split;
+- корректность модульной структуры;
+- mobile/tablet responsiveness;
+- стабильность UI после удаления монолитного ui.js.
+
+---
+
+# Проверенные устройства
+
+## Планшет
+- iPad
+- Safari
+- portrait / landscape
+
+## Телефон
+- iPhone
+- Safari
+- portrait / landscape
+
+---
+
+# Проверенные механики
+
+## Общий запуск
+Проверено:
+- игра запускается;
+- canvas отображается;
+- карта загружается;
+- UI отображается.
+
+Результат:
+PASS
+
+---
+
+## Волны
+Проверено:
+- запуск волн;
+- движение врагов;
+- завершение волны;
+- damage базы.
+
+Результат:
+PASS
+
+---
+
+## HP базы
+Проверено:
+- враги доходят до базы;
+- HP уменьшается;
+- Game Over срабатывает.
+
+Результат:
+PASS
+
+---
+
+## Меню
+Проверено:
+- открытие меню;
+- переключение сложности;
+- новая игра.
+
+Результат:
+PASS
+
+---
+
+## Codex
+Проверено:
+- открытие codex panel;
+- отображение справки.
+
+Результат:
+PARTIAL PASS
+
+Проблема:
+- на телефоне codex перекрывает почти весь экран.
+
+---
+
+## Zoom
+Проверено:
+- кнопки +/-;
+- изменение масштаба;
+- верхний zoom indicator.
+
+Результат:
+PARTIAL PASS
+
+Проблемы:
+- нижний label zoom не обновляется;
+- zoom можно увести в неудобное состояние на телефоне.
+
+---
+
+## Build Mode
+Проверено:
+- выбор башни;
+- выбор клетки;
+- build overlay;
+- confirm build.
+
+Результат:
+FAIL
+
+Проблемы:
+- выбранная клетка визуально отображается;
+- confirmBuild сообщает:
+  "Сначала выбери клетку";
+- башня не строится.
+
+Дополнительно:
+- выбор клетки ощущается смещённым относительно пальца.
+
+---
+
+# Mobile UX Test
+
+## Portrait Mode
+Результат:
+PARTIAL PASS
+
+Проблемы:
+- панели занимают слишком много места;
+- overlay перекрывает карту;
+- build panel неудобен.
+
+---
+
+## Landscape Mode
+Результат:
+PARTIAL PASS
+
+Проблемы:
+- нижние панели перекрывают карту;
+- controls занимают слишком много пространства;
+- кнопки требуют перераспределения.
+
+---
+
+# UX observations
+
+Предложения тестирования:
+
+## Перенести:
+- Башня
+- Волна
+
+Ближе к правому пальцу рядом со speed controls.
+
+---
+
+## Перенести отдельно:
+- Codex
+- Menu
+
+Сделать компактнее и отделить от основных action buttons.
+
+---
+
+# Главный вывод
+
+Stage 02.4.5:
+- успешно завершил UI split;
+- подтвердил работоспособность модульной архитектуры;
+- выявил mobile UX bottlenecks;
+- подготовил систему к отдельному Fix Pack этапу.
+
+---
+
+# Рекомендованный следующий этап
+
+Fix Pack:
+- confirmBuild fix;
+- coordinate mapping fix;
+- zoom stabilization;
+- mobile layout rebalance;
+- codex resizing;
+- dynamic zoom label.
