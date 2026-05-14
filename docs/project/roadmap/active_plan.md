@@ -26,11 +26,13 @@
 Текущий статус:
 
 - runtime development временно paused;
-- architecture stabilization partially completed;
+- Stage 03.1 operationally completed;
 - architecture package split completed;
-- roadmap package split in progress;
+- roadmap package split completed;
+- legacy architecture.md removed;
+- legacy roadmap.md removed;
 - AI navigation layer пока planning-only;
-- comments-only AI-readable layer ещё не внедрён;
+- Stage 03.2 preparation started;
 - runtime evolution временно ограничен compatibility-safe workflow.
 
 ---
@@ -77,8 +79,11 @@ Runtime development был временно остановлен не из-за 
 - Pass 03 — Dangerous Runtime Boundaries;
 - Pass 04 — Preliminary Runtime Contract Candidates;
 - Stage 03.1 Developer Report;
+- Stage 03.1 Final Snapshot;
 - architecture package split;
-- architecture verification workflow.
+- roadmap package split;
+- architecture verification workflow;
+- roadmap verification workflow.
 
 ---
 
@@ -100,81 +105,11 @@ Runtime development был временно остановлен не из-за 
 
 Текущий workflow:
 
-1. завершить roadmap package split;
-2. выполнить roadmap verification;
-3. перевести old roadmap.md в legacy artifact;
-4. подготовить AI navigation layer;
-5. подготовить comments-only AI-readable strategy;
-6. определить minimal safe runtime passes;
-7. вернуться к runtime evolution через bounded compatibility-safe workflow.
-
----
-
-## Текущий roadmap split plan
-
-Roadmap package должен содержать:
-
-    docs/project/roadmap/
-    ├── README.md
-    ├── completed_stages.md
-    ├── active_plan.md
-    ├── future_gameplay.md
-    └── publishing_plan.md
-
-Текущий статус:
-
-- README.md created;
-- completed_stages.md created;
-- active_plan.md current pass;
-- future_gameplay.md pending;
-- publishing_plan.md pending.
-
----
-
-## Ближайшие bounded passes
-
-Следующие safe passes:
-
-### Pass 01
-
-Создать:
-
-    future_gameplay.md
-
-Задача:
-
-- вынести future gameplay/runtime stages;
-- убрать conflict со старой Stage 03 Combat Expansion;
-- отделить future gameplay roadmap от active operational workflow.
-
----
-
-### Pass 02
-
-Создать:
-
-    publishing_plan.md
-
-Задача:
-
-- вынести marketplace/platform/publishing direction;
-- отделить publishing roadmap от runtime roadmap.
-
----
-
-### Pass 03
-
-Выполнить:
-
-roadmap package verification pass.
-
-Проверить:
-
-- package consistency;
-- references;
-- separation architecture/roadmap;
-- bounded structure;
-- absence of accidental runtime changes.
+1. подготовить Stage 03.2 navigation/retrieval workflow;
+2. определить bounded AI navigation artifacts;
+3. подготовить comments-only AI-readable strategy;
+4. определить minimal safe runtime passes;
+5. вернуться к runtime evolution через bounded compatibility-safe workflow.
 
 ---
 
@@ -196,7 +131,7 @@ AI navigation layer пока НЕ внедрён.
 
 Текущий статус:
 
-planning-only.
+Stage 03.2 planning phase.
 
 ---
 
@@ -215,16 +150,18 @@ future AI-readable markup должен:
 
 comments-only markup strategy.
 
+Внедрение intentionally moved to Stage 03.2.
+
 ---
 
 ## Runtime return strategy
 
 Возврат к runtime development разрешён только после:
 
-- roadmap stabilization;
 - navigation stabilization;
 - bounded workflow stabilization;
-- contract visibility stabilization.
+- contract visibility stabilization;
+- Stage 03.2 navigation planning.
 
 Runtime evolution больше не должен происходить через:
 
@@ -280,6 +217,8 @@ Runtime evolution больше не должен происходить чере
 - когда возвращаться к runtime gameplay expansion;
 - какие runtime zones можно safely evolve first.
 
+Эти задачи теперь относятся к Stage 03.2 planning workflow.
+
 ---
 
 ## Общий вывод
@@ -300,4 +239,6 @@ CORE FRONTIER перешёл:
 - inspection-first development;
 - compatibility-safe runtime evolution.
 
-Текущий active plan направлен на stabilizing foundation before further gameplay expansion.
+Stage 03.1 operationally completed.
+
+Текущий active plan направлен на Stage 03.2 navigation/retrieval preparation before further gameplay expansion.
