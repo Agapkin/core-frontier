@@ -26,13 +26,16 @@
 Текущий статус:
 
 - runtime development временно paused;
-- Stage 03.1 operationally completed;
+- Stage 03.1 completed and closed;
+- Stage 03.2 opened;
+- current active stage = Stage 03.2;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
 - legacy roadmap.md removed;
 - AI navigation layer пока planning-only;
-- Stage 03.2 preparation started;
+- current workflow = Repository OS / AI navigation planning;
+- runtime development remains paused until navigation infrastructure planning is completed;
 - runtime evolution временно ограничен compatibility-safe workflow.
 
 ---
@@ -87,6 +90,19 @@ Runtime development был временно остановлен не из-за 
 
 ---
 
+### Stage 03.2
+
+Открыт planning stage:
+
+- Repository Operating System planning;
+- AI navigation planning;
+- bounded workflow planning;
+- retrieval-safe repository planning.
+
+Implementation layers Stage 03.2 пока НЕ внедряются.
+
+---
+
 ## Что подтвердил discovery-cycle
 
 Подтверждено:
@@ -105,11 +121,13 @@ Runtime development был временно остановлен не из-за 
 
 Текущий workflow:
 
-1. подготовить Stage 03.2 navigation/retrieval workflow;
+1. определить Repository OS workflow;
 2. определить bounded AI navigation artifacts;
-3. подготовить comments-only AI-readable strategy;
-4. определить minimal safe runtime passes;
-5. вернуться к runtime evolution через bounded compatibility-safe workflow.
+3. определить YAML/index planning structure;
+4. подготовить comments-only AI-readable strategy;
+5. определить initial logs workflow;
+6. определить minimal safe runtime passes;
+7. вернуться к runtime evolution через bounded compatibility-safe workflow.
 
 ---
 
@@ -239,6 +257,10 @@ CORE FRONTIER перешёл:
 - inspection-first development;
 - compatibility-safe runtime evolution.
 
-Stage 03.1 operationally completed.
+Stage 03.1 completed and closed.
+
+Current active stage:
+
+Stage 03.2 — AI Navigation & Repository Operating System.
 
 Текущий active plan направлен на Stage 03.2 navigation/retrieval preparation before further gameplay expansion.
