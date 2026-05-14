@@ -142,8 +142,21 @@ Stage 03.1 завершил inspection-first runtime discovery-cycle.
 - Pass 03 — Dangerous Runtime Boundaries;
 - Pass 04 — Preliminary Runtime Contract Candidates;
 - Stage 03.1 Developer Report;
+- Stage 03.1 Final Snapshot;
 - architecture package split;
-- architecture verification workflow.
+- roadmap package split;
+- architecture verification workflow;
+- roadmap verification workflow.
+
+Подтверждено:
+
+- Stage 03.1 operationally completed;
+- bounded layered documentation workflow deployed;
+- layered repository structure introduced;
+- visibility-safe workflow confirmed;
+- giant flat workflow deprecated;
+- legacy architecture.md removed;
+- legacy roadmap.md removed.
 
 ---
 
@@ -206,11 +219,12 @@ CORE FRONTIER перешёл:
 
 Текущий статус:
 
+- Stage 03.1 operationally completed;
 - runtime/gameplay development временно paused;
-- architecture stabilization выполнена частично;
-- roadmap split находится в процессе;
+- roadmap/architecture split completed;
 - AI navigation layer пока planning-only;
 - comments-only AI-readable layer ещё не внедрён;
+- navigation-system deployment moved to Stage 03.2;
 - runtime evolution будет продолжен только через bounded compatibility-safe workflow.
 
 ---
