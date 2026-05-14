@@ -1,0 +1,28 @@
+current_stage: "Stage 03.2"
+current_pass: "Pass A — Minimal AI Navigation Layer Deployment"
+workflow_mode: "bounded repository evolution"
+runtime_status: "paused for navigation/repository workflow stabilization"
+current_safe_direction:
+  - "minimal AI navigation deployment"
+  - "Repository OS planning"
+  - "bounded navigation workflow"
+  - "retrieval-safe coordination"
+known_blockers:
+  - "runtime visibility sensitivity"
+  - "systems.js mutation hub"
+  - "build flow instability risk"
+  - "connector truncation risk"
+  - "giant markdown workflow limitations"
+active_passes:
+  - "Stage 03.2 / Pass 01"
+  - "Stage 03.2 / Pass A"
+deferred_layers:
+  - "ai/runtime_map.yml"
+  - "ai/contracts.yml"
+  - "logs layer"
+  - "comments-only markup"
+  - "automation rollout"
+next_safe_direction:
+  - "bounded navigation synchronization"
+  - "minimal Repository OS stabilization"
+  - "future runtime map planning"
