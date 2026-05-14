@@ -6,7 +6,7 @@ primary_entrypoints:
   active_plan:
     - docs/project/roadmap/active_plan.md
   current_stage:
-    - docs/project/stage_03_2.md
+    - docs/project/stage_03_3.md
   governance_passes:
     - docs/project/stage_03_2_pass_01.md
     - docs/project/stage_03_2_pass_b.md
@@ -33,6 +33,7 @@ active_stage_files:
   - docs/project/stage_03_2_pass_01.md
   - docs/project/stage_03_2_pass_b.md
   - docs/project/stage_03_2_runtime_findings_01.md
+  - docs/project/stage_03_3.md
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
@@ -61,3 +62,4 @@ notes:
   - use_ai_only_for_navigation
   - docs_project_is_human_memory_layer
   - runtime_files_are_source_of_truth
+  - stage_03_3_is_runtime_readability_preparation_stage
