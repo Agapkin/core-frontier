@@ -404,7 +404,7 @@ function getBuildPanelText() {
 
   return validation.ok
     ? "Можно строить — " + cost
-    : validation.reason + " — " + cost;
+    : "Нельзя построить здесь: " + validation.reason + " — " + cost;
 }
 
 function placeTower(tileX, tileY) {
