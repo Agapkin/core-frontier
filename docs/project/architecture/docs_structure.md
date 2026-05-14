@@ -80,6 +80,7 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_03_2_pass_01.md
     docs/project/stage_03_2_pass_b.md
     docs/project/stage_03_2_runtime_findings_01.md
+    docs/project/stage_03_3.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
     docs/project/stage_03_1_final_snapshot.md
@@ -97,6 +98,17 @@ stage_03_2_pass_01.md — Minimal Repository OS structure planning pass.
 stage_03_2_pass_b.md — Governance workflow formalization and synchronization discipline planning pass.
 
 stage_03_2_runtime_findings_01.md — Stabilized runtime findings artifact for bounded runtime evolution and future runtime mapping preparation.
+
+---
+
+## Stage 03.3 document
+
+stage_03_3.md — Runtime readability and AI-readable comments-only marking preparation stage.
+
+Stage 03.3 подготавливает topology-aware runtime marking workflow,
+cluster-based runtime readability stabilization
+и future safe comments-only marking preparation
+без runtime refactor и modularization.
 
 ---
 
