@@ -352,11 +352,11 @@ function spawnEnemy(typeId, index) {
 }
 
 // ======================================================
-// BUILD FLOW SECTION
-// Role: tile selection, validation, confirmation and placement.
-// Depends on: uiState, towerTypes, resources, power, towers, map.
-// Important: validateBuildTile() remains authoritative validity source.
-// Comments-only readability layer. No runtime semantics implied.
+// СЕКЦИЯ: BUILD FLOW / СТРОИТЕЛЬСТВО
+// Роль: выбор клетки, проверка, подтверждение и установка башни.
+// Зависит от: uiState, towerTypes, resources, power, towers, map.
+// Важно: validateBuildTile() остаётся главным источником проверки.
+// Это comments-only слой читаемости. Runtime-семантика не меняется.
 // ======================================================
 // ---------- BUILDING ----------
 
@@ -385,8 +385,8 @@ function selectBuildTile(tileX, tileY) {
   }
 }
 
-// pendingBuildTile = focused candidate state,
-// not guaranteed valid placement.
+// pendingBuildTile = выбранный кандидат,
+// а не гарантированно валидное место строительства.
 function getBuildPanelText() {
   if (uiState.selectedMode !== "tower") {
     return "";
@@ -416,8 +416,8 @@ function getBuildPanelText() {
     : "Нельзя построить здесь: " + validation.reason + " — " + cost;
 }
 
-// Placement mutation boundary:
-// mutates towers/resources/power/uiState.
+// Граница runtime-мутации:
+// изменяет towers/resources/power/uiState.
 function placeTower(tileX, tileY) {
   const towerType =
     towerTypes[uiState.selectedTowerType];
@@ -481,8 +481,8 @@ function placeTower(tileX, tileY) {
   );
 }
 
-// validateBuildTile() is the centralized
-// placement validity authority.
+// validateBuildTile() — центральный источник проверки
+// допустимости строительства.
 function validateBuildTile(
   tileX,
   tileY,
