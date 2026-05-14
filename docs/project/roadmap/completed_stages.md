@@ -166,11 +166,23 @@ Stage 03.1 завершил inspection-first runtime discovery-cycle.
 
 - Stage 03.2 opened as next planning stage;
 - Repository OS planning started;
+- minimal AI navigation layer deployed;
+- governance stabilization workflow became operational;
+- verification/correction lifecycle operationalized;
 - AI navigation planning moved into Stage 03.2 workflow.
 
 Важно:
 
 Stage 03.2 пока НЕ является completed stage.
+
+Deferred intentionally:
+
+- ai/runtime_map.yml;
+- ai/contracts.yml;
+- logs layer;
+- comments-only markup;
+- automation rollout;
+- runtime modularization governance.
 
 ---
 
@@ -234,10 +246,11 @@ CORE FRONTIER перешёл:
 Текущий статус:
 
 - Stage 03.1 operationally completed and closed;
-- Stage 03.2 opened as active planning stage;
+- Stage 03.2 opened as governance stabilization / runtime reentry planning stage;
 - runtime/gameplay development временно paused;
 - roadmap/architecture split completed;
-- AI navigation layer пока planning-only;
+- minimal AI navigation layer deployed;
+- governance stabilization workflow operational;
 - comments-only AI-readable layer ещё не внедрён;
 - navigation-system deployment moved to Stage 03.2;
 - runtime evolution будет продолжен только через bounded compatibility-safe workflow.
