@@ -110,6 +110,13 @@ cluster-based runtime readability stabilization
 и future safe comments-only marking preparation
 без runtime refactor и modularization.
 
+Stage 03.3 milestone:
+
+    js/systems_wave_manager.js
+
+Wave Manager helper extraction verified through real gameplay testing.
+This is the first successful bounded extraction artifact from js/systems.js.
+
 ---
 
 ## Architecture package
@@ -130,6 +137,23 @@ README.md является entrypoint.
 
 После architecture split architecture.md больше не является отдельным root-файлом в docs/project/.
 Его роль перенесена в docs/project/architecture/README.md.
+
+---
+
+## Runtime extraction visibility
+
+First verified bounded extraction artifact:
+
+    js/systems_wave_manager.js
+
+Статус:
+
+- extracted from js/systems.js;
+- loaded between js/state.js and js/systems.js;
+- runtime verified manually;
+- no visible regression detected;
+- topology-preserving extraction confirmed;
+- rollback-safe extraction boundary preserved.
 
 ---
 
