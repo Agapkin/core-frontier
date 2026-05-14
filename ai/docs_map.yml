@@ -7,8 +7,9 @@ primary_entrypoints:
     - docs/project/roadmap/active_plan.md
   current_stage:
     - docs/project/stage_03_2.md
-  current_pass:
+  governance_passes:
     - docs/project/stage_03_2_pass_01.md
+    - docs/project/stage_03_2_pass_b.md
 
 architecture_package:
   - docs/project/architecture/runtime_structure.md
@@ -28,14 +29,30 @@ active_stage_files:
   - docs/project/stage_03_1_final_snapshot.md
   - docs/project/stage_03_2.md
   - docs/project/stage_03_2_pass_01.md
+  - docs/project/stage_03_2_pass_b.md
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
   - docs/project/stage_03_1_developer_report_01.md
 
+historical_stage_files:
+  - docs/project/stage_01.md
+  - docs/project/stage_02.md
+  - docs/project/stage_02_1.md
+  - docs/project/stage_02_2.md
+  - docs/project/stage_02_3.md
+  - docs/project/stage_02_4.md
+  - docs/project/stage_02_4_1.md
+  - docs/project/stage_02_4_2.md
+  - docs/project/stage_02_4_3.md
+  - docs/project/stage_02_4_4.md
+  - docs/project/stage_02_4_5.md
+  - docs/project/stage_02_4_5_A.md
+  - docs/project/stage_02_4_6.md
+
 legacy_references:
   architecture_md: removed
-  roadmap_md: legacy_artifact_pending_cleanup
+  roadmap_md: removed
 
 notes:
   - use_ai_only_for_navigation
