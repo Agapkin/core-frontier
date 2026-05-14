@@ -29,13 +29,15 @@
 - Stage 03.1 completed and closed;
 - Stage 03.2 opened;
 - current active stage = Stage 03.2;
+- current phase = governance stabilization / runtime reentry planning;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
 - legacy roadmap.md removed;
-- AI navigation layer пока planning-only;
-- current workflow = Repository OS / AI navigation planning;
-- runtime development remains paused until navigation infrastructure planning is completed;
+- minimal AI navigation layer deployed;
+- governance stabilization workflow operational;
+- current workflow = Repository OS governance stabilization / runtime reentry planning;
+- runtime development remains paused until bounded runtime reentry plan is prepared;
 - runtime evolution временно ограничен compatibility-safe workflow.
 
 ---
@@ -92,14 +94,16 @@ Runtime development был временно остановлен не из-за 
 
 ### Stage 03.2
 
-Открыт planning stage:
+Открыт governance/navigation stabilization stage:
 
 - Repository Operating System planning;
-- AI navigation planning;
+- minimal AI navigation layer deployment;
 - bounded workflow planning;
-- retrieval-safe repository planning.
+- retrieval-safe repository planning;
+- governance lifecycle integration;
+- verification/correction lifecycle stabilization.
 
-Implementation layers Stage 03.2 пока НЕ внедряются.
+Runtime implementation layers Stage 03.2 пока НЕ внедряются.
 
 ---
 
@@ -121,11 +125,11 @@ Implementation layers Stage 03.2 пока НЕ внедряются.
 
 Текущий workflow:
 
-1. определить Repository OS workflow;
-2. определить bounded AI navigation artifacts;
-3. определить YAML/index planning structure;
-4. подготовить comments-only AI-readable strategy;
-5. определить initial logs workflow;
+1. удерживать governance layer bounded;
+2. поддерживать Documentation Impact workflow discipline;
+3. поддерживать AI Navigation Impact workflow discipline;
+4. выполнять только bounded synchronization corrections when needed;
+5. подготовить runtime reentry planning;
 6. определить minimal safe runtime passes;
 7. вернуться к runtime evolution через bounded compatibility-safe workflow.
 
@@ -135,7 +139,13 @@ Implementation layers Stage 03.2 пока НЕ внедряются.
 
 Подтверждено:
 
-будущий AI navigation layer должен быть:
+minimal AI navigation layer уже deployed:
+
+- ai/README.md;
+- ai/current_status.yml;
+- ai/docs_map.yml.
+
+AI navigation layer должен оставаться:
 
 - bounded;
 - retrieval-oriented;
@@ -143,13 +153,13 @@ Implementation layers Stage 03.2 пока НЕ внедряются.
 - connector-safe;
 - compressed.
 
-Но:
+Deferred intentionally:
 
-AI navigation layer пока НЕ внедрён.
-
-Текущий статус:
-
-Stage 03.2 planning phase.
+- ai/runtime_map.yml;
+- ai/contracts.yml;
+- logs layer;
+- comments-only markup;
+- automation rollout.
 
 ---
 
@@ -168,7 +178,7 @@ future AI-readable markup должен:
 
 comments-only markup strategy.
 
-Внедрение intentionally moved to Stage 03.2.
+Внедрение intentionally deferred.
 
 ---
 
@@ -176,10 +186,10 @@ comments-only markup strategy.
 
 Возврат к runtime development разрешён только после:
 
-- navigation stabilization;
+- governance stabilization;
 - bounded workflow stabilization;
-- contract visibility stabilization;
-- Stage 03.2 navigation planning.
+- contract visibility review;
+- runtime reentry planning.
 
 Runtime evolution больше не должен происходить через:
 
@@ -217,7 +227,7 @@ Runtime evolution больше не должен происходить чере
 Главная задача текущего этапа:
 
 не ускорить gameplay expansion,
-а стабилизировать repository evolution model.
+а стабилизировать repository evolution model и подготовить runtime reentry planning.
 
 Подтверждено:
 
@@ -227,15 +237,21 @@ Runtime evolution больше не должен происходить чере
 
 ## После roadmap split
 
-После roadmap split потребуется отдельно решить:
+После roadmap split текущий focus:
 
-- когда внедрять AI navigation artifacts;
-- когда внедрять comments-only markup;
-- когда начинать safe modularization;
-- когда возвращаться к runtime gameplay expansion;
-- какие runtime zones можно safely evolve first.
+- удержать governance layer bounded;
+- не расширять governance без необходимости;
+- подготовить runtime reentry planning;
+- определить, какие runtime zones можно safely evolve first.
 
-Эти задачи теперь относятся к Stage 03.2 planning workflow.
+Deferred intentionally:
+
+- logs layer;
+- ai/runtime_map.yml;
+- ai/contracts.yml;
+- comments-only markup;
+- automation rollout;
+- runtime modularization governance.
 
 ---
 
@@ -263,4 +279,8 @@ Current active stage:
 
 Stage 03.2 — AI Navigation & Repository Operating System.
 
-Текущий active plan направлен на Stage 03.2 navigation/retrieval preparation before further gameplay expansion.
+Current phase:
+
+governance stabilization / runtime reentry planning.
+
+Текущий active plan направлен на runtime reentry planning after governance stabilization.
