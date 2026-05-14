@@ -280,6 +280,169 @@ Navigation layer должен быть:
 
 ---
 
+## Repository Governance Lifecycle
+
+Repository governance formalizes already-confirmed workflow discipline.
+
+Governance lifecycle:
+
+    deployment
+    → Documentation Impact Check
+    → AI Navigation Impact Check
+    → verification pass
+    → correction pass if needed
+    → synchronization confirmation
+    → stabilization confirmation
+
+Главный принцип:
+
+deployment ≠ stabilization.
+
+Deployment начинает integration, но layer считается stabilized только после verification, correction if needed и synchronization confirmation.
+
+---
+
+### Documentation Impact Workflow
+
+После repository changes необходимо compactly проверить:
+
+- требуется ли architecture update;
+- требуется ли roadmap update;
+- требуется ли workflow update;
+- требуется ли logs update;
+- требуется ли developer report/snapshot;
+- есть ли deferred updates, если affected layer не входит в scope текущего pass.
+
+Impact workflow должен ограничивать propagation scope и предотвращать giant synchronization.
+
+---
+
+### AI Navigation Impact Workflow
+
+После repository/navigation changes необходимо compactly проверить:
+
+- требуется ли `ai/current_status.yml` update;
+- требуется ли `ai/docs_map.yml` update;
+- требуется ли `ai/runtime_map.yml` update;
+- требуется ли `ai/contracts.yml` update;
+- затронуты ли navigation anchors;
+- есть ли deferred updates, если affected layer не входит в scope текущего pass.
+
+AI Navigation Impact Workflow НЕ должен дублировать YAML contents внутри workflow.md.
+
+---
+
+### Verification & Correction Workflow
+
+Verification mandatory after:
+
+- navigation deployment;
+- docs structure changes;
+- architecture structure changes;
+- roadmap structure changes;
+- bounded synchronization passes.
+
+Navigation drift и governance drift считаются естественными repository phenomena.
+
+Correction must be:
+
+- bounded;
+- targeted;
+- synchronization-oriented;
+- propagation-safe.
+
+Запрещено:
+
+- giant correction rewrites;
+- uncontrolled propagation;
+- unrelated synchronization changes;
+- speculative sync outside verification scope.
+
+---
+
+### Deferred Update Rules
+
+Deferred updates must be explicit.
+
+Deferred update allowed when:
+
+- affected layer is outside current scope;
+- update requires separate bounded pass;
+- current pass does not permit propagation.
+
+Deferred does not mean forgotten.
+
+Every deferred update should be visible in Impact Check output or pass report.
+
+---
+
+### Synchronization Discipline
+
+Synchronization must remain bounded.
+
+Stabilization requires synchronization confirmation.
+
+Propagation must not become:
+
+- repo-wide rewrite;
+- giant sync pass;
+- unrelated layer update;
+- speculative governance expansion.
+
+Navigation layer must remain retrieval-safe.
+
+---
+
+### Bounded Propagation Rules
+
+Propagation scope must be limited to affected layers.
+
+Rules:
+
+- update only affected layers;
+- do not update unrelated files;
+- do not perform speculative sync;
+- do not perform automatic giant propagation;
+- keep governance short-form and protocol-oriented.
+
+---
+
+### Deferred governance areas
+
+Do not formalize yet:
+
+- runtime_map governance;
+- contracts governance;
+- logs workflow;
+- automation governance;
+- comments-only rollout governance;
+- runtime extraction governance;
+- modularization governance.
+
+These remain deferred until dedicated bounded planning/implementation passes.
+
+---
+
+### Anti-overgrowth rule
+
+workflow.md must remain:
+
+- bounded;
+- protocol-oriented;
+- retrieval-safe;
+- operational.
+
+workflow.md must NOT become:
+
+- governance archive;
+- reasoning archive;
+- incident history;
+- giant synchronization log;
+- duplicate of stage files;
+- duplicate of reports/snapshots.
+
+---
+
 ## Общий вывод
 
 CORE FRONTIER должен развиваться как:
