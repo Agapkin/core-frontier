@@ -79,6 +79,7 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_03_2.md
     docs/project/stage_03_2_pass_01.md
     docs/project/stage_03_2_pass_b.md
+    docs/project/stage_03_2_runtime_findings_01.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
     docs/project/stage_03_1_final_snapshot.md
@@ -94,6 +95,8 @@ Stage 03.2 является planning stage для repository operating system, A
 stage_03_2_pass_01.md — Minimal Repository OS structure planning pass.
 
 stage_03_2_pass_b.md — Governance workflow formalization and synchronization discipline planning pass.
+
+stage_03_2_runtime_findings_01.md — Stabilized runtime findings artifact for bounded runtime evolution and future runtime mapping preparation.
 
 ---
 
