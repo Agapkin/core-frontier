@@ -10,6 +10,8 @@ primary_entrypoints:
   governance_passes:
     - docs/project/stage_03_2_pass_01.md
     - docs/project/stage_03_2_pass_b.md
+  runtime_findings:
+    - docs/project/stage_03_2_runtime_findings_01.md
 
 architecture_package:
   - docs/project/architecture/runtime_structure.md
@@ -30,6 +32,7 @@ active_stage_files:
   - docs/project/stage_03_2.md
   - docs/project/stage_03_2_pass_01.md
   - docs/project/stage_03_2_pass_b.md
+  - docs/project/stage_03_2_runtime_findings_01.md
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
