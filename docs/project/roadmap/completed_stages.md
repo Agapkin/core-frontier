@@ -150,13 +150,27 @@ Stage 03.1 завершил inspection-first runtime discovery-cycle.
 
 Подтверждено:
 
-- Stage 03.1 operationally completed;
+- Stage 03.1 operationally completed and closed;
 - bounded layered documentation workflow deployed;
 - layered repository structure introduced;
 - visibility-safe workflow confirmed;
 - giant flat workflow deprecated;
 - legacy architecture.md removed;
 - legacy roadmap.md removed.
+
+---
+
+## Stage 03.1 → Stage 03.2 Transition
+
+После закрытия Stage 03.1:
+
+- Stage 03.2 opened as next planning stage;
+- Repository OS planning started;
+- AI navigation planning moved into Stage 03.2 workflow.
+
+Важно:
+
+Stage 03.2 пока НЕ является completed stage.
 
 ---
 
@@ -219,7 +233,8 @@ CORE FRONTIER перешёл:
 
 Текущий статус:
 
-- Stage 03.1 operationally completed;
+- Stage 03.1 operationally completed and closed;
+- Stage 03.2 opened as active planning stage;
 - runtime/gameplay development временно paused;
 - roadmap/architecture split completed;
 - AI navigation layer пока planning-only;
