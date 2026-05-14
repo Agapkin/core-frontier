@@ -51,7 +51,11 @@ docs/design/ содержит design/mechanics документацию.
 
 Текущие key documents после architecture split:
 
-    docs/project/roadmap.md
+    docs/project/roadmap/README.md
+    docs/project/roadmap/completed_stages.md
+    docs/project/roadmap/active_plan.md
+    docs/project/roadmap/future_gameplay.md
+    docs/project/roadmap/publishing_plan.md
     docs/project/architecture/README.md
     docs/project/architecture/runtime_structure.md
     docs/project/architecture/docs_structure.md
@@ -72,8 +76,18 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_02_4_6.md
     docs/project/stage_03.md
     docs/project/stage_03_1.md
+    docs/project/stage_03_2.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
+    docs/project/stage_03_1_final_snapshot.md
+
+---
+
+## Stage 03.2 document
+
+stage_03_2.md — Stage 03.2 definition for AI Navigation & Repository Operating System.
+
+Stage 03.2 является planning stage для repository operating system, AI navigation planning, bounded workflow planning и retrieval-safe repository planning.
 
 ---
 
@@ -137,7 +151,7 @@ Developer Report отличается от stage-файла:
 
 - docs/project/stage_03.md;
 - old docs/project/architecture.md before split;
-- docs/project/roadmap.md;
+- old docs/project/roadmap.md before split;
 - docs/design/mechanics.md;
 - крупные Stage 02.4.x документы.
 
@@ -170,9 +184,9 @@ documentation artifacts должны быть bounded.
 
 ---
 
-## docs/project/ и roadmap.md
+## docs/project/ и roadmap package
 
-roadmap.md должен описывать:
+roadmap package должен описывать:
 
 - порядок действий;
 - staged plan;
