@@ -1,9 +1,20 @@
 // CORE FRONTIER — Wave Manager helpers
-// Extracted from systems.js.
-// Browser-global runtime. No imports/exports.
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/systems_wave_manager.js
+// РОЛЬ: генерация состава волны и создание врагов.
+// ВЛАДЕЕТ: createWave(), shuffleWave(), spawnEnemy()
+// ЧИТАЕТ: difficultyProfiles, gameState, gameBalance, enemyTypes, waveState, enemyPath, TILE_SIZE
+// ИЗМЕНЯЕТ: enemies, waveState.spawnedEnemies
+// ИСПОЛЬЗУЕТСЯ В: startWave() из js/systems.js
+// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до systems.js.
+// НЕЛЬЗЯ: менять порядок загрузки без проверки startWave().
 
-// ---------- WAVE MANAGER ----------
+// ======================================================
+// СЕКЦИЯ: WAVE MANAGER / УПРАВЛЕНИЕ ВОЛНАМИ
+// РОЛЬ: создать состав волны, перемешать врагов и добавить их в enemies.
+// ======================================================
 
+// createWave(): формирует список врагов для текущей волны.
 function createWave(number) {
   const profile =
     difficultyProfiles[gameState.difficulty];
@@ -50,6 +61,7 @@ function createWave(number) {
   return shuffleWave(wave);
 }
 
+// shuffleWave(): перемешивает локальную копию wave без изменения исходного массива.
 function shuffleWave(wave) {
   const result = [...wave];
 
@@ -65,6 +77,7 @@ function shuffleWave(wave) {
   return result;
 }
 
+// spawnEnemy(): создаёт enemy object и добавляет его в enemies.
 function spawnEnemy(typeId, index) {
   const type = enemyTypes[typeId];
 
@@ -113,3 +126,7 @@ function spawnEnemy(typeId, index) {
 
   waveState.spawnedEnemies += 1;
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: WAVE MANAGER / УПРАВЛЕНИЕ ВОЛНАМИ
+// ======================================================
