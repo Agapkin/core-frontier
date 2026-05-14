@@ -351,6 +351,13 @@ function spawnEnemy(typeId, index) {
   waveState.spawnedEnemies += 1;
 }
 
+// ======================================================
+// BUILD FLOW SECTION
+// Role: tile selection, validation, confirmation and placement.
+// Depends on: uiState, towerTypes, resources, power, towers, map.
+// Important: validateBuildTile() remains authoritative validity source.
+// Comments-only readability layer. No runtime semantics implied.
+// ======================================================
 // ---------- BUILDING ----------
 
 function selectBuildTile(tileX, tileY) {
@@ -378,6 +385,8 @@ function selectBuildTile(tileX, tileY) {
   }
 }
 
+// pendingBuildTile = focused candidate state,
+// not guaranteed valid placement.
 function getBuildPanelText() {
   if (uiState.selectedMode !== "tower") {
     return "";
@@ -407,6 +416,8 @@ function getBuildPanelText() {
     : "Нельзя построить здесь: " + validation.reason + " — " + cost;
 }
 
+// Placement mutation boundary:
+// mutates towers/resources/power/uiState.
 function placeTower(tileX, tileY) {
   const towerType =
     towerTypes[uiState.selectedTowerType];
@@ -470,6 +481,8 @@ function placeTower(tileX, tileY) {
   );
 }
 
+// validateBuildTile() is the centralized
+// placement validity authority.
 function validateBuildTile(
   tileX,
   tileY,
