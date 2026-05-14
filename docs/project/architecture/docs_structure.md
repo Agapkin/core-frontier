@@ -77,6 +77,8 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_03.md
     docs/project/stage_03_1.md
     docs/project/stage_03_2.md
+    docs/project/stage_03_2_pass_01.md
+    docs/project/stage_03_2_pass_b.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
     docs/project/stage_03_1_final_snapshot.md
@@ -88,6 +90,10 @@ docs/design/ содержит design/mechanics документацию.
 stage_03_2.md — Stage 03.2 definition for AI Navigation & Repository Operating System.
 
 Stage 03.2 является planning stage для repository operating system, AI navigation planning, bounded workflow planning и retrieval-safe repository planning.
+
+stage_03_2_pass_01.md — Minimal Repository OS structure planning pass.
+
+stage_03_2_pass_b.md — Governance workflow formalization and synchronization discipline planning pass.
 
 ---
 
