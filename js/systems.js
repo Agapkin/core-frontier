@@ -51,6 +51,7 @@ function cancelBuildMode() {
 
 // startWave(): запускает новую волну и связывает checkpoint, waveState и spawn flow.
 function startWave() {
+  // ---------- WAVE START GUARDS ----------
   if (gameState.gameOver) {
     notify("Игра окончена", "warning");
     return;
@@ -65,12 +66,15 @@ function startWave() {
     return;
   }
 
+  // ---------- CHECKPOINT SAVE ----------
   saveCheckpoint();
 
+  // ---------- UI SELECTION RESET ----------
   uiState.selectedMode = null;
   uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
 
+  // ---------- WAVE STATE ACTIVATION ----------
   waveState.active = true;
 
   waveState.number += 1;
@@ -79,6 +83,7 @@ function startWave() {
   waveState.killedEnemies = 0;
   waveState.reachedBase = 0;
 
+  // ---------- WAVE CREATION / SPAWN FLOW ----------
   const wave = createWave(waveState.number);
 
   waveState.totalEnemies = wave.length;
@@ -87,6 +92,7 @@ function startWave() {
     spawnEnemy(enemyConfig.type, index);
   });
 
+  // ---------- UI FEEDBACK ----------
   updateUI();
 
   notify(
@@ -109,6 +115,7 @@ function startWave() {
 
 // saveCheckpoint(): сохраняет rollback-состояние перед запуском волны.
 function saveCheckpoint() {
+  // ---------- CHECKPOINT SNAPSHOT ----------
   checkpoint = {
     resources: clone(resources),
     base: clone(base),
@@ -128,11 +135,13 @@ function saveCheckpoint() {
 
 // retryLastWave(): восстанавливает checkpoint и возвращает игру к подготовке перед волной.
 function retryLastWave() {
+  // ---------- CHECKPOINT GUARD ----------
   if (!checkpoint) {
     notify("Checkpoint отсутствует", "warning");
     return;
   }
 
+  // ---------- CORE STATE RESTORE ----------
   resources = clone(checkpoint.resources);
   base = clone(checkpoint.base);
   power = clone(checkpoint.power);
@@ -146,12 +155,14 @@ function retryLastWave() {
 
   gameSpeed = checkpoint.gameSpeed;
 
+  // ---------- CAMERA RESTORE ----------
   camera.x = checkpoint.camera.x;
   camera.y = checkpoint.camera.y;
   camera.zoom = checkpoint.camera.zoom;
 
   clampCamera();
 
+  // ---------- ENTITY RESTORE ----------
   towers.length = 0;
 
   checkpoint.towers.forEach(tower => {
@@ -160,6 +171,7 @@ function retryLastWave() {
 
   enemies.length = 0;
 
+  // ---------- UI STATE RESET ----------
   uiState.selectedMode = null;
   uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
@@ -167,6 +179,7 @@ function retryLastWave() {
   uiState.infoPanelOpen = false;
   uiState.menuOpen = false;
 
+  // ---------- UI REBUILD / FEEDBACK ----------
   createDynamicUI();
 
   updatePower();
@@ -180,6 +193,7 @@ function retryLastWave() {
 
 // restartGame(): полностью сбрасывает runtime state в состояние новой игры.
 function restartGame() {
+  // ---------- CORE STATE RESET ----------
   resources = {
     wood: gameBalance.startWood,
     stone: gameBalance.startStone,
@@ -213,13 +227,16 @@ function restartGame() {
 
   gameSpeed = 1;
 
+  // ---------- CAMERA RESET ----------
   camera.zoom = 1;
   camera.x = 0;
   camera.y = 0;
 
+  // ---------- ENTITY RESET ----------
   towers.length = 0;
   enemies.length = 0;
 
+  // ---------- UI STATE RESET ----------
   uiState.selectedMode = null;
   uiState.pendingBuildTile = null;
   uiState.selectedTower = null;
@@ -227,6 +244,7 @@ function restartGame() {
   uiState.infoPanelOpen = false;
   uiState.menuOpen = false;
 
+  // ---------- UI REBUILD / FEEDBACK ----------
   createDynamicUI();
 
   updatePower();
@@ -272,6 +290,7 @@ function triggerGameOver() {
 function updateEnemies(multiplier) {
   if (gameState.gameOver) return;
 
+  // ---------- ENEMY MOVEMENT / BASE HIT ----------
   enemies.forEach(enemy => {
     const target =
       enemyPath[enemy.pathIndex + 1];
@@ -332,6 +351,7 @@ function updateEnemies(multiplier) {
     }
   });
 
+  // ---------- ENEMY CLEANUP / DEATH FLOW ----------
   for (
     let i = enemies.length - 1;
     i >= 0;
@@ -355,6 +375,7 @@ function updateEnemies(multiplier) {
     }
   }
 
+  // ---------- WAVE COMPLETION CHECK ----------
   if (
     waveState.active &&
     enemies.length === 0 &&
@@ -404,6 +425,7 @@ function applyReward(reward) {
 function updateTowers(multiplier) {
   if (gameState.gameOver) return;
 
+  // ---------- TARGET ACQUISITION ----------
   towers.forEach(tower => {
     const target = enemies.find(enemy => {
       const dx = enemy.x - tower.x;
@@ -415,6 +437,7 @@ function updateTowers(multiplier) {
       );
     });
 
+    // ---------- DAMAGE APPLICATION ----------
     if (target) {
       target.hp -=
         tower.damage * multiplier;
