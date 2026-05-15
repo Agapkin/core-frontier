@@ -14,7 +14,10 @@ current_runtime_state:
   comments_only_marking: "operational"
   first_bounded_extraction: "completed and verified"
   wave_manager_extraction: "runtime verified"
+  placement_extraction: "runtime verified"
+  placement_bridge_cleanup: "completed"
   topology_preservation: "confirmed"
+  browser_global_runtime_model: "preserved"
   rollback_safe_extraction: "confirmed"
 active_workflow:
   - "Stage 03.3 runtime readability stabilization"
