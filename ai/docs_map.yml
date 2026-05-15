@@ -60,6 +60,7 @@ verified_runtime_milestones:
   - placement_bridge_cleanup_completed
   - selected_object_actions_extraction_verified
   - systems_folder_relocation_verified
+  - systems_folder_marking_stabilized
   - topology_preserving_extraction_confirmed
   - browser_global_extraction_preserved
   - rollback_safe_extraction_confirmed
@@ -112,6 +113,7 @@ notes:
   - docs_project_is_human_memory_layer
   - runtime_files_are_source_of_truth
   - stage_03_3_is_runtime_readability_preparation_stage
+  - js_systems_is_stage_03_3_marking_stabilized_runtime_folder
   - first_real_extraction_survived_runtime_verification
   - placement_lifecycle_extraction_survived_runtime_verification
   - selected_object_actions_extraction_survived_runtime_verification
