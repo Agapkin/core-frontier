@@ -38,12 +38,14 @@ active_stage_files:
 runtime_extraction_visibility:
   - js/systems_wave_manager.js
   - js/systems_placement.js
+  - js/systems_selected_object_actions.js
 
 verified_runtime_milestones:
   - first_bounded_extraction_completed
   - wave_manager_extraction_verified
   - placement_extraction_verified
   - placement_bridge_cleanup_completed
+  - selected_object_actions_extraction_verified
   - topology_preserving_extraction_confirmed
   - browser_global_extraction_preserved
   - rollback_safe_extraction_confirmed
@@ -79,3 +81,4 @@ notes:
   - stage_03_3_is_runtime_readability_preparation_stage
   - first_real_extraction_survived_runtime_verification
   - placement_lifecycle_extraction_survived_runtime_verification
+  - selected_object_actions_extraction_survived_runtime_verification
