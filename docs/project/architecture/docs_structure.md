@@ -112,9 +112,10 @@ cluster-based runtime readability stabilization
 
 Stage 03.3 milestones:
 
-    js/systems_wave_manager.js
-    js/systems_placement.js
-    js/systems_selected_object_actions.js
+    js/systems/systems_wave_manager.js
+    js/systems/systems_placement.js
+    js/systems/systems_selected_object_actions.js
+    js/systems/systems.js
 
 Wave Manager helper extraction verified through real gameplay testing.
 This is the first successful bounded extraction artifact from js/systems.js.
@@ -124,6 +125,9 @@ This is the second successful bounded extraction artifact from js/systems.js.
 
 Selected object actions extraction verified through real gameplay testing.
 This is the third successful bounded extraction artifact from js/systems.js.
+
+Runtime systems relocation verified through manual runtime testing.
+The active systems topology now lives under js/systems/.
 
 ---
 
@@ -148,18 +152,44 @@ README.md является entrypoint.
 
 ---
 
+## Current runtime topology
+
+Confirmed runtime topology after Stage 03.3 relocation:
+
+    js/
+      data.js
+      state.js
+      game.js
+      systems/
+        systems.js
+        systems_wave_manager.js
+        systems_placement.js
+        systems_selected_object_actions.js
+      ui/
+
+Runtime contract:
+
+- browser-global script order is preserved;
+- systems files are grouped under js/systems/;
+- filenames were not renamed;
+- runtime code was not changed during relocation;
+- old root-level systems files were removed after index.html switched to relocated paths.
+
+---
+
 ## Runtime extraction visibility
 
 Verified bounded extraction artifacts:
 
-    js/systems_wave_manager.js
-    js/systems_placement.js
-    js/systems_selected_object_actions.js
+    js/systems/systems_wave_manager.js
+    js/systems/systems_placement.js
+    js/systems/systems_selected_object_actions.js
 
 Статус Wave Manager:
 
 - extracted from js/systems.js;
-- loaded between js/state.js and js/systems.js;
+- relocated to js/systems/systems_wave_manager.js;
+- loaded between js/state.js and js/systems/systems.js;
 - runtime verified manually;
 - no visible regression detected;
 - topology-preserving extraction confirmed;
@@ -168,11 +198,12 @@ Verified bounded extraction artifacts:
 Статус Placement:
 
 - extracted from js/systems.js;
-- loaded between js/systems_wave_manager.js and js/systems.js;
+- relocated to js/systems/systems_placement.js;
+- loaded between js/systems/systems_wave_manager.js and js/systems/systems.js;
 - confirmBuild bridge cleanup completed;
 - runtime verified manually;
 - no visible regression detected;
-- placement lifecycle ownership moved to js/systems_placement.js;
+- placement lifecycle ownership moved to js/systems/systems_placement.js;
 - topology-preserving extraction confirmed;
 - browser-global extraction preserved;
 - rollback-safe extraction boundary preserved.
@@ -180,13 +211,52 @@ Verified bounded extraction artifacts:
 Статус Selected Object Actions:
 
 - extracted from js/systems.js;
-- loaded between js/systems_placement.js and js/systems.js;
+- relocated to js/systems/systems_selected_object_actions.js;
+- loaded between js/systems/systems_placement.js and js/systems/systems.js;
 - runtime verified manually;
 - no visible regression detected;
-- selected object actions ownership moved to js/systems_selected_object_actions.js;
+- selected object actions ownership moved to js/systems/systems_selected_object_actions.js;
 - topology-preserving extraction confirmed;
 - browser-global extraction preserved;
 - rollback-safe extraction boundary preserved.
+
+Статус systems.js:
+
+- relocated to js/systems/systems.js;
+- reduced and comments-marked;
+- currently acts as mixed orchestration + lifecycle-heavy runtime shell;
+- not yet a pure orchestration shell.
+
+---
+
+## Runtime evolution methodology
+
+Current iterative runtime evolution model:
+
+growth
+→ semantic marking
+→ dependency inspection
+→ bounded extraction
+→ runtime verification
+→ bridge cleanup
+→ topology synchronization
+→ next growth cycle
+
+Project intentionally avoids:
+
+- fake modularization;
+- premature abstraction;
+- aggressive generic architecture;
+- imports/exports migration hysteria.
+
+Deferred areas:
+
+- generic object system;
+- occupancy rewrite;
+- object framework abstraction;
+- runtime contracts layer;
+- imports/exports migration;
+- aggressive extraction.
 
 ---
 
