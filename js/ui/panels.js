@@ -1,6 +1,23 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// ui/panels.js — panels, codex, HUD overlays, game over
+// CORE FRONTIER — UI Panels
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/ui/panels.js
+// РОЛЬ: DOM panels, HUD text updates и canvas overlay panels.
+// СТАТУС: UI semantic layer; часть panels всё ещё tower-specific, generic object panel system НЕ реализован.
+// ВЛАДЕЕТ: createMenuPanel(), createGameOverPanel(), updateDomVisibility(), updateUI(), drawWaveStatus(), drawSelectedTowerPanel(), drawInfoPanel(), drawGameOver()
+// НЕ ВЛАДЕЕТ: gameplay logic, placement validation, tower combat, wave lifecycle, reward system, render world/entities.
+// ЧИТАЕТ: uiState, gameState, waveState, resources, base, power, camera, gameSpeed, difficultyProfiles, towerTypes, enemyTypes, enemies, uiLayout, canvas.
+// ИЗМЕНЯЕТ: DOM panel visibility/text, menu difficulty selection, canvas overlay drawing.
+// ИСПОЛЬЗУЕТСЯ В: createDynamicUI(), game render/update flow, runtime UI refresh.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после ui helpers/layout/controls и после runtime systems files.
+// НЕЛЬЗЯ: менять UI lifecycle или gameplay callbacks без отдельного inspection pass.
 
+// ======================================================
+// СЕКЦИЯ: DOM PANEL CREATION / СОЗДАНИЕ DOM-ПАНЕЛЕЙ
+// РОЛЬ: создать persistent DOM panels и привязать UI callbacks.
+// ВКЛЮЧАЕТ: createMenuPanel(), createGameOverPanel()
+// ======================================================
+
+// createMenuPanel(): создаёт menu panel и difficulty/new game controls.
 function createMenuPanel() {
   const panel = document.createElement("div");
 
@@ -94,6 +111,7 @@ function createMenuPanel() {
   document.body.appendChild(panel);
 }
 
+// createGameOverPanel(): создаёт DOM panel для retry/new game после game over.
 function createGameOverPanel() {
   const panel = document.createElement("div");
 
@@ -174,6 +192,17 @@ function createGameOverPanel() {
   document.body.appendChild(panel);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: DOM PANEL CREATION / СОЗДАНИЕ DOM-ПАНЕЛЕЙ
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: DOM VISIBILITY / HUD TEXT UPDATE
+// РОЛЬ: синхронизировать DOM panels и HUD text с runtime state.
+// ВКЛЮЧАЕТ: updateDomVisibility(), updateUI()
+// ======================================================
+
+// updateDomVisibility(): показывает/скрывает DOM panels на основе uiState/gameState.
 function updateDomVisibility() {
   const towerPanel =
     document.getElementById(
@@ -237,6 +266,7 @@ function updateDomVisibility() {
   }
 }
 
+// updateUI(): обновляет HUD text values без изменения gameplay state.
 function updateUI() {
   setText(
     "wood",
@@ -288,6 +318,17 @@ function updateUI() {
   );
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: DOM VISIBILITY / HUD TEXT UPDATE
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: CANVAS HUD OVERLAYS / CANVAS-ПАНЕЛИ
+// РОЛЬ: рисовать runtime status, selected tower info, codex и game over overlay.
+// ВКЛЮЧАЕТ: drawWaveStatus(), drawSelectedTowerPanel(), drawInfoPanel(), drawGameOver()
+// ======================================================
+
+// drawWaveStatus(): рисует canvas HUD со статусом волны и speed.
 function drawWaveStatus() {
   const remaining =
     enemies.length;
@@ -357,6 +398,7 @@ function drawWaveStatus() {
   );
 }
 
+// drawSelectedTowerPanel(): рисует canvas info panel для выбранной tower.
 function drawSelectedTowerPanel() {
   if (!uiState.selectedTower) return;
 
@@ -444,6 +486,7 @@ function drawSelectedTowerPanel() {
   );
 }
 
+// drawInfoPanel(): рисует canvas codex/info panel с tower/enemy справкой.
 function drawInfoPanel() {
   if (!uiState.infoPanelOpen) return;
 
@@ -636,6 +679,7 @@ function drawInfoPanel() {
   }
 }
 
+// drawGameOver(): рисует затемнение canvas при game over.
 function drawGameOver() {
   if (!gameState.gameOver) return;
 
@@ -649,3 +693,7 @@ function drawGameOver() {
     canvas.height
   );
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: CANVAS HUD OVERLAYS / CANVAS-ПАНЕЛИ
+// ======================================================
