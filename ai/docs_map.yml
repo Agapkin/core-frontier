@@ -35,10 +35,23 @@ active_stage_files:
   - docs/project/stage_03_2_runtime_findings_01.md
   - docs/project/stage_03_3.md
 
+runtime_topology:
+  root:
+    - js/data.js
+    - js/state.js
+    - js/game.js
+  systems:
+    - js/systems/systems_wave_manager.js
+    - js/systems/systems_placement.js
+    - js/systems/systems_selected_object_actions.js
+    - js/systems/systems.js
+  ui:
+    - js/ui/
+
 runtime_extraction_visibility:
-  - js/systems_wave_manager.js
-  - js/systems_placement.js
-  - js/systems_selected_object_actions.js
+  - js/systems/systems_wave_manager.js
+  - js/systems/systems_placement.js
+  - js/systems/systems_selected_object_actions.js
 
 verified_runtime_milestones:
   - first_bounded_extraction_completed
@@ -46,10 +59,29 @@ verified_runtime_milestones:
   - placement_extraction_verified
   - placement_bridge_cleanup_completed
   - selected_object_actions_extraction_verified
+  - systems_folder_relocation_verified
   - topology_preserving_extraction_confirmed
   - browser_global_extraction_preserved
   - rollback_safe_extraction_confirmed
   - systems_js_monolith_reduction_confirmed
+
+runtime_methodology:
+  - growth
+  - semantic_marking
+  - dependency_inspection
+  - bounded_extraction
+  - runtime_verification
+  - bridge_cleanup
+  - topology_synchronization
+  - next_growth_cycle
+
+deferred_areas:
+  - generic_object_system
+  - occupancy_rewrite
+  - object_framework_abstraction
+  - runtime_contracts_layer
+  - imports_exports_migration
+  - aggressive_extraction
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
@@ -73,6 +105,7 @@ historical_stage_files:
 legacy_references:
   architecture_md: removed
   roadmap_md: removed
+  root_level_systems_files: removed
 
 notes:
   - use_ai_only_for_navigation
@@ -82,3 +115,5 @@ notes:
   - first_real_extraction_survived_runtime_verification
   - placement_lifecycle_extraction_survived_runtime_verification
   - selected_object_actions_extraction_survived_runtime_verification
+  - systems_relocation_survived_runtime_verification
+  - browser_global_runtime_topology_preserved
