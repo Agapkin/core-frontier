@@ -17,20 +17,34 @@ current_runtime_state:
   placement_extraction: "runtime verified"
   placement_bridge_cleanup: "completed"
   selected_object_actions_extraction: "runtime verified"
+  selected_object_actions_relocation: "runtime verified"
+  systems_folder_relocation: "runtime verified"
   topology_preservation: "confirmed"
   browser_global_runtime_model: "preserved"
   rollback_safe_extraction: "confirmed"
+  systems_js_current_role: "mixed orchestration + lifecycle-heavy runtime shell"
+  active_runtime_topology:
+    - "js/data.js"
+    - "js/state.js"
+    - "js/game.js"
+    - "js/systems/systems_wave_manager.js"
+    - "js/systems/systems_placement.js"
+    - "js/systems/systems_selected_object_actions.js"
+    - "js/systems/systems.js"
+    - "js/ui/*"
 active_workflow:
   - "Stage 03.3 runtime readability stabilization"
   - "comments-only marking preparation"
   - "bounded extraction verification workflow"
   - "topology-preserving runtime evolution"
   - "manual gameplay verification discipline"
+  - "runtime topology synchronization"
 current_safe_direction:
   - "localized extraction candidates only"
   - "topology-aware runtime evolution"
   - "bounded systems.js decomposition"
   - "avoid premature modularization"
+  - "preserve browser-global runtime order"
 known_blockers:
   - "systems.js mutation hub"
   - "script-order sensitivity"
@@ -38,12 +52,31 @@ known_blockers:
   - "connector truncation risk"
   - "wide extraction risk"
 deferred_layers:
+  - "generic object system"
+  - "occupancy rewrite"
+  - "object framework abstraction"
   - "ai/runtime_map.yml"
   - "ai/contracts.yml"
   - "logs layer"
   - "automation rollout"
   - "runtime modularization"
+  - "imports/exports migration"
 source_of_truth:
   runtime: "index.html, js/, css/"
   human_memory: "docs/project/"
   ai_navigation: "ai/ only for navigation"
+methodology:
+  runtime_evolution_cycle:
+    - growth
+    - semantic_marking
+    - dependency_inspection
+    - bounded_extraction
+    - runtime_verification
+    - bridge_cleanup
+    - topology_synchronization
+    - next_growth_cycle
+  intentionally_avoided:
+    - fake_modularization
+    - premature_abstraction
+    - aggressive_generic_architecture
+    - imports_exports_migration_hysteria
