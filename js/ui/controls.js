@@ -1,9 +1,28 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// ui/controls.js — gameplay controls and action panels
+// CORE FRONTIER — UI Controls
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/ui/controls.js
+// РОЛЬ: DOM controls layer, runtime command bridge и callback wiring layer.
+// СТАТУС: UI command/control layer; generic input abstraction и command routing architecture НЕ реализованы.
+// ВЛАДЕЕТ: createDynamicUI(), createBottomControlPanel(), createUtilityControls(), createSpeedControls(), createZoomControls(), createTowerActionPanel(), createBuildConfirmPanel()
+// НЕ ВЛАДЕЕТ: gameplay logic, placement validation, tower combat, enemy update, wave lifecycle, camera state ownership, hotkey system, generic object action framework.
+// ЧИТАЕТ: uiState, gameState, waveState, gameSpeed, camera, canvas, uiLayout.
+// ИЗМЕНЯЕТ: DOM controls/panels, local UI visibility state, runtime command callbacks.
+// ИСПОЛЬЗУЕТСЯ В: runtime UI rebuild flow, gameplay command dispatch, panels.js visibility/update flow.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после runtime systems files и before panels.js/game.js.
+// НЕЛЬЗЯ: менять runtime callbacks или gameplay dispatch semantics без отдельного inspection pass.
 
+// ======================================================
+// СЕКЦИЯ: DYNAMIC UI REBUILD / ПЕРЕСБОРКА UI
+// РОЛЬ: пересобрать runtime UI controls и синхронизировать active panels.
+// ВКЛЮЧАЕТ: createDynamicUI()
+// ======================================================
+
+// createDynamicUI(): пересобирает runtime DOM controls и синхронизирует visibility panels.
 function createDynamicUI() {
+  // ---------- UI LAYOUT REFRESH ----------
   updateUILayout();
 
+  // ---------- OLD PANEL CLEANUP ----------
   [
     "bottom-control-panel",
     "speed-panel",
@@ -14,6 +33,7 @@ function createDynamicUI() {
     "game-over-panel"
   ].forEach(removeElement);
 
+  // ---------- CONTROL PANEL REBUILD ----------
   createBottomControlPanel();
   createUtilityControls();
   createTowerActionPanel();
@@ -21,10 +41,25 @@ function createDynamicUI() {
   createMenuPanel();
   createGameOverPanel();
 
+  // ---------- TOPBAR VISIBILITY SYNC ----------
   updateTopbarVisibility();
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: DYNAMIC UI REBUILD / ПЕРЕСБОРКА UI
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: BOTTOM COMMAND PANEL / НИЖНЯЯ ПАНЕЛЬ КОМАНД
+// РОЛЬ: создать основные gameplay command buttons.
+// ВКЛЮЧАЕТ: createBottomControlPanel()
+// ======================================================
+
+// createBottomControlPanel(): создаёт bottom command panel для build/wave/menu/codex actions.
+// ТОЧКА РОСТА: build controls могут позже перейти к category/nested build menus.
+// ВАЖНО: generic build-category system пока НЕ реализована.
 function createBottomControlPanel() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "bottom-control-panel";
@@ -34,6 +69,7 @@ function createBottomControlPanel() {
     getBottomPanelStyle()
   );
 
+  // ---------- PRIMARY COMMAND BUTTONS ----------
   const buildButton = createUIButton(
     uiLayout.compact
       ? "🏹"
@@ -94,6 +130,7 @@ function createBottomControlPanel() {
     }
   );
 
+  // ---------- DOM ATTACH ----------
   panel.appendChild(buildButton);
   panel.appendChild(waveButton);
   panel.appendChild(codexButton);
@@ -102,12 +139,35 @@ function createBottomControlPanel() {
   document.body.appendChild(panel);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: BOTTOM COMMAND PANEL / НИЖНЯЯ ПАНЕЛЬ КОМАНД
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: UTILITY CONTROLS / ВСПОМОГАТЕЛЬНЫЕ КОНТРОЛЫ
+// РОЛЬ: собрать speed/zoom utility controls.
+// ВКЛЮЧАЕТ: createUtilityControls()
+// ======================================================
+
+// createUtilityControls(): создаёт utility control panels для speed и zoom.
 function createUtilityControls() {
   createSpeedControls();
   createZoomControls();
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: UTILITY CONTROLS / ВСПОМОГАТЕЛЬНЫЕ КОНТРОЛЫ
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: SPEED CONTROLS / КОНТРОЛЫ СКОРОСТИ
+// РОЛЬ: создать runtime speed control buttons.
+// ВКЛЮЧАЕТ: createSpeedControls()
+// ======================================================
+
+// createSpeedControls(): создаёт speed buttons и dispatch gameSpeed changes.
 function createSpeedControls() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "speed-panel";
@@ -117,6 +177,7 @@ function createSpeedControls() {
     getSpeedPanelStyle()
   );
 
+  // ---------- SPEED BUTTON CREATION ----------
   [1, 2, 3].forEach(speed => {
     const button = createUIButton(
       "x" + speed,
@@ -147,10 +208,23 @@ function createSpeedControls() {
     panel.appendChild(button);
   });
 
+  // ---------- DOM ATTACH ----------
   document.body.appendChild(panel);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: SPEED CONTROLS / КОНТРОЛЫ СКОРОСТИ
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: ZOOM CONTROLS / КОНТРОЛЫ ZOOM
+// РОЛЬ: создать zoom buttons для camera-aware world navigation.
+// ВКЛЮЧАЕТ: createZoomControls()
+// ======================================================
+
+// createZoomControls(): создаёт zoom buttons и dispatch camera zoom helpers.
 function createZoomControls() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "zoom-panel";
@@ -160,6 +234,7 @@ function createZoomControls() {
     getZoomPanelStyle()
   );
 
+  // ---------- ZOOM ACTION BUTTONS ----------
   const minus = createUIButton(
     "−",
     "#33445f",
@@ -200,10 +275,25 @@ function createZoomControls() {
     panel.appendChild(button);
   });
 
+  // ---------- DOM ATTACH ----------
   document.body.appendChild(panel);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: ZOOM CONTROLS / КОНТРОЛЫ ZOOM
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: SELECTED OBJECT ACTION CONTROLS
+// РОЛЬ: создать action controls для выбранного placed object.
+// ВКЛЮЧАЕТ: createTowerActionPanel()
+// ======================================================
+
+// createTowerActionPanel(): создаёт action panel для selected tower/object actions.
+// ТОЧКА РОСТА: current implementation tower-specific; future selected object actions pressure.
+// ВАЖНО: generic object action system пока НЕ реализован.
 function createTowerActionPanel() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "tower-action-panel";
@@ -213,6 +303,7 @@ function createTowerActionPanel() {
     getTowerActionPanelStyle()
   );
 
+  // ---------- OBJECT ACTION BUTTONS ----------
   const sellButton = createUIButton(
     "Продать",
     "#2f6b3c",
@@ -232,13 +323,26 @@ function createTowerActionPanel() {
     }
   );
 
+  // ---------- DOM ATTACH ----------
   panel.appendChild(sellButton);
   panel.appendChild(upgradeButton);
 
   document.body.appendChild(panel);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: SELECTED OBJECT ACTION CONTROLS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: BUILD CONFIRM CONTROLS / КОНТРОЛЫ ПОДТВЕРЖДЕНИЯ СТРОИТЕЛЬСТВА
+// РОЛЬ: создать confirm/cancel controls для placement flow.
+// ВКЛЮЧАЕТ: createBuildConfirmPanel()
+// ======================================================
+
+// createBuildConfirmPanel(): создаёт build confirm panel и dispatch placement commands.
 function createBuildConfirmPanel() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "build-confirm-panel";
@@ -248,6 +352,7 @@ function createBuildConfirmPanel() {
     getBuildPanelStyle()
   );
 
+  // ---------- BUILD STATUS TEXT ----------
   const text = document.createElement("div");
 
   text.id = "build-confirm-text";
@@ -274,6 +379,7 @@ function createBuildConfirmPanel() {
   text.innerText =
     "Выбери клетку";
 
+  // ---------- BUILD ACTION BUTTONS ----------
   const confirmButton = createUIButton(
     "Построить",
     "#2f6b3c",
@@ -288,9 +394,14 @@ function createBuildConfirmPanel() {
     () => cancelBuildMode()
   );
 
+  // ---------- DOM ATTACH ----------
   panel.appendChild(text);
   panel.appendChild(confirmButton);
   panel.appendChild(cancelButton);
 
   document.body.appendChild(panel);
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: BUILD CONFIRM CONTROLS / КОНТРОЛЫ ПОДТВЕРЖДЕНИЯ СТРОИТЕЛЬСТВА
+// ======================================================
