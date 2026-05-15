@@ -1,6 +1,23 @@
-// CORE FRONTIER — Stage 02.4.5
-// ui/canvas_world.js — world rendering and build overlays
+// CORE FRONTIER — Canvas World Rendering
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/ui/canvas_world.js
+// РОЛЬ: world-space rendering, terrain/tile rendering и placement overlay visualization.
+// СТАТУС: render helper layer; generic render engine / layer manager НЕ реализован.
+// ВЛАДЕЕТ: drawRectWorld(), drawTextWorld(), drawMap(), drawRoadTiles(), drawPathLine(), drawBase(), drawTowerRange(), drawBuildTile(), drawBuildOverlay()
+// НЕ ВЛАДЕЕТ: gameplay simulation, placement lifecycle, placement validation, enemy update, tower combat, pathfinding, occupancy rules, camera state ownership.
+// ЧИТАЕТ: ctx, canvas, camera, map, TILE_SIZE, roadTiles, enemyPath, base, towerTypes, uiState.
+// ИЗМЕНЯЕТ: canvas drawing state только во время render pass.
+// ИСПОЛЬЗУЕТСЯ В: game render flow, world rendering pass, placement overlay rendering.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после ui helpers/layout и после runtime state/functions, до game render usage.
+// НЕЛЬЗЯ: менять draw order, camera math или placement validation semantics без отдельного inspection pass.
 
+// ======================================================
+// СЕКЦИЯ: CAMERA-AWARE WORLD RENDER HELPERS
+// РОЛЬ: рисовать primitives в world coordinates через worldToScreen()/scaled().
+// ВКЛЮЧАЕТ: drawRectWorld(), drawTextWorld()
+// ======================================================
+
+// drawRectWorld(): рисует world-space rectangle через camera-aware transform helpers.
 function drawRectWorld(
   worldX,
   worldY,
@@ -33,6 +50,7 @@ function drawRectWorld(
   }
 }
 
+// drawTextWorld(): рисует text в world coordinates через camera-aware transform helpers.
 function drawTextWorld(text, worldX, worldY, size = 24) {
   const p = worldToScreen(worldX, worldY);
 
@@ -40,10 +58,23 @@ function drawTextWorld(text, worldX, worldY, size = 24) {
   ctx.fillText(text, p.x, p.y);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: CAMERA-AWARE WORLD RENDER HELPERS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: WORLD / TERRAIN RENDER
+// РОЛЬ: рисовать базовый фон мира и visible map grid.
+// ВКЛЮЧАЕТ: drawMap()
+// ======================================================
+
+// drawMap(): рисует background и grid только для visible camera area.
 function drawMap() {
+  // ---------- BACKGROUND FILL ----------
   ctx.fillStyle = "#183b22";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // ---------- VISIBLE TILE RANGE CALCULATION ----------
   const visibleWidth = canvas.width / camera.zoom;
   const visibleHeight = canvas.height / camera.zoom;
 
@@ -53,6 +84,7 @@ function drawMap() {
   const startRow = Math.floor(camera.y / TILE_SIZE);
   const endRow = Math.ceil((camera.y + visibleHeight) / TILE_SIZE);
 
+  // ---------- VISIBLE GRID DRAW ----------
   for (let row = startRow; row < endRow; row++) {
     for (let col = startCol; col < endCol; col++) {
       if (
@@ -82,6 +114,17 @@ function drawMap() {
   }
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: WORLD / TERRAIN RENDER
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: ROAD / PATH / BASE RENDER
+// РОЛЬ: рисовать road tiles, enemy path line и base marker.
+// ВКЛЮЧАЕТ: drawRoadTiles(), drawPathLine(), drawBase()
+// ======================================================
+
+// drawRoadTiles(): визуализирует roadTiles occupancy set как world-space tiles.
 function drawRoadTiles() {
   roadTiles.forEach(key => {
     const [tileX, tileY] = key.split(",").map(Number);
@@ -96,6 +139,7 @@ function drawRoadTiles() {
   });
 }
 
+// drawPathLine(): рисует enemyPath как camera-aware route line.
 function drawPathLine() {
   ctx.strokeStyle = "#8a673d";
   ctx.lineWidth = scaled(18);
@@ -121,6 +165,7 @@ function drawPathLine() {
   ctx.stroke();
 }
 
+// drawBase(): рисует base marker без владения base gameplay state.
 function drawBase() {
   const x = base.tileX * TILE_SIZE;
   const y = base.tileY * TILE_SIZE;
@@ -143,6 +188,17 @@ function drawBase() {
   );
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: ROAD / PATH / BASE RENDER
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: HIGHLIGHT / SELECTION OVERLAYS
+// РОЛЬ: рисовать tower range/highlight overlays.
+// ВКЛЮЧАЕТ: drawTowerRange()
+// ======================================================
+
+// drawTowerRange(): визуализирует tower range overlay без tower combat ownership.
 function drawTowerRange(tower) {
   if (!tower) return;
 
@@ -167,9 +223,24 @@ function drawTowerRange(tower) {
   ctx.stroke();
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: HIGHLIGHT / SELECTION OVERLAYS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: PLACEMENT PREVIEW / BUILD OVERLAY
+// РОЛЬ: визуализировать hovered/pending build tiles и placement validity.
+// ВКЛЮЧАЕТ: drawBuildTile(), drawBuildOverlay()
+// ВАЖНО: визуализирует placement state, но НЕ владеет placement validation.
+// ======================================================
+
+// drawBuildTile(): визуализирует candidate build tile, validation result и tower preview.
+// ТОЧКА РОСТА: placement overlays могут позже поддержать non-tower placeable objects.
+// ВАЖНО: generic placeable visualization system пока НЕ реализован.
 function drawBuildTile(tile, isPending = false) {
   if (!tile) return;
 
+  // ---------- PLACEMENT STATE READ ----------
   const towerType = towerTypes[uiState.selectedTowerType];
 
   const validation = validateBuildTile(
@@ -185,6 +256,7 @@ function drawBuildTile(tile, isPending = false) {
 
   const p = worldToScreen(x, y);
 
+  // ---------- VALIDITY TILE OVERLAY ----------
   ctx.fillStyle = valid
     ? "rgba(0,255,0,0.22)"
     : "rgba(255,0,0,0.22)";
@@ -211,6 +283,7 @@ function drawBuildTile(tile, isPending = false) {
     scaled(TILE_SIZE)
   );
 
+  // ---------- RANGE PREVIEW ----------
   const previewTower = {
     x: x + TILE_SIZE / 2,
     y: y + TILE_SIZE / 2,
@@ -219,6 +292,7 @@ function drawBuildTile(tile, isPending = false) {
 
   drawTowerRange(previewTower);
 
+  // ---------- TOWER BODY PREVIEW ----------
   ctx.globalAlpha = 0.58;
 
   drawRectWorld(
@@ -241,6 +315,9 @@ function drawBuildTile(tile, isPending = false) {
   );
 }
 
+// drawBuildOverlay(): рисует hovered и pending placement overlays для build mode.
+// ТОЧКА РОСТА: overlay ordering may later need explicit render-layer discipline.
+// ВАЖНО: render engine / layer manager пока НЕ реализован.
 function drawBuildOverlay() {
   if (uiState.selectedMode !== "tower") return;
 
@@ -252,3 +329,7 @@ function drawBuildOverlay() {
     drawBuildTile(uiState.pendingBuildTile, true);
   }
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: PLACEMENT PREVIEW / BUILD OVERLAY
+// ======================================================
