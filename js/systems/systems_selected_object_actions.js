@@ -5,6 +5,7 @@
 // СЕМАНТИКА: текущая реализация tower-specific, но boundary относится к selected object actions.
 // СТАТУС: generic object system НЕ реализован.
 // ВЛАДЕЕТ: selectTower(), sellSelectedTower()
+// НЕ ВЛАДЕЕТ: object registry, placement lifecycle, tower combat, UI panels, render highlight, update loop.
 // ЧИТАЕТ: gameState, uiState, towerTypes, resources, power, towers
 // ИЗМЕНЯЕТ: uiState.selectedTower, uiState.selectedMode, uiState.pendingBuildTile, resources, power.used, towers
 // ИСПОЛЬЗУЕТСЯ В: game.js, controls.js
@@ -14,6 +15,7 @@
 // ======================================================
 // СЕКЦИЯ: SELECTED OBJECT ACTIONS / ДЕЙСТВИЯ ВЫБРАННОГО ОБЪЕКТА
 // РОЛЬ: выбрать размещённый объект и выполнить действие продажи.
+// ГРАНИЦА: actions выбранного объекта без внедрения generic object system.
 // ======================================================
 
 // selectTower(): выбирает текущий tower как selected object.
