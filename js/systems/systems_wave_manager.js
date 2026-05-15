@@ -1,12 +1,12 @@
 // CORE FRONTIER — Wave Manager helpers
 // КАРТА ФАЙЛА ДЛЯ AI
-// ФАЙЛ: js/systems_wave_manager.js
+// ФАЙЛ: js/systems/systems_wave_manager.js
 // РОЛЬ: генерация состава волны и создание врагов.
 // ВЛАДЕЕТ: createWave(), shuffleWave(), spawnEnemy()
 // ЧИТАЕТ: difficultyProfiles, gameState, gameBalance, enemyTypes, waveState, enemyPath, TILE_SIZE
 // ИЗМЕНЯЕТ: enemies, waveState.spawnedEnemies
-// ИСПОЛЬЗУЕТСЯ В: startWave() из js/systems.js
-// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до systems.js.
+// ИСПОЛЬЗУЕТСЯ В: startWave() из js/systems/systems.js
+// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до js/systems/systems.js.
 // НЕЛЬЗЯ: менять порядок загрузки без проверки startWave().
 
 // ======================================================
