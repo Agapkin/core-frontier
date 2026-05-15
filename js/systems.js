@@ -225,69 +225,6 @@ function triggerGameOver() {
   notify("База уничтожена", "danger");
 }
 
-function selectTower(tower) {
-  uiState.selectedTower = tower;
-
-  uiState.selectedMode = null;
-  uiState.pendingBuildTile = null;
-
-  notify(
-    "Выбрана башня: " +
-      towerTypes[tower.typeId].name,
-    "info"
-  );
-}
-
-function sellSelectedTower() {
-  if (gameState.gameOver) {
-    notify("Игра окончена", "warning");
-    return;
-  }
-
-  if (!uiState.selectedTower) {
-    notify("Башня не выбрана", "warning");
-    return;
-  }
-
-  const tower = uiState.selectedTower;
-
-  const towerType =
-    towerTypes[tower.typeId];
-
-  Object.entries(towerType.cost).forEach(
-    ([resource, amount]) => {
-      const returned = Math.floor(
-        amount *
-        towerType.sellReturnRate
-      );
-
-      resources[resource] =
-        (resources[resource] || 0) +
-        returned;
-    }
-  );
-
-  power.used = Math.max(
-    0,
-    power.used -
-      towerType.powerUsage
-  );
-
-  const index = towers.findIndex(
-    t => t.id === tower.id
-  );
-
-  if (index >= 0) {
-    towers.splice(index, 1);
-  }
-
-  uiState.selectedTower = null;
-
-  updateUI();
-
-  notify("Башня продана", "success");
-}
-
 // ---------- UPDATE ----------
 
 function updateEnemies(multiplier) {
