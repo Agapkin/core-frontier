@@ -33,20 +33,6 @@ function cancelBuildMode() {
   notify("Строительство отменено", "info");
 }
 
-function confirmBuild() {
-  if (!uiState.pendingBuildTile) {
-    notify("Сначала выбери клетку", "warning");
-    return;
-  }
-
-  const tile = {
-    tileX: uiState.pendingBuildTile.tileX,
-    tileY: uiState.pendingBuildTile.tileY
-  };
-
-  placeTower(tile.tileX, tile.tileY);
-}
-
 function startWave() {
   if (gameState.gameOver) {
     notify("Игра окончена", "warning");
