@@ -1,12 +1,14 @@
 // CORE FRONTIER — Placement helpers
 // КАРТА ФАЙЛА ДЛЯ AI
-// ФАЙЛ: js/systems_placement.js
+// ФАЙЛ: js/systems/systems_placement.js
 // РОЛЬ: выбор клетки, проверка placement, установка tower object.
+// СЕМАНТИКА: текущая реализация работает с tower placement, но boundary относится к placement lifecycle.
+// СТАТУС: placement является foundation для future placeable objects, но generic object system НЕ реализован.
 // ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
 // ЧИТАЕТ: uiState, towerTypes, resources, power, towers, map, roadTiles, base, TILE_SIZE
 // ИЗМЕНЯЕТ: uiState.pendingBuildTile, uiState.selectedTower, uiState.selectedMode, resources, power.used, towers
-// ИСПОЛЬЗУЕТСЯ В: systems.js, panels.js, canvas_world.js, game.js
-// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до systems.js.
+// ИСПОЛЬЗУЕТСЯ В: js/systems/systems.js, panels.js, canvas_world.js, game.js
+// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до js/systems/systems.js.
 // НЕЛЬЗЯ: менять порядок загрузки без проверки build flow.
 
 // ======================================================
