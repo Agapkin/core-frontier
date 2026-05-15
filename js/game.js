@@ -1,16 +1,36 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// game.js — input, camera, zoom, coordinate mapping, game loop
+// CORE FRONTIER — Game Runtime Orchestration
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/game.js
+// РОЛЬ: runtime bootstrap, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
+// СТАТУС: sensitive runtime orchestration file; game engine architecture/input framework/scene manager/ECS НЕ реализованы.
+// ВЛАДЕЕТ: resizeCanvas(), input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
+// НЕ ВЛАДЕЕТ: placement validation, tower placement logic, selected object actions, enemy movement internals, tower combat internals, wave generation internals, UI panel rendering internals, entity/world drawing internals.
+// ЧИТАЕТ: canvas, window, camera, uiState, uiLayout, gameState, gameSpeed, map, TILE_SIZE.
+// ИЗМЕНЯЕТ: canvas size, camera drag/pinch/zoom/x/y state, uiState.hoveredTile, uiState.selectedTower.
+// ИСПОЛЬЗУЕТСЯ В: browser runtime startup, canvas event loop, requestAnimationFrame loop.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после data/state/systems/ui layers and starts final gameLoop().
+// НЕЛЬЗЯ: менять event binding order, input behavior, camera math, tap routing, update/render order или gameLoop sequence без отдельного inspection pass.
 
+// ======================================================
+// СЕКЦИЯ: BOOTSTRAP / RESIZE
+// РОЛЬ: синхронизировать canvas size, responsive layout, camera bounds и UI refresh.
+// ВКЛЮЧАЕТ: resizeCanvas(), resize/orientation listeners
+// ======================================================
+
+// resizeCanvas(): обновляет canvas size и синхронизирует layout/camera/UI после resize.
 function resizeCanvas() {
+  // ---------- CANVAS SIZE UPDATE ----------
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  // ---------- RESPONSIVE LAYOUT SYNC ----------
   updateResponsiveLayout();
 
   if (typeof updateUILayout === "function") {
     updateUILayout();
   }
 
+  // ---------- CAMERA/UI REFRESH ----------
   clampCamera();
 
   if (typeof createDynamicUI === "function") {
@@ -33,7 +53,14 @@ window.addEventListener("orientationchange", () => {
   }, 160);
 });
 
-// ---------- INIT ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: BOOTSTRAP / RESIZE
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: RUNTIME INIT
+// РОЛЬ: выполнить initial DOM/UI/power/bootstrap calls перед запуском input и loop.
+// ======================================================
 
 setupInitialDom();
 createDynamicUI();
@@ -42,7 +69,14 @@ updateUI();
 
 notify("Stage 02.4.5-A: mobile fix pack активен", "info");
 
-// ---------- INPUT ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: RUNTIME INIT
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: INPUT EVENT BINDING
+// РОЛЬ: привязать canvas pointer/wheel/touch events к routing helpers.
+// ======================================================
 
 canvas.addEventListener("pointerdown", pointerStart);
 canvas.addEventListener("pointermove", pointerMove);
@@ -65,8 +99,17 @@ canvas.addEventListener("touchend", touchEnd, {
   passive: false
 });
 
-// ---------- POINTER HELPERS ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: INPUT EVENT BINDING
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: POINTER INPUT
+// РОЛЬ: обработать pointer tap/drag routing и camera pan state.
+// ВКЛЮЧАЕТ: getCanvasPoint(), getPointer(), getTapThreshold(), pointerStart(), pointerMove(), pointerEnd()
+// ======================================================
+
+// getCanvasPoint(): переводит client coordinates в canvas-local point.
 function getCanvasPoint(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
 
@@ -76,10 +119,12 @@ function getCanvasPoint(clientX, clientY) {
   };
 }
 
+// getPointer(): извлекает canvas-local point из pointer event.
 function getPointer(event) {
   return getCanvasPoint(event.clientX, event.clientY);
 }
 
+// getTapThreshold(): возвращает movement threshold для tap/drag distinction.
 function getTapThreshold() {
   if (uiState.selectedMode === "tower") {
     return uiLayout.isMobile || uiLayout.isTablet ? 22 : 12;
@@ -88,6 +133,7 @@ function getTapThreshold() {
   return uiLayout.isMobile || uiLayout.isTablet ? 12 : 7;
 }
 
+// pointerStart(): начинает pointer drag/tap tracking и обновляет hovered tile.
 function pointerStart(event) {
   if (camera.pinchActive) return;
 
@@ -107,6 +153,9 @@ function pointerStart(event) {
   updateHoveredTile(pos.x, pos.y);
 }
 
+// pointerMove(): обновляет hover, определяет drag и двигает camera при pan.
+// ТОЧКА РОСТА: input routing может позже получить отдельную abstraction layer.
+// ВАЖНО: input framework пока НЕ реализован.
 function pointerMove(event) {
   if (camera.pinchActive) return;
 
@@ -114,6 +163,7 @@ function pointerMove(event) {
 
   const pos = getPointer(event);
 
+  // ---------- HOVER UPDATE ----------
   updateHoveredTile(pos.x, pos.y);
 
   if (!camera.dragging) return;
@@ -123,6 +173,7 @@ function pointerMove(event) {
 
   const threshold = getTapThreshold();
 
+  // ---------- DRAG THRESHOLD CHECK ----------
   if (
     Math.abs(totalDx) > threshold ||
     Math.abs(totalDy) > threshold
@@ -130,6 +181,7 @@ function pointerMove(event) {
     camera.moved = true;
   }
 
+  // ---------- CAMERA PAN ----------
   if (camera.moved) {
     const dx = pos.x - camera.lastX;
     const dy = pos.y - camera.lastY;
@@ -144,6 +196,7 @@ function pointerMove(event) {
   camera.lastY = pos.y;
 }
 
+// pointerEnd(): завершает pointer routing и dispatch tap если movement threshold не превышен.
 function pointerEnd(event) {
   if (camera.pinchActive) return;
 
@@ -165,8 +218,19 @@ function pointerEnd(event) {
   camera.dragging = false;
 }
 
-// ---------- TOUCH ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: POINTER INPUT
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: TOUCH / PINCH INPUT
+// РОЛЬ: обработать two-finger pinch gesture и передать zoom в camera helper.
+// ВКЛЮЧАЕТ: touchStart(), touchMove(), touchEnd(), touchDistance(), touchCenter()
+// ======================================================
+
+// touchStart(): активирует pinch mode при two-finger touch.
+// ТОЧКА РОСТА: mobile gestures могут позже расшириться за пределы pinch zoom.
+// ВАЖНО: gesture framework пока НЕ реализован.
 function touchStart(event) {
   if (event.touches.length === 2) {
     event.preventDefault();
@@ -179,6 +243,7 @@ function touchStart(event) {
   }
 }
 
+// touchMove(): рассчитывает pinch ratio и dispatch zoomAt().
 function touchMove(event) {
   if (event.touches.length === 2) {
     event.preventDefault();
@@ -197,12 +262,14 @@ function touchMove(event) {
   }
 }
 
+// touchEnd(): отключает pinch mode когда two-finger touch завершён.
 function touchEnd(event) {
   if (event.touches.length < 2) {
     camera.pinchActive = false;
   }
 }
 
+// touchDistance(): рассчитывает distance между двумя touch points.
 function touchDistance(event) {
   const a = event.touches[0];
   const b = event.touches[1];
@@ -213,6 +280,7 @@ function touchDistance(event) {
   );
 }
 
+// touchCenter(): рассчитывает canvas-local center между двумя touch points.
 function touchCenter(event) {
   const a = event.touches[0];
   const b = event.touches[1];
@@ -223,8 +291,17 @@ function touchCenter(event) {
   );
 }
 
-// ---------- ZOOM ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TOUCH / PINCH INPUT
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: CAMERA / ZOOM
+// РОЛЬ: изменить camera zoom/x/y state и удерживать camera внутри map bounds.
+// ВКЛЮЧАЕТ: wheelZoom(), zoomAt(), resetZoom(), clampCamera()
+// ======================================================
+
+// wheelZoom(): routes wheel delta into zoomAt() вокруг pointer position.
 function wheelZoom(event) {
   event.preventDefault();
 
@@ -242,6 +319,9 @@ function wheelZoom(event) {
   );
 }
 
+// zoomAt(): меняет camera.zoom и сохраняет world point под screen position.
+// ТОЧКА РОСТА: camera controls могут позже потребовать отдельной stabilization layer.
+// ВАЖНО: camera subsystem пока НЕ реализован.
 function zoomAt(screenX, screenY, newZoom) {
   const oldZoom = camera.zoom;
 
@@ -274,6 +354,7 @@ function zoomAt(screenX, screenY, newZoom) {
   updateUI();
 }
 
+// resetZoom(): сбрасывает camera zoom/position и опционально показывает notification.
 function resetZoom(showNotification = true) {
   camera.zoom = 1;
   camera.x = 0;
@@ -287,6 +368,7 @@ function resetZoom(showNotification = true) {
   }
 }
 
+// clampCamera(): ограничивает camera.x/y текущими map bounds.
 function clampCamera() {
   const visibleWidth =
     canvas.width / camera.zoom;
@@ -311,8 +393,17 @@ function clampCamera() {
   );
 }
 
-// ---------- TILE HELPERS ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: CAMERA / ZOOM
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: COORDINATE MAPPING
+// РОЛЬ: переводить coordinates между screen, world и tile spaces для input/render routing.
+// ВКЛЮЧАЕТ: updateHoveredTile(), screenToWorld(), screenToTile(), worldToScreen(), scaled()
+// ======================================================
+
+// updateHoveredTile(): сохраняет hovered tile на основе screen coordinates.
 function updateHoveredTile(screenX, screenY) {
   uiState.hoveredTile = screenToTile(
     screenX,
@@ -320,6 +411,7 @@ function updateHoveredTile(screenX, screenY) {
   );
 }
 
+// screenToWorld(): переводит screen coordinates в world coordinates с учётом camera.
 function screenToWorld(screenX, screenY) {
   return {
     x: camera.x + screenX / camera.zoom,
@@ -327,6 +419,7 @@ function screenToWorld(screenX, screenY) {
   };
 }
 
+// screenToTile(): переводит screen coordinates в tile coordinates через world coordinates.
 function screenToTile(screenX, screenY) {
   const world = screenToWorld(
     screenX,
@@ -339,6 +432,7 @@ function screenToTile(screenX, screenY) {
   };
 }
 
+// worldToScreen(): переводит world coordinates в screen coordinates с учётом camera.
 function worldToScreen(worldX, worldY) {
   return {
     x: (worldX - camera.x) * camera.zoom,
@@ -346,16 +440,31 @@ function worldToScreen(worldX, worldY) {
   };
 }
 
+// scaled(): масштабирует value через current camera.zoom.
 function scaled(value) {
   return value * camera.zoom;
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: COORDINATE MAPPING
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: TAP ROUTING
+// РОЛЬ: маршрутизировать tap в placement или selected object flow без ownership над этими systems.
+// ВКЛЮЧАЕТ: handleTap()
+// ======================================================
+
+// handleTap(): routes tap to placement selection, tower selection, or selection clear.
+// ТОЧКА РОСТА: tap routing может позже получить mode/state routing rules.
+// ВАЖНО: command router/scene manager пока НЕ реализованы.
 function handleTap(screenX, screenY) {
   if (gameState.gameOver) {
     notify("Игра окончена", "warning");
     return;
   }
 
+  // ---------- TILE RESOLUTION ----------
   const tile = screenToTile(
     screenX,
     screenY
@@ -366,6 +475,7 @@ function handleTap(screenX, screenY) {
     tile.tileY
   );
 
+  // ---------- BUILD MODE ROUTING ----------
   if (uiState.selectedMode === "tower") {
     selectBuildTile(
       tile.tileX,
@@ -375,6 +485,7 @@ function handleTap(screenX, screenY) {
     return;
   }
 
+  // ---------- TOWER SELECTION ROUTING ----------
   if (tower) {
     selectTower(tower);
     return;
@@ -383,15 +494,28 @@ function handleTap(screenX, screenY) {
   uiState.selectedTower = null;
 }
 
-// ---------- MAIN LOOP ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TAP ROUTING
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: MAIN LOOP / UPDATE-RENDER SEQUENCING
+// РОЛЬ: orchestrate update phase, render phase, UI overlays and next animation frame.
+// ВКЛЮЧАЕТ: gameLoop()
+// ======================================================
+
+// gameLoop(): выполняет fixed order update/render orchestration и запрашивает следующий frame.
+// ТОЧКА РОСТА: loop orchestration может позже учитывать pause/state modes.
+// ВАЖНО: game engine/scene manager/ECS пока НЕ реализованы.
 function gameLoop() {
   const multiplier = gameSpeed;
 
+  // ---------- UPDATE PHASE ----------
   updateEnemies(multiplier);
   updateTowers(multiplier);
   updateNotifications();
 
+  // ---------- WORLD RENDER PHASE ----------
   drawMap();
   drawRoadTiles();
   drawPathLine();
@@ -403,9 +527,11 @@ function gameLoop() {
 
   drawBuildOverlay();
 
+  // ---------- ENTITY RENDER PHASE ----------
   drawTowers();
   drawEnemies();
 
+  // ---------- UI/HUD RENDER PHASE ----------
   drawWaveStatus();
   drawSelectedTowerPanel();
   drawInfoPanel();
@@ -413,9 +539,15 @@ function gameLoop() {
   drawNotifications();
   drawGameOver();
 
+  // ---------- DOM VISIBILITY SYNC ----------
   updateDomVisibility();
 
+  // ---------- NEXT FRAME REQUEST ----------
   requestAnimationFrame(gameLoop);
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: MAIN LOOP / UPDATE-RENDER SEQUENCING
+// ======================================================
 
 gameLoop();
