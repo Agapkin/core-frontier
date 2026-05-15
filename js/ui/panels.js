@@ -21,6 +21,7 @@
 // ТОЧКА РОСТА: menu panel может позже стать entrypoint для nested menus/subpanels.
 // ВАЖНО: nested menu system пока НЕ реализована.
 function createMenuPanel() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "menu-panel";
@@ -41,6 +42,7 @@ function createMenuPanel() {
     )
   );
 
+  // ---------- DIFFICULTY BUTTONS ----------
   Object.values(difficultyProfiles).forEach(
     profile => {
       const active =
@@ -88,6 +90,7 @@ function createMenuPanel() {
     }
   );
 
+  // ---------- NEW GAME CONTROL ----------
   const restartTitle =
     createSmallText("Опасная зона:");
 
@@ -110,11 +113,13 @@ function createMenuPanel() {
 
   panel.appendChild(restartButton);
 
+  // ---------- DOM ATTACH ----------
   document.body.appendChild(panel);
 }
 
 // createGameOverPanel(): создаёт DOM panel для retry/new game после game over.
 function createGameOverPanel() {
+  // ---------- PANEL ROOT CREATION ----------
   const panel = document.createElement("div");
 
   panel.id = "game-over-panel";
@@ -151,6 +156,7 @@ function createGameOverPanel() {
     zIndex: "40"
   });
 
+  // ---------- TITLE / ACTION BUTTONS ----------
   const title =
     document.createElement("div");
 
@@ -187,6 +193,7 @@ function createGameOverPanel() {
 
   restartButton.style.width = "100%";
 
+  // ---------- DOM ATTACH ----------
   panel.appendChild(title);
   panel.appendChild(retryButton);
   panel.appendChild(restartButton);
@@ -208,6 +215,7 @@ function createGameOverPanel() {
 // ТОЧКА РОСТА: visibility может позже учитывать category/object-specific panels.
 // ВАЖНО: generic panel visibility system пока НЕ реализована.
 function updateDomVisibility() {
+  // ---------- SELECTED OBJECT ACTION PANEL VISIBILITY ----------
   const towerPanel =
     document.getElementById(
       "tower-action-panel"
@@ -221,6 +229,7 @@ function updateDomVisibility() {
         : "none";
   }
 
+  // ---------- BUILD CONFIRM PANEL VISIBILITY ----------
   const buildPanel =
     document.getElementById(
       "build-confirm-panel"
@@ -245,6 +254,7 @@ function updateDomVisibility() {
       getBuildPanelText();
   }
 
+  // ---------- MENU / GAME OVER PANEL VISIBILITY ----------
   const menuPanel =
     document.getElementById(
       "menu-panel"
@@ -408,12 +418,14 @@ function drawWaveStatus() {
 function drawSelectedTowerPanel() {
   if (!uiState.selectedTower) return;
 
+  // ---------- SELECTED TOWER DATA READ ----------
   const tower =
     uiState.selectedTower;
 
   const towerType =
     towerTypes[tower.typeId];
 
+  // ---------- PANEL GEOMETRY ----------
   const width =
     uiLayout.compact
       ? 270
@@ -431,6 +443,7 @@ function drawSelectedTowerPanel() {
       ? 140
       : 160;
 
+  // ---------- PANEL BACKGROUND ----------
   ctx.fillStyle =
     "rgba(0,0,0,0.72)";
 
@@ -441,6 +454,7 @@ function drawSelectedTowerPanel() {
     height
   );
 
+  // ---------- PANEL TEXT ----------
   ctx.fillStyle = "white";
 
   ctx.font =
@@ -498,6 +512,7 @@ function drawSelectedTowerPanel() {
 function drawInfoPanel() {
   if (!uiState.infoPanelOpen) return;
 
+  // ---------- PANEL GEOMETRY ----------
   const compact =
     uiLayout.compact;
 
@@ -528,6 +543,7 @@ function drawInfoPanel() {
       ? 64
       : 78;
 
+  // ---------- PANEL BACKGROUND / TITLE ----------
   ctx.fillStyle =
     "rgba(0,0,0,0.88)";
 
@@ -556,6 +572,7 @@ function drawInfoPanel() {
 
   let lineY = y + 56;
 
+  // ---------- TOWER CODEX CONTENT ----------
   ctx.fillText(
     "Башни:",
     x + 14,
@@ -606,6 +623,7 @@ function drawInfoPanel() {
     }
   );
 
+  // ---------- ENEMY CODEX CONTENT ----------
   ctx.fillText(
     "Враги:",
     x + 14,
@@ -654,6 +672,7 @@ function drawInfoPanel() {
     }
   );
 
+  // ---------- MECHANICS HELP CONTENT ----------
   if (!compact) {
     ctx.fillText(
       "Механики:",
