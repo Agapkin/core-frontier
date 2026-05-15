@@ -18,6 +18,8 @@
 // ======================================================
 
 // createMenuPanel(): создаёт menu panel и difficulty/new game controls.
+// ТОЧКА РОСТА: menu panel может позже стать entrypoint для nested menus/subpanels.
+// ВАЖНО: nested menu system пока НЕ реализована.
 function createMenuPanel() {
   const panel = document.createElement("div");
 
@@ -203,6 +205,8 @@ function createGameOverPanel() {
 // ======================================================
 
 // updateDomVisibility(): показывает/скрывает DOM panels на основе uiState/gameState.
+// ТОЧКА РОСТА: visibility может позже учитывать category/object-specific panels.
+// ВАЖНО: generic panel visibility system пока НЕ реализована.
 function updateDomVisibility() {
   const towerPanel =
     document.getElementById(
@@ -399,6 +403,8 @@ function drawWaveStatus() {
 }
 
 // drawSelectedTowerPanel(): рисует canvas info panel для выбранной tower.
+// ТОЧКА РОСТА: current tower-specific UI; future selected object panel candidate.
+// ВАЖНО: generic object panel system пока НЕ реализован.
 function drawSelectedTowerPanel() {
   if (!uiState.selectedTower) return;
 
@@ -487,6 +493,8 @@ function drawSelectedTowerPanel() {
 }
 
 // drawInfoPanel(): рисует canvas codex/info panel с tower/enemy справкой.
+// ТОЧКА РОСТА: codex может позже стать categorized encyclopedia для objects/enemies/resources.
+// ВАЖНО: categorized codex system пока НЕ реализована.
 function drawInfoPanel() {
   if (!uiState.infoPanelOpen) return;
 
