@@ -37,12 +37,17 @@ active_stage_files:
 
 runtime_extraction_visibility:
   - js/systems_wave_manager.js
+  - js/systems_placement.js
 
 verified_runtime_milestones:
   - first_bounded_extraction_completed
   - wave_manager_extraction_verified
+  - placement_extraction_verified
+  - placement_bridge_cleanup_completed
   - topology_preserving_extraction_confirmed
+  - browser_global_extraction_preserved
   - rollback_safe_extraction_confirmed
+  - systems_js_monolith_reduction_confirmed
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
@@ -73,3 +78,4 @@ notes:
   - runtime_files_are_source_of_truth
   - stage_03_3_is_runtime_readability_preparation_stage
   - first_real_extraction_survived_runtime_verification
+  - placement_lifecycle_extraction_survived_runtime_verification
