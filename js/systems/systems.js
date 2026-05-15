@@ -1,10 +1,10 @@
 // CORE FRONTIER — Stage 02.4.5-A
 // systems.js — remaining runtime orchestration and lifecycle-heavy systems
 // КАРТА ФАЙЛА ДЛЯ AI
-// ФАЙЛ: js/systems.js
+// ФАЙЛ: js/systems/systems.js
 // РОЛЬ: оставшиеся runtime commands, lifecycle reset, update flows и orchestration-heavy logic.
 // СТАТУС: файл разгружен после Stage 03.3 extractions, но НЕ является чистым orchestration shell.
-// ВЫНЕСЕНО: systems_wave_manager.js, systems_placement.js, systems_selected_object_actions.js
+// ВЫНЕСЕНО: js/systems/systems_wave_manager.js, js/systems/systems_placement.js, js/systems/systems_selected_object_actions.js
 // СОДЕРЖИТ: button actions, checkpoint/restart/game over, enemy update, reward flow, tower combat.
 // RUNTIME-КОНТРАКТ: browser-global script order должен сохраняться.
 // НЕЛЬЗЯ: делать extraction/refactor без отдельного inspection pass.
