@@ -3,6 +3,7 @@
 // ФАЙЛ: js/systems/systems_wave_manager.js
 // РОЛЬ: генерация состава волны и создание врагов.
 // ВЛАДЕЕТ: createWave(), shuffleWave(), spawnEnemy()
+// НЕ ВЛАДЕЕТ: startWave(), updateEnemies(), reward/death flow, game over flow.
 // ЧИТАЕТ: difficultyProfiles, gameState, gameBalance, enemyTypes, waveState, enemyPath, TILE_SIZE
 // ИЗМЕНЯЕТ: enemies, waveState.spawnedEnemies
 // ИСПОЛЬЗУЕТСЯ В: startWave() из js/systems/systems.js
@@ -12,6 +13,7 @@
 // ======================================================
 // СЕКЦИЯ: WAVE MANAGER / УПРАВЛЕНИЕ ВОЛНАМИ
 // РОЛЬ: создать состав волны, перемешать врагов и добавить их в enemies.
+// ГРАНИЦА: helper-layer для wave generation / spawn, без управления lifecycle волны.
 // ======================================================
 
 // createWave(): формирует список врагов для текущей волны.
