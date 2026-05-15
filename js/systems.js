@@ -1,8 +1,23 @@
 // CORE FRONTIER — Stage 02.4.5-A
-// systems.js — gameplay systems, build logic, waves, enemies, towers
+// systems.js — remaining runtime orchestration and lifecycle-heavy systems
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/systems.js
+// РОЛЬ: оставшиеся runtime commands, lifecycle reset, update flows и orchestration-heavy logic.
+// СТАТУС: файл разгружен после Stage 03.3 extractions, но НЕ является чистым orchestration shell.
+// ВЫНЕСЕНО: systems_wave_manager.js, systems_placement.js, systems_selected_object_actions.js
+// СОДЕРЖИТ: button actions, checkpoint/restart/game over, enemy update, reward flow, tower combat.
+// RUNTIME-КОНТРАКТ: browser-global script order должен сохраняться.
+// НЕЛЬЗЯ: делать extraction/refactor без отдельного inspection pass.
+
+// ======================================================
+// СЕКЦИЯ: BUTTON ACTIONS / UI COMMANDS
+// РОЛЬ: пользовательские команды запускают build mode, отмену build mode и wave start.
+// ВКЛЮЧАЕТ: buildTower(), cancelBuildMode(), startWave()
+// ======================================================
 
 // ---------- BUTTON ACTIONS ----------
 
+// buildTower(): включает режим строительства tower и сбрасывает selectedTower.
 function buildTower() {
   if (gameState.gameOver) {
     notify("Игра окончена", "warning");
@@ -26,6 +41,7 @@ function buildTower() {
   );
 }
 
+// cancelBuildMode(): отключает build mode и очищает pendingBuildTile.
 function cancelBuildMode() {
   uiState.selectedMode = null;
   uiState.pendingBuildTile = null;
@@ -33,6 +49,7 @@ function cancelBuildMode() {
   notify("Строительство отменено", "info");
 }
 
+// startWave(): запускает новую волну и связывает checkpoint, waveState и spawn flow.
 function startWave() {
   if (gameState.gameOver) {
     notify("Игра окончена", "warning");
@@ -78,8 +95,19 @@ function startWave() {
   );
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: BUTTON ACTIONS / UI COMMANDS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: CHECKPOINT / RESTART / GAME OVER
+// РОЛЬ: сохранить состояние, восстановить волну, начать новую игру и завершить игру.
+// ВКЛЮЧАЕТ: saveCheckpoint(), retryLastWave(), restartGame(), triggerGameOver()
+// ======================================================
+
 // ---------- CHECKPOINT / RESTART ----------
 
+// saveCheckpoint(): сохраняет rollback-состояние перед запуском волны.
 function saveCheckpoint() {
   checkpoint = {
     resources: clone(resources),
@@ -98,6 +126,7 @@ function saveCheckpoint() {
   };
 }
 
+// retryLastWave(): восстанавливает checkpoint и возвращает игру к подготовке перед волной.
 function retryLastWave() {
   if (!checkpoint) {
     notify("Checkpoint отсутствует", "warning");
@@ -149,6 +178,7 @@ function retryLastWave() {
   );
 }
 
+// restartGame(): полностью сбрасывает runtime state в состояние новой игры.
 function restartGame() {
   resources = {
     wood: gameBalance.startWood,
@@ -205,6 +235,7 @@ function restartGame() {
   notify("Новая игра начата", "info");
 }
 
+// triggerGameOver(): переводит runtime в game over state и очищает активные enemies/UI selection.
 function triggerGameOver() {
   if (gameState.gameOver) return;
 
@@ -225,8 +256,19 @@ function triggerGameOver() {
   notify("База уничтожена", "danger");
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: CHECKPOINT / RESTART / GAME OVER
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: UPDATE / ENEMY FLOW
+// РОЛЬ: обновить enemies, применить base damage и завершить волну.
+// ВКЛЮЧАЕТ: updateEnemies()
+// ======================================================
+
 // ---------- UPDATE ----------
 
+// updateEnemies(): двигает enemies, применяет damage к базе и обрабатывает death/reward flow.
 function updateEnemies(multiplier) {
   if (gameState.gameOver) return;
 
@@ -324,6 +366,17 @@ function updateEnemies(multiplier) {
   }
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: UPDATE / ENEMY FLOW
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: RESOURCE / REWARD FLOW
+// РОЛЬ: начислить reward за уничтоженных enemies.
+// ВКЛЮЧАЕТ: applyReward()
+// ======================================================
+
+// applyReward(): начисляет resources с учётом difficulty reward multiplier.
 function applyReward(reward) {
   const profile =
     difficultyProfiles[gameState.difficulty];
@@ -337,6 +390,17 @@ function applyReward(reward) {
   );
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: RESOURCE / REWARD FLOW
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: TOWER COMBAT FLOW
+// РОЛЬ: обновить tower targeting и нанести damage enemies.
+// ВКЛЮЧАЕТ: updateTowers()
+// ======================================================
+
+// updateTowers(): ищет цели в range и применяет tower damage.
 function updateTowers(multiplier) {
   if (gameState.gameOver) return;
 
@@ -361,3 +425,7 @@ function updateTowers(multiplier) {
     }
   });
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TOWER COMBAT FLOW
+// ======================================================
