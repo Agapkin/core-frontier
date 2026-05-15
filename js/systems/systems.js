@@ -2,11 +2,15 @@
 // systems.js — remaining runtime orchestration and lifecycle-heavy systems
 // КАРТА ФАЙЛА ДЛЯ AI
 // ФАЙЛ: js/systems/systems.js
-// РОЛЬ: оставшиеся runtime commands, lifecycle reset, update flows и orchestration-heavy logic.
+// РОЛЬ: orchestration/lifecycle file для button commands, wave start, checkpoint/restart/game over, enemy update, reward flow и tower combat.
 // СТАТУС: файл разгружен после Stage 03.3 extractions, но НЕ является чистым orchestration shell.
 // ВЫНЕСЕНО: js/systems/systems_wave_manager.js, js/systems/systems_placement.js, js/systems/systems_selected_object_actions.js
-// СОДЕРЖИТ: button actions, checkpoint/restart/game over, enemy update, reward flow, tower combat.
-// RUNTIME-КОНТРАКТ: browser-global script order должен сохраняться.
+// ВЛАДЕЕТ: buildTower(), cancelBuildMode(), startWave(), saveCheckpoint(), retryLastWave(), restartGame(), triggerGameOver(), updateEnemies(), applyReward(), updateTowers()
+// НЕ ВЛАДЕЕТ: wave generation helpers, placement lifecycle, selected object actions, UI panels, render layer, data/state definitions.
+// ЧИТАЕТ: gameState, uiState, waveState, checkpoint, resources, base, power, towers, enemies, enemyPath, difficultyProfiles, gameBalance, camera, gameSpeed.
+// ИЗМЕНЯЕТ: gameState, uiState, waveState, checkpoint, resources, base, power, towers, enemies, camera, gameSpeed.
+// ИСПОЛЬЗУЕТСЯ В: controls.js, game.js, runtime button flow, update loop.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после extracted systems files и до ui/* + game.js.
 // НЕЛЬЗЯ: делать extraction/refactor без отдельного inspection pass.
 
 // ======================================================
