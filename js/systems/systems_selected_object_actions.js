@@ -1,12 +1,14 @@
 // CORE FRONTIER — Selected Object Actions
 // КАРТА ФАЙЛА ДЛЯ AI
-// ФАЙЛ: js/systems_selected_object_actions.js
+// ФАЙЛ: js/systems/systems_selected_object_actions.js
 // РОЛЬ: действия с выбранным размещённым объектом.
+// СЕМАНТИКА: текущая реализация tower-specific, но boundary относится к selected object actions.
+// СТАТУС: generic object system НЕ реализован.
 // ВЛАДЕЕТ: selectTower(), sellSelectedTower()
 // ЧИТАЕТ: gameState, uiState, towerTypes, resources, power, towers
 // ИЗМЕНЯЕТ: uiState.selectedTower, uiState.selectedMode, uiState.pendingBuildTile, resources, power.used, towers
 // ИСПОЛЬЗУЕТСЯ В: game.js, controls.js
-// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до systems.js.
+// RUNTIME-КОНТРАКТ: файл должен загружаться после state.js и до js/systems/systems.js.
 // НЕЛЬЗЯ: переименовывать tower-specific функции без отдельного semantic migration pass.
 
 // ======================================================
