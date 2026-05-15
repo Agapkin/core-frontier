@@ -1,8 +1,36 @@
-// CORE FRONTIER — Stage 02.4.3
-// data.js — единый источник игровых данных
+// CORE FRONTIER — Stage 03.3
+// ======================================================
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/data.js
+// РОЛЬ: static gameplay configuration, balance definitions, enemy/tower data и world/path definitions.
+// СТАТУС: Stage 03.3 strongly marked runtime foundation data layer.
+// ВЛАДЕЕТ: TILE_SIZE, map, difficultyProfiles, gameBalance, towerTypes, enemyTypes, enemyPath, roadTiles, tileKey(), buildRoadTiles().
+// НЕ ВЛАДЕЕТ: mutable runtime state, gameplay loops, placement validation, combat execution, rendering, UI lifecycle.
+// ЧИТАЕТ: internal balance references между gameBalance и towerTypes.
+// ИЗМЕНЯЕТ: roadTiles during initial buildRoadTiles() generation only.
+// ИСПОЛЬЗУЕТСЯ В: js/state.js, js/systems/*, js/ui/*, js/game.js.
+// RUNTIME-КОНТРАКТ: browser-global data layer; должен загружаться до state.js, systems/*, ui/* и game.js.
+// НЕЛЬЗЯ: трактовать файл как generic registry framework, ECS/entity system или content pipeline.
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: CORE CONSTANTS / TILE CONFIG
+// РОЛЬ: базовые tile/world constants для map, rendering и coordinate math.
+// ======================================================
+
+// TILE_SIZE: базовый размер world tile для map/grid/runtime coordinate calculations.
 const TILE_SIZE = 64;
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: CORE CONSTANTS / TILE CONFIG
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: MAP / WORLD DIMENSIONS
+// РОЛЬ: static world dimensions и playable map boundaries.
+// ======================================================
+
+// map: static world geometry definition для runtime coordinate и camera systems.
 const map = {
   cols: 30,
   rows: 22,
@@ -10,6 +38,16 @@ const map = {
   height: 22 * TILE_SIZE
 };
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: MAP / WORLD DIMENSIONS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: DIFFICULTY PROFILES
+// РОЛЬ: difficulty modifiers для enemy stats, rewards и gameplay pressure.
+// ======================================================
+
+// difficultyProfiles: structured gameplay difficulty definitions для runtime scaling.
 const difficultyProfiles = {
   easy: {
     id: "easy",
@@ -49,6 +87,18 @@ const difficultyProfiles = {
   }
 };
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: DIFFICULTY PROFILES
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: GAME BALANCE CONFIG
+// РОЛЬ: compact gameplay balance и starting economy configuration.
+// ======================================================
+
+// gameBalance: current wave-defense balance config without production/economy framework.
+// ТОЧКА РОСТА: economy/progression pressure существует.
+// ВАЖНО: production-chain system и economy engine пока НЕ реализованы.
 const gameBalance = {
   startWood: 78,
   startStone: 20,
@@ -63,6 +113,18 @@ const gameBalance = {
   waveGrowth: 2
 };
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: GAME BALANCE CONFIG
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: TOWER DEFINITIONS
+// РОЛЬ: structured combat tower gameplay definitions и tower metadata.
+// ======================================================
+
+// towerTypes: structured current combat tower definitions with future placeable-data pressure.
+// ТОЧКА РОСТА: proto-registry pressure существует.
+// ВАЖНО: generic placeable registry и entity framework пока НЕ реализованы.
 const towerTypes = {
   basic: {
     id: "basic",
@@ -75,6 +137,9 @@ const towerTypes = {
     damage: 0.36,
     color: "#55e0e0",
     description: "Универсальная башня для первых волн.",
+
+    // upgrades: current upgrade descriptors data only.
+    // ВАЖНО: upgrade runtime framework пока НЕ реализован.
     upgrades: [
       {
         id: "damage_1",
@@ -94,6 +159,18 @@ const towerTypes = {
   }
 };
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TOWER DEFINITIONS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: ENEMY DEFINITIONS
+// РОЛЬ: structured enemy gameplay definitions и combat metadata.
+// ======================================================
+
+// enemyTypes: structured current enemy definitions with scaling/registry pressure.
+// ТОЧКА РОСТА: proto-registry pressure существует.
+// ВАЖНО: generic entity registry пока НЕ реализован.
 const enemyTypes = {
   runner: {
     id: "runner",
@@ -130,6 +207,16 @@ const enemyTypes = {
   }
 };
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: ENEMY DEFINITIONS
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: PATH / ROAD DATA
+// РОЛЬ: enemy movement path и derived road-tile geometry.
+// ======================================================
+
+// enemyPath: ordered world-space path points для enemy movement routing.
 const enemyPath = [
   { x: 0, y: 10 },
   { x: 4, y: 10 },
@@ -141,10 +228,21 @@ const enemyPath = [
   { x: 26, y: 10 }
 ];
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: PATH / ROAD DATA
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: DATA HELPERS
+// РОЛЬ: lightweight geometry/data helper utilities.
+// ======================================================
+
+// tileKey(): создаёт stable string key для tile coordinate addressing.
 function tileKey(tileX, tileY) {
   return tileX + "," + tileY;
 }
 
+// buildRoadTiles(): строит runtime road tile set на основе enemyPath.
 function buildRoadTiles(path) {
   const result = new Set();
 
@@ -170,4 +268,9 @@ function buildRoadTiles(path) {
   return result;
 }
 
+// roadTiles: prebuilt runtime road occupancy set derived from enemyPath.
 const roadTiles = buildRoadTiles(enemyPath);
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: DATA HELPERS
+// ======================================================
