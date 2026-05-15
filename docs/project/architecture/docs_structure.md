@@ -110,12 +110,16 @@ cluster-based runtime readability stabilization
 и future safe comments-only marking preparation
 без runtime refactor и modularization.
 
-Stage 03.3 milestone:
+Stage 03.3 milestones:
 
     js/systems_wave_manager.js
+    js/systems_placement.js
 
 Wave Manager helper extraction verified through real gameplay testing.
 This is the first successful bounded extraction artifact from js/systems.js.
+
+Placement lifecycle extraction verified through real gameplay testing.
+This is the second successful bounded extraction artifact from js/systems.js.
 
 ---
 
@@ -142,17 +146,30 @@ README.md является entrypoint.
 
 ## Runtime extraction visibility
 
-First verified bounded extraction artifact:
+Verified bounded extraction artifacts:
 
     js/systems_wave_manager.js
+    js/systems_placement.js
 
-Статус:
+Статус Wave Manager:
 
 - extracted from js/systems.js;
 - loaded between js/state.js and js/systems.js;
 - runtime verified manually;
 - no visible regression detected;
 - topology-preserving extraction confirmed;
+- rollback-safe extraction boundary preserved.
+
+Статус Placement:
+
+- extracted from js/systems.js;
+- loaded between js/systems_wave_manager.js and js/systems.js;
+- confirmBuild bridge cleanup completed;
+- runtime verified manually;
+- no visible regression detected;
+- placement lifecycle ownership moved to js/systems_placement.js;
+- topology-preserving extraction confirmed;
+- browser-global extraction preserved;
 - rollback-safe extraction boundary preserved.
 
 ---
