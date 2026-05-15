@@ -12,6 +12,10 @@ current_governance_state:
   pass_e_duplication_audit: "completed"
 current_runtime_state:
   comments_only_marking: "operational"
+  systems_folder_marking: "stabilized"
+  systems_folder_marking_refinement: "completed"
+  systems_folder_final_consistency_audit: "passed"
+  systems_folder_comments_corrections_needed: "none currently"
   first_bounded_extraction: "completed and verified"
   wave_manager_extraction: "runtime verified"
   placement_extraction: "runtime verified"
