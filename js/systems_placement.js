@@ -70,6 +70,21 @@ function getBuildPanelText() {
     : "Нельзя построить здесь: " + validation.reason + " — " + cost;
 }
 
+// confirmBuild(): подтверждает placement и вызывает placeTower().
+function confirmBuild() {
+  if (!uiState.pendingBuildTile) {
+    notify("Сначала выбери клетку", "warning");
+    return;
+  }
+
+  const tile = {
+    tileX: uiState.pendingBuildTile.tileX,
+    tileY: uiState.pendingBuildTile.tileY
+  };
+
+  placeTower(tile.tileX, tile.tileY);
+}
+
 // placeTower(): создаёт tower и мутирует resources/power/towers/uiState.
 function placeTower(tileX, tileY) {
   const towerType =
