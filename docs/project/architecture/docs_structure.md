@@ -114,12 +114,16 @@ Stage 03.3 milestones:
 
     js/systems_wave_manager.js
     js/systems_placement.js
+    js/systems_selected_object_actions.js
 
 Wave Manager helper extraction verified through real gameplay testing.
 This is the first successful bounded extraction artifact from js/systems.js.
 
 Placement lifecycle extraction verified through real gameplay testing.
 This is the second successful bounded extraction artifact from js/systems.js.
+
+Selected object actions extraction verified through real gameplay testing.
+This is the third successful bounded extraction artifact from js/systems.js.
 
 ---
 
@@ -150,6 +154,7 @@ Verified bounded extraction artifacts:
 
     js/systems_wave_manager.js
     js/systems_placement.js
+    js/systems_selected_object_actions.js
 
 Статус Wave Manager:
 
@@ -168,6 +173,17 @@ Verified bounded extraction artifacts:
 - runtime verified manually;
 - no visible regression detected;
 - placement lifecycle ownership moved to js/systems_placement.js;
+- topology-preserving extraction confirmed;
+- browser-global extraction preserved;
+- rollback-safe extraction boundary preserved.
+
+Статус Selected Object Actions:
+
+- extracted from js/systems.js;
+- loaded between js/systems_placement.js and js/systems.js;
+- runtime verified manually;
+- no visible regression detected;
+- selected object actions ownership moved to js/systems_selected_object_actions.js;
 - topology-preserving extraction confirmed;
 - browser-global extraction preserved;
 - rollback-safe extraction boundary preserved.
