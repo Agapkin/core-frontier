@@ -5,6 +5,7 @@
 // СЕМАНТИКА: текущая реализация работает с tower placement, но boundary относится к placement lifecycle.
 // СТАТУС: placement является foundation для future placeable objects, но generic object system НЕ реализован.
 // ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
+// НЕ ВЛАДЕЕТ: object registry, selected object actions, tower combat, UI panels, render overlay, update loop.
 // ЧИТАЕТ: uiState, towerTypes, resources, power, towers, map, roadTiles, base, TILE_SIZE
 // ИЗМЕНЯЕТ: uiState.pendingBuildTile, uiState.selectedTower, uiState.selectedMode, resources, power.used, towers
 // ИСПОЛЬЗУЕТСЯ В: js/systems/systems.js, panels.js, canvas_world.js, game.js
@@ -14,6 +15,7 @@
 // ======================================================
 // СЕКЦИЯ: PLACEMENT / РАЗМЕЩЕНИЕ
 // РОЛЬ: выбрать клетку, проверить placement и создать текущий tower object.
+// ГРАНИЦА: placement lifecycle для текущих tower objects, без внедрения generic object system.
 // ======================================================
 
 // selectBuildTile(): фиксирует pending placement candidate.
@@ -92,6 +94,7 @@ function placeTower(tileX, tileY) {
   const towerType =
     towerTypes[uiState.selectedTowerType];
 
+  // ---------- PLACEMENT VALIDATION ----------
   const validation = validateBuildTile(
     tileX,
     tileY,
@@ -103,10 +106,12 @@ function placeTower(tileX, tileY) {
     return;
   }
 
+  // ---------- COST / POWER MUTATION ----------
   payCost(towerType.cost);
 
   power.used += towerType.powerUsage;
 
+  // ---------- TOWER OBJECT CREATION ----------
   const tower = {
     id: Date.now() + Math.random(),
 
@@ -133,6 +138,7 @@ function placeTower(tileX, tileY) {
 
   towers.push(tower);
 
+  // ---------- UI SELECTION / BUILD MODE STATE ----------
   uiState.selectedTower = tower;
 
   // IMPORTANT:
@@ -143,6 +149,7 @@ function placeTower(tileX, tileY) {
 
   uiState.pendingBuildTile = null;
 
+  // ---------- UI FEEDBACK ----------
   updateUI();
 
   notify(
@@ -157,6 +164,7 @@ function validateBuildTile(
   tileY,
   towerType
 ) {
+  // ---------- MAP BOUNDARY CHECK ----------
   if (
     tileX < 0 ||
     tileY < 0 ||
@@ -170,6 +178,7 @@ function validateBuildTile(
     };
   }
 
+  // ---------- TILE OCCUPANCY / RESTRICTION CHECKS ----------
   if (isRoadTile(tileX, tileY)) {
     return {
       ok: false,
@@ -194,6 +203,7 @@ function validateBuildTile(
     };
   }
 
+  // ---------- POWER / RESOURCE CHECKS ----------
   if (
     power.used +
       towerType.powerUsage >
