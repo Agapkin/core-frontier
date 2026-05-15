@@ -1,13 +1,34 @@
-// CORE FRONTIER — Stage 02.4.5-A
-// ui/layout.js — responsive layout and topbar system
+// CORE FRONTIER — UI Layout
+// КАРТА ФАЙЛА ДЛЯ AI
+// ФАЙЛ: js/ui/layout.js
+// РОЛЬ: responsive layout state, topbar DOM setup, topbar style sync и panel style factories.
+// СТАТУС: layout helper layer; layout engine / responsive framework / UI framework НЕ реализованы.
+// ВЛАДЕЕТ: updateResponsiveLayout(), updateUILayout(), setupInitialDom(), createTopbarChip(), updateTopbarVisibility(), getBottomPanelStyle(), getSpeedPanelStyle(), getZoomPanelStyle(), getBuildPanelStyle(), getTowerActionPanelStyle(), getSidePanelStyle()
+// НЕ ВЛАДЕЕТ: gameplay logic, runtime commands, render/canvas drawing, panel lifecycle, button callbacks, entity rendering, game state mutation.
+// ЧИТАЕТ: window.innerWidth, window.innerHeight, document, uiLayout.
+// ИЗМЕНЯЕТ: uiLayout responsive flags, topbar DOM content, topbar style fields.
+// ИСПОЛЬЗУЕТСЯ В: dynamic UI rebuild flow, topbar setup, UI controls/panels style calculation.
+// RUNTIME-КОНТРАКТ: файл должен загружаться до UI files that call layout/style helpers.
+// НЕЛЬЗЯ: менять breakpoints, style values, DOM structure или compact logic без отдельного inspection pass.
 
+// ======================================================
+// СЕКЦИЯ: RESPONSIVE LAYOUT STATE
+// РОЛЬ: обновить viewport-dependent uiLayout flags.
+// ВКЛЮЧАЕТ: updateResponsiveLayout(), updateUILayout()
+// ======================================================
+
+// updateResponsiveLayout(): обновляет responsive flags и viewport-dependent uiLayout state.
+// ТОЧКА РОСТА: compact/mobile layout может позже потребовать broader layout coordination.
+// ВАЖНО: generalized layout engine / responsive framework пока НЕ реализованы.
 function updateResponsiveLayout() {
+  // ---------- VIEWPORT SIZE READ ----------
   const width = window.innerWidth;
   const height = window.innerHeight;
 
   uiLayout.width = width;
   uiLayout.height = height;
 
+  // ---------- RESPONSIVE FLAG UPDATE ----------
   uiLayout.isMobile = width <= 768;
 
   uiLayout.isTablet =
@@ -20,17 +41,31 @@ function updateResponsiveLayout() {
     (uiLayout.isTablet && uiLayout.isLandscape);
 }
 
+// updateUILayout(): обновляет layout state через responsive recalculation.
 function updateUILayout() {
   updateResponsiveLayout();
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: RESPONSIVE LAYOUT STATE
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: TOPBAR DOM SETUP
+// РОЛЬ: создать initial topbar DOM structure и HUD chips.
+// ВКЛЮЧАЕТ: setupInitialDom(), createTopbarChip()
+// ======================================================
+
+// setupInitialDom(): создаёт initial topbar DOM structure и HUD chips.
 function setupInitialDom() {
+  // ---------- TOPBAR ROOT READ / RESET ----------
   const topbar = document.getElementById("topbar");
 
   if (!topbar) return;
 
   topbar.innerHTML = "";
 
+  // ---------- CHIP CREATION ----------
   createTopbarChip(
     topbar,
     "wood-chip",
@@ -95,9 +130,11 @@ function setupInitialDom() {
     "100%"
   );
 
+  // ---------- TOPBAR STYLE SYNC ----------
   updateTopbarVisibility();
 }
 
+// createTopbarChip(): создаёт один topbar chip с value span id для HUD updates.
 function createTopbarChip(
   parent,
   chipId,
@@ -121,6 +158,17 @@ function createTopbarChip(
   parent.appendChild(chip);
 }
 
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TOPBAR DOM SETUP
+// ======================================================
+
+// ======================================================
+// СЕКЦИЯ: TOPBAR VISIBILITY / STYLE SYNC
+// РОЛЬ: синхронизировать topbar DOM style с responsive layout state.
+// ВКЛЮЧАЕТ: updateTopbarVisibility()
+// ======================================================
+
+// updateTopbarVisibility(): применяет responsive fixed style к topbar.
 function updateTopbarVisibility() {
   const topbar = document.getElementById("topbar");
 
@@ -151,8 +199,17 @@ function updateTopbarVisibility() {
   topbar.style.pointerEvents = "none";
 }
 
-// ---------- PANELS ----------
+// ======================================================
+// КОНЕЦ СЕКЦИИ: TOPBAR VISIBILITY / STYLE SYNC
+// ======================================================
 
+// ======================================================
+// СЕКЦИЯ: PANEL STYLE FACTORIES
+// РОЛЬ: вернуть responsive style maps для UI panels без panel lifecycle ownership.
+// ВКЛЮЧАЕТ: getBottomPanelStyle(), getSpeedPanelStyle(), getZoomPanelStyle(), getBuildPanelStyle(), getTowerActionPanelStyle(), getSidePanelStyle()
+// ======================================================
+
+// getBottomPanelStyle(): возвращает responsive style preset для bottom control panel.
 function getBottomPanelStyle() {
   if (uiLayout.isLandscape && uiLayout.compact) {
     return {
@@ -184,6 +241,7 @@ function getBottomPanelStyle() {
   };
 }
 
+// getSpeedPanelStyle(): возвращает responsive style preset для speed panel.
 function getSpeedPanelStyle() {
   if (uiLayout.isLandscape && uiLayout.compact) {
     return {
@@ -211,6 +269,7 @@ function getSpeedPanelStyle() {
   };
 }
 
+// getZoomPanelStyle(): возвращает responsive style preset для zoom panel.
 function getZoomPanelStyle() {
   if (uiLayout.isLandscape && uiLayout.compact) {
     return {
@@ -238,6 +297,7 @@ function getZoomPanelStyle() {
   };
 }
 
+// getBuildPanelStyle(): возвращает responsive style preset для build confirm panel.
 function getBuildPanelStyle() {
   if (uiLayout.isLandscape && uiLayout.compact) {
     return {
@@ -274,6 +334,7 @@ function getBuildPanelStyle() {
   };
 }
 
+// getTowerActionPanelStyle(): возвращает responsive style preset для selected tower action panel.
 function getTowerActionPanelStyle() {
   return {
     left: "10px",
@@ -287,6 +348,7 @@ function getTowerActionPanelStyle() {
   };
 }
 
+// getSidePanelStyle(): возвращает responsive style preset для side/menu/info panels.
 function getSidePanelStyle() {
   return {
     left: uiLayout.compact ? "10px" : "20px",
@@ -306,3 +368,7 @@ function getSidePanelStyle() {
     zIndex: "30"
   };
 }
+
+// ======================================================
+// КОНЕЦ СЕКЦИИ: PANEL STYLE FACTORIES
+// ======================================================
