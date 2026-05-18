@@ -100,7 +100,12 @@ Stage 03.4 НЕ начат.
         ├── design/
         │   └── mechanics.md
         └── project/
-            ├── roadmap.md
+            ├── roadmap/
+            │   ├── README.md
+            │   ├── active_plan.md
+            │   ├── completed_stages.md
+            │   ├── future_gameplay.md
+            │   └── publishing_plan.md
             ├── architecture/
             │   ├── README.md
             │   ├── runtime_structure.md
@@ -248,9 +253,10 @@ Runtime refactor, file splitting и AI-readable markup должны выполн
 
 1. runtime JS foundation стабилизирован;
 2. repository surface synchronization завершён;
-3. architecture/docs synchronization идёт bounded passes;
-4. Stage 03.4 пока НЕ начат;
-5. future runtime evolution должна сохранять topology-preserving discipline.
+3. architecture/docs synchronization завершён bounded passes;
+4. roadmap package synchronization завершён;
+5. Stage 03.4 пока НЕ начат;
+6. future runtime evolution должна сохранять topology-preserving discipline.
 
 ---
 
