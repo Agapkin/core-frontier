@@ -247,7 +247,13 @@ Stage 03.3B завершил code/surface/docs/navigation synchronization пос
 - architecture README.md synchronized;
 - architecture docs_structure.md synchronized;
 - roadmap active_plan.md synchronized;
-- Stage 03.4 remains not started.
+- Stage 03.3B frozen/stabilized baseline established.
+
+После Stage 03.3B:
+
+- Stage 03.4 planning/discovery phase became active;
+- Stage 03.4 execution/runtime evolution remains not started;
+- Stage 03.4A mutation classes planning artifact created.
 
 Stage 03.3B НЕ внедрял:
 
@@ -325,19 +331,22 @@ CORE FRONTIER перешёл:
 
 ## Текущий статус проекта
 
-Текущий статус после Stage 03.3B:
+Текущий статус после Stage 03.4 / 03.4A visibility synchronization:
 
 - Stage 03.1 operationally completed and closed;
 - Stage 03.2 completed as governance/navigation operational foundation;
 - Stage 03.3 completed as runtime readability stabilization;
-- Stage 03.3B completed/closing as code/surface/docs synchronization stage;
+- Stage 03.3B completed as code/surface/docs/navigation synchronization stage;
+- Stage 03.3B remains frozen/stabilized baseline;
 - runtime JS foundation stabilized;
 - repository surface synchronized;
 - AI YAML navigation synchronized;
 - architecture docs synchronized;
 - roadmap active plan synchronized;
-- Stage 03.4 НЕ начат;
-- runtime evolution будет продолжен только через bounded compatibility-safe workflow after explicit next-stage decision.
+- Stage 03.4 planning/discovery phase active;
+- Stage 03.4 execution/runtime evolution not started;
+- Stage 03.4A mutation classes planning artifact exists;
+- runtime evolution remains deferred until explicit future execution decision.
 
 ---
 
@@ -360,4 +369,4 @@ CORE FRONTIER больше не является small prototype.
 
 дальнейшее развитие требует controlled staged workflow,
 explicit next-stage decision,
-и запрета на преждевременный Stage 03.4 implementation без отдельного pass.
+и запрета на преждевременный Stage 03.4 execution/runtime evolution без отдельного pass.
