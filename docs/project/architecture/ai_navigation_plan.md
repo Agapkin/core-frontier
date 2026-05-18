@@ -15,7 +15,7 @@
 Важно:
 
 этот файл сохраняет planning/history context Stage 03.1,
-но после Stage 03.3B также фиксирует текущую active YAML navigation reality.
+но после Stage 03.4 visibility synchronization также фиксирует текущую active YAML navigation reality.
 
 ---
 
@@ -69,7 +69,7 @@ Active layer:
 
     ai/
 
-Текущие active files после Stage 03.3B:
+Текущие active files после Stage 03.4 visibility synchronization:
 
     ai/current_status.yml
     ai/docs_map.yml
@@ -146,17 +146,18 @@ Stage 03.1 предварительно рассматривал markdown-based 
 Этот список является historical/planning proposal,
 а НЕ current active repository truth.
 
-После Stage 03.3B active truth:
+После Stage 03.4 visibility synchronization active truth:
 
     ai/current_status.yml
     ai/docs_map.yml
 
 Deferred intentionally:
 
+    ai/repository_map.yml
     ai/runtime_map.yml
     ai/contracts.yml
 
-runtime_map.yml и contracts.yml пока НЕ реализованы.
+repository_map.yml, runtime_map.yml и contracts.yml пока НЕ реализованы.
 
 ---
 
@@ -272,7 +273,11 @@ Stage 03.1 не внедрял AI-readable markup.
 
 AI-readable markup остаётся compatibility-safe и bounded.
 
-Stage 03.4 НЕ начат.
+Stage 03.4 planning/discovery phase active.
+
+Stage 03.4 execution/runtime evolution phase NOT STARTED.
+
+Stage 03.4A mutation classes planning artifact exists.
 
 ---
 
@@ -301,6 +306,7 @@ Navigation layer:
 
 Deferred ideas:
 
+- ai/repository_map.yml;
 - ai/runtime_map.yml;
 - ai/contracts.yml;
 - stronger workflow anchors in ai/docs_map.yml;
@@ -324,7 +330,7 @@ AI navigation layer нужен не для giant AI memory.
 - architecture visibility;
 - safer repository evolution.
 
-Текущая active form после Stage 03.3B:
+Текущая active form после Stage 03.4 visibility synchronization:
 
     ai/current_status.yml
     ai/docs_map.yml
