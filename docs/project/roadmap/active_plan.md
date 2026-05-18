@@ -23,22 +23,43 @@
 
 ## Текущий статус проекта
 
-Текущий статус:
+Текущий статус после Stage 03.3B:
 
-- runtime development временно paused;
 - Stage 03.1 completed and closed;
-- Stage 03.2 opened;
-- current active stage = Stage 03.2;
-- current phase = governance stabilization / runtime reentry planning;
+- Stage 03.2 governance/navigation stabilization completed as operational foundation;
+- Stage 03.3 runtime readability stabilization completed;
+- Stage 03.3B code/surface and AI/docs synchronization is active/completing;
+- current active stage = Stage 03.3B;
+- current phase = documentation/navigation synchronization after runtime/code/surface stabilization;
+- Stage 03.4 НЕ начат;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
 - legacy roadmap.md removed;
-- minimal AI navigation layer deployed;
-- governance stabilization workflow operational;
-- current workflow = Repository OS governance stabilization / runtime reentry planning;
-- runtime development remains paused until bounded runtime reentry plan is prepared;
-- runtime evolution временно ограничен compatibility-safe workflow.
+- AI YAML navigation baseline synchronized;
+- runtime JS foundation stabilized;
+- repository surface synchronized;
+- runtime evolution remains bounded and compatibility-safe.
+
+---
+
+## Что уже стабилизировано
+
+Подтверждено:
+
+- comments-only runtime marking deployed across runtime foundation;
+- js/systems/* extraction topology verified;
+- Wave Manager extraction verified;
+- Placement extraction verified;
+- Selected Object Actions extraction verified;
+- systems folder relocation verified;
+- systems.js reduced to mixed orchestration + lifecycle-heavy runtime systems file;
+- index.html marked as shell runtime entrypoint;
+- css/style.css exists and is marked;
+- active CSS currently remains inline inside index.html;
+- css/style.css is not linked by index.html;
+- browser-global script order preserved;
+- Stage 03.4 not started.
 
 ---
 
@@ -58,7 +79,9 @@ Runtime development был временно остановлен не из-за 
 
 Подтверждено:
 
-дальнейшее runtime expansion без inspection/navigation workflow стал unsafe.
+дальнейшее runtime expansion без inspection/navigation workflow стало unsafe.
+
+Stage 03.3 / 03.3B снизили этот риск через runtime readability stabilization, bounded extraction workflow и synchronized navigation baseline.
 
 ---
 
@@ -94,7 +117,7 @@ Runtime development был временно остановлен не из-за 
 
 ### Stage 03.2
 
-Открыт governance/navigation stabilization stage:
+Завершена operational foundation для governance/navigation stabilization:
 
 - Repository Operating System planning;
 - minimal AI navigation layer deployment;
@@ -103,7 +126,43 @@ Runtime development был временно остановлен не из-за 
 - governance lifecycle integration;
 - verification/correction lifecycle stabilization.
 
-Runtime implementation layers Stage 03.2 пока НЕ внедряются.
+Runtime implementation layers Stage 03.2 не внедрялись.
+
+---
+
+### Stage 03.3
+
+Завершена runtime readability stabilization:
+
+- systems folder relocation;
+- systems folder marking stabilization;
+- runtime JS foundation marking;
+- UI marking stabilization;
+- game.js marking stabilization;
+- state.js/data.js marking stabilization;
+- runtime topology verification;
+- bounded extraction workflow confirmation.
+
+---
+
+### Stage 03.3B
+
+Stage 03.3B синхронизирует code/surface/docs/navigation layers после runtime stabilization.
+
+Выполнено:
+
+- index.html shell marking;
+- css/style.css surface marking;
+- index.html/css relationship correction;
+- AI YAML navigation synchronization;
+- architecture docs synchronization;
+- docs_structure.md synchronization.
+
+Текущая оставшаяся зона Stage 03.3B:
+
+- roadmap package synchronization;
+- light AI navigation plan wording sync if needed;
+- final documentation-layer verification.
 
 ---
 
@@ -111,11 +170,12 @@ Runtime implementation layers Stage 03.2 пока НЕ внедряются.
 
 Подтверждено:
 
-- runtime уже имеет implicit contracts;
+- runtime имеет implicit contracts;
 - script order является runtime-sensitive contract;
-- systems.js является central mutation hub;
-- build flow является highest interaction risk zone;
-- render/update order уже является runtime contract;
+- systems.js больше не является единым gameplay monolith;
+- current systems topology lives under js/systems/*;
+- build flow remains highest interaction risk zone;
+- render/update order является runtime contract;
 - visibility uncertainty должна быть stop condition;
 - giant markdown workflow больше unsafe.
 
@@ -125,13 +185,13 @@ Runtime implementation layers Stage 03.2 пока НЕ внедряются.
 
 Текущий workflow:
 
-1. удерживать governance layer bounded;
-2. поддерживать Documentation Impact workflow discipline;
-3. поддерживать AI Navigation Impact workflow discipline;
+1. завершить bounded roadmap synchronization;
+2. сохранить Documentation Impact workflow discipline;
+3. сохранить AI Navigation Impact workflow discipline;
 4. выполнять только bounded synchronization corrections when needed;
-5. подготовить runtime reentry planning;
-6. определить minimal safe runtime passes;
-7. вернуться к runtime evolution через bounded compatibility-safe workflow.
+5. не начинать Stage 03.4 без отдельного explicit pass;
+6. сохранить runtime/code topology без изменений;
+7. подготовить следующий safe decision point после полной docs-layer stabilization.
 
 ---
 
@@ -139,9 +199,8 @@ Runtime implementation layers Stage 03.2 пока НЕ внедряются.
 
 Подтверждено:
 
-minimal AI navigation layer уже deployed:
+active AI YAML navigation layer deployed:
 
-- ai/README.md;
 - ai/current_status.yml;
 - ai/docs_map.yml.
 
@@ -158,8 +217,9 @@ Deferred intentionally:
 - ai/runtime_map.yml;
 - ai/contracts.yml;
 - logs layer;
-- comments-only markup;
-- automation rollout.
+- automation rollout;
+- Stage 03.4 implementation;
+- runtime_map/contracts rollout.
 
 ---
 
@@ -167,18 +227,18 @@ Deferred intentionally:
 
 Подтверждено:
 
-future AI-readable markup должен:
+comments-only AI-readable marking уже deployed для runtime/code/surface foundation.
 
-- быть bounded;
-- быть compatibility-safe;
-- не ломать runtime readability;
-- не превращать runtime files в giant AI layer.
+Текущее состояние:
 
-Предварительное направление:
+- runtime files размечены;
+- systems files размечены;
+- UI files размечены;
+- game/state/data размечены;
+- index.html и css/style.css размечены как repository surface;
+- marking остается bounded и factual.
 
-comments-only markup strategy.
-
-Внедрение intentionally deferred.
+Дальнейшая разметка должна выполняться только через отдельные bounded passes.
 
 ---
 
@@ -186,10 +246,10 @@ comments-only markup strategy.
 
 Возврат к runtime development разрешён только после:
 
-- governance stabilization;
-- bounded workflow stabilization;
-- contract visibility review;
-- runtime reentry planning.
+- завершения Stage 03.3B documentation/navigation synchronization;
+- final docs-layer verification;
+- explicit next-stage decision;
+- bounded runtime reentry planning.
 
 Runtime evolution больше не должен происходить через:
 
@@ -213,12 +273,13 @@ Runtime evolution больше не должен происходить чере
 Особенно осторожно:
 
 - build flow;
-- systems.js;
+- js/systems/*;
 - game.js;
 - input/camera logic;
 - restart/retry lifecycle;
 - render/update order;
-- mobile interaction zones.
+- mobile interaction zones;
+- CSS extraction/linking, если она будет выделена в отдельный pass.
 
 ---
 
@@ -226,12 +287,18 @@ Runtime evolution больше не должен происходить чере
 
 Главная задача текущего этапа:
 
-не ускорить gameplay expansion,
-а стабилизировать repository evolution model и подготовить runtime reentry planning.
+закрыть Stage 03.3B documentation/navigation synchronization без runtime/code изменений.
 
 Подтверждено:
 
-без visibility/navigation stabilization дальнейший runtime growth будет создавать instability faster, чем проект сможет её контролировать.
+runtime/code/surface foundation уже стабилизирован.
+
+Теперь приоритет:
+
+- синхронизировать roadmap package;
+- не начинать Stage 03.4 преждевременно;
+- сохранить repository truth без fake architecture claims;
+- подготовить clear next decision point.
 
 ---
 
@@ -239,19 +306,21 @@ Runtime evolution больше не должен происходить чере
 
 После roadmap split текущий focus:
 
-- удержать governance layer bounded;
+- удержать roadmap package bounded;
+- не смешивать roadmap с architecture package;
 - не расширять governance без необходимости;
-- подготовить runtime reentry planning;
-- определить, какие runtime zones можно safely evolve first.
+- синхронизировать только stale roadmap sections;
+- сохранить historical stage files без переписывания.
 
 Deferred intentionally:
 
 - logs layer;
 - ai/runtime_map.yml;
 - ai/contracts.yml;
-- comments-only markup;
 - automation rollout;
-- runtime modularization governance.
+- runtime modularization governance;
+- CSS extraction/linking pass;
+- Stage 03.4.
 
 ---
 
@@ -271,16 +340,15 @@ CORE FRONTIER перешёл:
 - bounded workflow;
 - visibility-safe architecture;
 - inspection-first development;
-- compatibility-safe runtime evolution.
-
-Stage 03.1 completed and closed.
+- compatibility-safe runtime evolution;
+- synchronized runtime/code/surface/navigation baseline.
 
 Current active stage:
 
-Stage 03.2 — AI Navigation & Repository Operating System.
+Stage 03.3B — Code Surface / AI Docs Synchronization.
 
 Current phase:
 
-governance stabilization / runtime reentry planning.
+documentation/navigation synchronization after runtime stabilization.
 
-Текущий active plan направлен на runtime reentry planning after governance stabilization.
+Текущий active plan направлен на завершение Stage 03.3B docs-layer stabilization и подготовку следующего safe decision point.
