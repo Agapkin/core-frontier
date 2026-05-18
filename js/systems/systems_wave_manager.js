@@ -2,6 +2,7 @@
 // КАРТА ФАЙЛА ДЛЯ AI
 // ФАЙЛ: js/systems/systems_wave_manager.js
 // РОЛЬ: генерация состава волны и создание врагов.
+// СТАТУС: extracted Wave Manager helper layer; управляет generation/spawn helpers, но НЕ wave lifecycle.
 // ВЛАДЕЕТ: createWave(), shuffleWave(), spawnEnemy()
 // НЕ ВЛАДЕЕТ: startWave(), updateEnemies(), reward/death flow, game over flow.
 // ЧИТАЕТ: difficultyProfiles, gameState, gameBalance, enemyTypes, waveState, enemyPath, TILE_SIZE
