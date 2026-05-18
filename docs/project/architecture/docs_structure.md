@@ -49,8 +49,10 @@ docs/design/ содержит design/mechanics документацию.
 
 ## Актуальные project documents
 
-Текущие key documents после architecture split:
+Текущие key documents после Stage 03.3B synchronization:
 
+    ai/current_status.yml
+    ai/docs_map.yml
     docs/project/roadmap/README.md
     docs/project/roadmap/completed_stages.md
     docs/project/roadmap/active_plan.md
@@ -101,7 +103,7 @@ stage_03_2_runtime_findings_01.md — Stabilized runtime findings artifact for b
 
 ---
 
-## Stage 03.3 document
+## Stage 03.3 / 03.3B documents
 
 stage_03_3.md — Runtime readability and AI-readable comments-only marking preparation stage.
 
@@ -129,6 +131,16 @@ This is the third successful bounded extraction artifact from js/systems.js.
 Runtime systems relocation verified through manual runtime testing.
 The active systems topology now lives under js/systems/.
 
+Stage 03.3B дополнительно подтвердил:
+
+- runtime JS foundation stabilized;
+- repository surface synchronized;
+- index.html marked as shell runtime entrypoint;
+- active CSS currently remains inline inside index.html;
+- css/style.css exists and is marked, but is not linked by index.html;
+- synchronized AI YAML navigation baseline established;
+- Stage 03.4 not started.
+
 ---
 
 ## Architecture package
@@ -152,10 +164,34 @@ README.md является entrypoint.
 
 ---
 
+## AI navigation layer
+
+ai/ является bounded compressed navigation layer.
+
+Current active navigation files:
+
+    ai/current_status.yml
+    ai/docs_map.yml
+
+Роль ai/:
+
+- compressed repository navigation;
+- runtime topology visibility;
+- architecture entrypoint mapping;
+- retrieval-safe repository orientation.
+
+ai/ не должен дублировать giant reasoning archive из docs/project/.
+
+runtime_map.yml, contracts.yml и automation tooling пока НЕ реализованы.
+
+---
+
 ## Current runtime topology
 
-Confirmed runtime topology after Stage 03.3 relocation:
+Confirmed runtime topology after Stage 03.3B synchronization:
 
+    index.html
+    css/style.css
     js/
       data.js
       state.js
@@ -166,11 +202,20 @@ Confirmed runtime topology after Stage 03.3 relocation:
         systems_placement.js
         systems_selected_object_actions.js
       ui/
+        helpers.js
+        layout.js
+        controls.js
+        panels.js
+        canvas_world.js
+        canvas_entities.js
+        notifications.js
 
 Runtime contract:
 
 - browser-global script order is preserved;
 - systems files are grouped under js/systems/;
+- active CSS remains inline inside index.html;
+- css/style.css currently exists as repository surface file only;
 - filenames were not renamed;
 - runtime code was not changed during relocation;
 - old root-level systems files were removed after index.html switched to relocated paths.
@@ -251,12 +296,16 @@ Project intentionally avoids:
 
 Deferred areas:
 
+- Stage 03.4;
 - generic object system;
 - occupancy rewrite;
 - object framework abstraction;
 - runtime contracts layer;
+- runtime_map.yml;
+- contracts.yml;
 - imports/exports migration;
-- aggressive extraction.
+- aggressive extraction;
+- CSS extraction/linking pass.
 
 ---
 
@@ -360,4 +409,8 @@ Human memory layer должен оставаться читаемым для ч�
 
 Но giant markdown docs не должны использоваться как единственный navigation mechanism.
 
-Для AI navigation нужен отдельный compressed layer.
+Stage 03.3B подтвердил разделение ролей:
+
+- docs/project/ хранит human-readable history и architecture narrative;
+- ai/*.yml хранит compressed repository navigation layer;
+- runtime files остаются source of truth для runtime topology.
