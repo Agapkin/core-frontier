@@ -23,20 +23,29 @@ CORE FRONTIER перешёл от монолитного canvas-прототип
 
 Проект использует:
 
-- HTML entrypoint;
-- CSS layer;
-- JavaScript runtime через глобальные переменные и функции;
+- HTML shell/runtime entrypoint;
+- active inline CSS inside index.html;
+- browser-global JavaScript runtime через глобальные переменные и функции;
+- extracted systems topology внутри js/systems/*;
 - отдельные runtime-файлы для data, state, systems, UI, rendering и game loop;
 - documentation layer в docs/project/;
 - design layer в docs/design/.
 
-После Stage 03 и Stage 03.1 проект дополнительно получил:
+Дополнительно:
 
-- repository-aware workflow;
-- bounded documentation strategy;
-- inspection-first evolution model;
-- visibility stop condition;
-- preliminary runtime contract candidates.
+- css/style.css существует как Stage 03.3B CSS surface file;
+- css/style.css сейчас НЕ подключён index.html;
+- CSS framework / module loader architecture НЕ реализованы.
+
+После Stage 03.3 / 03.3B проект дополнительно получил:
+
+- stabilized runtime readability marking;
+- repository surface synchronization;
+- bounded extraction verification workflow;
+- topology-preserving runtime evolution model;
+- synchronized AI YAML navigation baseline.
+
+Stage 03.4 НЕ начат.
 
 ---
 
@@ -63,7 +72,7 @@ CORE FRONTIER перешёл от монолитного canvas-прототип
 
 ## Структура верхнего уровня
 
-Текущая структура проекта после architecture split:
+Текущая структура проекта после Stage 03.3B synchronization:
 
     core-frontier/
     ├── README.md
@@ -73,8 +82,12 @@ CORE FRONTIER перешёл от монолитного canvas-прототип
     ├── js/
     │   ├── data.js
     │   ├── state.js
-    │   ├── systems.js
     │   ├── game.js
+    │   ├── systems/
+    │   │   ├── systems_wave_manager.js
+    │   │   ├── systems_placement.js
+    │   │   ├── systems_selected_object_actions.js
+    │   │   └── systems.js
     │   └── ui/
     │       ├── helpers.js
     │       ├── layout.js
@@ -122,9 +135,17 @@ CORE FRONTIER перешёл от монолитного canvas-прототип
 
     data.js
     → state.js
+    → systems helpers
     → systems.js
     → ui/*
     → game.js
+
+Текущий systems topology:
+
+    js/systems/systems_wave_manager.js
+    js/systems/systems_placement.js
+    js/systems/systems_selected_object_actions.js
+    js/systems/systems.js
 
 index.html является runtime dependency root.
 
@@ -138,17 +159,21 @@ index.html является runtime dependency root.
 
 ---
 
-## Главные runtime findings Stage 03.1
+## Главные runtime findings Stage 03.3 / 03.3B
 
-Stage 03.1 подтвердил:
+Stage 03.3 / 03.3B подтвердили:
 
-- systems.js является central gameplay mutation hub;
+- systems.js больше не является единым gameplay monolith;
+- systems.js сейчас является mixed orchestration + lifecycle-heavy runtime systems file;
+- systems extraction survived runtime verification;
 - state.js содержит shared global runtime state;
 - game.js является input/camera/game loop orchestration layer;
 - ui/* содержит DOM/UI/HUD/rendering support layers;
 - panels.js является hidden complexity layer;
-- build flow является наиболее sensitive interaction zone;
-- render/update order является implicit runtime contract.
+- build/placement flow является наиболее sensitive interaction zone;
+- render/update order является implicit runtime contract;
+- browser-global runtime topology preserved after bounded extractions;
+- repository surface synchronized without runtime rewrite.
 
 Ключевые shared runtime structures:
 
@@ -185,7 +210,7 @@ docs/project/ не должен превращаться в единственн
 
 ## Future AI navigation layer
 
-Будущий ai/ должен быть отдельным compressed navigation layer.
+ai/ является bounded compressed navigation layer.
 
 Его задача:
 
@@ -193,10 +218,13 @@ docs/project/ не должен превращаться в единственн
 - compressed project map;
 - runtime navigation;
 - docs navigation;
-- contract/index layer;
 - retrieval shortcuts.
 
 ai/ не должен дублировать giant reasoning archive из docs/project/.
+
+Важно:
+
+runtime_map.yml, contracts.yml и automation tooling пока НЕ реализованы.
 
 ---
 
@@ -216,19 +244,24 @@ Runtime refactor, file splitting и AI-readable markup должны выполн
 
 ## Ближайшая логика развития
 
-После Stage 03.1:
+После Stage 03.3B:
 
-1. architecture.md был разделён на bounded architecture package;
-2. roadmap.md должен быть targeted updated отдельно;
-3. затем должен быть спланирован future AI navigation layer;
-4. затем возможен comments-only AI-readable markup pass;
-5. только после этого безопасно возвращаться к runtime evolution / Stage 02.4.6.
+1. runtime JS foundation стабилизирован;
+2. repository surface synchronization завершён;
+3. architecture/docs synchronization идёт bounded passes;
+4. Stage 03.4 пока НЕ начат;
+5. future runtime evolution должна сохранять topology-preserving discipline.
 
 ---
 
 ## Общий вывод
 
-CORE FRONTIER теперь развивается не только как gameplay/runtime project, но и как repository-aware, retrieval-aware и AI-navigation-aware codebase.
+CORE FRONTIER теперь развивается как:
+
+- gameplay/runtime project;
+- repository-aware codebase;
+- retrieval-aware codebase;
+- AI-navigation-aware codebase.
 
 Главный архитектурный принцип:
 
