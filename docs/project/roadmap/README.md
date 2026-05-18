@@ -19,22 +19,39 @@ docs/project/roadmap/
 
 ## Текущее состояние
 
-CORE FRONTIER прошёл несколько этапов runtime development и затем временно перешёл в architecture stabilization workflow.
+CORE FRONTIER прошёл несколько этапов runtime development, затем перешёл в architecture / navigation stabilization workflow.
 
-На текущем этапе:
+Текущий verified status после Stage 03.3B:
 
-- Stage 02.4.6 не удалена и не считается failure stage;
-- runtime development временно приостановлен из-за architectural blocker;
-- Stage 03 создал architecture / memory / repository-aware stabilization layer;
-- Stage 03.1 завершил inspection-first runtime discovery-cycle;
-- architecture.md был разделён на bounded architecture package;
-- roadmap.md должен быть разделён на bounded roadmap package.
+- Stage 03.1 completed and closed;
+- Stage 03.2 completed as governance/navigation operational foundation;
+- Stage 03.3 completed as runtime readability stabilization;
+- Stage 03.3B completed/closing as code/surface/docs synchronization stage;
+- current active stage = Stage 03.3B;
+- Stage 03.4 НЕ начат;
+- architecture package split completed;
+- roadmap package split completed;
+- legacy architecture.md removed;
+- legacy roadmap.md removed;
+- AI YAML navigation baseline synchronized;
+- runtime JS foundation stabilized;
+- repository surface synchronized.
+
+Stage 03.3 / 03.3B подтвердили:
+
+- comments-only runtime marking deployed;
+- js/systems/* extraction topology verified;
+- systems.js reduced to mixed orchestration + lifecycle-heavy runtime systems file;
+- index.html marked as shell runtime entrypoint;
+- css/style.css exists and is marked;
+- active CSS remains inline inside index.html;
+- css/style.css is not linked by index.html.
 
 ---
 
 ## Карта roadmap-документов
 
-Roadmap package должен быть разделён на bounded documents:
+Roadmap package уже разделён на bounded documents:
 
 - docs/project/roadmap/README.md  
   Главный вход в roadmap package.
@@ -52,13 +69,15 @@ Roadmap package должен быть разделён на bounded documents:
   Публикация, платформы, marketplace и внешнее развитие проекта.
 
 Важно:
-эти файлы должны быть созданы отдельными bounded passes.
+
+roadmap package является текущей bounded roadmap structure,
+а не будущим планом создания.
 
 ---
 
-## Целевая структура roadmap package
+## Текущая структура roadmap package
 
-Целевая структура roadmap layer:
+Текущая структура roadmap layer:
 
     docs/project/roadmap/
     ├── README.md
@@ -67,9 +86,7 @@ Roadmap package должен быть разделён на bounded documents:
     ├── future_gameplay.md
     └── publishing_plan.md
 
-Старый docs/project/roadmap.md временно остаётся legacy roadmap artifact до завершения roadmap split verification.
-
-После verification roadmap package legacy roadmap.md должен быть удалён отдельным cleanup pass.
+Legacy docs/project/roadmap.md удалён.
 
 ---
 
@@ -91,15 +108,14 @@ Roadmap НЕ должен:
 
 ## Текущий safe evolution order
 
-Подтверждённый порядок развития проекта после Stage 03.1:
+Подтверждённый порядок развития проекта после Stage 03.3B:
 
-1. architecture package split;
-2. roadmap package split;
-3. AI navigation layer planning;
-4. comments-only AI-readable markup planning;
-5. targeted AI navigation artifacts;
-6. controlled runtime evolution;
-7. возврат к Stage 02.4.6 / runtime gameplay work через compatibility-safe passes.
+1. завершить bounded roadmap/documentation synchronization;
+2. выполнить final docs-layer verification;
+3. сохранить Stage 03.4 как not started до explicit next-stage decision;
+4. не менять runtime/code topology в documentation passes;
+5. продолжать только bounded compatibility-safe workflow;
+6. возвращаться к runtime evolution только через отдельный explicit runtime reentry plan.
 
 ---
 
@@ -115,13 +131,13 @@ Stage 03 — Архитектура разработки и память про�
 
 старый Combat Expansion больше не должен называться Stage 03.
 
-Он должен быть перенесён в future gameplay roadmap как будущий gameplay/combat expansion stage без конфликта с уже существующей Stage 03.
+Он должен оставаться в future gameplay roadmap как будущий gameplay/combat expansion direction без конфликта с уже существующей Stage 03.
 
 ---
 
 ## Связь с architecture package
 
-Architecture package уже разделён на bounded files:
+Architecture package разделён на bounded files:
 
     docs/project/architecture/README.md
     docs/project/architecture/runtime_structure.md
@@ -131,28 +147,66 @@ Architecture package уже разделён на bounded files:
 
 Roadmap package должен ссылаться на architecture package, но не дублировать его.
 
+Architecture package после Stage 03.3B synchronized with current runtime/surface truth.
+
+---
+
+## Связь с AI navigation layer
+
+AI navigation layer active files:
+
+    ai/current_status.yml
+    ai/docs_map.yml
+
+Roadmap package не должен дублировать ai/*.yml.
+
+Роль roadmap:
+
+- порядок действий;
+- staged evolution;
+- completed/current/future roadmap context.
+
+Роль ai/*.yml:
+
+- compressed navigation;
+- repository orientation;
+- retrieval-safe entrypoints.
+
+Deferred intentionally:
+
+- ai/runtime_map.yml;
+- ai/contracts.yml;
+- automation tooling;
+- Stage 03.4 implementation.
+
 ---
 
 ## Ближайший roadmap workflow
 
-Следующие bounded passes:
+Текущий bounded roadmap workflow:
 
-1. создать completed_stages.md;
-2. создать active_plan.md;
-3. создать future_gameplay.md;
-4. создать publishing_plan.md;
-5. выполнить roadmap package verification pass;
-6. только после verification решать вопрос удаления legacy docs/project/roadmap.md.
+1. active_plan.md synchronized and verified;
+2. completed_stages.md synchronized;
+3. roadmap/README.md synchronized;
+4. perform roadmap package verification pass;
+5. optionally perform light ai_navigation_plan.md wording sync;
+6. only after final docs-layer verification decide next safe stage.
+
+Важно:
+
+Stage 03.4 не начинается автоматически после roadmap synchronization.
 
 ---
 
 ## Общий вывод
 
-Roadmap CORE FRONTIER должен стать bounded operational plan layer.
+Roadmap CORE FRONTIER является bounded operational plan layer.
 
-Он должен помогать двигаться по этапам, не смешиваясь с architecture, developer reports и AI navigation.
+Он помогает двигаться по этапам, не смешиваясь с architecture, developer reports и AI navigation.
 
 Главный принцип:
 
 architecture = устройство проекта;
-roadmap = порядок действий.
+roadmap = порядок действий;
+ai/*.yml = compressed navigation;
+runtime files = source of truth.
