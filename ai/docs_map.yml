@@ -46,7 +46,39 @@ runtime_topology:
     - js/systems/systems_selected_object_actions.js
     - js/systems/systems.js
   ui:
-    - js/ui/
+    - js/ui/helpers.js
+    - js/ui/layout.js
+    - js/ui/controls.js
+    - js/ui/panels.js
+    - js/ui/canvas_world.js
+    - js/ui/canvas_entities.js
+    - js/ui/notifications.js
+
+script_order:
+  - js/data.js
+  - js/state.js
+  - js/systems/systems_wave_manager.js
+  - js/systems/systems_placement.js
+  - js/systems/systems_selected_object_actions.js
+  - js/systems/systems.js
+  - js/ui/helpers.js
+  - js/ui/layout.js
+  - js/ui/controls.js
+  - js/ui/panels.js
+  - js/ui/canvas_world.js
+  - js/ui/canvas_entities.js
+  - js/ui/notifications.js
+  - js/game.js
+
+repository_surface:
+  html_shell:
+    - index.html
+  css_surface:
+    - css/style.css
+  active_css_source: "inline CSS inside index.html"
+  external_css_file_status: "css/style.css exists and is marked but is not linked by index.html"
+  css_framework: "not implemented"
+  module_loader: "not implemented"
 
 runtime_extraction_visibility:
   - js/systems/systems_wave_manager.js
@@ -61,10 +93,18 @@ verified_runtime_milestones:
   - selected_object_actions_extraction_verified
   - systems_folder_relocation_verified
   - systems_folder_marking_stabilized
+  - runtime_js_foundation_stabilized
+  - repository_surface_stage_03_3B_marked
   - topology_preserving_extraction_confirmed
   - browser_global_extraction_preserved
   - rollback_safe_extraction_confirmed
   - systems_js_monolith_reduction_confirmed
+
+current_status_markers:
+  current_stage: Stage 03.3B
+  runtime_code_surface_status: stabilized
+  stage_03_4: not_started
+  systems_js_current_role: "mixed orchestration + lifecycle-heavy runtime systems file"
 
 runtime_methodology:
   - growth
@@ -77,12 +117,17 @@ runtime_methodology:
   - next_growth_cycle
 
 deferred_areas:
+  - Stage_03_4
   - generic_object_system
   - occupancy_rewrite
   - object_framework_abstraction
   - runtime_contracts_layer
+  - runtime_map_yml
+  - contracts_yml
   - imports_exports_migration
   - aggressive_extraction
+  - CSS_extraction_or_linking_pass
+  - architecture_docs_Stage_03_3B_sync
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
@@ -119,3 +164,8 @@ notes:
   - selected_object_actions_extraction_survived_runtime_verification
   - systems_relocation_survived_runtime_verification
   - browser_global_runtime_topology_preserved
+  - stage_03_3B_is_code_surface_synchronization_stage
+  - index_html_is_marked_shell_runtime_entrypoint
+  - css_style_css_exists_but_is_not_linked_by_index_html
+  - active_css_is_inline_inside_index_html
+  - Stage_03_4_not_started
