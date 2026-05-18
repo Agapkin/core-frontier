@@ -49,7 +49,7 @@ docs/design/ содержит design/mechanics документацию.
 
 ## Актуальные project documents
 
-Текущие key documents после Stage 03.3B synchronization:
+Текущие key documents после Stage 03.4 planning visibility synchronization:
 
     ai/current_status.yml
     ai/docs_map.yml
@@ -83,9 +83,12 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_03_2_pass_b.md
     docs/project/stage_03_2_runtime_findings_01.md
     docs/project/stage_03_3.md
+    docs/project/stage_03_4.md
+    docs/project/stage_03_4A_mutation_classes.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
     docs/project/stage_03_1_final_snapshot.md
+    docs/project/stage_03_3B_frozen_snapshot.md
 
 ---
 
@@ -139,7 +142,27 @@ Stage 03.3B дополнительно подтвердил:
 - active CSS currently remains inline inside index.html;
 - css/style.css exists and is marked, but is not linked by index.html;
 - synchronized AI YAML navigation baseline established;
-- Stage 03.4 not started.
+- Stage 03.3B frozen snapshot created.
+
+---
+
+## Stage 03.4 / 03.4A documents
+
+stage_03_4.md — Stage 03.4 planning/discovery document for repository impact awareness and repository impact mapping foundation.
+
+Stage 03.4 planning/discovery phase is active.
+
+Stage 03.4 execution/runtime evolution phase is NOT started.
+
+stage_03_4A_mutation_classes.md — Stage 03.4A planning/research artifact for mutation classes, synchronization radius and mandatory visibility chains.
+
+Stage 03.4A НЕ является:
+
+- repository_map.yml implementation;
+- workflow.md rewrite;
+- automation rollout;
+- parser/scanner implementation;
+- governance engine.
 
 ---
 
@@ -182,7 +205,7 @@ Current active navigation files:
 
 ai/ не должен дублировать giant reasoning archive из docs/project/.
 
-runtime_map.yml, contracts.yml и automation tooling пока НЕ реализованы.
+runtime_map.yml, contracts.yml, repository_map.yml и automation tooling пока НЕ реализованы.
 
 ---
 
@@ -230,41 +253,6 @@ Verified bounded extraction artifacts:
     js/systems/systems_placement.js
     js/systems/systems_selected_object_actions.js
 
-Статус Wave Manager:
-
-- extracted from js/systems.js;
-- relocated to js/systems/systems_wave_manager.js;
-- loaded between js/state.js and js/systems/systems.js;
-- runtime verified manually;
-- no visible regression detected;
-- topology-preserving extraction confirmed;
-- rollback-safe extraction boundary preserved.
-
-Статус Placement:
-
-- extracted from js/systems.js;
-- relocated to js/systems/systems_placement.js;
-- loaded between js/systems/systems_wave_manager.js and js/systems/systems.js;
-- confirmBuild bridge cleanup completed;
-- runtime verified manually;
-- no visible regression detected;
-- placement lifecycle ownership moved to js/systems/systems_placement.js;
-- topology-preserving extraction confirmed;
-- browser-global extraction preserved;
-- rollback-safe extraction boundary preserved.
-
-Статус Selected Object Actions:
-
-- extracted from js/systems.js;
-- relocated to js/systems/systems_selected_object_actions.js;
-- loaded between js/systems/systems_placement.js and js/systems/systems.js;
-- runtime verified manually;
-- no visible regression detected;
-- selected object actions ownership moved to js/systems/systems_selected_object_actions.js;
-- topology-preserving extraction confirmed;
-- browser-global extraction preserved;
-- rollback-safe extraction boundary preserved.
-
 Статус systems.js:
 
 - relocated to js/systems/systems.js;
@@ -287,16 +275,27 @@ growth
 → topology synchronization
 → next growth cycle
 
+Stage 03.4 adds planning/discovery focus:
+
+structural mutation detection
+→ mutation classification
+→ synchronization radius analysis
+→ bounded mandatory sync
+→ post-sync verification
+
 Project intentionally avoids:
 
 - fake modularization;
 - premature abstraction;
 - aggressive generic architecture;
-- imports/exports migration hysteria.
+- imports/exports migration hysteria;
+- fake repository_map authority;
+- fake governance engine.
 
 Deferred areas:
 
-- Stage 03.4;
+- Stage 03.4 execution/runtime evolution;
+- ai/repository_map.yml;
 - generic object system;
 - occupancy rewrite;
 - object framework abstraction;
@@ -409,8 +408,9 @@ Human memory layer должен оставаться читаемым для ч�
 
 Но giant markdown docs не должны использоваться как единственный navigation mechanism.
 
-Stage 03.3B подтвердил разделение ролей:
+Stage 03.4 / 03.4A visibility synchronization подтвердил разделение ролей:
 
 - docs/project/ хранит human-readable history и architecture narrative;
 - ai/*.yml хранит compressed repository navigation layer;
-- runtime files остаются source of truth для runtime topology.
+- runtime files остаются source of truth для runtime topology;
+- repository_map.yml пока не реализован и должен оставаться future compressed operational interpretation layer.
