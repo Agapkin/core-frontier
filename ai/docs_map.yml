@@ -127,7 +127,6 @@ deferred_areas:
   - imports_exports_migration
   - aggressive_extraction
   - CSS_extraction_or_linking_pass
-  - architecture_docs_Stage_03_3B_sync
 
 developer_reports:
   - docs/project/stage_03_developer_report_01.md
