@@ -173,31 +173,110 @@ Stage 03.1 завершил inspection-first runtime discovery-cycle.
 
 Важно:
 
-Stage 03.2 пока НЕ является completed stage.
-
-Deferred intentionally:
-
-- ai/runtime_map.yml;
-- ai/contracts.yml;
-- logs layer;
-- comments-only markup;
-- automation rollout;
-- runtime modularization governance.
+этот блок фиксирует historical transition, а не current status.
 
 ---
 
-## Что подтвердил Stage 03.1
+## Stage 03.2
+
+Stage 03.2 стал operational foundation для AI Navigation & Repository Operating System planning.
+
+Подтверждено:
+
+- Repository Operating System planning выполнен как bounded planning layer;
+- minimal AI navigation layer deployed;
+- governance workflow formalization выполнена;
+- Documentation Impact / AI Navigation Impact discipline закреплена;
+- verification/correction lifecycle operationalized;
+- runtime reentry должен идти только через bounded compatibility-safe workflow.
+
+Stage 03.2 не внедрял runtime implementation layer.
+
+---
+
+## Stage 03.3
+
+Stage 03.3 завершил runtime readability stabilization.
+
+Подтверждено:
+
+- comments-only AI-readable runtime marking внедрён;
+- runtime JS foundation stabilized;
+- systems folder marking stabilized;
+- systems folder relocation completed and runtime verified;
+- js/systems/* topology confirmed;
+- Wave Manager extraction verified;
+- Placement extraction verified;
+- Placement bridge cleanup completed;
+- Selected Object Actions extraction verified;
+- systems.js reduced to mixed orchestration + lifecycle-heavy runtime systems file;
+- browser-global runtime model preserved;
+- rollback-safe bounded extraction workflow confirmed.
+
+Ключевые extracted runtime files:
+
+    js/systems/systems_wave_manager.js
+    js/systems/systems_placement.js
+    js/systems/systems_selected_object_actions.js
+    js/systems/systems.js
+
+Stage 03.3 подтвердил:
+
+runtime evolution может продолжаться только через semantic marking,
+dependency inspection,
+bounded extraction,
+runtime verification
+и topology synchronization.
+
+---
+
+## Stage 03.3B
+
+Stage 03.3B завершил code/surface/docs/navigation synchronization после runtime stabilization.
+
+Подтверждено:
+
+- index.html marked as shell runtime entrypoint;
+- css/style.css exists and is marked as repository surface file;
+- active CSS remains inline inside index.html;
+- css/style.css is not linked by index.html;
+- AI YAML navigation baseline synchronized;
+- ai/current_status.yml synchronized;
+- ai/docs_map.yml synchronized;
+- architecture runtime_structure.md synchronized;
+- architecture README.md synchronized;
+- architecture docs_structure.md synchronized;
+- roadmap active_plan.md synchronized;
+- Stage 03.4 remains not started.
+
+Stage 03.3B НЕ внедрял:
+
+- runtime_map.yml;
+- contracts.yml;
+- automation tooling;
+- runtime automation layer;
+- ECS/entity framework;
+- content pipeline;
+- generic object framework;
+- CSS framework;
+- module loader architecture.
+
+---
+
+## Что подтвердил Stage 03.1 / 03.3B cycle
 
 Подтверждено:
 
 - runtime уже имеет implicit contracts;
 - script order является runtime-sensitive contract;
-- systems.js является central mutation hub;
+- systems.js больше не является единым gameplay monolith;
+- current systems topology lives under js/systems/*;
 - build flow является highest interaction risk zone;
 - render/update order уже является runtime contract;
 - giant markdown files создают visibility risks;
 - connector truncation является operational limitation;
-- visibility uncertainty должна быть stop condition.
+- visibility uncertainty должна быть stop condition;
+- comments-only marking может стабилизировать runtime readability без runtime mutation.
 
 ---
 
@@ -215,6 +294,8 @@ Deferred intentionally:
 Подтверждено:
 
 architecture больше не должен храниться как giant flat markdown document.
+
+После Stage 03.3B architecture package synchronized with current runtime/surface truth.
 
 ---
 
@@ -237,23 +318,26 @@ CORE FRONTIER перешёл:
 - visibility-safe workflow;
 - compatibility-safe changes;
 - staged modularization;
-- navigation-aware architecture.
+- navigation-aware architecture;
+- stabilized runtime/code/surface baseline.
 
 ---
 
 ## Текущий статус проекта
 
-Текущий статус:
+Текущий статус после Stage 03.3B:
 
 - Stage 03.1 operationally completed and closed;
-- Stage 03.2 opened as governance stabilization / runtime reentry planning stage;
-- runtime/gameplay development временно paused;
-- roadmap/architecture split completed;
-- minimal AI navigation layer deployed;
-- governance stabilization workflow operational;
-- comments-only AI-readable layer ещё не внедрён;
-- navigation-system deployment moved to Stage 03.2;
-- runtime evolution будет продолжен только через bounded compatibility-safe workflow.
+- Stage 03.2 completed as governance/navigation operational foundation;
+- Stage 03.3 completed as runtime readability stabilization;
+- Stage 03.3B completed/closing as code/surface/docs synchronization stage;
+- runtime JS foundation stabilized;
+- repository surface synchronized;
+- AI YAML navigation synchronized;
+- architecture docs synchronized;
+- roadmap active plan synchronized;
+- Stage 03.4 НЕ начат;
+- runtime evolution будет продолжен только через bounded compatibility-safe workflow after explicit next-stage decision.
 
 ---
 
@@ -269,8 +353,11 @@ CORE FRONTIER больше не является small prototype.
 - tightly-coupled gameplay architecture;
 - multi-layer repository project;
 - navigation-sensitive codebase;
-- visibility-sensitive evolution environment.
+- visibility-sensitive evolution environment;
+- Stage 03.3B-stabilized code/surface/docs baseline.
 
 Следовательно:
 
-дальнейшее развитие требует controlled staged workflow.
+дальнейшее развитие требует controlled staged workflow,
+explicit next-stage decision,
+и запрета на преждевременный Stage 03.4 implementation без отдельного pass.
