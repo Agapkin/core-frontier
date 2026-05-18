@@ -21,14 +21,17 @@ docs/project/roadmap/
 
 CORE FRONTIER прошёл несколько этапов runtime development, затем перешёл в architecture / navigation stabilization workflow.
 
-Текущий verified status после Stage 03.3B:
+Текущий verified status после Stage 03.4 / 03.4A visibility synchronization:
 
 - Stage 03.1 completed and closed;
 - Stage 03.2 completed as governance/navigation operational foundation;
 - Stage 03.3 completed as runtime readability stabilization;
-- Stage 03.3B completed/closing as code/surface/docs synchronization stage;
-- current active stage = Stage 03.3B;
-- Stage 03.4 НЕ начат;
+- Stage 03.3B completed as code/surface/docs/navigation stabilization stage;
+- Stage 03.3B frozen baseline preserved;
+- current active planning stage = Stage 03.4;
+- Stage 03.4 planning/discovery phase active;
+- Stage 03.4 execution/runtime evolution phase NOT STARTED;
+- Stage 03.4A mutation classes and synchronization radius planning document exists;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
@@ -46,6 +49,17 @@ Stage 03.3 / 03.3B подтвердили:
 - css/style.css exists and is marked;
 - active CSS remains inline inside index.html;
 - css/style.css is not linked by index.html.
+
+Stage 03.4 / 03.4A сейчас находятся в planning/discovery visibility layer.
+
+Они НЕ запускают:
+
+- runtime rewrite;
+- gameplay changes;
+- repository_map.yml implementation;
+- governance engine;
+- automation rollout;
+- parser/scanner implementation.
 
 ---
 
@@ -90,6 +104,29 @@ Legacy docs/project/roadmap.md удалён.
 
 ---
 
+## Связанные Stage 03.4 planning artifacts
+
+Текущие Stage 03.4 planning artifacts:
+
+    docs/project/stage_03_4.md
+    docs/project/stage_03_4A_mutation_classes.md
+
+stage_03_4.md фиксирует foundation слоя контроля влияния изменений и repository impact mapping.
+
+stage_03_4A_mutation_classes.md фиксирует mutation classes и synchronization radius planning.
+
+Оба документа являются planning/discovery artifacts.
+
+Они НЕ являются:
+
+- runtime implementation;
+- workflow law;
+- governance engine;
+- automation layer;
+- repository_map.yml rollout.
+
+---
+
 ## Главный roadmap principle
 
 Roadmap отвечает на вопрос:
@@ -108,14 +145,15 @@ Roadmap НЕ должен:
 
 ## Текущий safe evolution order
 
-Подтверждённый порядок развития проекта после Stage 03.3B:
+Подтверждённый порядок развития проекта после Stage 03.4 / 03.4A visibility synchronization:
 
-1. завершить bounded roadmap/documentation synchronization;
-2. выполнить final docs-layer verification;
-3. сохранить Stage 03.4 как not started до explicit next-stage decision;
-4. не менять runtime/code topology в documentation passes;
-5. продолжать только bounded compatibility-safe workflow;
-6. возвращаться к runtime evolution только через отдельный explicit runtime reentry plan.
+1. сохранять Stage 03.3B frozen baseline;
+2. вести Stage 03.4 только как planning/discovery phase;
+3. использовать Stage 03.4A для mutation classes и synchronization radius planning;
+4. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
+5. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
+6. не менять runtime/code topology в documentation passes;
+7. продолжать только bounded compatibility-safe workflow.
 
 ---
 
@@ -147,7 +185,7 @@ Architecture package разделён на bounded files:
 
 Roadmap package должен ссылаться на architecture package, но не дублировать его.
 
-Architecture package после Stage 03.3B synchronized with current runtime/surface truth.
+Architecture package synchronized with current runtime/surface and Stage 03.4 planning visibility truth.
 
 ---
 
@@ -174,10 +212,11 @@ Roadmap package не должен дублировать ai/*.yml.
 
 Deferred intentionally:
 
+- ai/repository_map.yml;
 - ai/runtime_map.yml;
 - ai/contracts.yml;
 - automation tooling;
-- Stage 03.4 implementation.
+- Stage 03.4 execution/runtime evolution.
 
 ---
 
@@ -185,16 +224,17 @@ Deferred intentionally:
 
 Текущий bounded roadmap workflow:
 
-1. active_plan.md synchronized and verified;
-2. completed_stages.md synchronized;
-3. roadmap/README.md synchronized;
-4. perform roadmap package verification pass;
-5. optionally perform light ai_navigation_plan.md wording sync;
-6. only after final docs-layer verification decide next safe stage.
+1. preserve Stage 03.3B frozen baseline;
+2. maintain Stage 03.4 planning/discovery visibility;
+3. use Stage 03.4A as mutation-class planning artifact;
+4. verify structural mutations before synchronization;
+5. apply only mandatory bounded synchronization radius;
+6. avoid workflow/governance rewrites until planning concepts are verified;
+7. defer repository_map.yml creation to a separate explicit bounded pass.
 
 Важно:
 
-Stage 03.4 не начинается автоматически после roadmap synchronization.
+Stage 03.4 execution/runtime evolution не начинается автоматически после roadmap visibility synchronization.
 
 ---
 
@@ -210,3 +250,6 @@ architecture = устройство проекта;
 roadmap = порядок действий;
 ai/*.yml = compressed navigation;
 runtime files = source of truth.
+
+Stage 03.4 / 03.4A добавляют impact-awareness planning layer,
+но НЕ превращают roadmap в governance engine или automation system.
