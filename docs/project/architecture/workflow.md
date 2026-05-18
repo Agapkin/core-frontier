@@ -24,6 +24,8 @@ Roadmap-порядок действий здесь не описывается.
 
 Этот порядок был подтверждён в Stage 03.1.
 
+Stage 03.4 implementation пока НЕ начат.
+
 ---
 
 ## Inspection-first principle
@@ -72,14 +74,16 @@ Inspection pass нужен для:
 - isolated scope;
 - one-goal modifications;
 - compatibility-safe patches;
-- inspection-first workflow.
+- inspection-first workflow;
+- one-file/two-file synchronization passes.
 
 Нежелательно:
 
 - giant rewrites;
 - repo-wide changes;
 - uncontrolled refactor;
-- multi-subsystem mutation passes.
+- multi-subsystem mutation passes;
+- giant multi-file synchronization.
 
 ---
 
@@ -101,13 +105,22 @@ AI обязан:
 - перейти в inspection/report mode;
 - сообщить limitation;
 - предложить bounded workflow;
-- избегать unsafe overwrite.
+- избегать unsafe overwrite;
+- не выполнять overwrite from memory.
+
+Полная visibility файла обязательна перед mutation pass.
 
 ---
 
 ## Connector-safe workflow
 
 GitHub connector workflow должен оставаться bounded.
+
+Подтверждено:
+
+- connector может временно терять repository access;
+- read access и write/update access могут отличаться;
+- repository reads могут работать при failed writes.
 
 Безопасные операции:
 
@@ -241,6 +254,8 @@ Developer Reports:
 - фиксируют findings;
 - фиксируют completed passes.
 
+Historical stage docs не должны переписываться как current-state operational docs.
+
 ---
 
 ## AI navigation workflow
@@ -259,6 +274,34 @@ Navigation layer должен быть:
 
 ---
 
+## Pass separation discipline
+
+Repository workflow разделяет:
+
+- audit passes;
+- synchronization passes;
+- verification passes.
+
+Audit pass:
+
+- ищет drift;
+- проверяет repository reality;
+- не выполняет mutation.
+
+Synchronization pass:
+
+- выполняет bounded update;
+- ограничен explicit scope;
+- не должен становиться giant rewrite.
+
+Verification pass:
+
+- подтверждает applied synchronization;
+- проверяет отсутствие stale state;
+- не должен опираться только на memory.
+
+---
+
 ## Safe future workflow
 
 Рекомендуемый workflow:
@@ -269,7 +312,8 @@ Navigation layer должен быть:
 4. isolated patch
 5. compatibility verification
 6. bounded commit
-7. next isolated pass
+7. post-mutation verification pass
+8. next isolated pass
 
 Не рекомендуется:
 
@@ -329,6 +373,10 @@ Impact workflow должен ограничивать propagation scope и пр�
 - есть ли deferred updates, если affected layer не входит в scope текущего pass.
 
 AI Navigation Impact Workflow НЕ должен дублировать YAML contents внутри workflow.md.
+
+Важно:
+
+`ai/runtime_map.yml` и `ai/contracts.yml` пока НЕ реализованы.
 
 ---
 
@@ -420,6 +468,19 @@ Do not formalize yet:
 - modularization governance.
 
 These remain deferred until dedicated bounded planning/implementation passes.
+
+---
+
+### Commit language discipline
+
+По умолчанию:
+
+- commit titles должны быть на русском;
+- extended commit bodies должны быть на русском.
+
+Исключение:
+
+- explicit alternative language request.
 
 ---
 
