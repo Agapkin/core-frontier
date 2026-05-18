@@ -5,7 +5,7 @@
   ФАЙЛ: index.html
   РОЛЬ: browser entrypoint, DOM/canvas root bootstrap и script loading assembly point.
   СТАТУС: repository shell layer; gameplay runtime owner / module loader / app framework НЕ реализованы.
-  ВЛАДЕЕТ: document shell, viewport meta, inline CSS shell styles, #topbar, #game canvas, browser-global script order.
+  ВЛАДЕЕТ: document shell, viewport meta, active inline CSS shell styles, #topbar, #game canvas, browser-global script order.
   НЕ ВЛАДЕЕТ: gameplay logic, runtime state, systems execution, rendering implementation, UI component lifecycle, module loading architecture.
   ЧИТАЕТ: browser HTML/CSS/Script loading semantics.
   ИЗМЕНЯЕТ: initial DOM structure parsed by browser only.
@@ -35,11 +35,12 @@
 
   <!-- ====================================================== -->
   <!-- СЕКЦИЯ: INLINE CSS -->
-  <!-- РОЛЬ: задать shell-level viewport/canvas/topbar styles без отдельной CSS architecture. -->
-  <!-- ВАЖНО: standalone CSS architecture / CSS extraction пока НЕ реализованы. -->
+  <!-- РОЛЬ: задать active shell-level viewport/canvas/topbar styles внутри HTML. -->
+  <!-- ВАЖНО: css/style.css существует, но этот shell сейчас НЕ подключает его через link tag. -->
+  <!-- ВАЖНО: module/CSS framework architecture пока НЕ реализована. -->
   <!-- ====================================================== -->
 
-  <!-- inline CSS: shell-level styles for full-screen canvas and topbar HUD roots. -->
+  <!-- inline CSS: active shell-level styles for full-screen canvas and topbar HUD roots. -->
   <style>
     html,
     body {
