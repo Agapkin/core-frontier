@@ -4,8 +4,8 @@ workflow_mode: "bounded runtime/surface evolution"
 runtime_status: "stabilized"
 runtime_evolution_status: "Stage 03.3 runtime foundation stabilized"
 surface_status: "Stage 03.3B repository surface synchronized"
-ai_yaml_navigation_status: "prepared for Stage 03.3B synchronization"
-docs_navigation_status: "architecture docs sync still pending bounded pass"
+ai_yaml_navigation_status: "Stage 03.3B AI YAML navigation synchronized"
+docs_navigation_status: "architecture docs and roadmap package synchronized"
 stage_03_4_status: "not_started"
 current_governance_state:
   pass_01: "completed"
@@ -78,7 +78,7 @@ active_workflow:
   - "manual gameplay verification discipline"
   - "runtime topology synchronization"
 current_safe_direction:
-  - "continue bounded ai/docs navigation synchronization from verified live repository state"
+  - "maintain bounded documentation/navigation synchronization discipline"
   - "avoid Stage 03.4 implementation until explicitly started"
   - "preserve browser-global runtime order"
   - "preserve inline CSS / css/style.css relationship unless separate pass changes it"
@@ -100,7 +100,6 @@ deferred_layers:
   - "runtime modularization"
   - "imports/exports migration"
   - "CSS extraction/linking pass"
-  - "architecture docs Stage 03.3B sync pass"
 source_of_truth:
   runtime: "index.html, js/, css/"
   human_memory: "docs/project/"
