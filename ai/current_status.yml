@@ -1,12 +1,14 @@
-current_stage: "Stage 03.3B"
-current_phase: "code surface stabilization and AI/docs synchronization"
+current_stage: "Stage 03.4"
+current_phase: "planning/discovery: repository impact awareness and mutation-class planning"
 workflow_mode: "bounded runtime/surface evolution"
 runtime_status: "stabilized"
 runtime_evolution_status: "Stage 03.3 runtime foundation stabilized"
 surface_status: "Stage 03.3B repository surface synchronized"
-ai_yaml_navigation_status: "Stage 03.3B AI YAML navigation synchronized"
-docs_navigation_status: "architecture docs and roadmap package synchronized"
-stage_03_4_status: "not_started"
+ai_yaml_navigation_status: "Stage 03.4 planning visibility synchronized"
+docs_navigation_status: "architecture docs and roadmap package synchronized for Stage 03.4 planning visibility"
+stage_03_4_status: "planning_discovery_active"
+stage_03_4_execution_status: "not_started"
+stage_03_4A_status: "mutation classes and synchronization radius planning document created"
 current_governance_state:
   pass_01: "completed"
   pass_a_minimal_ai_layer: "completed"
@@ -72,24 +74,30 @@ active_script_order:
 active_workflow:
   - "Stage 03.3 runtime readability stabilization"
   - "Stage 03.3B code/surface synchronization"
+  - "Stage 03.4 planning/discovery: repository impact awareness"
+  - "Stage 03.4A mutation classes and synchronization radius planning"
   - "comments-only marking discipline"
   - "bounded extraction verification workflow"
   - "topology-preserving runtime evolution"
   - "manual gameplay verification discipline"
   - "runtime topology synchronization"
 current_safe_direction:
+  - "continue Stage 03.4 planning/discovery without runtime execution"
   - "maintain bounded documentation/navigation synchronization discipline"
-  - "avoid Stage 03.4 implementation until explicitly started"
+  - "avoid Stage 03.4 runtime implementation until explicitly started"
   - "preserve browser-global runtime order"
   - "preserve inline CSS / css/style.css relationship unless separate pass changes it"
+  - "do not create repository_map.yml before separate bounded planning/extraction pass"
 known_blockers:
   - "script-order sensitivity"
   - "shared mutable globals"
   - "connector truncation risk"
   - "wide extraction risk"
   - "inactive css/style.css can confuse documentation if not explicitly described"
+  - "structural documentation mutations create synchronization pressure"
 deferred_layers:
-  - "Stage 03.4"
+  - "Stage 03.4 execution/runtime evolution"
+  - "ai/repository_map.yml"
   - "generic object system"
   - "occupancy rewrite"
   - "object framework abstraction"
@@ -114,6 +122,12 @@ methodology:
     - bridge_cleanup
     - topology_synchronization
     - next_growth_cycle
+  stage_03_4_planning_cycle:
+    - structural_mutation_detection
+    - mutation_classification
+    - synchronization_radius_analysis
+    - bounded_mandatory_sync
+    - post_sync_verification
   intentionally_avoided:
     - fake_modularization
     - premature_abstraction
@@ -121,3 +135,6 @@ methodology:
     - imports_exports_migration_hysteria
     - fake_CSS_framework_claims
     - fake_module_loader_claims
+    - fake_repository_map_authority
+    - fake_governance_engine
+    - premature_parser_scanner_implementation
