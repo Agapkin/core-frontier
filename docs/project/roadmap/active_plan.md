@@ -23,15 +23,18 @@
 
 ## Текущий статус проекта
 
-Текущий статус после Stage 03.3B:
+Текущий статус после Stage 03.4 / 03.4A visibility synchronization:
 
 - Stage 03.1 completed and closed;
 - Stage 03.2 governance/navigation stabilization completed as operational foundation;
 - Stage 03.3 runtime readability stabilization completed;
 - Stage 03.3B code/surface/docs/navigation stabilization completed;
-- current stabilized stage = Stage 03.3B;
-- current phase = post-stabilization repository state after runtime/code/surface/docs synchronization;
-- Stage 03.4 НЕ начат;
+- Stage 03.3B remains FROZEN / STABILIZED baseline;
+- current active planning stage = Stage 03.4;
+- current phase = planning/discovery: repository impact awareness and mutation-class planning;
+- Stage 03.4 planning/discovery phase is ACTIVE;
+- Stage 03.4 execution/runtime evolution phase is NOT STARTED;
+- Stage 03.4A mutation classes and synchronization radius planning artifact exists;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
@@ -59,7 +62,63 @@
 - active CSS currently remains inline inside index.html;
 - css/style.css is not linked by index.html;
 - browser-global script order preserved;
-- Stage 03.4 not started.
+- Stage 03.3B frozen baseline preserved.
+
+---
+
+## Текущая Stage 03.4 planning direction
+
+Stage 03.4 сейчас активен только как planning/discovery phase.
+
+Текущий focus:
+
+- repository impact awareness;
+- synchronization radius;
+- mutation classes;
+- repository-visible structural mutations;
+- runtime impact vs synchronization impact;
+- runtime coupling vs synchronization coupling;
+- safe local mutation vs architecture mutation;
+- future repository_map.yml planning.
+
+Stage 03.4 НЕ запускает:
+
+- runtime rewrite;
+- gameplay changes;
+- automation rollout;
+- parser/scanner implementation;
+- governance engine;
+- ECS/entity framework;
+- repository_map.yml implementation.
+
+---
+
+## Stage 03.4A visibility
+
+Stage 03.4A mutation classes planning artifact существует:
+
+    docs/project/stage_03_4A_mutation_classes.md
+
+Назначение Stage 03.4A:
+
+- formalize mutation classes;
+- clarify synchronization radius;
+- define mandatory synchronization chains;
+- distinguish optional synchronization from mandatory synchronization;
+- document over-synchronization risks;
+- clarify structural mutation handling;
+- preserve anti-overengineering discipline.
+
+Stage 03.4A является planning/research artifact.
+
+Stage 03.4A НЕ является:
+
+- workflow law;
+- governance engine;
+- automation layer;
+- parser/scanner implementation;
+- repository_map.yml rollout;
+- runtime execution pass.
 
 ---
 
@@ -82,6 +141,10 @@ Runtime development был временно остановлен не из-за 
 дальнейшее runtime expansion без inspection/navigation workflow стало unsafe.
 
 Stage 03.3 / 03.3B снизили этот риск через runtime readability stabilization, bounded extraction workflow и synchronized navigation baseline.
+
+Stage 03.4 / 03.4A добавляют следующий planning layer:
+
+repository impact awareness и synchronization radius discipline.
 
 ---
 
@@ -159,7 +222,24 @@ Stage 03.3B завершил code/surface/docs/navigation synchronization пос
 - docs_structure.md synchronization;
 - roadmap package synchronization;
 - final documentation-layer verification completed;
-- Stage 03.4 remains not started.
+- frozen snapshot created.
+
+---
+
+### Stage 03.4 / 03.4A
+
+Stage 03.4 planning/discovery phase active.
+
+Подтверждено:
+
+- docs/project/stage_03_4.md exists;
+- docs/project/stage_03_4A_mutation_classes.md exists;
+- AI YAML navigation reflects Stage 03.4 planning visibility;
+- roadmap README reflects Stage 03.4 / 03.4A visibility;
+- docs_structure reflects Stage 03.4 / 03.4A visibility;
+- repository_map.yml remains deferred/not implemented;
+- automation/parser/governance rollout not started;
+- Stage 03.4 execution/runtime evolution not started.
 
 ---
 
@@ -174,7 +254,9 @@ Stage 03.3B завершил code/surface/docs/navigation synchronization пос
 - build flow remains highest interaction risk zone;
 - render/update order является runtime contract;
 - visibility uncertainty должна быть stop condition;
-- giant markdown workflow больше unsafe.
+- giant markdown workflow больше unsafe;
+- structural documentation mutations create synchronization pressure;
+- not every mutation should update every repository layer.
 
 ---
 
@@ -182,13 +264,14 @@ Stage 03.3B завершил code/surface/docs/navigation synchronization пос
 
 Текущий workflow:
 
-1. сохранить stabilized roadmap/documentation baseline;
-2. сохранить Documentation Impact workflow discipline;
-3. сохранить AI Navigation Impact workflow discipline;
-4. выполнять только bounded synchronization corrections when needed;
-5. не начинать Stage 03.4 без отдельного explicit pass;
-6. сохранить runtime/code topology без изменений;
-7. подготовить следующий safe decision point для future design/planning work.
+1. сохранить Stage 03.3B frozen baseline;
+2. вести Stage 03.4 как planning/discovery phase;
+3. использовать Stage 03.4A для mutation classes и synchronization radius planning;
+4. проверять structural mutations перед synchronization;
+5. применять только mandatory bounded synchronization radius;
+6. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
+7. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
+8. сохранить runtime/code topology без изменений.
 
 ---
 
@@ -211,11 +294,12 @@ AI navigation layer должен оставаться:
 
 Deferred intentionally:
 
+- ai/repository_map.yml;
 - ai/runtime_map.yml;
 - ai/contracts.yml;
 - logs layer;
 - automation rollout;
-- Stage 03.4 implementation;
+- Stage 03.4 execution/runtime evolution;
 - runtime_map/contracts rollout.
 
 ---
@@ -243,10 +327,10 @@ comments-only AI-readable marking уже deployed для runtime/code/surface fo
 
 Возврат к runtime development разрешён только после:
 
-- завершённой Stage 03.3B stabilization baseline;
-- final docs-layer verification;
+- сохранённой Stage 03.3B frozen baseline;
 - explicit next-stage decision;
-- bounded runtime reentry planning.
+- bounded runtime reentry planning;
+- separate Stage 03.4 execution/runtime pass.
 
 Runtime evolution больше не должен происходить через:
 
@@ -265,7 +349,8 @@ Runtime evolution больше не должен происходить чере
 - isolated;
 - compatibility-safe;
 - inspection-driven;
-- dependency-aware.
+- dependency-aware;
+- impact-aware.
 
 Особенно осторожно:
 
@@ -282,22 +367,26 @@ Runtime evolution больше не должен происходить чере
 
 ## Главный operational goal
 
-Главная задача текущего stabilized состояния:
+Главная задача текущего active plan:
 
-сохранить Stage 03.3B synchronization baseline без runtime/code изменений.
+сохранить Stage 03.3B frozen baseline
+и вести Stage 03.4 как planning/discovery phase для repository impact awareness.
 
 Подтверждено:
 
 - runtime/code/surface/docs/navigation/workflow layers synchronized;
 - runtime/code/surface foundation стабилизирован;
-- frozen-state verification completed;
-- Stage 03.4 remains not started.
+- Stage 03.4 planning/discovery phase active;
+- Stage 03.4 execution/runtime evolution not started;
+- Stage 03.4A mutation classes planning artifact exists;
+- repository_map.yml remains deferred/not implemented.
 
 Текущий приоритет:
 
 - сохранять repository truth без fake architecture claims;
 - сохранять bounded synchronization discipline;
-- defer future implementation work до explicit future design/planning decision.
+- clarify synchronization radius before creating repository_map.yml;
+- defer future runtime implementation work до explicit future execution decision.
 
 ---
 
@@ -309,17 +398,19 @@ Runtime evolution больше не должен происходить чере
 - не смешивать roadmap с architecture package;
 - не расширять governance без необходимости;
 - сохранять synchronized roadmap state;
-- сохранить historical stage files без переписывания.
+- сохранить historical stage files без переписывания;
+- использовать roadmap только как operational planning layer, а не governance engine.
 
 Deferred intentionally:
 
 - logs layer;
+- ai/repository_map.yml;
 - ai/runtime_map.yml;
 - ai/contracts.yml;
 - automation rollout;
 - runtime modularization governance;
 - CSS extraction/linking pass;
-- Stage 03.4.
+- Stage 03.4 execution/runtime evolution.
 
 ---
 
@@ -340,14 +431,19 @@ CORE FRONTIER перешёл:
 - visibility-safe architecture;
 - inspection-first development;
 - compatibility-safe runtime evolution;
-- synchronized runtime/code/surface/navigation baseline.
+- synchronized runtime/code/surface/navigation baseline;
+- impact-aware planning discipline.
 
-Current stabilized stage:
+Current active planning stage:
 
-Stage 03.3B — Code Surface / AI Docs Synchronization.
+Stage 03.4 — Repository Impact Awareness Planning.
+
+Current planning artifact:
+
+Stage 03.4A — Mutation Classes and Synchronization Radius Planning.
 
 Current phase:
 
-post-stabilization repository state after runtime/code/surface/docs synchronization.
+planning/discovery only.
 
-Текущий active plan направлен на сохранение stabilized Stage 03.3B baseline и подготовку следующего safe decision point без запуска Stage 03.4 implementation.
+Текущий active plan направлен на сохранение stabilized Stage 03.3B baseline и развитие Stage 03.4 planning/discovery без запуска runtime execution, repository_map rollout или governance automation.
