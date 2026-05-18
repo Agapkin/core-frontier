@@ -21,10 +21,21 @@ index.html
 index.html:
 
 * создаёт HTML shell;
-* подключает CSS;
-* содержит часть inline styles;
+* содержит active inline CSS;
+* НЕ подключает css/style.css через link tag;
 * подключает runtime scripts;
 * задаёт порядок загрузки JavaScript.
+
+Дополнительный surface-файл:
+
+css/style.css
+
+css/style.css:
+
+* существует в репозитории;
+* размечен как Stage 03.3B CSS surface file;
+* сейчас НЕ является active stylesheet для index.html;
+* не означает внедрение CSS framework или design system.
 
 ⸻
 
@@ -34,7 +45,10 @@ Critical script order
 
 js/data.js
 js/state.js
-js/systems.js
+js/systems/systems_wave_manager.js
+js/systems/systems_placement.js
+js/systems/systems_selected_object_actions.js
+js/systems/systems.js
 js/ui/helpers.js
 js/ui/layout.js
 js/ui/controls.js
@@ -48,17 +62,19 @@ js/game.js
 
 data.js
 → state.js
+→ systems helpers
 → systems.js
 → ui/*
 → game.js
 
-Проект использует глобальные переменные и функции.
+Проект использует browser-global переменные и функции.
 
 Следовательно:
 
 * data.js должен загружаться до state.js;
-* state.js должен загружаться до systems.js;
-* systems.js должен загружаться до UI files;
+* state.js должен загружаться до systems/*;
+* extracted systems helpers должны загружаться до js/systems/systems.js;
+* js/systems/systems.js должен загружаться до UI files;
 * UI files должны загружаться до game.js;
 * game.js должен загружаться последним.
 
@@ -110,25 +126,31 @@ state.js является central shared state layer.
 
 Gameplay systems layer
 
-Файл:
+Файлы:
 
-js/systems.js
+js/systems/systems_wave_manager.js
+js/systems/systems_placement.js
+js/systems/systems_selected_object_actions.js
+js/systems/systems.js
 
 Роль:
 
-* build logic;
-* tower placement;
-* validation;
-* waves;
-* enemy lifecycle;
-* tower attacks;
-* rewards;
-* power updates;
-* checkpoint;
-* retry/restart;
-* game over.
+* wave generation / spawn helpers;
+* placement lifecycle;
+* selected object actions;
+* button/runtime commands;
+* checkpoint/retry/restart/game over;
+* enemy update;
+* reward flow;
+* tower combat.
 
-systems.js является central gameplay mutation hub.
+js/systems/systems.js больше не является единым gameplay monolith.
+
+Текущая роль systems.js:
+
+mixed orchestration + lifecycle-heavy runtime systems file.
+
+Он остаётся важным mutation/runtime lifecycle file, но часть responsibilities уже вынесена bounded extraction passes.
 
 ⸻
 
@@ -216,39 +238,39 @@ Stage 03.1 подтвердил, что следующие структуры я
 
 ⸻
 
-systems.js как mutation hub
+systems.js after Stage 03.3 extractions
 
-systems.js является самым опасным mutation hub.
+До Stage 03.3 systems.js был главным mutation hub.
 
-Он одновременно связан с:
+После bounded extractions часть responsibilities вынесена:
 
-* build flow;
-* waves;
-* enemies;
-* towers;
-* rewards;
-* restart/retry;
-* game over;
-* resources;
-* power;
-* uiState;
-* gameState;
-* notifications;
-* UI updates.
+* js/systems/systems_wave_manager.js — createWave(), shuffleWave(), spawnEnemy();
+* js/systems/systems_placement.js — placement/build tile helpers and tower placement lifecycle;
+* js/systems/systems_selected_object_actions.js — selectTower(), sellSelectedTower();
+* js/systems/systems.js — remaining orchestration/lifecycle/update/combat flows.
 
-systems.js нельзя refactor giant-pass методом.
+systems.js всё ещё нельзя refactor giant-pass методом.
+
+Особенно sensitive остаются:
+
+* startWave();
+* checkpoint/retry/restart/game over;
+* updateEnemies();
+* applyReward();
+* updateTowers();
+* shared mutations resources/power/waveState/towers/enemies/uiState/gameState.
 
 ⸻
 
-Build flow
+Build / placement flow
 
-Build flow является наиболее sensitive interaction zone.
+Build / placement flow является sensitive interaction zone.
 
 Участвующие файлы:
 
 controls.js
 → game.js
-→ systems.js
+→ js/systems/systems_placement.js
 → canvas_world.js
 → panels.js
 
@@ -308,22 +330,37 @@ panels.js нельзя одновременно менять как HUD, Codex, 
 
 ⸻
 
+Repository surface state
+
+Stage 03.3B подтвердил surface reality:
+
+* index.html является marked shell runtime entrypoint;
+* active CSS сейчас находится inline внутри index.html;
+* css/style.css существует и размечен;
+* css/style.css сейчас НЕ подключён index.html;
+* CSS framework / design system architecture не реализованы;
+* module loader / framework architecture не реализованы.
+
+CSS extraction/linking должен быть отдельным bounded pass, если будет нужен.
+
+⸻
+
 Dangerous combined-change zones
 
 Опасные combined-change zones:
 
 * state.js + layout.js;
-* systems.js + controls.js;
-* systems.js + panels.js;
-* systems.js + game.js;
+* systems/* + controls.js;
+* systems/* + panels.js;
+* systems/* + game.js;
 * game.js + canvas_world.js;
 * layout.js + controls.js + panels.js;
-* state.js + systems.js + game.js.
+* state.js + systems/* + game.js.
 
 Наиболее опасная зона:
 
 state.js
-+ systems.js
++ systems/*
 + layout.js
 + controls.js
 + panels.js
@@ -345,15 +382,18 @@ Preliminary runtime contract candidates
 * waveState lifecycle contract;
 * towers/enemies entity shape contract;
 * camera coordinate transform contract;
-* build flow contract;
+* build/placement flow contract;
 * restart/retry lifecycle contract;
 * render/update loop contract;
 * UI/HUD contract;
-* input/camera contract.
+* input/camera contract;
+* repository surface CSS relationship contract.
 
 Важно:
 
 это preliminary candidates, а не formal contracts.
+
+Stage 03.4 не начат.
 
 ⸻
 
@@ -363,9 +403,10 @@ Safe runtime rules
 
 * script order не менять без migration plan;
 * uiLayout менять isolated pass;
-* build flow менять bounded patch;
-* systems.js не refactor giant-pass методом;
+* build/placement flow менять bounded patch;
+* systems/* не refactor giant-pass методом;
 * render order не менять без render review;
-* game.js + systems.js не менять вместе без explicit boundary review;
+* game.js + systems/* не менять вместе без explicit boundary review;
 * global runtime renames требуют compatibility/alias layer;
-* future modularization должна идти staged extraction методом.
+* future modularization должна идти staged extraction методом;
+* CSS linking/extraction не смешивать с runtime/script-order changes.
