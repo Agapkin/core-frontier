@@ -69,6 +69,12 @@ Stage 03.4A mutation classes planning document created:
 
 - docs/project/architecture/ai_navigation_plan.md
 
+- docs/project/architecture/synchronization_protocols.md
+
+synchronization_protocols.md хранит reusable synchronization playbooks.
+
+Protocol 01 formalizes confirmed new_stage_file synchronization behavior.
+
 ---
 
 ## Общий вывод
