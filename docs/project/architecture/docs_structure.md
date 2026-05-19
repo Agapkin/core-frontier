@@ -63,6 +63,7 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/architecture/docs_structure.md
     docs/project/architecture/workflow.md
     docs/project/architecture/ai_navigation_plan.md
+    docs/project/architecture/synchronization_protocols.md
     docs/project/stage_01.md
     docs/project/stage_02.md
     docs/project/stage_02_1.md
@@ -179,6 +180,9 @@ Architecture package:
     docs/project/architecture/docs_structure.md
     docs/project/architecture/workflow.md
     docs/project/architecture/ai_navigation_plan.md
+    docs/project/architecture/synchronization_protocols.md
+
+synchronization_protocols.md хранит reusable synchronization protocols и mutation archetype playbooks.
 
 README.md является entrypoint.
 
