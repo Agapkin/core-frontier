@@ -256,6 +256,8 @@ Developer Reports:
 
 Historical stage docs не должны переписываться как current-state operational docs.
 
+Repository-visible structural mutations и stage-file mutations должны consult synchronization_protocols.md для mutation-specific synchronization scope.
+
 ---
 
 ## AI navigation workflow
