@@ -14,12 +14,15 @@ primary_entrypoints:
     - docs/project/stage_03_2_runtime_findings_01.md
   stage_03_4A:
     - docs/project/stage_03_4A_mutation_classes.md
+  synchronization_protocols:
+    - docs/project/architecture/synchronization_protocols.md
 
 architecture_package:
   - docs/project/architecture/runtime_structure.md
   - docs/project/architecture/docs_structure.md
   - docs/project/architecture/workflow.md
   - docs/project/architecture/ai_navigation_plan.md
+  - docs/project/architecture/synchronization_protocols.md
 
 roadmap_package:
   - docs/project/roadmap/completed_stages.md
