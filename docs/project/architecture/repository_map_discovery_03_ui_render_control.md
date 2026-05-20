@@ -1,265 +1,279 @@
-# Repository Map Discovery 03 — UI Render / Control
+# Repository Map Discovery 03 — UI Render / Control Index
 
-## 1. Назначение batch-файла
+## 1. Назначение Batch 03 root-файла
 
-Этот файл является bounded extraction batch для repository cognition discovery.
+Этот файл является lightweight index/status/navigation layer для Batch 03 UI render/control discovery mini-chain.
 
-Batch ownership:
+Он больше НЕ хранит detailed extraction blocks напрямую.
 
-- `js/ui/controls.js`
-- `js/ui/canvas_world.js`
-- `js/ui/canvas_entities.js`
+Detailed source-faithful extraction теперь находится только в bounded sub-batch files:
 
-Этот файл предназначен для:
+- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
+- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
+- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
 
-- source-faithful AI-readable markup extraction;
-- verification blocks;
-- mismatch visibility;
-- correction candidate tracking;
-- cognition-maintenance continuation.
+Назначение этого root-файла:
 
-Repository truth remains:
-
-- actual code;
-- actual runtime behavior.
-
-Headers remain:
-
-- interpretation layer;
-- AI-readable markup;
-- verification candidates.
+- Batch 03 purpose;
+- mini-chain navigation;
+- sub-batch ownership map;
+- integrity/status overview;
+- continuation state;
+- operational constraints;
+- deferred/not-done areas.
 
 This file is NOT:
 
 - `repository_map.yml`;
 - parser/scanner output;
 - automation layer;
-- governance system.
+- governance system;
+- source authority;
+- runtime authority.
 
-If markup and code diverge:
+Repository truth remains:
 
-- code wins;
-- divergence must remain visible explicitly;
-- source wording must not be silently normalized.
+- actual code;
+- actual runtime behavior.
+
+Discovery files remain interpretation/cognition layer only.
 
 ---
 
-## 2. Batch status
+## 2. Batch 03 purpose
 
-Batch: 03 — UI render/control.
+Batch 03 covers UI render/control repository cognition for:
+
+- UI command/control bridge;
+- world/canvas rendering;
+- entity/canvas rendering;
+- render-only boundary verification;
+- cross-file runtime coupling detection;
+- call-site vs ownership distinction.
+
+Batch 03 was split into mini-chain files because the previous single Batch 03 extraction file became synchronization-sensitive and was partially truncated during a large full-file replacement.
+
+The split exists to reduce:
+
+- connector/write pressure;
+- partial truncation risk;
+- overwrite-from-memory risk;
+- extraction drift risk;
+- continuation ambiguity.
+
+---
+
+## 3. Mini-chain navigation
+
+### 03a — UI Controls
+
+File:
+
+- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
+
+Owned source file:
+
+- `js/ui/controls.js`
+
+Cross-file verification source:
+
+- `js/ui/panels.js`
 
 Status:
 
-- extracted;
-- source-faithful markup preserved;
-- verification blocks added;
-- controls.js ownership interpretation corrected after cross-file verification;
-- call-site vs ownership distinction explicitly preserved;
-- no active source-header correction candidates remain;
-- source JS not mutated.
+- created;
+- source-faithful extraction completed;
+- verification block present;
+- closure state present;
+- cross-file ownership clarified;
+- no active source-header correction candidate.
 
-Source files:
+Key preserved finding:
 
-- `js/ui/controls.js`
+- `controls.js` calls `createMenuPanel()` / `createGameOverPanel()` during dynamic UI rebuild;
+- ownership remains in `panels.js`;
+- call-site does NOT imply ownership;
+- this is runtime coupling, not source-header omission.
+
+---
+
+### 03b — Canvas World Rendering
+
+File:
+
+- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
+
+Owned source file:
+
 - `js/ui/canvas_world.js`
+
+Status:
+
+- created;
+- source-faithful extraction completed;
+- verification block present;
+- closure state present;
+- no active source-header correction candidate.
+
+Key preserved finding:
+
+- `canvas_world.js` owns world-space rendering helpers and placement overlay visualization;
+- it reads placement validation result for visualization;
+- it does NOT own placement lifecycle or placement validation;
+- generic render engine / layer manager is not implemented.
+
+---
+
+### 03c — Canvas Entity Rendering
+
+File:
+
+- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
+
+Owned source file:
+
 - `js/ui/canvas_entities.js`
 
-Cross-verification source:
+Status:
 
-- `docs/project/architecture/runtime_structure.md`
+- created;
+- source-faithful extraction completed;
+- verification block present;
+- closure state present;
+- no active source-header correction candidate.
 
----
+Key preserved finding:
 
-## 3. `js/ui/controls.js`
-
-File: `js/ui/controls.js`
-
-source_read_status: fully read for Batch 03 extraction pass; ownership interpretation corrected after cross-file verification.
-
-### Header extraction — source-faithful
-
-```text
-CORE FRONTIER — UI Controls
-КАРТА ФАЙЛА ДЛЯ AI
-ФАЙЛ: js/ui/controls.js
-РОЛЬ: DOM controls layer, runtime command bridge и callback wiring layer.
-СТАТУС: UI command/control layer; generic input abstraction и command routing architecture НЕ реализованы.
-ВЛАДЕЕТ: createDynamicUI(), createBottomControlPanel(), createUtilityControls(), createSpeedControls(), createZoomControls(), createTowerActionPanel(), createBuildConfirmPanel()
-НЕ ВЛАДЕЕТ: gameplay logic, placement validation, tower combat, enemy update, wave lifecycle, camera state ownership, hotkey system, generic object action framework.
-ЧИТАЕТ: uiState, gameState, waveState, gameSpeed, camera, canvas, uiLayout.
-ИЗМЕНЯЕТ: DOM controls/panels, local UI visibility state, runtime command callbacks.
-ИСПОЛЬЗУЕТСЯ В: runtime UI rebuild flow, gameplay command dispatch, panels.js visibility/update flow.
-RUNTIME-КОНТРАКТ: файл должен загружаться после runtime systems files и before panels.js/game.js.
-НЕЛЬЗЯ: менять runtime callbacks или gameplay dispatch semantics без отдельного inspection pass.
-```
-
-### Section extraction — source-faithful
-
-```text
-СЕКЦИЯ: DYNAMIC UI REBUILD / ПЕРЕСБОРКА UI
-РОЛЬ: пересобрать runtime UI controls и синхронизировать active panels.
-ВКЛЮЧАЕТ: createDynamicUI()
-```
-
-Function-level comments:
-
-```text
-createDynamicUI(): пересобирает runtime DOM controls и синхронизирует visibility panels.
-```
-
-Internal markers preserved:
-
-```text
-UI LAYOUT REFRESH
-OLD PANEL CLEANUP
-CONTROL PANEL REBUILD
-TOPBAR VISIBILITY SYNC
-```
-
-Observed calls inside section:
-
-```text
-updateUILayout()
-removeElement("bottom-control-panel")
-removeElement("speed-panel")
-removeElement("zoom-panel")
-removeElement("tower-action-panel")
-removeElement("build-confirm-panel")
-removeElement("menu-panel")
-removeElement("game-over-panel")
-createBottomControlPanel()
-createUtilityControls()
-createTowerActionPanel()
-createBuildConfirmPanel()
-createMenuPanel()
-createGameOverPanel()
-updateTopbarVisibility()
-```
-
-Ownership interpretation:
-
-```text
-createMenuPanel() and createGameOverPanel() are external panel creation functions called by controls.js during dynamic UI rebuild.
-They are not declared by controls.js and are not owned by controls.js.
-Actual ownership is confirmed in js/ui/panels.js.
-This is verified cross-file runtime coupling, not controls.js header omission.
-
-IMPORTANT:
-call-site does NOT imply ownership.
-Cross-file runtime calls must not automatically become ownership correction candidates.
-```
+- `canvas_entities.js` is render-only visualization layer;
+- target lines visualize `tower.target` but do not own targeting;
+- HP bars visualize enemy state but do not own damage/death flow;
+- generic entity render system / ECS pipeline is not implemented.
 
 ---
 
-```text
-СЕКЦИЯ: BOTTOM COMMAND PANEL / НИЖНЯЯ ПАНЕЛЬ КОМАНД
-РОЛЬ: создать основные gameplay command buttons.
-ВКЛЮЧАЕТ: createBottomControlPanel()
-```
-
-Function-level comments:
+## 4. Sub-batch ownership map
 
 ```text
-createBottomControlPanel(): создаёт bottom command panel для build/wave/menu/codex actions.
-ТОЧКА РОСТА: build controls могут позже перейти к category/nested build menus.
-ВАЖНО: generic build-category system пока НЕ реализована.
+03a → js/ui/controls.js
+03b → js/ui/canvas_world.js
+03c → js/ui/canvas_entities.js
 ```
 
-Internal markers preserved:
+Detailed extraction ownership:
 
 ```text
-PANEL ROOT CREATION
-PRIMARY COMMAND BUTTONS
-DOM ATTACH
+repository_map_discovery_03a_ui_controls.md
+→ controls.js extraction, verification, cross-file coupling notes
+
+repository_map_discovery_03b_canvas_world.md
+→ canvas_world.js extraction, verification, render/placement overlay boundary notes
+
+repository_map_discovery_03c_canvas_entities.md
+→ canvas_entities.js extraction, verification, render-only boundary notes
 ```
 
-Runtime command callbacks observed:
+The Batch 03 root file must remain lightweight.
 
-```text
-buildTower()
-startWave()
-uiState.infoPanelOpen toggle
-uiState.menuOpen toggle
-```
+Do NOT reinsert detailed extraction blocks into this file.
 
 ---
 
-```text
-СЕКЦИЯ: UTILITY CONTROLS / ВСПОМОГАТЕЛЬНЫЕ КОНТРОЛЫ
-РОЛЬ: собрать speed/zoom utility controls.
-ВКЛЮЧАЕТ: createUtilityControls()
-```
+## 5. Integrity status
 
-Function-level comments:
+Current mini-chain integrity status:
 
-```text
-createUtilityControls(): создаёт utility control panels для speed и zoom.
-```
+- 03a exists and contains closure state;
+- 03b exists and contains closure state;
+- 03c exists and contains closure state;
+- Batch 03 root now contains only index/status/navigation;
+- source JS files were not mutated during mini-chain restructuring;
+- runtime behavior was not changed.
 
-Observed calls:
+Post-split expected invariant:
 
-```text
-createSpeedControls()
-createZoomControls()
-```
+Detailed extraction lives only in:
 
----
+- 03a;
+- 03b;
+- 03c.
 
-```text
-СЕКЦИЯ: SPEED CONTROLS / КОНТРОЛЫ СКОРОСТИ
-РОЛЬ: создать runtime speed control buttons.
-ВКЛЮЧАЕТ: createSpeedControls()
-```
+Root Batch 03 file lives only as:
 
-Function-level comments:
-
-```text
-createSpeedControls(): создаёт speed buttons и dispatch gameSpeed changes.
-```
-
-Internal markers preserved:
-
-```text
-PANEL ROOT CREATION
-SPEED BUTTON CREATION
-DOM ATTACH
-```
-
-Runtime callback behavior observed:
-
-```text
-gameState.gameOver guard
-gameSpeed = speed
-createDynamicUI()
-notify("Скорость игры: x" + speed, "info")
-```
+- index;
+- status;
+- navigation;
+- continuation state.
 
 ---
 
-```text
-СЕКЦИЯ: ZOOM CONTROLS / КОНТРОЛЫ ZOOM
-РОЛЬ: создать zoom buttons для camera-aware world navigation.
-ВКЛЮЧАЕТ: createZoomControls()
-```
+## 6. Continuation state
 
-Function-level comments:
+Batch 03 mini-chain restructuring status:
 
-```text
-createZoomControls(): создаёт zoom buttons и dispatch camera zoom helpers.
-```
+- 03a created;
+- 03b created;
+- 03c created;
+- Batch 03 root reduced to lightweight index/status/navigation.
 
-Internal markers preserved:
+Current Batch 03 status:
 
-```text
-PANEL ROOT CREATION
-ZOOM ACTION BUTTONS
-DOM ATTACH
-```
+- stable after mini-chain split;
+- detailed extraction preserved in bounded files;
+- root no longer oversized;
+- connector/write pressure reduced.
 
-Runtime callback behavior observed:
+Next safe directions:
 
-```text
-zoomAt(canvas.width / 2, canvas.height / 2, camera.zoom - 0.12)
-zoomAt(canvas.width / 2, canvas.height / 2, camera.zoom + 0.12)
-resetZoom(true)
-```
+1. Run a bounded post-split integrity verification if needed.
+2. Consider template stabilization only after confirming Batch 03 mini-chain remains stable.
+3. Continue future discovery with bounded files earlier if a batch begins to exceed safe mutation size.
+
+Do not repeat 03a/03b/03c unless repository drift or visibility uncertainty appears.
+
+---
+
+## 7. Operational constraints
+
+Do NOT:
+
+- mutate runtime JS;
+- mutate source headers;
+- create `repository_map.yml`;
+- create parser/scanner systems;
+- create dependency graph;
+- move files into folders yet;
+- move discovery rules into `workflow.md`;
+- alter Batch 01 / Batch 02 from this Batch 03 root file.
+
+This mini-chain remains:
+
+- experimental;
+- discovery-local;
+- bounded;
+- connector-safe;
+- non-authoritative.
+
+---
+
+## 8. Deferred / not-done areas
+
+Deferred / not done in this pass:
+
+- `repository_map.yml` implementation;
+- parser/scanner implementation;
+- automation rollout;
+- folder migration to `docs/project/architecture/repository_map_discovery/`;
+- template canonization;
+- workflow.md canonization;
+- runtime/source header mutation;
+- Batch 01/02 redesign.
+
+---
+
+## 9. Operational conclusion
+
+Batch 03 has been converted from one synchronization-sensitive extraction file into a bounded mini-chain.
+
+The root Batch 03 file now provides navigation and status only.
+
+This preserves extraction integrity while reducing connector/write pressure for future repository cognition maintenance.
