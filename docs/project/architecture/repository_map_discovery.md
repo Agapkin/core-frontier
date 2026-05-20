@@ -125,7 +125,47 @@ Only real incompleteness/drift should become correction candidates.
 
 ---
 
-## 5. Correction workflow discipline
+## 5. Call-site vs ownership verification rule
+
+Discovery must preserve the distinction:
+
+```text
+function call does NOT imply ownership
+```
+
+Ownership should be verified through:
+
+- declaration / definition location;
+- explicit source-header ownership;
+- actual code/runtime behavior;
+- confirmed file responsibility.
+
+Cross-file calls should be classified as one of:
+
+- runtime coupling;
+- orchestration dependency;
+- callback bridge;
+- external dependency.
+
+They should NOT automatically become:
+
+- missing ownership;
+- source-header omission;
+- correction candidate.
+
+Verified examples:
+
+- `controls.js` calls `createMenuPanel()` / `createGameOverPanel()`, but ownership remains in `panels.js`;
+- `game.js` bridges into placement / selected object systems without owning them;
+- `systems.js` calls extracted wave helpers without owning wave generation helpers.
+
+This rule is discovery-local and experimental.
+
+Do NOT move it into `workflow.md` yet.
+
+---
+
+## 6. Correction workflow discipline
 
 Source-header / markup correction passes must:
 
@@ -150,7 +190,7 @@ Correction passes must NOT:
 
 ---
 
-## 6. Batch-chain navigation
+## 7. Batch-chain navigation
 
 Current bounded discovery chain:
 
@@ -215,7 +255,7 @@ Status:
 
 ---
 
-## 7. Continuation status
+## 8. Continuation status
 
 Current completed restructuring:
 
@@ -239,7 +279,7 @@ Do not reintroduce giant extraction blocks into this root file.
 
 ---
 
-## 8. Operational constraints
+## 9. Operational constraints
 
 Do NOT:
 
@@ -263,7 +303,7 @@ This chain remains:
 
 ---
 
-## 9. Deferred/not-yet-implemented areas
+## 10. Deferred/not-yet-implemented areas
 
 Still deferred / not implemented:
 
@@ -280,7 +320,7 @@ Still deferred / not implemented:
 
 ---
 
-## 10. Operational conclusion
+## 11. Operational conclusion
 
 Repository cognition discovery has been restructured from one oversized evolving extraction document into a bounded discovery chain.
 
