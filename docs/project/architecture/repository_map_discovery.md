@@ -207,12 +207,12 @@ Owned source files:
 
 Status:
 
-- created;
-- Batch A migrated;
+- extracted;
 - source-faithful extraction preserved;
 - verification blocks present;
-- correction candidates identified;
-- source JS not mutated.
+- `js/game.js` source-header correction applied;
+- discovery re-check/update completed;
+- no active Batch 01 source-header correction candidates remain except optional future review for `systems.js` lifecycle density.
 
 ---
 
@@ -229,9 +229,12 @@ Owned source files:
 
 Status:
 
-- created;
-- continuation-ready;
-- extraction not yet completed in this batch file.
+- extracted;
+- source-faithful extraction preserved;
+- verification blocks present;
+- `js/systems/systems_placement.js` source-header correction applied for `confirmBuild()` ownership visibility;
+- discovery re-check/update completed;
+- no active Batch 02 source-header correction candidates remain.
 
 ---
 
@@ -249,9 +252,12 @@ Owned source files:
 
 Status:
 
-- created;
-- continuation-ready;
-- extraction not yet completed in this batch file.
+- extracted;
+- source-faithful extraction preserved;
+- verification blocks present;
+- controls.js ownership interpretation corrected as cross-file runtime coupling;
+- call-site vs ownership distinction explicitly preserved;
+- no active Batch 03 source-header correction candidates remain.
 
 ---
 
@@ -260,26 +266,43 @@ Status:
 Current completed restructuring:
 
 - root discovery file reduced to overview/workflow/navigation layer;
-- Batch 01 file created and populated;
-- Batch 02 file created as continuation-ready container;
-- Batch 03 file created as continuation-ready container.
+- Batch 01 file created, populated, corrected and re-checked;
+- Batch 02 file created, populated, corrected and re-checked;
+- Batch 03 file created, populated and interpretation-corrected.
 
 Current next safe direction:
 
-1. Do not continue new extraction until root discovery stabilization is confirmed.
-2. Begin source-header correction passes only after explicit instruction.
-3. Correction should start with Batch 01 source files if needed:
-   - `js/systems/systems.js`
-   - `js/game.js`
-4. Continue Batch 02 extraction only after correction/stabilization decision.
-
-Do not restart discovery.
-
-Do not reintroduce giant extraction blocks into this root file.
+1. Do not restart discovery.
+2. Do not reintroduce giant extraction blocks into this root file.
+3. Before expanding into new runtime areas, prefer a bounded template-stabilization or next-sample decision pass.
+4. If continuing discovery, use the same bounded batch-file pattern.
 
 ---
 
-## 9. Operational constraints
+## 9. Discovery-chain integrity audit snapshot
+
+Current audit finding:
+
+- Batch 01 / 02 / 03 use compatible high-level structure;
+- source-faithful extraction remains the dominant pattern;
+- verification blocks remain present;
+- correction/re-check logic is now repeatable;
+- call-site vs ownership distinction is explicitly preserved;
+- root file remains lightweight and retrieval-safe.
+
+Known operational risk:
+
+- batch files can still become synchronization-sensitive if updated with partial full-file replacements;
+- future updates should preserve full section integrity and avoid truncation.
+
+Template stabilization status:
+
+- useful soon;
+- not mandatory before one more bounded discovery area if the current pattern is followed carefully.
+
+---
+
+## 10. Operational constraints
 
 Do NOT:
 
@@ -303,7 +326,7 @@ This chain remains:
 
 ---
 
-## 10. Deferred/not-yet-implemented areas
+## 11. Deferred/not-yet-implemented areas
 
 Still deferred / not implemented:
 
@@ -320,7 +343,7 @@ Still deferred / not implemented:
 
 ---
 
-## 11. Operational conclusion
+## 12. Operational conclusion
 
 Repository cognition discovery has been restructured from one oversized evolving extraction document into a bounded discovery chain.
 
@@ -329,7 +352,8 @@ The root file now acts as:
 - overview layer;
 - workflow layer;
 - navigation layer;
-- continuation-status layer.
+- continuation-status layer;
+- audit snapshot layer.
 
 Detailed source-faithful extraction belongs in bounded batch files.
 
