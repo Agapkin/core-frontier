@@ -125,7 +125,64 @@ Only real incompleteness/drift should become correction candidates.
 
 ---
 
-## 5. Call-site vs ownership verification rule
+## 5. Oversized / truncation-prone batch handling rule
+
+Discovery batches are themselves synchronization-sensitive repository cognition entities.
+
+If a discovery batch becomes:
+
+- too large;
+- truncation-prone;
+- synchronization-sensitive;
+- unsafe for bounded full-file mutation;
+
+then:
+
+- do NOT repeatedly restore it as one giant extraction file;
+- convert it into mini-chain structure instead.
+
+Mini-chain structure:
+
+### Root batch file
+
+Root batch file should contain only:
+
+- index;
+- navigation;
+- status;
+- continuation;
+- integrity warnings.
+
+### Sub-batch files
+
+Sub-batch files should contain:
+
+- detailed extraction;
+- verification;
+- cognition notes;
+- correction lifecycle.
+
+Operational lessons verified by Batch 03:
+
+- bounded sub-batches reduce connector/write pressure;
+- post-write integrity verification is mandatory for large cognition files;
+- discovery files themselves are synchronization-sensitive entities;
+- extraction integrity drift can occur without runtime drift;
+- restoration must use fresh source reads instead of overwrite-from-memory reconstruction.
+
+This is discovery-local mutation-safety guidance.
+
+It is NOT:
+
+- `workflow.md` canonization;
+- governance redesign;
+- `repository_map.yml` generation;
+- parser/scanner rollout;
+- architecture redesign.
+
+---
+
+## 6. Call-site vs ownership verification rule
 
 Discovery must preserve the distinction:
 
@@ -165,7 +222,7 @@ Do NOT move it into `workflow.md` yet.
 
 ---
 
-## 6. Correction workflow discipline
+## 7. Correction workflow discipline
 
 Source-header / markup correction passes must:
 
@@ -190,7 +247,7 @@ Correction passes must NOT:
 
 ---
 
-## 7. Batch-chain navigation
+## 8. Batch-chain navigation
 
 Current bounded discovery chain:
 
@@ -261,7 +318,7 @@ Status:
 
 ---
 
-## 8. Continuation status
+## 9. Continuation status
 
 Current completed restructuring:
 
@@ -276,10 +333,11 @@ Current next safe direction:
 2. Do not reintroduce giant extraction blocks into this root file.
 3. Before expanding into new runtime areas, prefer a bounded template-stabilization or next-sample decision pass.
 4. If continuing discovery, use the same bounded batch-file pattern.
+5. If a batch becomes oversized/truncation-prone, split it into a mini-chain instead of repeatedly restoring it as one giant file.
 
 ---
 
-## 9. Discovery-chain integrity audit snapshot
+## 10. Discovery-chain integrity audit snapshot
 
 Current audit finding:
 
@@ -293,7 +351,8 @@ Current audit finding:
 Known operational risk:
 
 - batch files can still become synchronization-sensitive if updated with partial full-file replacements;
-- future updates should preserve full section integrity and avoid truncation.
+- future updates should preserve full section integrity and avoid truncation;
+- oversized extraction batches should become mini-chains before repeated restoration attempts.
 
 Template stabilization status:
 
@@ -302,7 +361,7 @@ Template stabilization status:
 
 ---
 
-## 10. Operational constraints
+## 11. Operational constraints
 
 Do NOT:
 
@@ -326,7 +385,7 @@ This chain remains:
 
 ---
 
-## 11. Deferred/not-yet-implemented areas
+## 12. Deferred/not-yet-implemented areas
 
 Still deferred / not implemented:
 
@@ -343,7 +402,7 @@ Still deferred / not implemented:
 
 ---
 
-## 12. Operational conclusion
+## 13. Operational conclusion
 
 Repository cognition discovery has been restructured from one oversized evolving extraction document into a bounded discovery chain.
 
@@ -356,5 +415,7 @@ The root file now acts as:
 - audit snapshot layer.
 
 Detailed source-faithful extraction belongs in bounded batch files.
+
+If an extraction batch itself becomes oversized or truncation-prone, it should be split into mini-chain structure.
 
 This reduces connector/write pressure and makes future extraction/correction/re-check passes safer.
