@@ -442,6 +442,68 @@ Potential bounded future directions:
 - repository-map consistency checking;
 - lightweight navigation regeneration.
 
+Future auto-discovery should operationally aim to reduce human uncertainty rather than multiply review artifacts.
+
+Operationally, future bounded auto-discovery should separate:
+
+- auto-confirmed findings;
+- contested/uncertain zones;
+- contradictions;
+- unsafe assumptions;
+- evidence-backed decision packets.
+
+Examples of auto-confirmed findings may include:
+
+- header matches code;
+- section list matches code;
+- function list matches code;
+- runtime relationship verified;
+- no correction candidate detected.
+
+Human decision markers should instead focus on:
+
+- uncertain ownership;
+- helper significance ambiguity;
+- runtime/header contradiction;
+- unsafe assumption;
+- future refactor classification.
+
+For contested zones, future bounded auto-discovery should ideally produce evidence-backed deep-dig packets containing:
+
+- finding;
+- evidence source;
+- competing interpretations;
+- risk;
+- suggested classification;
+- synchronization impact;
+- recommended action.
+
+Repository operationally discovered that human review should not require full re-reading of all generated discovery output.
+
+Human approval surface should instead concentrate on:
+
+- contested zones;
+- authority-significant contradictions;
+- synchronization-risk decisions;
+- refactor/cleanup decisions.
+
+Future bounded automation may assist with:
+
+- scanning;
+- comparison;
+- drift detection;
+- discovery draft generation;
+- verification reporting;
+- decision-marker generation.
+
+However future bounded automation should NOT autonomously:
+
+- mutate runtime code;
+- rewrite headers;
+- approve correction candidates;
+- decide refactor direction;
+- merge discovery updates without human gate.
+
 However, the discovery cycle operationally demonstrated risks around:
 
 - premature automation;
