@@ -222,7 +222,77 @@ Do NOT move it into `workflow.md` yet.
 
 ---
 
-## 7. Correction workflow discipline
+## 7. Helper visibility significance rule
+
+Discovery must preserve the distinction:
+
+```text
+helper existence does NOT automatically require top-header ownership visibility
+```
+
+But helper omission must NOT be silently ignored either.
+
+If a helper/function exists in code but is absent from top ownership visibility, discovery must run helper significance verification before classifying it.
+
+Possible helper significance outcomes:
+
+### 1. Authority / lifecycle / contract-significant helper
+
+Examples:
+
+- `confirmBuild()`;
+- `buildRoadTiles()`.
+
+Possible result:
+
+- ownership visibility correction candidate.
+
+### 2. Local / section-scoped maintenance helper
+
+Example:
+
+- `updateResponsiveLayout()`.
+
+Possible result:
+
+- section extraction and cognition notes are sufficient;
+- no top-header correction required.
+
+### 3. Uncertain helper significance
+
+Possible result:
+
+- preserve explicit uncertainty;
+- mark as `needs_review`;
+- avoid premature source-header mutation.
+
+This rule exists to prevent:
+
+- automatic header inflation;
+- automatic helper propagation into top ownership surfaces;
+- fake architecture normalization.
+
+It also exists to prevent:
+
+- silent omission acceptance;
+- skipped runtime-significant ownership drift.
+
+Therefore this rule is:
+
+- significance verification discipline;
+- anti-overcorrection safeguard;
+- mismatch-detection safeguard.
+
+It is NOT:
+
+- an auto-ignore rule;
+- source-header rewrite policy;
+- schema canonization;
+- mass header correction trigger.
+
+---
+
+## 8. Correction workflow discipline
 
 Source-header / markup correction passes must:
 
@@ -247,7 +317,7 @@ Correction passes must NOT:
 
 ---
 
-## 8. Batch-chain navigation
+## 9. Batch-chain navigation
 
 Current bounded discovery chain:
 
@@ -318,7 +388,7 @@ Status:
 
 ---
 
-## 9. Continuation status
+## 10. Continuation status
 
 Current completed restructuring:
 
@@ -337,7 +407,7 @@ Current next safe direction:
 
 ---
 
-## 10. Discovery-chain integrity audit snapshot
+## 11. Discovery-chain integrity audit snapshot
 
 Current audit finding:
 
@@ -361,7 +431,7 @@ Template stabilization status:
 
 ---
 
-## 11. Operational constraints
+## 12. Operational constraints
 
 Do NOT:
 
@@ -385,7 +455,7 @@ This chain remains:
 
 ---
 
-## 12. Deferred/not-yet-implemented areas
+## 13. Deferred/not-yet-implemented areas
 
 Still deferred / not implemented:
 
@@ -402,7 +472,7 @@ Still deferred / not implemented:
 
 ---
 
-## 13. Operational conclusion
+## 14. Operational conclusion
 
 Repository cognition discovery has been restructured from one oversized evolving extraction document into a bounded discovery chain.
 
