@@ -52,8 +52,9 @@ Status:
 - extracted;
 - source-faithful markup preserved;
 - verification blocks added;
-- correction candidates identified;
-- source JS not mutated.
+- correction candidate for `js/systems/systems_placement.js` completed/resolved;
+- source JS correction applied for `confirmBuild()` ownership visibility;
+- discovery snapshot re-checked after source correction.
 
 Source files:
 
@@ -70,9 +71,9 @@ Cross-verification source:
 
 File: `js/systems/systems_placement.js`
 
-source_read_status: fully read for Batch 02 extraction pass.
+source_read_status: re-read after source-markup correction commit `51c1df7f023166a738833dd3aadc3f6cdda5208a`.
 
-### Header extraction — source-faithful
+### Header extraction — source-faithful / post-correction snapshot
 
 ```text
 CORE FRONTIER — Placement helpers
@@ -81,7 +82,7 @@ CORE FRONTIER — Placement helpers
 РОЛЬ: выбор клетки, проверка placement, установка tower object.
 СЕМАНТИКА: текущая реализация работает с tower placement, но boundary относится к placement lifecycle.
 СТАТУС: placement является foundation для future placeable objects, но generic object system НЕ реализован.
-ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
+ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), confirmBuild(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
 НЕ ВЛАДЕЕТ: object registry, selected object actions, tower combat, UI panels, render overlay, update loop.
 ЧИТАЕТ: uiState, towerTypes, resources, power, towers, map, roadTiles, base, TILE_SIZE
 ИЗМЕНЯЕТ: uiState.pendingBuildTile, uiState.selectedTower, uiState.selectedMode, resources, power.used, towers
@@ -129,17 +130,17 @@ POWER / RESOURCE CHECKS
 
 ### Verification block
 
-source_read_status: fully read.
+source_read_status: re-read after source-markup correction.
 
-header_matches_code: partial.
+header_matches_code: yes.
 
 section_list_matches_code: yes.
 
-function_list_matches_code: partial.
+function_list_matches_code: yes.
 
 missing_from_header:
 
-- `confirmBuild()` exists in code and section flow but is absent from top `ВЛАДЕЕТ` list.
+- none detected after `confirmBuild()` ownership correction.
 
 header_claims_not_confirmed:
 
@@ -151,18 +152,16 @@ code_confirms:
 - file owns tower placement lifecycle;
 - file remains tower-specific while boundary language points toward future placeable objects;
 - `validateBuildTile()` is the main placement validation source;
-- `confirmBuild()` calls `placeTower()` and is operationally part of build/placement flow;
+- `confirmBuild()` calls `placeTower()` and is now visible in the top `ВЛАДЕЕТ` list;
 - build mode intentionally stays active after placement;
 - `canvas_world.js` can read placement validation for overlay feedback, but render overlay is not owned here.
 
 code_contradicts:
 
-- no direct contradiction in behavior;
-- ownership list is incomplete because `confirmBuild()` is omitted.
+- none detected.
 
 needs_review:
 
-- source header correction for `confirmBuild()` ownership visibility;
 - generic placeable-object migration;
 - build-flow changes;
 - validation semantics changes;
@@ -170,7 +169,7 @@ needs_review:
 - power/resource mutation changes;
 - tower object creation changes.
 
-confidence: high for source honesty; medium/high for current boundary; correction needed for ownership completeness.
+confidence: high for source honesty; medium/high for current boundary; ownership visibility correction completed.
 
 ### Cognition notes
 
@@ -180,7 +179,7 @@ implicit_contracts:
 
 - build flow depends on `uiState.selectedMode`, `uiState.pendingBuildTile`, `resources`, `power`, `towers`;
 - `validateBuildTile()` is central placement authority;
-- `confirmBuild()` is an important placement confirmation bridge;
+- `confirmBuild()` is an important placement confirmation bridge and now visible in top ownership markup;
 - `canvas_world.js` reads placement validation result for overlay feedback;
 - build mode intentionally remains active after placement for fast mobile building flow;
 - current implementation creates tower objects, not generic placeable objects.
@@ -190,7 +189,7 @@ hallucination_risks:
 - do not infer generic object system;
 - do not treat placement lifecycle as already generic;
 - do not assign render overlay ownership to placement file;
-- do not hide `confirmBuild()` ownership omission.
+- do not hide future generic-object pressure behind current tower-specific implementation.
 
 future_map_relevance: essential for placement/build-flow cognition.
 
@@ -311,22 +310,19 @@ future_map_relevance: important for selected-object action boundary and future g
 
 Correction candidate status:
 
-- direct behavior contradiction: no;
-- ownership visibility incompleteness: yes;
-- `confirmBuild()` exists in code but is missing from top `ВЛАДЕЕТ` list.
+- source-markup correction applied;
+- discovery snapshot re-checked and synchronized after correction;
+- no direct contradiction remains;
+- `confirmBuild()` is now represented in the top source header and in this discovery extraction.
 
 Correction class:
 
-- incomplete ownership visibility.
+- previously incomplete ownership visibility;
+- `confirmBuild()` ownership visibility correction completed.
 
-Recommended source-markup correction:
+Remaining correction candidate:
 
-- add `confirmBuild()` to top `ВЛАДЕЕТ` list.
-
-Correction urgency:
-
-- recommended before using this file as stable extraction source for future repository_map;
-- does not require runtime logic mutation.
+- none currently active for Batch 02 `js/systems/systems_placement.js`.
 
 ---
 
@@ -361,7 +357,8 @@ Extraction status:
 - source-faithful extraction completed;
 - verification blocks added;
 - mismatch/correction candidates recorded;
-- source JS not mutated.
+- `js/systems/systems_placement.js` source correction applied;
+- Batch 02 discovery re-check/update completed after source correction.
 
 Integrated extraction types:
 
@@ -383,8 +380,7 @@ Integrated extraction types:
 
 Next safe direction:
 
-- perform bounded source-markup correction for `js/systems/systems_placement.js` if explicitly requested;
-- then re-check/update this Batch 02 discovery snapshot;
-- only after that continue Batch 03 extraction.
+- Batch 02 is stable enough to proceed to Batch 03 extraction;
+- continue with `docs/project/architecture/repository_map_discovery_03_ui_render_control.md` only after explicit instruction.
 
 Do not repeat Batch 02 unless repository drift or visibility uncertainty appears.
