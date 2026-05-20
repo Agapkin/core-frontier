@@ -1,13 +1,13 @@
 // CORE FRONTIER — Game Runtime Orchestration
 // КАРТА ФАЙЛА ДЛЯ AI
 // ФАЙЛ: js/game.js
-// РОЛЬ: runtime bootstrap, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
+// РОЛЬ: runtime bootstrap, runtime init, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
 // СТАТУС: sensitive runtime orchestration file; game engine architecture/input framework/scene manager/ECS НЕ реализованы.
-// ВЛАДЕЕТ: resizeCanvas(), input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
+// ВЛАДЕЕТ: resizeCanvas(), initial DOM/UI/power/bootstrap calls, input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
 // НЕ ВЛАДЕЕТ: placement validation, tower placement logic, selected object actions, enemy movement internals, tower combat internals, wave generation internals, UI panel rendering internals, entity/world drawing internals.
 // ЧИТАЕТ: canvas, window, camera, uiState, uiLayout, gameState, gameSpeed, map, TILE_SIZE.
 // ИЗМЕНЯЕТ: canvas size, camera drag/pinch/zoom/x/y state, uiState.hoveredTile, uiState.selectedTower.
-// ИСПОЛЬЗУЕТСЯ В: browser runtime startup, canvas event loop, requestAnimationFrame loop.
+// ИСПОЛЬЗУЕТСЯ В: browser runtime startup, initial DOM/UI bootstrap, canvas event loop, requestAnimationFrame loop.
 // RUNTIME-КОНТРАКТ: файл должен загружаться после data/state/systems/ui layers and starts final gameLoop().
 // НЕЛЬЗЯ: менять event binding order, input behavior, camera math, tap routing, update/render order или gameLoop sequence без отдельного inspection pass.
 
