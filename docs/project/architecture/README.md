@@ -53,6 +53,27 @@ Stage 03.4A mutation classes planning document created:
 
 - docs/project/stage_03_4A_mutation_classes.md
 
+Stage 03.4B repository archetypes and repository cognition preparation document created:
+
+- docs/project/stage_03_4B_repository_archetypes.md
+
+Stage 03.4B formalizes:
+
+- repository archetypes;
+- repository layer distinctions;
+- runtime truth vs interpretation layer distinction;
+- authority-sensitive and synchronization-sensitive file awareness;
+- extraction-first repository cognition preparation;
+- skeletal repository_map.yml planning discipline.
+
+Stage 03.4B does NOT implement:
+
+- repository_map.yml;
+- parser/scanner systems;
+- governance engine;
+- automation rollout;
+- runtime rewrite.
+
 ---
 
 ## Карта архитектурных документов
@@ -75,6 +96,8 @@ synchronization_protocols.md хранит reusable synchronization playbooks.
 
 Protocol 01 formalizes confirmed new_stage_file synchronization behavior.
 
+Protocol 01 Section 14 now supports segmented connector-safe synchronization execution for mandatory anchors.
+
 ---
 
 ## Общий вывод
@@ -85,13 +108,23 @@ CORE FRONTIER развивается как:
 - repository-aware codebase;
 - retrieval-aware codebase;
 - AI-navigation-aware codebase;
-- impact-awareness planning codebase.
+- impact-awareness planning codebase;
+- repository-cognition preparation codebase.
 
 Главный архитектурный принцип:
 
 сначала visibility,
 потом navigation,
 потом impact awareness,
+потом repository cognition preparation,
 потом contracts,
 потом controlled modularization,
 и только затем runtime evolution.
+
+Repository cognition remains:
+
+- bounded;
+- extraction-first;
+- runtime-truth-driven;
+- interpretation-oriented;
+- non-authoritative over runtime.
