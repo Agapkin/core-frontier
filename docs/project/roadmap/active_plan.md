@@ -23,7 +23,7 @@
 
 ## Текущий статус проекта
 
-Текущий статус после Stage 03.4 / 03.4A visibility synchronization:
+Текущий статус после Stage 03.4 / 03.4A / 03.4B visibility synchronization:
 
 - Stage 03.1 completed and closed;
 - Stage 03.2 governance/navigation stabilization completed as operational foundation;
@@ -31,10 +31,11 @@
 - Stage 03.3B code/surface/docs/navigation stabilization completed;
 - Stage 03.3B remains FROZEN / STABILIZED baseline;
 - current active planning stage = Stage 03.4;
-- current phase = planning/discovery: repository impact awareness and mutation-class planning;
+- current phase = planning/discovery: repository impact awareness, mutation-class planning and repository cognition preparation;
 - Stage 03.4 planning/discovery phase is ACTIVE;
 - Stage 03.4 execution/runtime evolution phase is NOT STARTED;
 - Stage 03.4A mutation classes and synchronization radius planning artifact exists;
+- Stage 03.4B repository archetypes and repository cognition preparation artifact exists;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
@@ -79,7 +80,9 @@ Stage 03.4 сейчас активен только как planning/discovery ph
 - runtime impact vs synchronization impact;
 - runtime coupling vs synchronization coupling;
 - safe local mutation vs architecture mutation;
-- future repository_map.yml planning.
+- repository archetype extraction;
+- repository cognition preparation;
+- future skeletal repository_map.yml planning discipline.
 
 Stage 03.4 НЕ запускает:
 
@@ -122,6 +125,34 @@ Stage 03.4A НЕ является:
 
 ---
 
+## Stage 03.4B visibility
+
+Stage 03.4B repository archetypes and repository cognition preparation artifact существует:
+
+    docs/project/stage_03_4B_repository_archetypes.md
+
+Назначение Stage 03.4B:
+
+- formalize repository archetypes;
+- formalize repository layer distinctions;
+- stabilize runtime truth vs interpretation distinctions;
+- prepare extraction-first repository cognition foundation;
+- prepare future skeletal repository_map planning discipline.
+
+Stage 03.4B является planning/discovery artifact.
+
+Stage 03.4B НЕ является:
+
+- repository_map.yml implementation;
+- parser/scanner implementation;
+- governance engine;
+- automation rollout;
+- runtime rewrite;
+- ECS/framework stage;
+- synchronization automation stage.
+
+---
+
 ## Почему runtime development был paused
 
 Runtime development был временно остановлен не из-за gameplay failure.
@@ -142,9 +173,9 @@ Runtime development был временно остановлен не из-за 
 
 Stage 03.3 / 03.3B снизили этот риск через runtime readability stabilization, bounded extraction workflow и synchronized navigation baseline.
 
-Stage 03.4 / 03.4A добавляют следующий planning layer:
+Stage 03.4 / 03.4A / 03.4B добавляют следующий planning layer:
 
-repository impact awareness и synchronization radius discipline.
+repository impact awareness, synchronization radius discipline, mutation-class discipline и repository cognition preparation.
 
 ---
 
@@ -226,7 +257,7 @@ Stage 03.3B завершил code/surface/docs/navigation synchronization пос
 
 ---
 
-### Stage 03.4 / 03.4A
+### Stage 03.4 / 03.4A / 03.4B
 
 Stage 03.4 planning/discovery phase active.
 
@@ -234,9 +265,9 @@ Stage 03.4 planning/discovery phase active.
 
 - docs/project/stage_03_4.md exists;
 - docs/project/stage_03_4A_mutation_classes.md exists;
-- AI YAML navigation reflects Stage 03.4 planning visibility;
-- roadmap README reflects Stage 03.4 / 03.4A visibility;
-- docs_structure reflects Stage 03.4 / 03.4A visibility;
+- docs/project/stage_03_4B_repository_archetypes.md exists;
+- AI YAML navigation reflects Stage 03.4B planning visibility;
+- roadmap README reflects Stage 03.4 / 03.4A / 03.4B visibility;
 - repository_map.yml remains deferred/not implemented;
 - automation/parser/governance rollout not started;
 - Stage 03.4 execution/runtime evolution not started.
@@ -256,7 +287,9 @@ Stage 03.4 planning/discovery phase active.
 - visibility uncertainty должна быть stop condition;
 - giant markdown workflow больше unsafe;
 - structural documentation mutations create synchronization pressure;
-- not every mutation should update every repository layer.
+- not every mutation should update every repository layer;
+- runtime coupling and synchronization coupling are different;
+- repository cognition must remain runtime-truth-driven and extraction-first.
 
 ---
 
@@ -267,11 +300,12 @@ Stage 03.4 planning/discovery phase active.
 1. сохранить Stage 03.3B frozen baseline;
 2. вести Stage 03.4 как planning/discovery phase;
 3. использовать Stage 03.4A для mutation classes и synchronization radius planning;
-4. проверять structural mutations перед synchronization;
-5. применять только mandatory bounded synchronization radius;
-6. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
-7. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
-8. сохранить runtime/code topology без изменений.
+4. использовать Stage 03.4B для repository archetype extraction и repository cognition preparation;
+5. проверять structural mutations перед synchronization;
+6. применять только mandatory bounded synchronization radius;
+7. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
+8. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
+9. сохранить runtime/code topology без изменений.
 
 ---
 
@@ -370,15 +404,17 @@ Runtime evolution больше не должен происходить чере
 Главная задача текущего active plan:
 
 сохранить Stage 03.3B frozen baseline
-и вести Stage 03.4 как planning/discovery phase для repository impact awareness.
+и вести Stage 03.4 как planning/discovery phase для repository impact awareness, synchronization radius discipline and repository cognition preparation.
 
 Подтверждено:
 
-- runtime/code/surface/docs/navigation/workflow layers synchronized;
 - runtime/code/surface foundation стабилизирован;
+- AI navigation synchronized for Stage 03.4B visibility;
+- roadmap README synchronized for Stage 03.4B visibility;
 - Stage 03.4 planning/discovery phase active;
 - Stage 03.4 execution/runtime evolution not started;
 - Stage 03.4A mutation classes planning artifact exists;
+- Stage 03.4B repository archetypes planning artifact exists;
 - repository_map.yml remains deferred/not implemented.
 
 Текущий приоритет:
@@ -386,6 +422,7 @@ Runtime evolution больше не должен происходить чере
 - сохранять repository truth без fake architecture claims;
 - сохранять bounded synchronization discipline;
 - clarify synchronization radius before creating repository_map.yml;
+- keep repository cognition extraction-first and interpretation-oriented;
 - defer future runtime implementation work до explicit future execution decision.
 
 ---
@@ -432,15 +469,17 @@ CORE FRONTIER перешёл:
 - inspection-first development;
 - compatibility-safe runtime evolution;
 - synchronized runtime/code/surface/navigation baseline;
-- impact-aware planning discipline.
+- impact-aware planning discipline;
+- repository cognition preparation discipline.
 
 Current active planning stage:
 
 Stage 03.4 — Repository Impact Awareness Planning.
 
-Current planning artifact:
+Current planning artifacts:
 
-Stage 03.4A — Mutation Classes and Synchronization Radius Planning.
+- Stage 03.4A — Mutation Classes and Synchronization Radius Planning;
+- Stage 03.4B — Repository Archetypes and Repository Cognition Preparation.
 
 Current phase:
 
