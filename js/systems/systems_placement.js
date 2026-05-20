@@ -4,7 +4,7 @@
 // РОЛЬ: выбор клетки, проверка placement, установка tower object.
 // СЕМАНТИКА: текущая реализация работает с tower placement, но boundary относится к placement lifecycle.
 // СТАТУС: placement является foundation для future placeable objects, но generic object system НЕ реализован.
-// ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
+// ВЛАДЕЕТ: selectBuildTile(), getBuildPanelText(), confirmBuild(), placeTower(), validateBuildTile(), getTowerAtTile(), isRoadTile(), isBaseTile(), isTowerTile(), hasCost(), payCost()
 // НЕ ВЛАДЕЕТ: object registry, selected object actions, tower combat, UI panels, render overlay, update loop.
 // ЧИТАЕТ: uiState, towerTypes, resources, power, towers, map, roadTiles, base, TILE_SIZE
 // ИЗМЕНЯЕТ: uiState.pendingBuildTile, uiState.selectedTower, uiState.selectedMode, resources, power.used, towers
