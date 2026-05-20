@@ -49,7 +49,8 @@ Status:
 - corrected toward source-faithful markup;
 - verification blocks added;
 - correction candidates identified;
-- source JS not mutated.
+- source JS correction applied for `js/game.js` header visibility;
+- discovery snapshot re-checked after source correction.
 
 Source files:
 
@@ -272,21 +273,21 @@ future_map_relevance: essential.
 
 File: `js/game.js`
 
-source_read_status: fully re-read for correction pass.
+source_read_status: re-read after source-markup correction commit `d13cb134090e96af20adcdcd91a9732024621314`.
 
-### Header extraction — source-faithful
+### Header extraction — source-faithful / post-correction snapshot
 
 ```text
 CORE FRONTIER — Game Runtime Orchestration
 КАРТА ФАЙЛА ДЛЯ AI
 ФАЙЛ: js/game.js
-РОЛЬ: runtime bootstrap, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
+РОЛЬ: runtime bootstrap, runtime init, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
 СТАТУС: sensitive runtime orchestration file; game engine architecture/input framework/scene manager/ECS НЕ реализованы.
-ВЛАДЕЕТ: resizeCanvas(), input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
+ВЛАДЕЕТ: resizeCanvas(), initial DOM/UI/power/bootstrap calls, input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
 НЕ ВЛАДЕЕТ: placement validation, tower placement logic, selected object actions, enemy movement internals, tower combat internals, wave generation internals, UI panel rendering internals, entity/world drawing internals.
 ЧИТАЕТ: canvas, window, camera, uiState, uiLayout, gameState, gameSpeed, map, TILE_SIZE.
 ИЗМЕНЯЕТ: canvas size, camera drag/pinch/zoom/x/y state, uiState.hoveredTile, uiState.selectedTower.
-ИСПОЛЬЗУЕТСЯ В: browser runtime startup, canvas event loop, requestAnimationFrame loop.
+ИСПОЛЬЗУЕТСЯ В: browser runtime startup, initial DOM/UI bootstrap, canvas event loop, requestAnimationFrame loop.
 RUNTIME-КОНТРАКТ: файл должен загружаться после data/state/systems/ui layers and starts final gameLoop().
 НЕЛЬЗЯ: менять event binding order, input behavior, camera math, tap routing, update/render order или gameLoop sequence без отдельного inspection pass.
 ```
@@ -489,7 +490,7 @@ NEXT FRAME REQUEST
 
 ### Verification block
 
-source_read_status: fully re-read.
+source_read_status: re-read after source-markup correction.
 
 header_matches_code: yes.
 
@@ -499,8 +500,8 @@ function_list_matches_code: yes.
 
 missing_from_header:
 
-- `RUNTIME INIT` section has no named function ownership but is real runtime startup sequence;
-- event listener bindings are correctly declared as owned, not individual function-only ownership.
+- no active missing top-header item remains for runtime init visibility after source correction;
+- event listener bindings are correctly declared as behavioral ownership, not individual function-only ownership.
 
 header_claims_not_confirmed:
 
@@ -508,7 +509,8 @@ header_claims_not_confirmed:
 
 code_confirms:
 
-- file owns runtime bootstrap, input routing, camera helpers, coordinate mapping and `gameLoop()` sequencing;
+- file owns runtime bootstrap, runtime init, input routing, camera helpers, coordinate mapping and `gameLoop()` sequencing;
+- initial DOM/UI/power/bootstrap calls are now visible in the source header and discovery snapshot;
 - no input framework, scene manager, game engine or ECS is implemented;
 - placement validation, selected object actions, enemy movement internals, tower combat internals and render internals are external to this file;
 - update/render order is fixed inside `gameLoop()`.
@@ -537,6 +539,7 @@ implicit_contracts:
 
 - file loads after data/state/systems/ui layers;
 - `resizeCanvas()` can rebuild UI;
+- runtime init calls setup DOM/UI/power/bootstrap before input/loop continuation;
 - pointer/touch/wheel bindings route into camera and tap systems;
 - coordinate helpers are shared by input and rendering;
 - `handleTap()` bridges into placement and selected object actions without owning them;
@@ -580,19 +583,19 @@ Correction class:
 
 Correction candidate status:
 
-- no direct contradiction;
-- header is honest;
-- `RUNTIME INIT` is operationally real but not represented as named ownership function.
-
-Possible future source-markup correction:
-
-- optional/low urgency;
-- could clarify bootstrap/init responsibility if future extraction depends on it.
+- source-markup correction applied;
+- discovery snapshot re-checked and synchronized after correction;
+- no direct contradiction remains;
+- runtime init visibility is now represented in the top source header and in this discovery extraction.
 
 Correction class:
 
-- honest-but-compact header;
-- implicit runtime contract visibility.
+- previously honest-but-compact header;
+- runtime init / bootstrap visibility correction completed.
+
+Remaining correction candidate:
+
+- none currently active for Batch 01 `js/game.js`.
 
 ---
 
@@ -606,7 +609,9 @@ Completed corrected extraction batch:
 
 Correction status:
 
-- Batch A wording corrected from normalized/paraphrased extraction toward source-faithful markup extraction.
+- Batch A wording corrected from normalized/paraphrased extraction toward source-faithful markup extraction;
+- `js/game.js` source header correction applied;
+- Batch 01 discovery re-check/update completed after source correction.
 
 Integrated extraction types:
 
