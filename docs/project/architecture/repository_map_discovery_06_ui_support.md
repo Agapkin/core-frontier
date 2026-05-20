@@ -328,6 +328,8 @@ code_confirms:
 - `setupInitialDom()` creates/reset topbar DOM chips;
 - style factory functions return responsive style maps and do not own panel lifecycle;
 - file reads/mutates `uiLayout` but does not own foundation state shape;
+- after `layout.js` load, later runtime calls resolve to the layout.js browser-global `updateResponsiveLayout()` version rather than the earlier state.js version;
+- Batch 06 qualifies Batch 04 interpretation by describing effective runtime responsive recalculation after UI layer load;
 - layout engine / responsive framework / UI framework are not implemented.
 
 code_contradicts:
@@ -337,6 +339,9 @@ code_contradicts:
 needs_review:
 
 - duplicate-name / authority ambiguity with `updateResponsiveLayout()` in `js/state.js`;
+- extraction/split residue candidate around responsive recalculation ownership;
+- browser-global shadowing/load-order semantics;
+- possible runtime bug risk from duplicate recalculation path;
 - breakpoint changes;
 - `uiLayout` shape changes;
 - compact/mobile logic changes;
@@ -366,16 +371,19 @@ runtime_coupling:
 
 state_authority_distinction:
 
-- `state.js` remains foundation authority for `uiLayout` state shape;
+- `state.js` remains foundation authority for `uiLayout` state shape and bootstrap/init ownership;
+- `layout.js` captures effective runtime responsive recalculation ownership after UI layer load;
 - `layout.js` mutates responsive/layout fields as UI support behavior;
 - mutation of `uiLayout` does not make `layout.js` owner of foundation state shape.
 
 needs_review_zone:
 
 - both `state.js` and `layout.js` declare `updateResponsiveLayout()`;
-- current runtime load order means later declaration may shadow earlier browser-global function name;
-- this is not classified as source-header contradiction in this pass because actual runtime behavior requires deeper execution-order review;
-- preserve as explicit needs-review zone before any layout/state refactor.
+- current runtime load order means later declaration shadows earlier browser-global function name;
+- `game.js` resize flow calls `updateResponsiveLayout()` and then `updateUILayout()`, while `updateUILayout()` also delegates to `updateResponsiveLayout()`;
+- preserve as extraction/split residue candidate, runtime authority ambiguity, future refactor candidate, possible runtime bug risk and needs further review;
+- Batch 04 remains accurate for foundation/init ownership;
+- no immediate source-header correction is required.
 
 helper_visibility_significance:
 
@@ -388,7 +396,8 @@ hallucination_risks:
 - do not infer responsive framework;
 - do not treat style factories as panel lifecycle ownership;
 - do not treat `uiLayout` mutation as ownership of foundation state shape;
-- do not silently normalize duplicate `updateResponsiveLayout()` function name.
+- do not silently normalize duplicate `updateResponsiveLayout()` function name;
+- do not interpret Batch 06 as full ownership transfer of `uiLayout` foundation authority away from `state.js`.
 
 future_map_relevance: important support layer with state-coupled layout behavior and explicit needs-review zone.
 
@@ -592,6 +601,7 @@ Relationship to `game.js`:
 
 - notifications participate in update/render feedback flow;
 - layout and helpers support UI bootstrap/rebuild paths;
+- `game.js` resize flow currently exposes duplicate `updateResponsiveLayout()` call path through `updateUILayout()` delegation;
 - no Batch 06 file owns game loop or input/camera orchestration.
 
 ---
@@ -628,7 +638,11 @@ Correction candidate status:
 Correction class:
 
 - none currently active;
-- needs-review for duplicate browser-global helper name / load-order semantics.
+- extraction/split residue candidate;
+- runtime authority ambiguity;
+- future refactor candidate;
+- possible runtime bug risk;
+- needs-review for duplicate browser-global helper name / shadowing-load-order semantics.
 
 Recommended source-markup correction:
 
@@ -669,6 +683,7 @@ Extraction status:
 - verification blocks added;
 - UI support relationship notes added;
 - correction candidates classified;
+- duplicate `updateResponsiveLayout()` interpretation synchronized with Batch 04 audit clarification;
 - no source JS mutation performed.
 
 Integrated extraction types:
