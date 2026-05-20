@@ -304,6 +304,66 @@ Verification pass:
 
 ---
 
+## Bounded continuation discipline
+
+Если bounded synchronization или mutation chain не может безопасно завершиться в одном execution из-за connector pressure, tool limitation, visibility limit, large-file pressure, cumulative mutation pressure, safety interruption или bounded execution constraint, pass может продолжаться через bounded continuation phases.
+
+Continuation phase НЕ является restart.
+
+Continuation phase должна:
+
+- продолжать только remaining scope;
+- не повторять уже закрытые phases или anchors;
+- сохранять исходный bounded scope;
+- сохранять repository truth;
+- сохранять verification discipline;
+- не превращаться в broad cleanup или governance expansion.
+
+В каждом continuation report нужно clearly фиксировать:
+
+- что уже completed;
+- что осталось mandatory или in-scope;
+- какие files changed;
+- какие files inspected but unchanged;
+- какие commits относятся к текущей chain;
+- есть ли remaining stale anchors или deferred areas;
+- текущий synchronization/mutation closure status.
+
+Короткие continuation commands допустимы и предпочтительны после того, как pass context already established:
+
+- CONTINUE CURRENT PASS;
+- CONTINUE SYNCHRONIZATION;
+- CONTINUE CURRENT PROTOCOL.
+
+User should not need to resend the full original operational prompt for every continuation phase.
+
+GPT branch must use the previous pass report as continuation state, unless repository drift or visibility uncertainty requires re-inspection.
+
+Final closure report must summarize:
+
+- all continuation phases;
+- all commits;
+- final closure state;
+- remaining deferred areas, if any;
+- unrelated mutation check.
+
+Bounded continuation is:
+
+- execution discipline;
+- connector-safe workflow behavior;
+- verification-preserving continuation.
+
+Bounded continuation is NOT:
+
+- autonomous continuation;
+- queue system;
+- retry engine;
+- orchestration daemon;
+- governance expansion;
+- background execution promise.
+
+---
+
 ## Safe future workflow
 
 Рекомендуемый workflow:
@@ -465,7 +525,7 @@ Do not formalize yet:
 - contracts governance;
 - logs workflow;
 - automation governance;
-- comments-only rollout governance;
+- comments-only rollout discipline;
 - runtime extraction governance;
 - modularization governance.
 
