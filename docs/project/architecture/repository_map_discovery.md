@@ -443,6 +443,7 @@ mixed_responsibility:
 boundary_confidence:
 extraction_origin:
 verification_flag:
+implicit_contracts:
 map_relevance:
 notes:
 ```
@@ -471,16 +472,411 @@ Still deferred / not implemented:
 
 ---
 
-## 13. Operational conclusion
+## 13. Compact runtime/header discovery blocks
 
-Repository cognition accumulation appears operationally justified.
+### Runtime orchestration pressure
 
-But discovery accumulation must remain:
+#### `js/systems/systems.js`
 
-- bounded;
-- verification-oriented;
-- runtime-truth-driven;
-- uncertainty-aware;
-- non-authoritative.
+File: `js/systems/systems.js`
 
-This file intentionally accumulates evolving findings separately from stable planning philosophy.
+Primary archetype: lifecycle-heavy runtime systems file.
+
+Secondary archetypes:
+
+- runtime command bridge;
+- wave lifecycle coordinator;
+- checkpoint/restart/game-over lifecycle owner;
+- enemy update flow;
+- reward flow;
+- tower combat update flow.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; file is not pure orchestration shell.
+
+Mixed responsibility: very high.
+
+Boundary confidence: medium.
+
+Extraction origin: post-extraction remainder after logical bounded extractions; still lifecycle-heavy and organic-growth influenced.
+
+Implicit contracts:
+
+- `startWave()` depends on extracted wave manager helpers;
+- checkpoint shape mirrors current global runtime state;
+- `updateEnemies()` and `updateTowers()` are called by `gameLoop()`;
+- file must load after extracted systems helpers and before UI/game.
+
+Verification flags:
+
+- required before extraction/refactor;
+- high risk for shared state mutation;
+- high risk for runtime lifecycle drift.
+
+Hallucination risk:
+
+Future map must not label this file as clean orchestration. It is a dense runtime lifecycle/mutation zone.
+
+Notes:
+
+Future repository_map should preserve both primary role and secondary lifecycle responsibilities.
+
+---
+
+#### `js/game.js`
+
+File: `js/game.js`
+
+Primary archetype: runtime orchestration and browser loop file.
+
+Secondary archetypes:
+
+- input router;
+- camera/zoom controller;
+- coordinate transform provider;
+- tap routing dispatcher;
+- update/render sequencing owner.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code and runtime_structure.md.
+
+Mixed responsibility: high, but intentionally centralized around runtime orchestration.
+
+Boundary confidence: medium/high.
+
+Extraction origin: organic orchestration hub; not an extracted helper file.
+
+Implicit contracts:
+
+- final script in load order;
+- owns `gameLoop()` sequence;
+- update order precedes render order;
+- tap routing depends on placement and selected-object systems;
+- camera helpers feed render coordinate transforms.
+
+Verification flags:
+
+- required before render/update sequence changes;
+- required before input/camera behavior changes;
+- required before any game-loop extraction.
+
+Hallucination risk:
+
+Future map must not split input, camera and loop into separate clean subsystems unless actual code is refactored later.
+
+Notes:
+
+`game.js` is runtime-critical and relationship-rich, but future map should capture contracts, not generate a dependency graph.
+
+---
+
+### Remaining extracted systems
+
+#### `js/systems/systems_placement.js`
+
+File: `js/systems/systems_placement.js`
+
+Primary archetype: placement lifecycle helper file.
+
+Secondary archetypes:
+
+- build tile selection;
+- placement validation;
+- tower object creation;
+- cost/payment helper layer;
+- tile occupancy helper layer.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; current implementation is tower-specific despite future placeable-object pressure.
+
+Mixed responsibility: medium.
+
+Boundary confidence: medium/high.
+
+Extraction origin: logical lifecycle-based extraction with future-generic pressure.
+
+Implicit contracts:
+
+- build flow depends on `uiState.selectedMode`, `uiState.pendingBuildTile`, `resources`, `power`, `towers`;
+- `validateBuildTile()` is central placement authority;
+- render overlay calls validation for visual feedback;
+- `confirmBuild()` is owned here although not listed in the original header ownership line.
+
+Verification flags:
+
+- header mostly reliable but ownership list may be slightly incomplete because `confirmBuild()` is present;
+- required before generic object/placeable migration;
+- required before build-flow changes.
+
+Hallucination risk:
+
+Future map must not treat “placement lifecycle” as generic object system. It is still tower placement.
+
+Notes:
+
+This file is a good candidate for future map entry with explicit `future_generic_pressure` note.
+
+---
+
+#### `js/systems/systems_selected_object_actions.js`
+
+File: `js/systems/systems_selected_object_actions.js`
+
+Primary archetype: selected object actions helper file.
+
+Secondary archetypes:
+
+- tower selection;
+- tower selling;
+- selected-state cleanup;
+- resource/power mutation bridge.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; boundary is intentionally future-oriented while implementation remains tower-specific.
+
+Mixed responsibility: low/medium.
+
+Boundary confidence: medium/high.
+
+Extraction origin: logical bounded extraction around selected-object actions.
+
+Implicit contracts:
+
+- selection clears build mode and pending tile;
+- selling mutates resources, power and towers;
+- functions are called from game input and UI controls.
+
+Verification flags:
+
+- required before renaming tower-specific functions;
+- required before generic selected-object migration.
+
+Hallucination risk:
+
+Future map must not claim generic selected object architecture exists.
+
+Notes:
+
+A useful map should encode current tower-specific truth plus future selected-object pressure separately.
+
+---
+
+### UI/runtime coordination sample
+
+#### `js/ui/controls.js`
+
+File: `js/ui/controls.js`
+
+Primary archetype: UI command/control bridge.
+
+Secondary archetypes:
+
+- dynamic UI rebuild layer;
+- gameplay command button creator;
+- speed control bridge;
+- zoom control bridge;
+- selected object action panel creator;
+- build confirm panel creator.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; file creates DOM and wires callbacks into runtime systems.
+
+Mixed responsibility: high.
+
+Boundary confidence: medium.
+
+Extraction origin: organic UI/runtime bridge with semantic grouping.
+
+Implicit contracts:
+
+- must load after systems files and before panels/game;
+- `createDynamicUI()` rebuilds multiple persistent panels;
+- buttons dispatch directly into gameplay/runtime functions;
+- UI rebuild removes and recreates DOM panels by fixed ids.
+
+Verification flags:
+
+- required before callback changes;
+- required before generic command routing;
+- required before panel lifecycle rewrite.
+
+Hallucination risk:
+
+Future map must not label this as pure UI rendering. It is a command bridge between DOM and runtime systems.
+
+Notes:
+
+High synchronization relevance because it binds UI shape to gameplay command names.
+
+---
+
+#### `js/ui/canvas_world.js`
+
+File: `js/ui/canvas_world.js`
+
+Primary archetype: world render helper layer.
+
+Secondary archetypes:
+
+- camera-aware primitive renderer;
+- terrain/grid renderer;
+- road/path/base renderer;
+- selection/range overlay renderer;
+- placement preview renderer.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; file is render-focused but calls placement validation for overlay feedback.
+
+Mixed responsibility: medium.
+
+Boundary confidence: medium/high.
+
+Extraction origin: logical render-layer grouping with placement-overlay coupling.
+
+Implicit contracts:
+
+- depends on `worldToScreen()` and `scaled()` from `game.js`;
+- placement overlay depends on `validateBuildTile()`;
+- render order controlled by `gameLoop()`;
+- does not own placement rules despite reading validation result.
+
+Verification flags:
+
+- required before render order changes;
+- required before placement validation semantics change;
+- required before camera math changes.
+
+Hallucination risk:
+
+Future map must not treat render overlay as placement lifecycle ownership.
+
+Notes:
+
+This is mostly clean render layer with one important runtime validation relationship.
+
+---
+
+#### `js/ui/canvas_entities.js`
+
+File: `js/ui/canvas_entities.js`
+
+Primary archetype: entity render layer.
+
+Secondary archetypes:
+
+- tower renderer;
+- enemy renderer;
+- selected tower highlight renderer;
+- target line visualizer;
+- HP bar renderer.
+
+Header consistency: high.
+
+Runtime truth check: header matches actual code; file reads entity state and draws visualization only.
+
+Mixed responsibility: low/medium.
+
+Boundary confidence: high.
+
+Extraction origin: logical render-layer grouping.
+
+Implicit contracts:
+
+- depends on `drawRectWorld()`, `drawTextWorld()`, `worldToScreen()`, `scaled()`;
+- target lines visualize `tower.target` but do not own targeting;
+- HP bars visualize `enemy.hp` but do not own damage/death flow.
+
+Verification flags:
+
+- required before combat visual semantics changes;
+- required before generic entity renderer migration.
+
+Hallucination risk:
+
+Future map must not infer ECS/entity pipeline from the filename or render role.
+
+Notes:
+
+This is one of the cleaner render files, but still tied to tower/enemy-specific shapes.
+
+---
+
+## 14. Updated mixed responsibility findings
+
+Current highest mixed-responsibility files:
+
+- `js/systems/systems.js` — very high;
+- `js/ui/panels.js` — very high;
+- `js/game.js` — high but intentional orchestration hub;
+- `js/ui/controls.js` — high command-bridge mixing;
+- `js/state.js` — medium/high central shared state.
+
+Moderate mixed-responsibility files:
+
+- `js/systems/systems_placement.js`;
+- `js/ui/canvas_world.js`.
+
+Lower mixed-responsibility files:
+
+- `js/systems/systems_wave_manager.js`;
+- `js/systems/systems_selected_object_actions.js`;
+- `js/ui/canvas_entities.js`.
+
+Important:
+
+Low mixed responsibility does not mean low runtime impact.
+
+---
+
+## 15. Updated implicit contract observations
+
+Current implicit contracts that future repository_map should preserve as notes, not full dependency graph:
+
+- script order contract;
+- `gameLoop()` update/render sequence;
+- build/placement flow across controls → game → placement → canvas_world → panels;
+- selected object flow across game → selected_object_actions → controls/panels;
+- render helper dependency from canvas_entities to canvas_world helpers;
+- placement overlay reads validation but does not own validation;
+- target lines visualize targeting but do not own targeting;
+- UI controls dispatch directly to runtime command functions.
+
+These are relationship hints.
+
+They are NOT yet repository_map.yml dependencies.
+
+---
+
+## 16. Updated hallucination-risk observations
+
+Additional hallucination risks confirmed:
+
+- `js/ui/controls.js` may look like pure UI but dispatches gameplay/runtime commands;
+- `js/ui/canvas_world.js` may look like pure rendering but reads placement validation;
+- `js/systems/systems_placement.js` may look generic but remains tower-specific;
+- `js/systems/systems_selected_object_actions.js` may look generic but remains tower-specific;
+- `js/game.js` may look like separable subsystems but currently keeps input/camera/loop together;
+- `canvas_entities.js` may look like an entity pipeline but ECS/generic renderer is not implemented.
+
+---
+
+## 17. Updated operational conclusion
+
+Discovery findings are becoming more structured and map-useful.
+
+Headers remain broadly reliable as cognition aids,
+but future repository_map must preserve:
+
+- mixed-responsibility flags;
+- boundary confidence;
+- verification flags;
+- implicit contract notes;
+- future-generic pressure separate from actual implementation truth.
+
+`repository_map.yml` should remain deferred until at least one more bounded sample verifies remaining UI/helpers/layout/notifications and architecture docs interactions.
