@@ -14,6 +14,8 @@ primary_entrypoints:
     - docs/project/stage_03_2_runtime_findings_01.md
   stage_03_4A:
     - docs/project/stage_03_4A_mutation_classes.md
+  stage_03_4B:
+    - docs/project/stage_03_4B_repository_archetypes.md
   synchronization_protocols:
     - docs/project/architecture/synchronization_protocols.md
 
@@ -41,9 +43,11 @@ active_stage_files:
   - docs/project/stage_03_3.md
   - docs/project/stage_03_4.md
   - docs/project/stage_03_4A_mutation_classes.md
+  - docs/project/stage_03_4B_repository_archetypes.md
 
 current_status_markers:
   current_stage: Stage 03.4
   current_phase: planning_discovery_active
   stage_03_4_execution: not_started
   stage_03_4A: mutation_classes_planning_created
+  stage_03_4B: repository_archetypes_and_repository_cognition_preparation_created
