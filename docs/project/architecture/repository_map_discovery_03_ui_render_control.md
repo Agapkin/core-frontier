@@ -53,7 +53,8 @@ Status:
 - extracted;
 - source-faithful markup preserved;
 - verification blocks added;
-- correction candidates identified;
+- controls.js ownership interpretation corrected after cross-file verification;
+- no active source-header correction candidates remain;
 - source JS not mutated.
 
 Source files:
@@ -72,7 +73,7 @@ Cross-verification source:
 
 File: `js/ui/controls.js`
 
-source_read_status: fully read for Batch 03 extraction pass.
+source_read_status: fully read for Batch 03 extraction pass; ownership interpretation corrected after cross-file verification.
 
 ### Header extraction — source-faithful
 
@@ -132,6 +133,15 @@ createBuildConfirmPanel()
 createMenuPanel()
 createGameOverPanel()
 updateTopbarVisibility()
+```
+
+Ownership interpretation:
+
+```text
+createMenuPanel() and createGameOverPanel() are external panel creation functions called by controls.js during dynamic UI rebuild.
+They are not declared by controls.js and are not owned by controls.js.
+Actual ownership is confirmed in js/ui/panels.js.
+This is verified cross-file runtime coupling, not controls.js header omission.
 ```
 
 ---
@@ -312,22 +322,21 @@ cancelBuildMode()
 
 ### Verification block
 
-source_read_status: fully read.
+source_read_status: fully read; cross-file ownership interpretation corrected after panels.js verification.
 
-header_matches_code: partial.
+header_matches_code: yes.
 
-section_list_matches_code: partial.
+section_list_matches_code: yes for controls-owned sections.
 
-function_list_matches_code: partial.
+function_list_matches_code: yes for controls-owned functions.
 
 missing_from_header:
 
-- `createMenuPanel()` is called by `createDynamicUI()` but is absent from top `ВЛАДЕЕТ` list and absent from the visible source section declarations in this file snapshot.
-- `createGameOverPanel()` is called by `createDynamicUI()` but is absent from top `ВЛАДЕЕТ` list and absent from the visible source section declarations in this file snapshot.
+- none detected after cross-file ownership correction.
 
 header_claims_not_confirmed:
 
-- no contradiction detected for listed ownership items;
+- none detected for listed ownership items;
 - command routing architecture remains explicitly non-implemented, which code confirms.
 
 code_confirms:
@@ -335,17 +344,18 @@ code_confirms:
 - file is DOM controls layer and runtime command bridge, not pure UI rendering;
 - `createDynamicUI()` rebuilds runtime DOM controls and active panels;
 - callbacks dispatch directly into gameplay/runtime functions: `buildTower()`, `startWave()`, `sellSelectedTower()`, `confirmBuild()`, `cancelBuildMode()`, `zoomAt()`, `resetZoom()`;
+- `createMenuPanel()` and `createGameOverPanel()` are external panel creation calls owned by `js/ui/panels.js`, not by `controls.js`;
+- not every function call implies ownership;
 - generic input abstraction and command routing architecture are not implemented;
 - selected object action controls remain tower-specific in behavior.
 
 code_contradicts:
 
-- no direct runtime contradiction;
-- ownership/header visibility appears incomplete because menu/game-over panel creation calls are present but not declared in top ownership list.
+- none detected.
 
 needs_review:
 
-- source header correction for `createMenuPanel()` / `createGameOverPanel()` ownership visibility if those functions are defined in this file or intentionally owned through this layer;
+- cross-file runtime coupling between `controls.js` and `panels.js`;
 - command routing changes;
 - callback semantics changes;
 - dynamic UI rebuild lifecycle changes;
@@ -353,7 +363,7 @@ needs_review:
 - build confirm UI changes;
 - generic command routing migration.
 
-confidence: medium/high for role honesty; medium for ownership completeness until menu/game-over panel ownership is verified/corrected.
+confidence: high for role honesty; medium/high for ownership boundary after cross-file verification.
 
 ### Cognition notes
 
@@ -363,21 +373,29 @@ implicit_contracts:
 
 - controls create DOM but dispatch runtime/gameplay callbacks directly;
 - `createDynamicUI()` removes/recreates fixed DOM panel ids;
+- `createDynamicUI()` calls external panel creation functions owned by `panels.js`;
 - speed controls mutate global `gameSpeed` and recursively rebuild UI;
 - zoom controls call camera helpers owned by `game.js`;
 - selected object action panel dispatches to selected object system;
 - build confirm panel dispatches to placement system;
 - UI naming can hide runtime command bridge responsibility.
 
+cross_file_runtime_coupling:
+
+- `controls.js` orchestrates dynamic UI rebuild;
+- `panels.js` owns `createMenuPanel()` and `createGameOverPanel()`;
+- `controls.js` depends on those external panel creation functions being available at runtime;
+- this may represent future refactor pressure but not current ownership contradiction.
+
 hallucination_risks:
 
 - do not treat `controls.js` as pure presentation/rendering;
 - do not infer generic command router;
 - do not infer generic object action framework;
-- do not hide missing menu/game-over panel ownership visibility;
+- do not treat calls to `createMenuPanel()` / `createGameOverPanel()` as controls.js ownership;
 - do not assign gameplay logic ownership to controls despite direct callbacks.
 
-future_map_relevance: essential for UI/runtime command bridge cognition.
+future_map_relevance: essential for UI/runtime command bridge and cross-file runtime coupling cognition.
 
 ---
 
@@ -708,23 +726,28 @@ future_map_relevance: important for render-only boundary confirmation.
 
 Correction candidate status:
 
-- direct behavior contradiction: no;
-- ownership visibility incompleteness: likely yes;
-- `createMenuPanel()` and `createGameOverPanel()` are called by `createDynamicUI()` but are absent from top `ВЛАДЕЕТ` list.
+- no active source-header correction required.
+
+Resolved interpretation:
+
+- `createMenuPanel()` and `createGameOverPanel()` are not controls.js ownership omissions;
+- they are external panel creation dependencies;
+- actual ownership remains in `js/ui/panels.js`;
+- controls.js orchestrates dynamic UI rebuild and calls these external functions at runtime.
 
 Correction class:
 
-- incomplete ownership visibility / needs ownership verification.
+- previously suspected incomplete ownership visibility;
+- reclassified as verified cross-file runtime coupling.
 
-Recommended next step:
+Future review class:
 
-- verify whether `createMenuPanel()` and `createGameOverPanel()` are defined in `controls.js`, another UI file, or expected from external layer;
-- if owned by `controls.js`, add them to top `ВЛАДЕЕТ` in a separate bounded source-markup correction pass.
+- ownership-boundary review zone / possible refactor pressure;
+- not current source-header correction.
 
-Correction urgency:
+Recommended source-markup correction:
 
-- recommended before treating Batch 03 as fully stable;
-- no runtime logic mutation required.
+- not needed now.
 
 ---
 
@@ -777,7 +800,8 @@ Extraction status:
 
 - source-faithful extraction completed;
 - verification blocks added;
-- mismatch/correction candidates recorded;
+- controls.js ownership interpretation corrected after cross-file verification;
+- no active source-header correction candidates remain;
 - source JS not mutated.
 
 Integrated extraction types:
@@ -797,17 +821,17 @@ Integrated extraction types:
 - important notes;
 - operationally meaningful internal markers;
 - verification blocks with explicit mismatch fields;
-- correction candidate classification.
+- correction candidate classification;
+- cross-file runtime coupling classification.
 
 Batch structural compatibility:
 
 - compatible with Batch 01 and Batch 02 extraction style;
-- new observed pattern: UI command bridge callbacks and DOM panel ownership require stronger ownership verification than render-only files.
+- new observed pattern: UI command bridge callbacks and cross-file panel creation dependencies require runtime coupling classification, not automatic ownership correction.
 
 Next safe direction:
 
-- perform bounded verification/correction decision for `js/ui/controls.js` ownership visibility if explicitly requested;
-- then re-check/update this Batch 03 discovery snapshot if source correction occurs;
-- only after Batch 03 stabilization consider template stabilization pass.
+- no Batch 03 source-header correction is currently required;
+- after explicit instruction, consider template stabilization pass for cross-file runtime coupling notation.
 
 Do not repeat Batch 03 unless repository drift or visibility uncertainty appears.
