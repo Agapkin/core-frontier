@@ -1,53 +1,53 @@
-# Repository Map Plan — Experimental Discovery Layer
+# Repository Map Plan — Stable Planning Philosophy
 
 ## 1. Назначение документа
 
-Этот файл является experimental repository cognition planning/discovery layer для CORE FRONTIER.
+Этот файл описывает stable planning philosophy для будущей skeletal repository_map evolution в CORE FRONTIER.
 
-Он создан до любого реального `repository_map.yml` implementation.
+Он существует до любого реального `repository_map.yml` implementation.
 
-Файл нужен как:
+Его задача:
 
-- cognition/discovery sandbox;
-- repository visibility laboratory;
-- место для bounded extraction findings;
-- место для проверки того, какой minimal useful repository_map eventually нужен проекту.
+- зафиксировать зачем repository_map pressure возник;
+- защитить bounded cognition philosophy;
+- сохранить runtime truth supremacy;
+- определить anti-overengineering constraints;
+- определить candidate field direction;
+- отделить stable planning philosophy от evolving discovery findings.
 
 Этот файл НЕ является:
 
-- canonical repository_map;
-- authority layer;
+- repository_map.yml;
+- canonical repository map;
 - runtime authority;
-- stable synchronization source;
+- automation layer;
 - parser/scanner output;
-- automation rollout;
 - governance engine;
-- repository_map.yml implementation.
+- synchronization source of truth;
+- chronological discovery diary.
 
-Главный принцип:
+Evolving discovery findings now belong in:
 
-сначала repository cognition discovery,
-потом skeletal map planning,
-и только затем possible bounded `repository_map.yml` creation.
+`docs/project/architecture/repository_map_discovery.md`
 
 ---
 
 ## 2. Почему repository_map pressure emerged
 
-Repository_map pressure возник не из желания создать giant metadata system.
+Repository_map pressure возник из реальных operational problems, not from desire to build a giant metadata system.
 
-Он возник из реальных operational problems:
+Project now contains multiple interacting layers:
 
-- repository стал multi-layer system;
-- runtime truth, AI navigation, roadmap, architecture и synchronization protocols начали пересекаться;
-- new Stage-files создали mandatory synchronization pressure;
-- Stage 03.4B formalized repository archetypes and layer distinctions;
-- Protocol 01 execution showed that interpretation layers require bounded coordination;
-- branch continuation workflow теперь зависит от clear repository state visibility.
+- runtime code;
+- surface shell;
+- AI navigation;
+- architecture docs;
+- roadmap docs;
+- synchronization protocols;
+- workflow discipline;
+- stage/frozen historical memory.
 
-Repository evolution больше не является только runtime problem.
-
-Теперь repository evolution включает:
+Stage 03.4 / 03.4A / 03.4B confirmed that repository evolution now includes:
 
 - repository cognition;
 - synchronization sensitivity;
@@ -56,35 +56,63 @@ Repository evolution больше не является только runtime pro
 - bounded propagation;
 - connector-safe continuation discipline.
 
----
-
-## 3. Что repository cognition должен eventually видеть
-
-Future skeletal repository_map может быть полезен только если он помогает видеть:
-
-- relationship visibility;
-- archetype visibility;
-- layer visibility;
-- authority type visibility;
-- synchronization sensitivity visibility;
-- runtime criticality visibility;
-- AI-readable header presence;
-- future map relevance.
-
-Но он НЕ должен становиться:
-
-- giant runtime dependency graph;
-- imagined architecture map;
-- automation authority;
-- governance source;
-- second repository reality;
-- replacement for live repository truth.
+Therefore a future skeletal repository map may become useful,
+but only after discovery stabilizes.
 
 ---
 
-## 4. Почему giant metadata systems опасны
+## 3. Existing repository cognition sources
 
-Giant metadata systems опасны потому что они создают:
+Future repository_map extraction must evolve from existing repository cognition sources instead of inventing structure from scratch.
+
+Current cognition sources include:
+
+- `ai/docs_map.yml`;
+- `ai/current_status.yml`;
+- `docs/project/architecture/docs_structure.md`;
+- `docs/project/architecture/runtime_structure.md`;
+- AI-readable file headers;
+- actual code/runtime behavior.
+
+Important distinction:
+
+AI-readable headers are interpretation layer.
+
+Actual code/runtime behavior remains authoritative truth source.
+
+If header and code diverge:
+
+code wins.
+
+---
+
+## 4. Runtime truth supremacy
+
+Repository truth is determined by:
+
+- actual files;
+- actual runtime code;
+- actual runtime behavior;
+- actual script order;
+- actual repository structure;
+- verified repository state.
+
+Interpretation layers help humans and AI navigate repository state.
+
+They do not replace runtime truth.
+
+Future repository_map must remain:
+
+- interpretation-oriented;
+- non-authoritative over runtime;
+- verification-driven;
+- uncertainty-aware.
+
+---
+
+## 5. Why giant metadata systems are dangerous
+
+Giant metadata systems create:
 
 - false precision;
 - stale interpretation layers;
@@ -92,62 +120,63 @@ Giant metadata systems опасны потому что они создают:
 - second repository reality;
 - connector/truncation pressure;
 - excessive maintenance burden;
-- temptation to automate before understanding.
+- automation-before-understanding pressure.
 
-Для CORE FRONTIER особенно опасно, если repository_map начнёт описывать:
+For CORE FRONTIER especially dangerous:
 
 - imagined dependencies;
 - speculative runtime graphs;
 - fake ownership;
-- architecture that is not verified in actual files.
+- clean architecture claims not verified in actual files;
+- turning repository_map into governance authority.
 
-Repository truth remains authoritative.
-
-Interpretation layers must remain supportive.
+Minimal useful cognition is preferred over maximal metadata coverage.
 
 ---
 
-## 5. Почему extraction-first mapping required
+## 6. Extraction-first mapping principle
 
-Repository cognition должен строиться из:
+Repository cognition must be built from:
 
 - live repository truth;
 - verified topology;
-- AI-readable headers;
-- existing docs structure;
+- existing AI-readable headers;
+- existing architecture/runtime docs;
 - bounded file inspection;
 - confirmed synchronization behavior.
 
-А НЕ из:
-
-- speculative architecture;
-- generic templates;
-- auto-generated metadata dreams;
-- guessed dependency chains;
-- fake runtime maps.
-
-Extraction-first значит:
+Extraction-first means:
 
 - inspect actual files;
 - collect lightweight observations;
 - avoid full dependency extraction;
-- confirm before encoding;
 - preserve uncertainty;
-- keep mapping skeletal.
+- mark verification needs;
+- keep future map skeletal.
+
+Do NOT build from:
+
+- speculative architecture;
+- generic templates;
+- guessed dependency chains;
+- fake runtime maps;
+- generated metadata without verification.
 
 ---
 
-## 6. Почему repository_map.yml remains deferred
+## 7. Why repository_map.yml remains deferred
 
-`repository_map.yml` remains deferred/not implemented because repository cognition is not mature enough yet to freeze into a canonical map.
+`repository_map.yml` remains deferred/not implemented because repository cognition is not stable enough to freeze into canonical map form.
 
-Current safe direction:
+Before any future `repository_map.yml` creation, repository must first:
 
-1. collect lightweight discovery observations;
-2. compare layer/archetype categories;
-3. identify minimal useful fields;
-4. avoid overfitting to current docs wording;
-5. only then consider skeletal `repository_map.yml` creation.
+1. collect discovery findings separately;
+2. identify stable layers and archetypes;
+3. confirm which header fields are trustworthy;
+4. identify mixed-responsibility files;
+5. preserve uncertainty instead of hiding it;
+6. define minimal useful fields;
+7. avoid giant metadata design.
 
 Until then:
 
@@ -159,210 +188,88 @@ Until then:
 
 ---
 
-## 7. Почему planning file exists before actual map
+## 8. Stable candidate field direction
 
-Этот planning file существует раньше actual map because:
-
-- repository_map pressure needs a safe sandbox;
-- field candidates need testing before stabilization;
-- repository archetypes need observation before encoding;
-- interpretation boundaries need protection;
-- giant-map mistakes are expensive to unwind.
-
-This file may later:
-
-- freeze;
-- archive;
-- become historical planning evidence;
-- be superseded by a skeletal map planning document;
-- provide rationale for future `repository_map.yml` fields.
-
----
-
-## 8. Initial bounded discovery method
-
-This discovery pass collects ONLY lightweight information:
-
-- path;
-- layer;
-- archetype;
-- role;
-- authority type;
-- synchronization sensitivity;
-- runtime criticality;
-- AI-readable header presence;
-- possible future repository_map relevance.
-
-This discovery pass does NOT collect:
-
-- full dependencies;
-- runtime call graphs;
-- speculative relationships;
-- generated metadata;
-- implementation plans;
-- automation rules.
-
----
-
-## 9. Initial inspected files
-
-This first bounded pass inspected a limited representative sample:
-
-### Root / surface entrypoint sample
-
-- `README.md`
-- `index.html`
-
-### AI navigation sample
-
-- `ai/current_status.yml`
-- `ai/docs_map.yml`
-
-### Architecture / governance sample
-
-- `docs/project/architecture/workflow.md`
-- `docs/project/architecture/synchronization_protocols.md`
-
-### Roadmap sample
-
-- `docs/project/roadmap/active_plan.md`
-
-### Runtime sample
-
-- `js/game.js`
-- `js/systems/systems.js`
-
-### Surface sample
-
-- `css/style.css`
-
-This sample is intentionally incomplete.
-
-It is enough to test candidate repository cognition fields,
-but not enough to produce a repository map.
-
----
-
-## 10. Initial lightweight discovery observations
-
-| Path | Layer | Archetype | Role | Authority type | Sync sensitivity | Runtime criticality | AI header | Future map relevance |
-|---|---|---|---|---|---|---|---|---|
-| `README.md` | root / project intro | project overview | product/concept entrypoint | human orientation | low/medium | low | no | useful as root project summary |
-| `index.html` | surface / runtime shell | browser entrypoint | DOM/canvas root and script loading assembly | runtime shell authority | high | high | yes | essential for script order and surface/runtime boundary |
-| `ai/current_status.yml` | AI navigation | current status marker | compressed current repository state | interpretation/navigation | high | low | n/a | essential for current-state summary |
-| `ai/docs_map.yml` | AI navigation | docs/navigation map | compressed repository entrypoints | interpretation/navigation | high | low | n/a | essential for discoverability |
-| `workflow.md` | governance / workflow | workflow discipline | safe repository evolution rules | operational workflow guidance | high | low | no | essential for pass behavior boundaries |
-| `synchronization_protocols.md` | governance / protocol library | synchronization protocol | passive playbooks for mutation archetypes | passive synchronization guidance | high | low | no | essential for sync radius / mutation archetype visibility |
-| `active_plan.md` | roadmap | active operational plan | current safe direction and staged focus | roadmap interpretation | high | low | no | essential for active roadmap status |
-| `js/game.js` | runtime | runtime orchestration | bootstrap, input, camera, main loop sequencing | runtime truth | medium/high | high | yes | essential as runtime-critical orchestration file |
-| `js/systems/systems.js` | runtime | lifecycle-heavy runtime systems | commands, waves, checkpoint/restart, enemy/tower update | runtime truth | medium/high | high | yes | essential as runtime-heavy mutation zone |
-| `css/style.css` | surface | CSS surface file | visual/layout stylesheet | surface interpretation/runtime-adjacent | medium | low/medium | yes | useful because file exists but is not currently linked by index.html |
-
----
-
-## 11. Initial archetype findings
-
-The inspected sample confirms at least these repository archetypes:
-
-- project overview file;
-- browser shell entrypoint;
-- AI current status file;
-- AI docs/navigation map;
-- workflow discipline file;
-- passive synchronization protocol file;
-- roadmap active plan file;
-- runtime orchestration file;
-- lifecycle-heavy runtime systems file;
-- CSS surface file.
-
-These archetypes have different authority types.
-
-A useful future repository map must distinguish them instead of flattening all files into one metadata list.
-
----
-
-## 12. Initial layer findings
-
-The inspected sample confirms these practical layers:
-
-- root/project orientation layer;
-- surface/runtime shell layer;
-- AI navigation layer;
-- architecture/workflow layer;
-- synchronization protocol layer;
-- roadmap layer;
-- runtime truth layer;
-- surface styling layer.
-
-Important distinction:
-
-runtime truth layer and interpretation layers must not be merged.
-
----
-
-## 13. Initial authority findings
-
-Initial authority categories appear useful:
-
-- runtime truth;
-- runtime shell authority;
-- surface authority;
-- AI navigation interpretation;
-- roadmap interpretation;
-- workflow guidance;
-- passive synchronization guidance;
-- human orientation.
-
-Future map should avoid assigning execution authority to interpretation files.
-
----
-
-## 14. Initial synchronization sensitivity findings
-
-High synchronization sensitivity appears around:
-
-- `ai/current_status.yml`;
-- `ai/docs_map.yml`;
-- `docs/project/roadmap/active_plan.md`;
-- `docs/project/architecture/workflow.md`;
-- `docs/project/architecture/synchronization_protocols.md`;
-- `index.html` because script order is runtime-sensitive and interpretation-sensitive.
-
-Runtime-critical files are not always the same as synchronization-sensitive files.
-
-This confirms the Stage 03.4B distinction.
-
----
-
-## 15. Proposed minimal future repository_map directions
-
-A future skeletal `repository_map.yml` should likely start with minimal fields only:
+Future skeletal `repository_map.yml` may eventually use fields such as:
 
 ```yaml
 path:
 layer:
-archetype:
+primary_archetype:
+secondary_archetypes:
 role:
 authority_type:
 sync_sensitivity:
 runtime_criticality:
-ai_header:
+header_status:
+header_consistency:
+truth_source:
+mixed_responsibility:
+boundary_confidence:
+extraction_origin:
+verification_flag:
 map_relevance:
 notes:
 ```
 
-Possible constraints:
+These fields remain experimental until discovery confirms them.
 
-- one entry per important file at first;
-- no automatic dependency extraction;
-- no generated call graph;
-- no runtime authority claims;
-- no speculation without inspection;
-- no full repository coverage requirement in first version.
+They must not become giant metadata bureaucracy.
 
 ---
 
-## 16. Deferred areas
+## 9. Discovery lifecycle direction
+
+Repository cognition discovery should accumulate in:
+
+`docs/project/architecture/repository_map_discovery.md`
+
+Discovery should be structured by stable cognition categories, not pass chronology.
+
+Recommended categories:
+
+- verified runtime findings;
+- header verification findings;
+- mixed responsibility findings;
+- extraction-origin findings;
+- synchronization sensitivity findings;
+- authority findings;
+- verification-risk findings;
+- needs-review zones;
+- rejected assumptions;
+- candidate field evolution.
+
+The discovery file may grow and evolve.
+
+This plan file should remain stable and lightweight.
+
+---
+
+## 10. Map creation constraints
+
+Future repository_map creation must obey:
+
+- bounded pass discipline;
+- verification-first workflow;
+- no overwrite-from-memory;
+- no fake dependency mapping;
+- no automatic authority assignment;
+- no runtime/code mutation;
+- no parser/scanner rollout;
+- no automation engine;
+- no governance expansion.
+
+The first repository_map, if created later, should be:
+
+- skeletal;
+- partial;
+- clearly non-authoritative;
+- explicitly derived from verified repository truth;
+- allowed to mark uncertainty.
+
+---
+
+## 11. Deferred/not-implemented areas
 
 Still deferred / not implemented:
 
@@ -374,61 +281,24 @@ Still deferred / not implemented:
 - runtime dependency graph;
 - runtime_map.yml;
 - contracts.yml;
-- full runtime layer inspection;
-- full UI layer inspection;
-- full roadmap package inspection;
-- full architecture package inspection;
+- full repository map coverage;
 - generated repository cognition.
 
 ---
 
-## 17. Next bounded discovery pass recommendation
+## 12. Operational conclusion
 
-The next safe discovery pass should inspect a wider but still bounded set of files:
+Repository_map pressure is operationally justified.
 
-1. Full architecture package:
-
-- `docs/project/architecture/README.md`
-- `docs/project/architecture/docs_structure.md`
-- `docs/project/architecture/runtime_structure.md`
-- `docs/project/architecture/ai_navigation_plan.md`
-
-2. Runtime foundation files:
-
-- `js/data.js`
-- `js/state.js`
-- `js/systems/systems_wave_manager.js`
-- `js/systems/systems_placement.js`
-- `js/systems/systems_selected_object_actions.js`
-
-3. UI layer sample:
-
-- `js/ui/controls.js`
-- `js/ui/panels.js`
-- `js/ui/canvas_world.js`
-- `js/ui/canvas_entities.js`
-- `js/ui/notifications.js`
-
-The goal should remain:
-
-understand minimal useful repository_map fields,
-not generate the map.
-
----
-
-## 18. Operational conclusion
-
-Repository_map pressure appears operationally justified.
-
-But repository cognition should remain:
+But repository cognition must remain:
 
 - bounded;
-- experimental;
 - extraction-first;
 - runtime-truth-driven;
 - interpretation-oriented;
+- uncertainty-aware;
 - non-authoritative over runtime.
 
-This planning file is a discovery sandbox.
+This file preserves stable planning philosophy.
 
-It should help prevent premature giant metadata systems while making future skeletal map design more grounded.
+Discovery-heavy findings belong in `repository_map_discovery.md`.
