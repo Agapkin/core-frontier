@@ -433,21 +433,65 @@ Minimal sufficient synchronization is preferred over maximal propagation.
 
 ## 14. Batch execution rule
 
-For a `new_stage_file` pass, mandatory anchor updates should usually be executed in the same bounded synchronization pass.
+For a `new_stage_file` pass, mandatory anchor updates should usually be executed inside the same bounded Protocol 01 synchronization execution.
 
-Do NOT split mandatory anchor synchronization into follow-up tasks unless:
+If a single multi-file write attempt creates excessive connector/tool write pressure, mandatory synchronization may be executed through sequential bounded sub-phases inside the same protocol execution.
+
+Recommended segmented order:
+
+1. AI navigation layer:
+
+- `ai/current_status.yml`;
+- `ai/docs_map.yml`.
+
+2. Roadmap layer:
+
+- `docs/project/roadmap/README.md`;
+- `docs/project/roadmap/active_plan.md`.
+
+3. Architecture visibility layer:
+
+- `docs/project/architecture/README.md`;
+- `docs/project/architecture/docs_structure.md`.
+
+Each sub-phase must:
+
+- remain bounded;
+- preserve repository truth;
+- include verification before continuing;
+- avoid giant multi-file write pressure;
+- report partial completion honestly if interruption occurs.
+
+Segmented synchronization is:
+
+- execution discipline;
+- connector-safe operational behavior;
+- phased verification inside one protocol execution.
+
+Segmented synchronization is NOT:
+
+- protocol fragmentation;
+- governance expansion;
+- asynchronous relay synchronization;
+- automation rollout;
+- synchronization daemon behavior.
+
+Do NOT split mandatory anchor synchronization into separate follow-up tasks unless:
 
 - file visibility is incomplete;
 - connector write access fails;
 - target file is too large/truncated;
 - SHA/update conflict occurs;
-- hard safety stop is triggered.
+- hard safety stop is triggered;
+- segmented execution cannot safely continue inside the same protocol execution.
 
 If split occurs, the pass report must explicitly state:
 
 - what was completed;
 - what remains mandatory;
-- why split was required.
+- why split was required;
+- whether the interruption happened before or after repository mutation;
+- what verification state was reached.
 
 ---
 
