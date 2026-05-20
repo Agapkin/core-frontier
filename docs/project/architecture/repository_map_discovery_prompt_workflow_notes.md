@@ -301,6 +301,135 @@ rather than merely external supervision.
 
 ---
 
+### Strategic questioning loop
+
+Repository operationally discovered that human questioning frequently acted as:
+
+- cognition-pressure probing;
+- hidden-risk exposure;
+- synchronization-risk discovery;
+- premature-action interruption.
+
+Strategic questioning often transformed vague discomfort into explicit operational review zones.
+
+Recurring operational pressure patterns included:
+
+- “will this create future drift?”
+- “are we leaving synchronization tails?”
+- “should relocation be tested first?”
+- “will future map layers depend on this path structure?”
+
+This repeatedly converted intuition-level concern into:
+
+- bounded audit passes;
+- synchronization verification;
+- dependency review;
+- mutation safety checks.
+
+---
+
+### Reviewer reframing behavior
+
+Repository operationally demonstrated that reviewer-side reasoning frequently transformed:
+
+- vague concerns;
+- broad ideas;
+- unsafe impulses;
+- premature architecture expansion;
+
+into:
+
+- bounded audit passes;
+- disposable tests;
+- synchronization-safe tasks;
+- dependency-ordered discovery actions.
+
+Operational examples included:
+
+- relocation fear → relocation mechanics test;
+- automation idea → automation-before-cognition analysis;
+- architecture duplication concern → deferred separation audit;
+- broad “what next?” → dependency/cognition ordering.
+
+This repeatedly reduced:
+
+- unsafe mutation pressure;
+- premature infrastructure growth;
+- speculative workflow branching.
+
+---
+
+### Dependency / cognition ordering
+
+Repository operationally discovered that discovery sequencing stabilized around:
+
+```text
+cognition dependency order
+```
+
+rather than:
+
+```text
+curiosity order
+```
+
+Foundation/runtime layers were intentionally prioritized before:
+
+- semantic UI layers;
+- surface/runtime shell layers;
+- future planning/refactor reasoning.
+
+This sequencing reduced:
+
+- interpretation drift;
+- false ownership assumptions;
+- unstable refactor reasoning;
+- premature architectural conclusions.
+
+---
+
+### Disposable infrastructure testing principle
+
+Repository operationally discovered that potentially dangerous repository operations should first be tested on disposable artifacts before touching active cognition infrastructure.
+
+Primary operational example:
+
+- relocation mechanics disposable test.
+
+This operational pattern reduced:
+
+- synchronization risk;
+- cognition corruption risk;
+- active discovery-chain instability.
+
+The repository operationally validated that infrastructure-risk testing itself should remain bounded and reversible.
+
+---
+
+### Human anti-expansion stabilization
+
+Repository operationally demonstrated that human/reviewer interaction repeatedly prevented:
+
+- premature governance growth;
+- parser/scanner expansion;
+- uncontrolled automation planning;
+- unnecessary architecture layering;
+- speculative abstraction.
+
+Workflow stability depended partly on repeatedly restoring focus toward:
+
+- current bounded objective;
+- current repository truth;
+- current synchronization state.
+
+This repeatedly reduced:
+
+- runaway scope expansion;
+- premature systemization;
+- cognition inflation.
+
+---
+
 ## 7. Future bounded automation observations
 
 Repository operationally suggests that limited future automation may become useful only after repository cognition compression stabilizes.
