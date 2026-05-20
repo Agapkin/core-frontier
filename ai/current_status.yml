@@ -1,14 +1,15 @@
 current_stage: "Stage 03.4"
-current_phase: "planning/discovery: repository impact awareness and mutation-class planning"
+current_phase: "planning/discovery: repository impact awareness, mutation-class planning and repository cognition preparation"
 workflow_mode: "bounded runtime/surface evolution"
 runtime_status: "stabilized"
 runtime_evolution_status: "Stage 03.3 runtime foundation stabilized"
 surface_status: "Stage 03.3B repository surface synchronized"
-ai_yaml_navigation_status: "Stage 03.4 planning visibility synchronized"
-docs_navigation_status: "architecture docs and roadmap package synchronized for Stage 03.4 planning visibility"
+ai_yaml_navigation_status: "Stage 03.4B planning visibility synchronized"
+docs_navigation_status: "Stage 03.4B synchronization continuing through Protocol 01 segmented execution"
 stage_03_4_status: "planning_discovery_active"
 stage_03_4_execution_status: "not_started"
 stage_03_4A_status: "mutation classes and synchronization radius planning document created"
+stage_03_4B_status: "repository archetypes and repository cognition preparation document created"
 current_governance_state:
   pass_01: "completed"
   pass_a_minimal_ai_layer: "completed"
@@ -76,13 +77,17 @@ active_workflow:
   - "Stage 03.3B code/surface synchronization"
   - "Stage 03.4 planning/discovery: repository impact awareness"
   - "Stage 03.4A mutation classes and synchronization radius planning"
+  - "Stage 03.4B repository archetypes and repository cognition preparation"
   - "comments-only marking discipline"
   - "bounded extraction verification workflow"
   - "topology-preserving runtime evolution"
   - "manual gameplay verification discipline"
   - "runtime topology synchronization"
+  - "Protocol 01 new_stage_file segmented synchronization discipline"
 current_safe_direction:
   - "continue Stage 03.4 planning/discovery without runtime execution"
+  - "use Stage 03.4B as repository archetype extraction and repository cognition preparation artifact"
+  - "complete remaining Protocol 01 mandatory synchronization anchors through bounded segmented execution"
   - "maintain bounded documentation/navigation synchronization discipline"
   - "avoid Stage 03.4 runtime implementation until explicitly started"
   - "preserve browser-global runtime order"
@@ -128,6 +133,12 @@ methodology:
     - synchronization_radius_analysis
     - bounded_mandatory_sync
     - post_sync_verification
+  stage_03_4B_repository_cognition_cycle:
+    - repository_archetype_extraction
+    - authority_zone_visibility
+    - runtime_truth_vs_interpretation_distinction
+    - synchronization_sensitive_classification
+    - skeletal_repository_map_planning_discipline
   intentionally_avoided:
     - fake_modularization
     - premature_abstraction
