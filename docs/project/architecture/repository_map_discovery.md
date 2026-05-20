@@ -885,14 +885,14 @@ but future repository_map must preserve:
 
 ## 18. Full AI-readable markup extraction — Batch A runtime orchestration
 
-This section begins the correction from summary-style discovery toward full verified AI-readable markup extraction.
+This section corrects Batch A from summary-style discovery toward source-faithful AI-readable markup extraction.
 
-Scope completed in this batch:
+Scope corrected in this batch:
 
 - `js/systems/systems.js`
 - `js/game.js`
 
-This section preserves extracted markup, not raw implementation code.
+This section preserves extracted markup and verification notes, not raw implementation code.
 
 ---
 
@@ -900,314 +900,209 @@ This section preserves extracted markup, not raw implementation code.
 
 File: `js/systems/systems.js`
 
-Source read status: fully re-read in Batch A.
+source_read_status: fully re-read for correction pass.
 
-#### Header extraction
+#### Header extraction — source-faithful
 
-Title / file marker:
+```text
+CORE FRONTIER — Stage 02.4.5-A
+systems.js — remaining runtime orchestration and lifecycle-heavy systems
+КАРТА ФАЙЛА ДЛЯ AI
+ФАЙЛ: js/systems/systems.js
+РОЛЬ: orchestration/lifecycle file для button commands, wave start, checkpoint/restart/game over, enemy update, reward flow и tower combat.
+СТАТУС: файл разгружен после Stage 03.3 extractions, но НЕ является чистым orchestration shell.
+ВЫНЕСЕНО: js/systems/systems_wave_manager.js, js/systems/systems_placement.js, js/systems/systems_selected_object_actions.js
+ВЛАДЕЕТ: buildTower(), cancelBuildMode(), startWave(), saveCheckpoint(), retryLastWave(), restartGame(), triggerGameOver(), updateEnemies(), applyReward(), updateTowers()
+НЕ ВЛАДЕЕТ: wave generation helpers, placement lifecycle, selected object actions, UI panels, render layer, data/state definitions.
+ЧИТАЕТ: gameState, uiState, waveState, checkpoint, resources, base, power, towers, enemies, enemyPath, difficultyProfiles, gameBalance, camera, gameSpeed.
+ИЗМЕНЯЕТ: gameState, uiState, waveState, checkpoint, resources, base, power, towers, enemies, camera, gameSpeed.
+ИСПОЛЬЗУЕТСЯ В: controls.js, game.js, runtime button flow, update loop.
+RUNTIME-КОНТРАКТ: файл должен загружаться после extracted systems files и до ui/* + game.js.
+НЕЛЬЗЯ: делать extraction/refactor без отдельного inspection pass.
+```
 
-- `CORE FRONTIER — Stage 02.4.5-A`
-- `systems.js — remaining runtime orchestration and lifecycle-heavy systems`
-- `КАРТА ФАЙЛА ДЛЯ AI`
+#### Section extraction — source-faithful
 
-Role:
+```text
+СЕКЦИЯ: BUTTON ACTIONS / UI COMMANDS
+РОЛЬ: пользовательские команды запускают build mode, отмену build mode и wave start.
+ВКЛЮЧАЕТ: buildTower(), cancelBuildMode(), startWave()
+```
 
-- orchestration/lifecycle file for button commands, wave start, checkpoint/restart/game over, enemy update, reward flow and tower combat.
+Function-level comments:
 
-Status:
+```text
+buildTower(): включает режим строительства tower и сбрасывает selectedTower.
+cancelBuildMode(): отключает build mode и очищает pendingBuildTile.
+startWave(): запускает новую волну и связывает checkpoint, waveState и spawn flow.
+```
 
-- unloaded/reduced after Stage 03.3 extractions;
-- explicitly NOT a clean orchestration shell.
+Internal markers preserved:
 
-Extracted out:
-
-- `js/systems/systems_wave_manager.js`
-- `js/systems/systems_placement.js`
-- `js/systems/systems_selected_object_actions.js`
-
-Owns:
-
-- `buildTower()`
-- `cancelBuildMode()`
-- `startWave()`
-- `saveCheckpoint()`
-- `retryLastWave()`
-- `restartGame()`
-- `triggerGameOver()`
-- `updateEnemies()`
-- `applyReward()`
-- `updateTowers()`
-
-Does not own:
-
-- wave generation helpers;
-- placement lifecycle;
-- selected object actions;
-- UI panels;
-- render layer;
-- data/state definitions.
-
-Reads:
-
-- `gameState`
-- `uiState`
-- `waveState`
-- `checkpoint`
-- `resources`
-- `base`
-- `power`
-- `towers`
-- `enemies`
-- `enemyPath`
-- `difficultyProfiles`
-- `gameBalance`
-- `camera`
-- `gameSpeed`
-
-Mutates:
-
-- `gameState`
-- `uiState`
-- `waveState`
-- `checkpoint`
-- `resources`
-- `base`
-- `power`
-- `towers`
-- `enemies`
-- `camera`
-- `gameSpeed`
-
-Used by:
-
-- `controls.js`
-- `game.js`
-- runtime button flow
-- update loop
-
-Runtime contract:
-
-- must load after extracted systems files;
-- must load before `ui/*` and `game.js`.
-
-Forbidden changes:
-
-- do not perform extraction/refactor without separate inspection pass.
-
-#### Section extraction
-
-Section: `BUTTON ACTIONS / UI COMMANDS`
-
-Role:
-
-- user commands start build mode, cancel build mode and start wave.
-
-Includes:
-
-- `buildTower()`
-- `cancelBuildMode()`
-- `startWave()`
-
-Function-level markup:
-
-- `buildTower()`: enables tower build mode and resets `selectedTower`.
-- `cancelBuildMode()`: disables build mode and clears `pendingBuildTile`.
-- `startWave()`: starts a new wave and connects checkpoint, `waveState` and spawn flow.
-
-Internal markup preserved as cognition signals:
-
-- `BUTTON ACTIONS`
-- `WAVE START GUARDS`
-- `CHECKPOINT SAVE`
-- `UI SELECTION RESET`
-- `WAVE STATE ACTIVATION`
-- `WAVE CREATION / SPAWN FLOW`
-- `UI FEEDBACK`
-
-Verification:
-
-- code confirms section role;
-- code confirms `startWave()` depends on `saveCheckpoint()`, `createWave()`, `spawnEnemy()`, `updateUI()` and `notify()`;
-- header accurately marks this as command/lifecycle logic, not pure orchestration.
+```text
+BUTTON ACTIONS
+WAVE START GUARDS
+CHECKPOINT SAVE
+UI SELECTION RESET
+WAVE STATE ACTIVATION
+WAVE CREATION / SPAWN FLOW
+UI FEEDBACK
+```
 
 ---
 
-Section: `CHECKPOINT / RESTART / GAME OVER`
+```text
+СЕКЦИЯ: CHECKPOINT / RESTART / GAME OVER
+РОЛЬ: сохранить состояние, восстановить волну, начать новую игру и завершить игру.
+ВКЛЮЧАЕТ: saveCheckpoint(), retryLastWave(), restartGame(), triggerGameOver()
+```
 
-Role:
+Function-level comments:
 
-- save state, restore wave, start new game and end game.
+```text
+saveCheckpoint(): сохраняет rollback-состояние перед запуском волны.
+retryLastWave(): восстанавливает checkpoint и возвращает игру к подготовке перед волной.
+restartGame(): полностью сбрасывает runtime state в состояние новой игры.
+triggerGameOver(): переводит runtime в game over state и очищает активные enemies/UI selection.
+```
 
-Includes:
+Internal markers preserved:
 
-- `saveCheckpoint()`
-- `retryLastWave()`
-- `restartGame()`
-- `triggerGameOver()`
-
-Function-level markup:
-
-- `saveCheckpoint()`: saves rollback state before wave start.
-- `retryLastWave()`: restores checkpoint and returns game to pre-wave preparation.
-- `restartGame()`: fully resets runtime state into new game state.
-- `triggerGameOver()`: moves runtime to game-over state and clears active enemies/UI selection.
-
-Internal markup preserved as cognition signals:
-
-- `CHECKPOINT / RESTART`
-- `CHECKPOINT SNAPSHOT`
-- `CHECKPOINT GUARD`
-- `CORE STATE RESTORE`
-- `CAMERA RESTORE`
-- `ENTITY RESTORE`
-- `UI STATE RESET`
-- `UI REBUILD / FEEDBACK`
-- `CORE STATE RESET`
-- `CAMERA RESET`
-- `ENTITY RESET`
-
-Verification:
-
-- code confirms this section mutates broad shared runtime state;
-- checkpoint shape mirrors current globals, so future map must not treat checkpoint as independent state system;
-- high runtime mutation pressure confirmed.
+```text
+CHECKPOINT / RESTART
+CHECKPOINT SNAPSHOT
+CHECKPOINT GUARD
+CORE STATE RESTORE
+CAMERA RESTORE
+ENTITY RESTORE
+UI STATE RESET
+UI REBUILD / FEEDBACK
+CORE STATE RESET
+CAMERA RESET
+ENTITY RESET
+```
 
 ---
 
-Section: `UPDATE / ENEMY FLOW`
+```text
+СЕКЦИЯ: UPDATE / ENEMY FLOW
+РОЛЬ: обновить enemies, применить base damage и завершить волну.
+ВКЛЮЧАЕТ: updateEnemies()
+```
 
-Role:
+Function-level comments:
 
-- update enemies, apply base damage and complete wave.
+```text
+UPDATE
+updateEnemies(): двигает enemies, применяет damage к базе и обрабатывает death/reward flow.
+```
 
-Includes:
+Internal markers preserved:
 
-- `updateEnemies()`
-
-Function-level markup:
-
-- `updateEnemies()`: moves enemies, applies damage to base and handles death/reward flow.
-
-Internal markup preserved as cognition signals:
-
-- `UPDATE`
-- `ENEMY MOVEMENT / BASE HIT`
-- `ENEMY CLEANUP / DEATH FLOW`
-- `WAVE COMPLETION CHECK`
-
-Verification:
-
-- code confirms enemy movement, base damage, reward trigger, enemy cleanup and wave completion are in one function;
-- file owns significant lifecycle mutation, not only orchestration;
-- header is accurate.
+```text
+ENEMY MOVEMENT / BASE HIT
+ENEMY CLEANUP / DEATH FLOW
+WAVE COMPLETION CHECK
+```
 
 ---
 
-Section: `RESOURCE / REWARD FLOW`
+```text
+СЕКЦИЯ: RESOURCE / REWARD FLOW
+РОЛЬ: начислить reward за уничтоженных enemies.
+ВКЛЮЧАЕТ: applyReward()
+```
 
-Role:
+Function-level comments:
 
-- assign reward for destroyed enemies.
-
-Includes:
-
-- `applyReward()`
-
-Function-level markup:
-
-- `applyReward()`: adds resources using difficulty reward multiplier.
-
-Verification:
-
-- code confirms reward mutation is isolated here;
-- reward flow is called by `updateEnemies()`;
-- section boundary is believable.
+```text
+applyReward(): начисляет resources с учётом difficulty reward multiplier.
+```
 
 ---
 
-Section: `TOWER COMBAT FLOW`
+```text
+СЕКЦИЯ: TOWER COMBAT FLOW
+РОЛЬ: обновить tower targeting и нанести damage enemies.
+ВКЛЮЧАЕТ: updateTowers()
+```
 
-Role:
+Function-level comments:
 
-- update tower targeting and damage enemies.
+```text
+updateTowers(): ищет цели в range и применяет tower damage.
+```
 
-Includes:
+Internal markers preserved:
 
-- `updateTowers()`
+```text
+TARGET ACQUISITION
+DAMAGE APPLICATION
+```
 
-Function-level markup:
+#### Verification block
 
-- `updateTowers()`: finds targets in range and applies tower damage.
+source_read_status: fully re-read.
 
-Internal markup preserved as cognition signals:
+header_matches_code: yes.
 
-- `TARGET ACQUISITION`
-- `DAMAGE APPLICATION`
+section_list_matches_code: yes.
 
-Verification:
+function_list_matches_code: yes.
 
-- code confirms tower targeting and damage logic still lives in `systems.js`;
-- this confirms `systems.js` remains lifecycle-heavy;
-- future map must not describe combat as extracted.
+missing_from_header:
 
-#### Verification summary
+- none detected for top-level owned functions;
+- source section/internal markers expose more lifecycle detail than header field alone.
 
-Header consistency: high.
+header_claims_not_confirmed:
 
-Missing from header:
+- none detected.
 
-- no major missing top-level functions detected;
-- internal section comments reveal more detailed lifecycle responsibilities than the header alone.
+code_confirms:
 
-Code confirms:
+- file is still lifecycle-heavy;
+- file owns button commands, checkpoint/restart/game-over, enemy flow, reward flow and tower combat;
+- extracted files reduce scope but do not make `systems.js` clean orchestration shell;
+- load-order contract remains important.
 
-- file remains a dense lifecycle/mutation zone;
-- file is not clean orchestration;
-- extracted helper files reduce scope but do not make this file simple.
+code_contradicts:
 
-Code contradicts:
+- none detected.
 
-- no direct contradiction found.
+needs_review:
 
-Needs review:
+- extraction/refactor;
+- wave lifecycle changes;
+- checkpoint shape changes;
+- retry/restart lifecycle changes;
+- enemy update changes;
+- reward flow changes;
+- tower combat changes;
+- game-over flow changes.
 
-- any extraction/refactor;
-- checkpoint shape change;
-- wave lifecycle change;
-- combat/reward flow change;
-- game-over/retry lifecycle change.
-
-Confidence:
-
-- high that header is honest;
-- medium that boundaries are stable enough for future mapping without further runtime verification.
+confidence: high for header honesty; medium for future boundary stability.
 
 #### Cognition notes
 
-Mixed responsibility:
+mixed_responsibility: very high.
 
-- very high.
+implicit_contracts:
 
-Implicit contracts:
+- `startWave()` connects checkpoint, waveState and spawn flow;
+- `retryLastWave()` and `restartGame()` rebuild UI after state mutation;
+- `updateEnemies()` handles movement, base damage, cleanup and wave completion;
+- `updateTowers()` owns current tower targeting/damage flow;
+- `gameLoop()` in `game.js` calls `updateEnemies()` and `updateTowers()`.
 
-- load order after extracted helpers and before UI/game;
-- `startWave()` relies on wave helper functions;
-- `updateEnemies()` / `updateTowers()` are called by `gameLoop()`;
-- checkpoint mirrors global runtime shape;
-- retry/restart rebuilds UI through `createDynamicUI()`, `updatePower()`, `updateUI()`.
+hallucination_risks:
 
-Hallucination risks:
+- do not label as clean orchestration shell;
+- do not assume combat or enemy update are extracted;
+- do not treat checkpoint as independent state system;
+- do not understate shared mutation pressure.
 
-- future map may falsely label this file as clean orchestration;
-- future map may incorrectly assume combat, enemy update or retry lifecycle have been extracted;
-- future map may understate shared-state mutation pressure.
-
-Future map relevance:
-
-- essential;
-- should carry `verification_flag: required`;
-- should carry `mixed_responsibility: very high`;
-- should preserve section-level lifecycle roles.
+future_map_relevance: essential.
 
 ---
 
@@ -1215,459 +1110,316 @@ Future map relevance:
 
 File: `js/game.js`
 
-Source read status: fully re-read in Batch A.
+source_read_status: fully re-read for correction pass.
 
-#### Header extraction
+#### Header extraction — source-faithful
 
-Title / file marker:
+```text
+CORE FRONTIER — Game Runtime Orchestration
+КАРТА ФАЙЛА ДЛЯ AI
+ФАЙЛ: js/game.js
+РОЛЬ: runtime bootstrap, canvas/input routing, camera helpers, coordinate mapping и main loop sequencing.
+СТАТУС: sensitive runtime orchestration file; game engine architecture/input framework/scene manager/ECS НЕ реализованы.
+ВЛАДЕЕТ: resizeCanvas(), input event binding, pointer/touch/wheel routing, camera pan/zoom helpers, coordinate helpers, handleTap(), gameLoop().
+НЕ ВЛАДЕЕТ: placement validation, tower placement logic, selected object actions, enemy movement internals, tower combat internals, wave generation internals, UI panel rendering internals, entity/world drawing internals.
+ЧИТАЕТ: canvas, window, camera, uiState, uiLayout, gameState, gameSpeed, map, TILE_SIZE.
+ИЗМЕНЯЕТ: canvas size, camera drag/pinch/zoom/x/y state, uiState.hoveredTile, uiState.selectedTower.
+ИСПОЛЬЗУЕТСЯ В: browser runtime startup, canvas event loop, requestAnimationFrame loop.
+RUNTIME-КОНТРАКТ: файл должен загружаться после data/state/systems/ui layers and starts final gameLoop().
+НЕЛЬЗЯ: менять event binding order, input behavior, camera math, tap routing, update/render order или gameLoop sequence без отдельного inspection pass.
+```
 
-- `CORE FRONTIER — Game Runtime Orchestration`
-- `КАРТА ФАЙЛА ДЛЯ AI`
+#### Section extraction — source-faithful
 
-Role:
+```text
+СЕКЦИЯ: BOOTSTRAP / RESIZE
+РОЛЬ: синхронизировать canvas size, responsive layout, camera bounds и UI refresh.
+ВКЛЮЧАЕТ: resizeCanvas(), resize/orientation listeners
+```
 
-- runtime bootstrap;
-- canvas/input routing;
-- camera helpers;
-- coordinate mapping;
-- main loop sequencing.
+Function-level comments:
 
-Status:
+```text
+resizeCanvas(): обновляет canvas size и синхронизирует layout/camera/UI после resize.
+```
 
-- sensitive runtime orchestration file;
-- game engine architecture/input framework/scene manager/ECS are NOT implemented.
+Internal markers preserved:
 
-Owns:
-
-- `resizeCanvas()`
-- input event binding
-- pointer/touch/wheel routing
-- camera pan/zoom helpers
-- coordinate helpers
-- `handleTap()`
-- `gameLoop()`
-
-Does not own:
-
-- placement validation;
-- tower placement logic;
-- selected object actions;
-- enemy movement internals;
-- tower combat internals;
-- wave generation internals;
-- UI panel rendering internals;
-- entity/world drawing internals.
-
-Reads:
-
-- `canvas`
-- `window`
-- `camera`
-- `uiState`
-- `uiLayout`
-- `gameState`
-- `gameSpeed`
-- `map`
-- `TILE_SIZE`
-
-Mutates:
-
-- canvas size;
-- camera drag/pinch/zoom/x/y state;
-- `uiState.hoveredTile`;
-- `uiState.selectedTower`.
-
-Used by:
-
-- browser runtime startup;
-- canvas event loop;
-- requestAnimationFrame loop.
-
-Runtime contract:
-
-- must load after data/state/systems/ui layers;
-- starts final `gameLoop()`.
-
-Forbidden changes:
-
-- do not change event binding order;
-- do not change input behavior;
-- do not change camera math;
-- do not change tap routing;
-- do not change update/render order;
-- do not change `gameLoop()` sequence without separate inspection pass.
-
-#### Section extraction
-
-Section: `BOOTSTRAP / RESIZE`
-
-Role:
-
-- synchronize canvas size, responsive layout, camera bounds and UI refresh.
-
-Includes:
-
-- `resizeCanvas()`
-- resize listener
-- orientationchange listener
-
-Function-level markup:
-
-- `resizeCanvas()`: updates canvas size and synchronizes layout/camera/UI after resize.
-
-Internal markup preserved as cognition signals:
-
-- `CANVAS SIZE UPDATE`
-- `RESPONSIVE LAYOUT SYNC`
-- `CAMERA/UI REFRESH`
-
-Verification:
-
-- code confirms resize flow touches canvas size, responsive layout, UI layout, camera clamp, dynamic UI and HUD update;
-- this section is runtime/UI bridge, not pure canvas sizing.
+```text
+CANVAS SIZE UPDATE
+RESPONSIVE LAYOUT SYNC
+CAMERA/UI REFRESH
+```
 
 ---
 
-Section: `RUNTIME INIT`
+```text
+СЕКЦИЯ: RUNTIME INIT
+РОЛЬ: выполнить initial DOM/UI/power/bootstrap calls перед запуском input и loop.
+```
 
-Role:
+Observed initialization calls:
 
-- perform initial DOM/UI/power/bootstrap calls before input and loop.
-
-Includes observed calls:
-
-- `setupInitialDom()`
-- `createDynamicUI()`
-- `updatePower()`
-- `updateUI()`
-- initial `notify()`
-
-Verification:
-
-- code confirms runtime init happens before event binding and loop operation;
-- this is an important bootstrap contract even though it is not listed in top-level `owns` as a named function.
+```text
+setupInitialDom()
+createDynamicUI()
+updatePower()
+updateUI()
+notify("Stage 02.4.5-A: mobile fix pack активен", "info")
+```
 
 ---
 
-Section: `INPUT EVENT BINDING`
+```text
+СЕКЦИЯ: INPUT EVENT BINDING
+РОЛЬ: привязать canvas pointer/wheel/touch events к routing helpers.
+```
 
-Role:
+Observed event bindings:
 
-- bind canvas pointer/wheel/touch events to routing helpers.
-
-Includes event bindings:
-
-- `pointerdown` → `pointerStart`
-- `pointermove` → `pointerMove`
-- `pointerup` → `pointerEnd`
-- `pointercancel` → `pointerEnd`
-- `wheel` → `wheelZoom`
-- `touchstart` → `touchStart`
-- `touchmove` → `touchMove`
-- `touchend` → `touchEnd`
-
-Verification:
-
-- code confirms header claim that event binding order/input behavior is runtime-sensitive;
-- input binding is not abstracted into a framework.
+```text
+pointerdown → pointerStart
+pointermove → pointerMove
+pointerup → pointerEnd
+pointercancel → pointerEnd
+wheel → wheelZoom
+touchstart → touchStart
+touchmove → touchMove
+touchend → touchEnd
+```
 
 ---
 
-Section: `POINTER INPUT`
+```text
+СЕКЦИЯ: POINTER INPUT
+РОЛЬ: обработать pointer tap/drag routing и camera pan state.
+ВКЛЮЧАЕТ: getCanvasPoint(), getPointer(), getTapThreshold(), pointerStart(), pointerMove(), pointerEnd()
+```
 
-Role:
+Function-level comments:
 
-- handle pointer tap/drag routing and camera pan state.
+```text
+getCanvasPoint(): переводит client coordinates в canvas-local point.
+getPointer(): извлекает canvas-local point из pointer event.
+getTapThreshold(): возвращает movement threshold для tap/drag distinction.
+pointerStart(): начинает pointer drag/tap tracking и обновляет hovered tile.
+pointerMove(): обновляет hover, определяет drag и двигает camera при pan.
+ТОЧКА РОСТА: input routing может позже получить отдельную abstraction layer.
+ВАЖНО: input framework пока НЕ реализован.
+pointerEnd(): завершает pointer routing и dispatch tap если movement threshold не превышен.
+```
 
-Includes:
+Internal markers preserved:
 
-- `getCanvasPoint()`
-- `getPointer()`
-- `getTapThreshold()`
-- `pointerStart()`
-- `pointerMove()`
-- `pointerEnd()`
-
-Function-level markup:
-
-- `getCanvasPoint()`: converts client coordinates to canvas-local point.
-- `getPointer()`: extracts canvas-local point from pointer event.
-- `getTapThreshold()`: returns movement threshold for tap/drag distinction.
-- `pointerStart()`: starts pointer drag/tap tracking and updates hovered tile.
-- `pointerMove()`: updates hover, detects drag and moves camera during pan.
-- `pointerEnd()`: ends pointer routing and dispatches tap if movement threshold not exceeded.
-
-Growth points / important notes:
-
-- input routing may later receive separate abstraction layer;
-- input framework is NOT implemented.
-
-Internal markup preserved as cognition signals:
-
-- `HOVER UPDATE`
-- `DRAG THRESHOLD CHECK`
-- `CAMERA PAN`
-
-Verification:
-
-- code confirms input and camera are tightly connected;
-- tap detection depends on current UI mode/device layout;
-- future map must not split input/camera as implemented subsystems.
+```text
+HOVER UPDATE
+DRAG THRESHOLD CHECK
+CAMERA PAN
+```
 
 ---
 
-Section: `TOUCH / PINCH INPUT`
+```text
+СЕКЦИЯ: TOUCH / PINCH INPUT
+РОЛЬ: обработать two-finger pinch gesture и передать zoom в camera helper.
+ВКЛЮЧАЕТ: touchStart(), touchMove(), touchEnd(), touchDistance(), touchCenter()
+```
 
-Role:
+Function-level comments:
 
-- handle two-finger pinch gesture and pass zoom to camera helper.
-
-Includes:
-
-- `touchStart()`
-- `touchMove()`
-- `touchEnd()`
-- `touchDistance()`
-- `touchCenter()`
-
-Function-level markup:
-
-- `touchStart()`: activates pinch mode during two-finger touch.
-- `touchMove()`: calculates pinch ratio and dispatches `zoomAt()`.
-- `touchEnd()`: disables pinch mode when two-finger touch ends.
-- `touchDistance()`: calculates distance between two touch points.
-- `touchCenter()`: calculates canvas-local center between two touch points.
-
-Growth points / important notes:
-
-- mobile gestures may later expand beyond pinch zoom;
-- gesture framework is NOT implemented.
-
-Verification:
-
-- code confirms touch handling is directly embedded in `game.js`;
-- no separate gesture framework exists.
+```text
+touchStart(): активирует pinch mode при two-finger touch.
+ТОЧКА РОСТА: mobile gestures могут позже расшириться за пределы pinch zoom.
+ВАЖНО: gesture framework пока НЕ реализован.
+touchMove(): рассчитывает pinch ratio и dispatch zoomAt().
+touchEnd(): отключает pinch mode когда two-finger touch завершён.
+touchDistance(): рассчитывает distance между двумя touch points.
+touchCenter(): рассчитывает canvas-local center между двумя touch points.
+```
 
 ---
 
-Section: `CAMERA / ZOOM`
+```text
+СЕКЦИЯ: CAMERA / ZOOM
+РОЛЬ: изменить camera zoom/x/y state и удерживать camera внутри map bounds.
+ВКЛЮЧАЕТ: wheelZoom(), zoomAt(), resetZoom(), clampCamera()
+```
 
-Role:
+Function-level comments:
 
-- mutate camera zoom/x/y state and keep camera inside map bounds.
-
-Includes:
-
-- `wheelZoom()`
-- `zoomAt()`
-- `resetZoom()`
-- `clampCamera()`
-
-Function-level markup:
-
-- `wheelZoom()`: routes wheel delta into `zoomAt()` around pointer position.
-- `zoomAt()`: changes `camera.zoom` and preserves world point under screen position.
-- `resetZoom()`: resets camera zoom/position and optionally shows notification.
-- `clampCamera()`: constrains `camera.x/y` to current map bounds.
-
-Growth points / important notes:
-
-- camera controls may later require separate stabilization layer;
-- camera subsystem is NOT implemented.
-
-Verification:
-
-- code confirms camera math is runtime-sensitive;
-- render helpers depend on camera transform helpers from this file.
+```text
+wheelZoom(): routes wheel delta into zoomAt() вокруг pointer position.
+zoomAt(): меняет camera.zoom и сохраняет world point под screen position.
+ТОЧКА РОСТА: camera controls могут позже потребовать отдельной stabilization layer.
+ВАЖНО: camera subsystem пока НЕ реализован.
+resetZoom(): сбрасывает camera zoom/position и опционально показывает notification.
+clampCamera(): ограничивает camera.x/y текущими map bounds.
+```
 
 ---
 
-Section: `COORDINATE MAPPING`
+```text
+СЕКЦИЯ: COORDINATE MAPPING
+РОЛЬ: переводить coordinates между screen, world и tile spaces для input/render routing.
+ВКЛЮЧАЕТ: updateHoveredTile(), screenToWorld(), screenToTile(), worldToScreen(), scaled()
+```
 
-Role:
+Function-level comments:
 
-- translate coordinates between screen, world and tile spaces for input/render routing.
-
-Includes:
-
-- `updateHoveredTile()`
-- `screenToWorld()`
-- `screenToTile()`
-- `worldToScreen()`
-- `scaled()`
-
-Function-level markup:
-
-- `updateHoveredTile()`: stores hovered tile based on screen coordinates.
-- `screenToWorld()`: converts screen coordinates to world coordinates using camera.
-- `screenToTile()`: converts screen coordinates to tile coordinates via world coordinates.
-- `worldToScreen()`: converts world coordinates to screen coordinates using camera.
-- `scaled()`: scales value through current `camera.zoom`.
-
-Verification:
-
-- code confirms this file provides transform helpers used by render layers;
-- coordinate mapping is a cross-layer contract between input and rendering.
+```text
+updateHoveredTile(): сохраняет hovered tile на основе screen coordinates.
+screenToWorld(): переводит screen coordinates в world coordinates с учётом camera.
+screenToTile(): переводит screen coordinates в tile coordinates через world coordinates.
+worldToScreen(): переводит world coordinates в screen coordinates с учётом camera.
+scaled(): масштабирует value через current camera.zoom.
+```
 
 ---
 
-Section: `TAP ROUTING`
+```text
+СЕКЦИЯ: TAP ROUTING
+РОЛЬ: маршрутизировать tap в placement или selected object flow без ownership над этими systems.
+ВКЛЮЧАЕТ: handleTap()
+```
 
-Role:
+Function-level comments:
 
-- route tap into placement or selected object flow without owning those systems.
+```text
+handleTap(): routes tap to placement selection, tower selection, or selection clear.
+ТОЧКА РОСТА: tap routing может позже получить mode/state routing rules.
+ВАЖНО: command router/scene manager пока НЕ реализованы.
+```
 
-Includes:
+Internal markers preserved:
 
-- `handleTap()`
-
-Function-level markup:
-
-- `handleTap()`: routes tap to placement selection, tower selection, or selection clear.
-
-Growth points / important notes:
-
-- tap routing may later receive mode/state routing rules;
-- command router/scene manager is NOT implemented.
-
-Internal markup preserved as cognition signals:
-
-- `TILE RESOLUTION`
-- `BUILD MODE ROUTING`
-- `TOWER SELECTION ROUTING`
-
-Verification:
-
-- code confirms `handleTap()` bridges input into placement and selected-object systems;
-- it calls external ownership functions rather than owning placement/selection logic.
+```text
+TILE RESOLUTION
+BUILD MODE ROUTING
+TOWER SELECTION ROUTING
+```
 
 ---
 
-Section: `MAIN LOOP / UPDATE-RENDER SEQUENCING`
+```text
+СЕКЦИЯ: MAIN LOOP / UPDATE-RENDER SEQUENCING
+РОЛЬ: orchestrate update phase, render phase, UI overlays and next animation frame.
+ВКЛЮЧАЕТ: gameLoop()
+```
 
-Role:
+Function-level comments:
 
-- orchestrate update phase, render phase, UI overlays and next animation frame.
+```text
+gameLoop(): выполняет fixed order update/render orchestration и запрашивает следующий frame.
+ТОЧКА РОСТА: loop orchestration может позже учитывать pause/state modes.
+ВАЖНО: game engine/scene manager/ECS пока НЕ реализованы.
+```
 
-Includes:
+Internal markers preserved:
 
-- `gameLoop()`
+```text
+UPDATE PHASE
+WORLD RENDER PHASE
+ENTITY RENDER PHASE
+UI/HUD RENDER PHASE
+DOM VISIBILITY SYNC
+NEXT FRAME REQUEST
+```
 
-Function-level markup:
+#### Verification block
 
-- `gameLoop()`: executes fixed-order update/render orchestration and requests next frame.
+source_read_status: fully re-read.
 
-Growth points / important notes:
+header_matches_code: yes.
 
-- loop orchestration may later account for pause/state modes;
-- game engine/scene manager/ECS is NOT implemented.
+section_list_matches_code: yes.
 
-Internal markup preserved as cognition signals:
+function_list_matches_code: yes.
 
-- `UPDATE PHASE`
-- `WORLD RENDER PHASE`
-- `ENTITY RENDER PHASE`
-- `UI/HUD RENDER PHASE`
-- `DOM VISIBILITY SYNC`
-- `NEXT FRAME REQUEST`
+missing_from_header:
 
-Verification:
+- `RUNTIME INIT` section has no named function ownership but is real runtime startup sequence;
+- event listener bindings are correctly declared as owned, not individual function-only ownership.
 
-- code confirms update/render order is an implicit runtime contract;
-- `gameLoop()` calls systems, render, UI overlay and DOM sync functions in fixed sequence;
-- future map should preserve this as contract note, not generated dependency graph.
+header_claims_not_confirmed:
 
-#### Verification summary
+- none detected.
 
-Header consistency: high.
+code_confirms:
 
-Missing from header:
+- file owns runtime bootstrap, input routing, camera helpers, coordinate mapping and `gameLoop()` sequencing;
+- no input framework, scene manager, game engine or ECS is implemented;
+- placement validation, selected object actions, enemy movement internals, tower combat internals and render internals are external to this file;
+- update/render order is fixed inside `gameLoop()`.
 
-- no major missing top-level responsibilities detected;
-- runtime init calls are section-level responsibilities not fully represented as top header ownership.
+code_contradicts:
 
-Code confirms:
+- none detected.
 
-- `game.js` is runtime orchestration hub;
-- input, camera, coordinate mapping and loop sequencing are intentionally centralized;
-- no engine/scene/ECS/input framework exists.
+needs_review:
 
-Code contradicts:
-
-- no direct contradiction found.
-
-Needs review:
-
-- event binding changes;
-- input/camera behavior changes;
-- coordinate transform changes;
+- event binding order changes;
+- input behavior changes;
+- camera math changes;
 - tap routing changes;
-- render/update order changes;
-- game-loop extraction.
+- update/render order changes;
+- `gameLoop()` sequence changes;
+- extraction of input/camera/loop subsystems.
 
-Confidence:
-
-- high that header is honest;
-- medium/high that boundaries are understandable;
-- still requires verification before extraction because runtime contract density is high.
+confidence: high for header honesty; medium/high for boundary understanding; verification still required before runtime changes.
 
 #### Cognition notes
 
-Mixed responsibility:
+mixed_responsibility: high, but intentionally centralized around runtime orchestration.
 
-- high, but aligned around orchestration rather than accidental random mixing.
+implicit_contracts:
 
-Implicit contracts:
+- file loads after data/state/systems/ui layers;
+- `resizeCanvas()` can rebuild UI;
+- pointer/touch/wheel bindings route into camera and tap systems;
+- coordinate helpers are shared by input and rendering;
+- `handleTap()` bridges into placement and selected object actions without owning them;
+- `gameLoop()` fixed order controls update/render/UI overlay/DOM visibility sequence.
 
-- final load position;
-- startup/init before loop;
-- event binding order;
-- camera transform helpers used by render layer;
-- tap routing bridges into placement/selection systems;
-- fixed update/render/UI sequence.
+hallucination_risks:
 
-Hallucination risks:
+- do not infer input framework;
+- do not infer camera subsystem;
+- do not infer scene manager/game engine;
+- do not infer ECS;
+- do not conceptually split input/camera/loop before actual code extraction exists.
 
-- future map may falsely infer separate input framework;
-- future map may falsely infer camera subsystem;
-- future map may falsely infer scene manager/game engine;
-- future map may split responsibilities conceptually before code actually separates them.
-
-Future map relevance:
-
-- essential;
-- should carry `verification_flag: required`;
-- should preserve section-level contracts;
-- should avoid dependency graph generation.
+future_map_relevance: essential.
 
 ---
 
 ## 19. Batch A extraction closure state
 
-Completed extraction batch:
+Completed corrected extraction batch:
 
 - Batch A — runtime orchestration:
   - `js/systems/systems.js`
   - `js/game.js`
 
+Correction status:
+
+- Batch A wording corrected from normalized/paraphrased extraction toward source-faithful markup extraction.
+
 Integrated extraction types:
 
-- full top header extraction;
-- owns / does-not-own extraction;
-- reads / mutates extraction;
-- used-by extraction;
-- runtime contract extraction;
-- forbidden changes extraction;
-- section headers;
-- section roles;
-- included functions;
-- function-level role comments;
-- growth points;
-- important notes;
-- internal cognition markers;
-- verification summaries;
-- mismatch / missing-header observations;
-- confidence and needs-review notes.
+- top file header wording;
+- ROLE / STATUS / EXTRACTED OUT where present;
+- OWNS / DOES NOT OWN;
+- READS / MUTATES;
+- USED BY;
+- RUNTIME CONTRACT;
+- FORBIDDEN CHANGES;
+- section headers exactly;
+- section roles exactly;
+- INCLUDED functions exactly;
+- function-level role comments as close to source wording as possible;
+- GROWTH POINTS / IMPORTANT notes where present;
+- operationally meaningful internal section markers;
+- verification blocks with explicit mismatch fields.
 
 Remaining extraction batches:
 
