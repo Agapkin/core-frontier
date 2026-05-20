@@ -21,7 +21,7 @@ docs/project/roadmap/
 
 CORE FRONTIER прошёл несколько этапов runtime development, затем перешёл в architecture / navigation stabilization workflow.
 
-Текущий verified status после Stage 03.4 / 03.4A visibility synchronization:
+Текущий verified status после Stage 03.4 / 03.4A / 03.4B visibility synchronization:
 
 - Stage 03.1 completed and closed;
 - Stage 03.2 completed as governance/navigation operational foundation;
@@ -32,6 +32,7 @@ CORE FRONTIER прошёл несколько этапов runtime development, 
 - Stage 03.4 planning/discovery phase active;
 - Stage 03.4 execution/runtime evolution phase NOT STARTED;
 - Stage 03.4A mutation classes and synchronization radius planning document exists;
+- Stage 03.4B repository archetypes and repository cognition preparation document exists;
 - architecture package split completed;
 - roadmap package split completed;
 - legacy architecture.md removed;
@@ -50,7 +51,7 @@ Stage 03.3 / 03.3B подтвердили:
 - active CSS remains inline inside index.html;
 - css/style.css is not linked by index.html.
 
-Stage 03.4 / 03.4A сейчас находятся в planning/discovery visibility layer.
+Stage 03.4 / 03.4A / 03.4B сейчас находятся в planning/discovery visibility layer.
 
 Они НЕ запускают:
 
@@ -110,12 +111,15 @@ Legacy docs/project/roadmap.md удалён.
 
     docs/project/stage_03_4.md
     docs/project/stage_03_4A_mutation_classes.md
+    docs/project/stage_03_4B_repository_archetypes.md
 
 stage_03_4.md фиксирует foundation слоя контроля влияния изменений и repository impact mapping.
 
 stage_03_4A_mutation_classes.md фиксирует mutation classes и synchronization radius planning.
 
-Оба документа являются planning/discovery artifacts.
+stage_03_4B_repository_archetypes.md фиксирует repository archetypes, repository layer distinctions, runtime truth vs interpretation distinction и preparation foundation для будущего repository cognition / skeletal repository_map planning discipline.
+
+Все эти документы являются planning/discovery artifacts.
 
 Они НЕ являются:
 
@@ -145,15 +149,16 @@ Roadmap НЕ должен:
 
 ## Текущий safe evolution order
 
-Подтверждённый порядок развития проекта после Stage 03.4 / 03.4A visibility synchronization:
+Подтверждённый порядок развития проекта после Stage 03.4 / 03.4A / 03.4B visibility synchronization:
 
 1. сохранять Stage 03.3B frozen baseline;
 2. вести Stage 03.4 только как planning/discovery phase;
 3. использовать Stage 03.4A для mutation classes и synchronization radius planning;
-4. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
-5. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
-6. не менять runtime/code topology в documentation passes;
-7. продолжать только bounded compatibility-safe workflow.
+4. использовать Stage 03.4B для repository archetype extraction и repository cognition preparation;
+5. не начинать Stage 03.4 execution/runtime evolution без отдельного explicit pass;
+6. не создавать repository_map.yml без отдельного bounded planning/extraction pass;
+7. не менять runtime/code topology в documentation passes;
+8. продолжать только bounded compatibility-safe workflow.
 
 ---
 
@@ -182,6 +187,7 @@ Architecture package разделён на bounded files:
     docs/project/architecture/docs_structure.md
     docs/project/architecture/workflow.md
     docs/project/architecture/ai_navigation_plan.md
+    docs/project/architecture/synchronization_protocols.md
 
 Roadmap package должен ссылаться на architecture package, но не дублировать его.
 
@@ -227,10 +233,11 @@ Deferred intentionally:
 1. preserve Stage 03.3B frozen baseline;
 2. maintain Stage 03.4 planning/discovery visibility;
 3. use Stage 03.4A as mutation-class planning artifact;
-4. verify structural mutations before synchronization;
-5. apply only mandatory bounded synchronization radius;
-6. avoid workflow/governance rewrites until planning concepts are verified;
-7. defer repository_map.yml creation to a separate explicit bounded pass.
+4. use Stage 03.4B as repository archetype extraction and repository cognition preparation artifact;
+5. verify structural mutations before synchronization;
+6. apply only mandatory bounded synchronization radius;
+7. avoid workflow/governance rewrites until planning concepts are verified;
+8. defer repository_map.yml creation to a separate explicit bounded pass.
 
 Важно:
 
@@ -251,5 +258,5 @@ roadmap = порядок действий;
 ai/*.yml = compressed navigation;
 runtime files = source of truth.
 
-Stage 03.4 / 03.4A добавляют impact-awareness planning layer,
+Stage 03.4 / 03.4A / 03.4B добавляют impact-awareness, synchronization-radius и repository-cognition planning layer,
 но НЕ превращают roadmap в governance engine или automation system.
