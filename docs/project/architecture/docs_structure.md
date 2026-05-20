@@ -49,7 +49,7 @@ docs/design/ содержит design/mechanics документацию.
 
 ## Актуальные project documents
 
-Текущие key documents после Stage 03.4 planning visibility synchronization:
+Текущие key documents после Stage 03.4 / 03.4A / 03.4B planning visibility synchronization:
 
     ai/current_status.yml
     ai/docs_map.yml
@@ -86,6 +86,7 @@ docs/design/ содержит design/mechanics документацию.
     docs/project/stage_03_3.md
     docs/project/stage_03_4.md
     docs/project/stage_03_4A_mutation_classes.md
+    docs/project/stage_03_4B_repository_archetypes.md
     docs/project/stage_03_developer_report_01.md
     docs/project/stage_03_1_developer_report_01.md
     docs/project/stage_03_1_final_snapshot.md
@@ -147,7 +148,7 @@ Stage 03.3B дополнительно подтвердил:
 
 ---
 
-## Stage 03.4 / 03.4A documents
+## Stage 03.4 / 03.4A / 03.4B documents
 
 stage_03_4.md — Stage 03.4 planning/discovery document for repository impact awareness and repository impact mapping foundation.
 
@@ -164,6 +165,29 @@ Stage 03.4A НЕ является:
 - automation rollout;
 - parser/scanner implementation;
 - governance engine.
+
+stage_03_4B_repository_archetypes.md — Stage 03.4B planning/discovery artifact for repository archetypes and repository cognition preparation.
+
+Stage 03.4B formalizes:
+
+- repository archetypes;
+- repository layer distinctions;
+- runtime truth vs interpretation layer distinction;
+- authority-sensitive files;
+- synchronization-sensitive files;
+- runtime-critical files;
+- extraction-first repository cognition preparation;
+- skeletal repository_map.yml planning discipline.
+
+Stage 03.4B НЕ является:
+
+- repository_map.yml implementation;
+- parser/scanner implementation;
+- governance engine;
+- automation rollout;
+- runtime rewrite;
+- ECS/framework stage;
+- synchronization automation stage.
 
 ---
 
@@ -210,6 +234,8 @@ Current active navigation files:
 ai/ не должен дублировать giant reasoning archive из docs/project/.
 
 runtime_map.yml, contracts.yml, repository_map.yml и automation tooling пока НЕ реализованы.
+
+repository_map.yml remains deferred/not implemented and must remain a future compressed operational interpretation layer, not runtime authority or governance engine.
 
 ---
 
@@ -287,6 +313,14 @@ structural mutation detection
 → bounded mandatory sync
 → post-sync verification
 
+Stage 03.4B adds repository cognition preparation focus:
+
+repository archetype extraction
+→ authority-zone visibility
+→ runtime truth vs interpretation distinction
+→ synchronization-sensitive classification
+→ skeletal repository_map planning discipline
+
 Project intentionally avoids:
 
 - fake modularization;
@@ -294,7 +328,9 @@ Project intentionally avoids:
 - aggressive generic architecture;
 - imports/exports migration hysteria;
 - fake repository_map authority;
-- fake governance engine.
+- fake governance engine;
+- premature parser/scanner implementation;
+- automation-before-understanding.
 
 Deferred areas:
 
@@ -308,7 +344,10 @@ Deferred areas:
 - contracts.yml;
 - imports/exports migration;
 - aggressive extraction;
-- CSS extraction/linking pass.
+- CSS extraction/linking pass;
+- parser/scanner implementation;
+- automation rollout;
+- governance engine.
 
 ---
 
@@ -412,9 +451,10 @@ Human memory layer должен оставаться читаемым для ч�
 
 Но giant markdown docs не должны использоваться как единственный navigation mechanism.
 
-Stage 03.4 / 03.4A visibility synchronization подтвердил разделение ролей:
+Stage 03.4 / 03.4A / 03.4B visibility synchronization подтвердил разделение ролей:
 
 - docs/project/ хранит human-readable history и architecture narrative;
 - ai/*.yml хранит compressed repository navigation layer;
 - runtime files остаются source of truth для runtime topology;
-- repository_map.yml пока не реализован и должен оставаться future compressed operational interpretation layer.
+- repository_map.yml пока не реализован и должен оставаться future compressed operational interpretation layer;
+- interpretation layers help repository cognition but do not replace runtime truth.
