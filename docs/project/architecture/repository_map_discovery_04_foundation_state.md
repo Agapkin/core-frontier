@@ -500,6 +500,8 @@ code_confirms:
 - file owns `clone()` and `updatePower()` helpers;
 - file reads `gameBalance` and `towerTypes` from `data.js`;
 - `updateResponsiveLayout()` mutates `uiLayout` and is invoked during initialization;
+- after `js/ui/layout.js` loads, the effective browser-global `updateResponsiveLayout()` used by later runtime calls is shadowed by the layout.js version;
+- Batch 04 describes state.js foundation/init ownership and must not be read as sole effective runtime ownership of responsive recalculation after UI layer load;
 - `updatePower()` mutates `power.used` from `towers` collection;
 - tower-specific identifiers remain current runtime truth;
 - generic selected-object, placed-object and state-store systems are not implemented.
@@ -510,6 +512,8 @@ code_contradicts:
 
 needs_review:
 
+- duplicate browser-global `updateResponsiveLayout()` helper name with `js/ui/layout.js`;
+- post-layout-load responsive recalculation authority;
 - state shape changes;
 - declaration order changes;
 - initial value changes;
@@ -520,7 +524,7 @@ needs_review:
 - checkpoint shape changes;
 - power/economy semantics changes.
 
-confidence: high for shared state foundation authority; high for header honesty; high for current runtime shape.
+confidence: high for shared state foundation authority; high for header honesty; medium/high for effective responsive recalculation authority after UI layer load.
 
 ### Cognition notes
 
@@ -562,7 +566,16 @@ helper_logic:
 
 - `clone()`;
 - `updatePower()`;
-- `updateResponsiveLayout()`.
+- `updateResponsiveLayout()` as bootstrap-time responsive initialization helper before UI layout layer load.
+
+responsive_authority_clarification:
+
+- `state.js` owns initial `uiLayout` state shape and invokes bootstrap-time `updateResponsiveLayout()` during initial load;
+- `js/ui/layout.js` later declares another browser-global `updateResponsiveLayout()`;
+- because `layout.js` loads after `state.js`, later runtime calls resolve to the layout.js version;
+- this is classified as duplicate browser-global helper name / shadowing-load-order ambiguity;
+- preserve as extraction/split residue candidate, runtime authority ambiguity, future refactor candidate, possible runtime bug risk and needs further review;
+- no immediate source-header correction is implied by this clarification.
 
 implicit_contracts:
 
@@ -581,7 +594,8 @@ hallucination_risks:
 - do not infer selectedObject architecture;
 - do not infer placedObjects collection;
 - do not treat tower-specific identifiers as already migrated;
-- do not treat helper functions as gameplay rule ownership.
+- do not treat helper functions as gameplay rule ownership;
+- do not treat Batch 04 as sole effective runtime ownership of responsive recalculation after `layout.js` load.
 
 future_map_relevance: essential foundation authority layer.
 
@@ -615,6 +629,8 @@ Important distinction:
 
 - `data.js` is foundation data/config authority;
 - `state.js` is foundation mutable state authority;
+- `state.js` owns initial `uiLayout` state shape and bootstrap-time responsive initialization;
+- effective runtime responsive recalculation after UI layer load is qualified by `js/ui/layout.js` shadowing behavior;
 - downstream systems read/mutate state but do not own foundation state shape unless explicitly stated.
 
 ---
@@ -651,20 +667,23 @@ Correction candidate status:
 
 - no direct contradiction;
 - no missing top-level ownership detected;
-- header is honest and source-faithful.
+- header is honest and source-faithful;
+- duplicate `updateResponsiveLayout()` with `js/ui/layout.js` qualifies effective runtime interpretation but is not immediate source-header correction.
 
 Correction class:
 
-- none currently active.
+- none currently active;
+- needs-review for duplicate browser-global helper name / shadowing-load-order semantics.
 
 Recommended source-markup correction:
 
-- not needed now.
+- not needed in this synchronization pass.
 
 Important cognition clarification:
 
 - file is shared mutable state foundation;
-- helper functions mutate specific state zones (`uiLayout`, `power.used`) but do not own gameplay rules.
+- helper functions mutate specific state zones (`uiLayout`, `power.used`) but do not own gameplay rules;
+- `updateResponsiveLayout()` in this file is bootstrap-time state/layout initialization before `layout.js` later shadows the global helper name.
 
 ---
 
@@ -682,6 +701,7 @@ Extraction status:
 - verification blocks added;
 - foundation relationship notes added;
 - correction candidates classified;
+- duplicate `updateResponsiveLayout()` interpretation synchronized with Batch 06 audit finding;
 - no source JS mutation performed.
 
 Integrated extraction types:
