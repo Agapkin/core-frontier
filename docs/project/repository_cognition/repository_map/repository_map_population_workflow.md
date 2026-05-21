@@ -70,7 +70,33 @@ Do NOT automatically rewrite all layers.
 
 ---
 
-## 4. No Discovery prose copy rule
+## 4. Cross-layer verification rule
+
+Repository Map layers must not be treated as isolated truth containers.
+
+When ambiguity, pressure, mismatch or uncertainty appears,
+verification should cross-check:
+
+- runtime/source files
+- Discovery provenance/evidence
+- neighboring Repository Map layers
+
+No single layer is self-sufficient truth.
+
+Runtime/source provides actual authority.
+Discovery provides provenance and verification context.
+Neighboring Repository Map layers may expose hidden contradictions or semantic drift.
+
+If needed,
+perform deeper reread before semantic stabilization.
+
+Localize conflicts before correction.
+
+Correction passes must remain bounded.
+
+---
+
+## 5. No Discovery prose copy rule
 
 Discovery preserves:
 
@@ -88,7 +114,7 @@ Do NOT copy long Discovery prose into Repository Map.
 
 ---
 
-## 5. Split-package discipline
+## 6. Split-package discipline
 
 Each Repository Map file has a bounded role.
 
@@ -107,7 +133,7 @@ Do NOT collapse package into giant YAML.
 
 ---
 
-## 6. Index synchronization rule
+## 7. Index synchronization rule
 
 After any Repository Map layer changes status or scope,
 repository_map_index.yml must be checked.
@@ -126,7 +152,7 @@ explicitly mention this in audit output.
 
 ---
 
-## 7. Reference anchoring rule
+## 8. Reference anchoring rule
 
 If populated layers reference:
 
@@ -142,7 +168,7 @@ Prefer minimal bounded anchors.
 
 ---
 
-## 8. Direct-main workflow rule
+## 9. Direct-main workflow rule
 
 Repository Map cognition-layer-only changes may be made directly on main when:
 
@@ -162,7 +188,7 @@ Branch + PR + merge remains required for:
 
 ---
 
-## 9. Commit discipline
+## 10. Commit discipline
 
 Every commit should contain:
 
@@ -184,7 +210,7 @@ Git history must preserve mutation lineage.
 
 ---
 
-## 10. Standard audit cycle
+## 11. Standard audit cycle
 
 Recommended Repository Map pass flow:
 
