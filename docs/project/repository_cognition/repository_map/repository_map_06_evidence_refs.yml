@@ -1,29 +1,123 @@
 # Repository Map Evidence References Layer
+# Stage 0.3.4B — minimal evidence anchors for file inventory refs only
 
 meta:
-  status: skeleton_only
-  purpose: "Evidence linkage between Repository Map records and Discovery evidence."
+  status: minimally_anchored_for_file_inventory
+  purpose: "Lightweight provenance anchors referenced by repository_map_01_files.yml."
+  scope: "Evidence anchors only; not extraction archive or synchronization layer."
+  primary_layer: repository_map_01_files.yml
 
 stores:
   - evidence_refs
   - provenance_links
   - verification_refs
+  - file_inventory_anchor_records
 
 must_not_store:
   - full_discovery_prose
   - extraction_history_dump
   - mandatory_live_sync_logic
+  - reasoning_archives
+  - synchronization_engines
 
-record_shape_example:
-  evidence_ref:
-    evidence_id:
-    discovery_source:
-    related_refs: []
-    verification_status:
+evidence_refs:
+  - evidence_id: evidence:discovery:batch01
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_01_runtime_orchestration.md
+    related_refs:
+      - file:js/systems/systems
+      - file:js/game
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems.js
+      - js/game.js
+
+  - evidence_id: evidence:discovery:batch02
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_02_extracted_systems.md
+    related_refs:
+      - file:js/systems/systems_placement
+      - file:js/systems/systems_selected_object_actions
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_placement.js
+      - js/systems/systems_selected_object_actions.js
+
+  - evidence_id: evidence:discovery:batch03a
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md
+    related_refs:
+      - file:js/ui/controls
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/controls.js
+
+  - evidence_id: evidence:discovery:batch03b
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md
+    related_refs:
+      - file:js/ui/canvas_world
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_world.js
+
+  - evidence_id: evidence:discovery:batch03c
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md
+    related_refs:
+      - file:js/ui/canvas_entities
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_entities.js
+
+  - evidence_id: evidence:discovery:batch04
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_04_foundation_state.md
+    related_refs:
+      - file:js/data
+      - file:js/state
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/data.js
+      - js/state.js
+
+  - evidence_id: evidence:discovery:batch05
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_manager.md
+    related_refs:
+      - file:js/systems/systems_wave_manager
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_wave_manager.js
+
+  - evidence_id: evidence:discovery:batch06
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_06_ui_support.md
+    related_refs:
+      - file:js/ui/helpers
+      - file:js/ui/layout
+      - file:js/ui/notifications
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/helpers.js
+      - js/ui/layout.js
+      - js/ui/notifications.js
+
+  - evidence_id: evidence:discovery:batch07
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_07_panels.md
+    related_refs:
+      - file:js/ui/panels
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/panels.js
+
+  - evidence_id: evidence:discovery:batch08
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_entry.md
+    related_refs:
+      - file:index_html
+      - file:css/style
+    verification_status: verified_against_runtime_source
+    source_files:
+      - index.html
+      - css/style.css
 
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
-  - "Evidence references should stay lightweight."
+  - "Evidence references remain lightweight provenance anchors only."
+  - "This pass anchors only refs already used by repository_map_01_files.yml."
+  - "Do not expand into extraction archive or synchronization engine."
 
 placeholders:
-  evidence_refs: []
+  future_evidence_population: []
