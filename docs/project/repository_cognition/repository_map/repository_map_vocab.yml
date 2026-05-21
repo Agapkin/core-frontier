@@ -94,7 +94,7 @@ stores:
     - future_placeable_object_pressure
     - selected_object_boundary
     - selected_object_architecture_not_implemented
-    - generic_object_not_implemented
+    - generic_object_system_not_implemented
     - render_only_boundary
     - future_generic_render_pressure
     - lifecycle_density_pressure
@@ -208,6 +208,11 @@ critical_distinctions:
   - "callback wiring != callback ownership"
   - "downstream mutation != foundation state shape ownership"
 
+clarification_notes:
+  downstream_mutation_marker_pair:
+    authority_type: "downstream_mutation_without_state_shape_ownership describes files that mutate shared runtime state without owning the foundation state shape."
+    boundary_marker: "downstream_mutation_not_state_shape_ownership preserves the interpretation rule that mutation does not imply state-shape ownership."
+
 normalization_notes:
   alias_risks:
     - "tower / placed object / selected object must not be silently normalized."
@@ -215,6 +220,7 @@ normalization_notes:
     - "orchestration / mixed responsibility must not imply clean architecture."
     - "render entity / gameplay entity must remain distinct."
     - "not_implemented markers preserve current absence, not future commitment."
+    - "generic_object_system_not_implemented is narrower than generic_object_not_implemented and matches source/discovery wording."
   speculative_terms_blocked:
     - ecs_runtime
     - generic_object_system_as_existing
