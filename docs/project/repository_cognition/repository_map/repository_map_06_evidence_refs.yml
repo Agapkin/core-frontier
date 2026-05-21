@@ -20,7 +20,7 @@ must_not_store:
   - reasoning_archives
   - synchronization_engines
 
- evidence_refs:
+evidence_refs:
   - evidence_id: evidence:discovery:batch01
     discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_01_runtime_orchestration.md
     related_refs:
@@ -76,7 +76,7 @@ must_not_store:
       - js/state.js
 
   - evidence_id: evidence:discovery:batch05
-    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_generation.md
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_manager.md
     related_refs:
       - file:js/systems/systems_wave_manager
     verification_status: verified_against_runtime_source
@@ -96,7 +96,7 @@ must_not_store:
       - js/ui/notifications.js
 
   - evidence_id: evidence:discovery:batch07
-    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_07_ui_panels.md
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_07_panels.md
     related_refs:
       - file:js/ui/panels
     verification_status: verified_against_runtime_source
@@ -104,7 +104,7 @@ must_not_store:
       - js/ui/panels.js
 
   - evidence_id: evidence:discovery:batch08
-    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_shell.md
+    discovery_source: docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_entry.md
     related_refs:
       - file:index_html
       - file:css/style
