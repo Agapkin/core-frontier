@@ -8,9 +8,9 @@
 
 Detailed source-faithful extraction теперь находится только в bounded sub-batch files:
 
-- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
-- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
-- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md`
 
 Назначение этого root-файла:
 
@@ -69,7 +69,7 @@ The split exists to reduce:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md`
 
 Owned source file:
 
@@ -101,7 +101,7 @@ Key preserved finding:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md`
 
 Owned source file:
 
@@ -128,7 +128,7 @@ Key preserved finding:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md`
 
 Owned source file:
 
