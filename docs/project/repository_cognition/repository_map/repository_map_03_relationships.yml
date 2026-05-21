@@ -1,0 +1,32 @@
+# Repository Map Relationships Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Semantic relationship inventory between repository entities."
+
+stores:
+  - ownership_relationships
+  - mutation_relationships
+  - bridge_relationships
+  - lifecycle_relationships
+
+must_not_store:
+  - giant_dependency_graphs
+  - generated_runtime_traces
+  - duplicated_entity_records
+
+record_shape_example:
+  relationship_item:
+    relationship_id:
+    relationship_type:
+    source_ref:
+    target_ref:
+    semantic_strength:
+    evidence_refs: []
+
+anti_entropy_notes:
+  - "Relationships should stay operationally meaningful."
+  - "Avoid graph explosion."
+
+placeholders:
+  relationships: []
