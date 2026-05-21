@@ -1,0 +1,37 @@
+# Repository Map Hotspots Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Cross-layer diagnostic telemetry for overloaded or high-pressure repository areas."
+
+stores:
+  - hotspot_signals
+  - cross_layer_density
+  - semantic_pressure_overlap
+  - synchronization_hotspots
+
+must_not_store:
+  - automatic_refactor_commands
+  - autonomous_architecture_decisions
+  - speculative_mutation_plans
+
+telemetry_rules:
+  - "Hotspots are diagnostic telemetry only."
+  - "Hotspots do not authorize refactors."
+  - "Separate audit required before any mutation decisions."
+
+record_shape_example:
+  hotspot_item:
+    hotspot_id:
+    related_refs: []
+    signal_types: []
+    pressure_markers: []
+    evidence_refs: []
+    review_required: true
+
+anti_entropy_notes:
+  - "Avoid AI refactor escalation from telemetry alone."
+  - "Keep hotspot records bounded and evidence-linked."
+
+placeholders:
+  hotspots: []
