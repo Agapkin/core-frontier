@@ -1,0 +1,67 @@
+# Repository Map Index
+# Stage 0.3.4B — package skeleton only
+
+meta:
+  package: repository_map
+  status: skeleton_only
+  purpose: "Root manifest and navigation layer for the split Repository Map package."
+  scope: "Compressed operational semantic topology; not populated yet."
+
+package_purpose:
+  - "Provide compact navigation across Repository Map package layers."
+  - "Preserve structured cognition without duplicating Discovery prose."
+  - "Keep repository cognition split, bounded and synchronization-aware."
+
+package_philosophy:
+  repository_map_is:
+    - compressed_semantic_topology
+    - structured_inventory_layer
+    - evidence_linked_navigation_layer
+  repository_map_is_not:
+    - runtime_authority
+    - discovery_copy
+    - automation_engine
+    - governance_system
+    - dependency_graph_dump
+  authority_boundary: "Runtime/source code remains absolute authority."
+  discovery_boundary: "Discovery remains archival evidence layer."
+  hotspot_boundary: "Hotspots are diagnostic telemetry only, not refactor commands."
+
+layer_separation:
+  vocab: "Shared type vocabulary only."
+  files: "File-level semantic inventory."
+  functions: "Function inventory survival layer."
+  relationships: "Semantic topology links."
+  surfaces: "DOM/CSS/canvas/surface topology."
+  risks_pressure: "Risk and semantic pressure markers."
+  evidence_refs: "Lightweight archival evidence references."
+  hotspots: "Cross-layer diagnostic telemetry."
+
+package_file_registry:
+  - file: repository_map_vocab.yml
+    responsibility: "Shared vocabulary and id conventions."
+  - file: repository_map_01_files.yml
+    responsibility: "File entities, roles and ownership boundaries."
+  - file: repository_map_02_functions.yml
+    responsibility: "Function inventory and semantic function classes."
+  - file: repository_map_03_relationships.yml
+    responsibility: "Relationships between files, functions and surfaces."
+  - file: repository_map_04_surfaces.yml
+    responsibility: "DOM roots, selectors, canvas overlays and surface authority."
+  - file: repository_map_05_risks_pressure.yml
+    responsibility: "Needs-review markers, ambiguity and semantic pressure."
+  - file: repository_map_06_evidence_refs.yml
+    responsibility: "Evidence references back to Discovery/source verification."
+  - file: repository_map_07_hotspots.yml
+    responsibility: "Diagnostic cross-index for overloaded/high-pressure areas."
+
+anti_entropy_notes:
+  - "Do not populate real repository data during skeleton phase."
+  - "Do not copy Discovery prose into Repository Map."
+  - "Do not maintain generated data manually."
+  - "Do not collapse split package into one giant YAML file."
+  - "Do not convert hotspot telemetry into refactor commands."
+
+placeholders:
+  package_status: []
+  package_warnings: []

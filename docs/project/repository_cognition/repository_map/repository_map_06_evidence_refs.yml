@@ -1,0 +1,29 @@
+# Repository Map Evidence References Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Evidence linkage between Repository Map records and Discovery evidence."
+
+stores:
+  - evidence_refs
+  - provenance_links
+  - verification_refs
+
+must_not_store:
+  - full_discovery_prose
+  - extraction_history_dump
+  - mandatory_live_sync_logic
+
+record_shape_example:
+  evidence_ref:
+    evidence_id:
+    discovery_source:
+    related_refs: []
+    verification_status:
+
+anti_entropy_notes:
+  - "Discovery remains archival evidence, not live operational dependency."
+  - "Evidence references should stay lightweight."
+
+placeholders:
+  evidence_refs: []

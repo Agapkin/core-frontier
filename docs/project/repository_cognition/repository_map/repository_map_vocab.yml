@@ -1,0 +1,46 @@
+# Repository Map Vocabulary
+# Stage 0.3.4B — package skeleton only
+
+meta:
+  file: repository_map_vocab.yml
+  status: skeleton_only
+  purpose: "Shared vocabulary and type conventions for the split Repository Map package."
+  scope: "Vocabulary only; not repository data."
+
+stores:
+  entity_types: []
+  relationship_types: []
+  risk_types: []
+  authority_types: []
+  surface_types: []
+  source_types: []
+
+must_not_store:
+  - real_repository_entities
+  - discovery_prose
+  - generated_snapshots
+  - dependency_graph_dump
+
+id_conventions:
+  examples:
+    - file:js/ui/panels
+    - fn:js/ui/panels:createMenuPanel
+    - rel:controls.createDynamicUI->panels.createMenuPanel
+    - surface:dom:menu-panel
+    - risk:duplicate-updateResponsiveLayout
+    - hotspot:file:js/ui/panels
+
+record_shape_example:
+  vocabulary_entry:
+    type_id:
+    label:
+    description_short:
+    allowed_in: []
+
+anti_entropy_notes:
+  - "Keep vocabulary compact and shared."
+  - "Do not store actual map records here."
+  - "Do not copy Discovery prose."
+
+placeholders:
+  pending_vocab_entries: []

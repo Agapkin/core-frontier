@@ -1,0 +1,35 @@
+# Repository Map Files Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Semantic inventory of repository files and subsystem boundaries."
+
+stores:
+  - file_entities
+  - semantic_roles
+  - ownership_boundaries
+  - runtime_authority_markers
+
+must_not_store:
+  - full_file_contents
+  - generated_dependency_dump
+  - discovery_reasoning_prose
+
+record_shape_example:
+  file_entity:
+    file_id:
+    path:
+    semantic_role:
+    owns: []
+    does_not_own: []
+    reads: []
+    mutates: []
+    risk_refs: []
+    evidence_refs: []
+
+anti_entropy_notes:
+  - "Keep file records compressed and inventory-oriented."
+  - "Generated details should remain external."
+
+placeholders:
+  file_entities: []
