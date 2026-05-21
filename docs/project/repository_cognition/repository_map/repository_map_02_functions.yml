@@ -1,36 +1,600 @@
 # Repository Map Functions Layer
+# Stage 0.3.4B — initial semantic function inventory population
 
 meta:
-  status: skeleton_only
-  purpose: "Function inventory and orchestration semantics."
+  status: initially_populated
+  purpose: "Bounded semantic inventory of significant runtime functions and orchestration semantics."
+  scope: "Semantic function inventory only; not parser dump, full call graph or dependency graph."
+  source_of_truth_order:
+    - runtime_source_files
+    - discovery_batch_01_08
+    - repository_map_vocab
+    - neighboring_repository_map_layers
 
 stores:
   - function_inventory
   - lifecycle_functions
+  - orchestration_functions
   - bridge_functions
+  - callback_targets
   - helper_functions
-  - mutation_functions
+  - mutation_heavy_functions
+  - render_functions
+  - validation_functions
+  - future_pressure_markers_when_source_confirmed
 
 must_not_store:
   - full_source_code
+  - every_local_helper
   - generated_call_graph_dump
+  - dependency_graph
   - long_reasoning_blocks
+  - refactor_plan
+  - automation_logic
 
-record_shape_example:
-  function_item:
-    function_id:
-    file_id:
-    function_name:
-    semantic_role:
-    mutates: []
-    reads: []
-    called_by: []
+selection_rule:
+  include_when:
+    - lifecycle_ownership
+    - orchestration_boundary
+    - mutation_heavy_behavior
+    - bridge_or_callback_routing
+    - render_or_visualization_boundary
+    - validation_or_coordinate_mapping_authority
+    - source_confirmed_future_pressure
+  exclude_when:
+    - tiny_local_detail_without_runtime_semantic_weight
+    - parser_only_listing
+    - speculative_future_architecture
+
+functions:
+  - function_id: fn:js/systems/systems:buildTower
+    file_id: file:js/systems/systems
+    name: buildTower
+    function_classes: [callback_target, bridge_function, mutation_heavy_function]
+    semantic_role: "Turns on current tower build mode and resets selected tower state."
+    owns: "Build-mode command entrypoint."
+    does_not_own: "Placement validation or tower creation."
+    mutates_summary: "uiState.selectedTower, selectedMode, selectedTowerType, pendingBuildTile."
+    pressure_refs: []
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:cancelBuildMode
+    file_id: file:js/systems/systems
+    name: cancelBuildMode
+    function_classes: [callback_target, mutation_heavy_function]
+    semantic_role: "Cancels active build mode and clears pending placement candidate."
+    owns: "Build mode cancellation."
+    does_not_own: "Placement validation or object lifecycle."
+    mutates_summary: "uiState.selectedMode, pendingBuildTile."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:startWave
+    file_id: file:js/systems/systems
+    name: startWave
+    function_classes: [lifecycle_function, orchestration_function, mutation_heavy_function]
+    semantic_role: "Starts a wave, saves checkpoint, resets UI selection, activates waveState and dispatches spawn helpers."
+    owns: "Wave lifecycle start."
+    does_not_own: "Wave composition generation or spawn object construction."
+    mutates_summary: "waveState, uiState selection fields, checkpoint; dispatches updateUI/notify."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:saveCheckpoint
+    file_id: file:js/systems/systems
+    name: saveCheckpoint
+    function_classes: [state_helper_function, lifecycle_function]
+    semantic_role: "Captures rollback state before wave start."
+    owns: "Checkpoint snapshot creation."
+    does_not_own: "Restart UI rebuild semantics."
+    mutates_summary: "checkpoint snapshot object."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:retryLastWave
+    file_id: file:js/systems/systems
+    name: retryLastWave
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Restores checkpoint, clears enemies, resets UI selection and rebuilds UI."
+    owns: "Retry/rollback flow."
+    does_not_own: "Foundation state shape."
+    mutates_summary: "resources, base, power, waveState, gameState, gameSpeed, camera, towers, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:restartGame
+    file_id: file:js/systems/systems
+    name: restartGame
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Resets runtime state to a new-game baseline and rebuilds UI."
+    owns: "Runtime restart flow."
+    does_not_own: "Foundation state declaration shape."
+    mutates_summary: "resources, base, power, waveState, gameState, checkpoint, gameSpeed, camera, towers, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:triggerGameOver
+    file_id: file:js/systems/systems
+    name: triggerGameOver
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Sets game-over state, clears enemies and selection, updates UI feedback."
+    owns: "Game over transition."
+    does_not_own: "Game-over panel rendering."
+    mutates_summary: "gameState.gameOver, waveState.active, base.hp, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:updateEnemies
+    file_id: file:js/systems/systems
+    name: updateEnemies
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Moves enemies, applies base damage, cleans up dead/reached enemies and completes wave when empty."
+    owns: "Enemy update and death/reward/base-hit flow."
+    does_not_own: "Enemy spawning or drawing."
+    mutates_summary: "enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:applyReward
+    file_id: file:js/systems/systems
+    name: applyReward
+    function_classes: [mutation_heavy_function, helper_function]
+    semantic_role: "Applies difficulty-adjusted resource reward after enemy death."
+    owns: "Reward resource mutation."
+    does_not_own: "Economy engine or production chain."
+    mutates_summary: "resources by reward entries."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:updateTowers
+    file_id: file:js/systems/systems
+    name: updateTowers
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Updates tower target acquisition and damage application."
+    owns: "Current tower combat update."
+    does_not_own: "Tower rendering or placement lifecycle."
+    mutates_summary: "enemy hp, tower.target."
+    pressure_refs: [tower_specific_current]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems_wave_manager:createWave
+    file_id: file:js/systems/systems_wave_manager
+    name: createWave
+    function_classes: [helper_function, future_pressure_function]
+    semantic_role: "Creates wave enemy composition from difficulty and balance data."
+    owns: "Wave composition helper."
+    does_not_own: "Wave lifecycle activation."
+    mutates_summary: "Local wave array only."
+    pressure_refs: [enemy_wave_scaling_pressure]
     risk_refs: []
-    evidence_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_wave_manager:shuffleWave
+    file_id: file:js/systems/systems_wave_manager
+    name: shuffleWave
+    function_classes: [helper_function]
+    semantic_role: "Shuffles a local copy of wave composition."
+    owns: "Wave list randomization helper."
+    does_not_own: "Runtime waveState lifecycle."
+    mutates_summary: "Local copied array only."
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_wave_manager:spawnEnemy
+    file_id: file:js/systems/systems_wave_manager
+    name: spawnEnemy
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Creates enemy runtime object and appends it to enemies."
+    owns: "Enemy object spawn helper."
+    does_not_own: "Enemy update, death/reward flow or render."
+    mutates_summary: "enemies, waveState.spawnedEnemies."
+    pressure_refs: [entity_framework_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_placement:selectBuildTile
+    file_id: file:js/systems/systems_placement
+    name: selectBuildTile
+    function_classes: [lifecycle_function, validation_function]
+    semantic_role: "Sets pending build tile and reports placement validation feedback."
+    owns: "Placement candidate selection."
+    does_not_own: "Tower object creation."
+    mutates_summary: "uiState.pendingBuildTile."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:getBuildPanelText
+    file_id: file:js/systems/systems_placement
+    name: getBuildPanelText
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Produces compact build confirm text from current selected tower type and validation result."
+    owns: "Build panel status text helper."
+    does_not_own: "Panel lifecycle."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:confirmBuild
+    file_id: file:js/systems/systems_placement
+    name: confirmBuild
+    function_classes: [lifecycle_function, bridge_function]
+    semantic_role: "Confirms pending placement and dispatches tower placement."
+    owns: "Build confirmation step."
+    does_not_own: "Validation details or UI panel creation."
+    mutates_summary: "Indirect via placeTower."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:placeTower
+    file_id: file:js/systems/systems_placement
+    name: placeTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Validates placement, pays cost, creates current tower object and updates selection/build state."
+    owns: "Current tower placement mutation."
+    does_not_own: "Generic placeable object registry."
+    mutates_summary: "resources, power.used, towers, uiState.selectedTower, selectedMode, pendingBuildTile."
+    pressure_refs: [future_placeable_object_pressure, generic_object_system_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:validateBuildTile
+    file_id: file:js/systems/systems_placement
+    name: validateBuildTile
+    function_classes: [validation_function]
+    semantic_role: "Primary source of placement validation for map boundary, restrictions, power and resources."
+    owns: "Placement validation decision."
+    does_not_own: "Render overlay visualization."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:getTowerAtTile
+    file_id: file:js/systems/systems_placement
+    name: getTowerAtTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Current tower occupancy lookup by tile."
+    owns: "Tower tile occupancy lookup."
+    does_not_own: "Generic object registry."
+    mutates_summary: "None."
+    pressure_refs: [generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:hasCost
+    file_id: file:js/systems/systems_placement
+    name: hasCost
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether resources cover placement cost."
+    owns: "Cost availability check."
+    does_not_own: "Economy engine."
+    mutates_summary: "None."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:payCost
+    file_id: file:js/systems/systems_placement
+    name: payCost
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Subtracts placement resource cost."
+    owns: "Placement cost mutation helper."
+    does_not_own: "Economy engine or production chain."
+    mutates_summary: "resources entries."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_selected_object_actions:selectTower
+    file_id: file:js/systems/systems_selected_object_actions
+    name: selectTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Selects current tower as selected object and clears build state."
+    owns: "Current selected tower selection."
+    does_not_own: "Generic selected object architecture."
+    mutates_summary: "uiState.selectedTower, selectedMode, pendingBuildTile."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_selected_object_actions:sellSelectedTower
+    file_id: file:js/systems/systems_selected_object_actions
+    name: sellSelectedTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Sells selected tower, returns resources, releases power and clears selection."
+    owns: "Current selected tower sell action."
+    does_not_own: "Generic object action system."
+    mutates_summary: "resources, power.used, towers, uiState.selectedTower."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_action_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/game:resizeCanvas
+    file_id: file:js/game
+    name: resizeCanvas
+    function_classes: [orchestration_function, responsive_layout_function]
+    semantic_role: "Synchronizes canvas size, responsive layout, camera bounds and UI refresh after viewport changes."
+    owns: "Runtime resize orchestration."
+    does_not_own: "Layout engine or UI component architecture."
+    mutates_summary: "canvas size and indirect UI/camera sync."
+    pressure_refs: [responsive_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerStart
+    file_id: file:js/game
+    name: pointerStart
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Starts pointer drag/tap tracking and updates hovered tile."
+    owns: "Pointer input routing state."
+    does_not_own: "Input framework."
+    mutates_summary: "camera dragging/moved/start/last fields, uiState.hoveredTile indirectly."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerMove
+    file_id: file:js/game
+    name: pointerMove
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Updates hover, detects drag and pans camera."
+    owns: "Pointer movement routing and camera pan mutation."
+    does_not_own: "Camera subsystem implementation."
+    mutates_summary: "camera.x/y/moved/last fields, uiState.hoveredTile indirectly."
+    pressure_refs: [input_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerEnd
+    file_id: file:js/game
+    name: pointerEnd
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Ends pointer routing and dispatches tap if drag threshold was not exceeded."
+    owns: "Pointer end routing."
+    does_not_own: "Placement or selected object action semantics."
+    mutates_summary: "camera.dragging and indirect tap dispatch effects."
+    pressure_refs: [input_framework_not_implemented, command_router_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:zoomAt
+    file_id: file:js/game
+    name: zoomAt
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Changes camera zoom while preserving world point under screen position."
+    owns: "Camera zoom math and camera x/y adjustment."
+    does_not_own: "Camera subsystem architecture."
+    mutates_summary: "camera.zoom, camera.x, camera.y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:clampCamera
+    file_id: file:js/game
+    name: clampCamera
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Constrains camera position inside current map bounds."
+    owns: "Camera bounds helper."
+    does_not_own: "Standalone camera subsystem."
+    mutates_summary: "camera.x, camera.y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:screenToWorld
+    file_id: file:js/game
+    name: screenToWorld
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts screen coordinates to world coordinates using current camera."
+    owns: "Screen-to-world coordinate mapping."
+    does_not_own: "Render layer."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:screenToTile
+    file_id: file:js/game
+    name: screenToTile
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts screen coordinates to tile coordinates through world coordinates."
+    owns: "Input tile resolution helper."
+    does_not_own: "Placement validation."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:worldToScreen
+    file_id: file:js/game
+    name: worldToScreen
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts world coordinates to screen coordinates using current camera."
+    owns: "World-to-screen coordinate mapping."
+    does_not_own: "Entity/world rendering ownership."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:handleTap
+    file_id: file:js/game
+    name: handleTap
+    function_classes: [bridge_function, orchestration_function]
+    semantic_role: "Routes tap to placement selection, tower selection or selection clear."
+    owns: "Tap routing between current modes."
+    does_not_own: "Placement validation or selected object implementation."
+    mutates_summary: "uiState.selectedTower in empty-tile case; indirect via selected/placement functions."
+    pressure_refs: [command_router_not_implemented, scene_manager_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:gameLoop
+    file_id: file:js/game
+    name: gameLoop
+    function_classes: [orchestration_function, render_function]
+    semantic_role: "Runs fixed update/render/UI overlay sequence and schedules next animation frame."
+    owns: "Main loop sequencing."
+    does_not_own: "Individual update or render internals."
+    mutates_summary: "Indirect via called update/render functions and requestAnimationFrame scheduling."
+    pressure_refs: [game_engine_not_implemented, scene_manager_not_implemented, ecs_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/ui/controls:createDynamicUI
+    file_id: file:js/ui/controls
+    name: createDynamicUI
+    function_classes: [orchestration_function, bridge_function]
+    semantic_role: "Rebuilds runtime DOM controls and synchronizes active panels."
+    owns: "Dynamic UI controls rebuild."
+    does_not_own: "Gameplay logic or panel semantic content."
+    mutates_summary: "DOM controls/panels via creation/removal and topbar visibility sync."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createBottomControlPanel
+    file_id: file:js/ui/controls
+    name: createBottomControlPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates bottom command buttons for build, wave, codex and menu actions."
+    owns: "Bottom command panel DOM and callback wiring."
+    does_not_own: "Callback target gameplay ownership."
+    mutates_summary: "DOM and UI panel toggles through callbacks."
+    pressure_refs: [generic_build_category_system_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createTowerActionPanel
+    file_id: file:js/ui/controls
+    name: createTowerActionPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates selected tower/object action panel with sell and unavailable upgrade button."
+    owns: "Selected object action control surface."
+    does_not_own: "Selected object action implementation or upgrade framework."
+    mutates_summary: "DOM panel and callback wiring only."
+    pressure_refs: [generic_object_action_system_not_implemented, upgrade_runtime_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure, risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createBuildConfirmPanel
+    file_id: file:js/ui/controls
+    name: createBuildConfirmPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates placement confirm/cancel controls and dispatches placement commands."
+    owns: "Build confirm DOM and callback wiring."
+    does_not_own: "Placement validation or tower creation."
+    mutates_summary: "DOM panel; indirect via confirm/cancel callbacks."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/layout:updateResponsiveLayout
+    file_id: file:js/ui/layout
+    name: updateResponsiveLayout
+    function_classes: [responsive_layout_function, mutation_heavy_function]
+    semantic_role: "Updates viewport-dependent uiLayout flags."
+    owns: "Responsive layout state recalculation."
+    does_not_own: "Full responsive framework."
+    mutates_summary: "uiLayout width/height/isMobile/isTablet/isLandscape/compact."
+    pressure_refs: [layout_engine_not_implemented, responsive_framework_not_implemented]
+    risk_refs: [risk:duplicate-updateResponsiveLayout]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:updateUILayout
+    file_id: file:js/ui/layout
+    name: updateUILayout
+    function_classes: [responsive_layout_function, helper_function]
+    semantic_role: "Layout update wrapper around responsive recalculation."
+    owns: "UI layout refresh helper call."
+    does_not_own: "Layout engine."
+    mutates_summary: "Indirect via updateResponsiveLayout."
+    pressure_refs: [layout_engine_not_implemented]
+    risk_refs: [risk:duplicate-updateResponsiveLayout]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:setupInitialDom
+    file_id: file:js/ui/layout
+    name: setupInitialDom
+    function_classes: [orchestration_function, helper_function]
+    semantic_role: "Creates initial topbar DOM structure and HUD chips."
+    owns: "Initial topbar DOM setup."
+    does_not_own: "HUD value update semantics."
+    mutates_summary: "topbar.innerHTML and topbar child nodes."
+    pressure_refs: [design_system_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:updateTopbarVisibility
+    file_id: file:js/ui/layout
+    name: updateTopbarVisibility
+    function_classes: [responsive_layout_function, helper_function]
+    semantic_role: "Applies responsive fixed style to topbar."
+    owns: "Topbar style sync."
+    does_not_own: "External CSS activation."
+    mutates_summary: "topbar inline style fields."
+    pressure_refs: [responsive_framework_not_implemented]
+    risk_refs: [risk:selector_drift_risk]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getPanelStyleFactories
+    file_id: file:js/ui/layout
+    name: getBottomPanelStyle/getSpeedPanelStyle/getZoomPanelStyle/getBuildPanelStyle/getTowerActionPanelStyle/getSidePanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style maps for runtime UI panels without owning panel lifecycle."
+    owns: "Panel style presets."
+    does_not_own: "Panel lifecycle or gameplay callbacks."
+    mutates_summary: "None; returns style objects."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:notify
+    file_id: file:js/ui/notifications
+    name: notify
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Creates notification entry and limits notification queue size."
+    owns: "Notification queue creation."
+    does_not_own: "Gameplay event cause."
+    mutates_summary: "uiState.notifications."
+    pressure_refs: [notification_framework_not_implemented, priority_system_not_implemented, animation_system_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:updateNotifications
+    file_id: file:js/ui/notifications
+    name: updateNotifications
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Decrements notification lifetime and removes expired entries."
+    owns: "Notification lifetime update."
+    does_not_own: "Animation system."
+    mutates_summary: "uiState.notifications entry life and queue contents."
+    pressure_refs: [notification_framework_not_implemented, animation_system_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:drawNotifications
+    file_id: file:js/ui/notifications
+    name: drawNotifications
+    function_classes: [render_function]
+    semantic_role: "Draws active notifications as canvas overlay."
+    owns: "Notification canvas visualization."
+    does_not_own: "Notification lifecycle cause or gameplay ownership."
+    mutates_summary: "Canvas drawing state during render pass only."
+    pressure_refs: [notification_framework_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
 
 anti_entropy_notes:
-  - "Function inventory must remain bounded."
-  - "Call-site explosion must remain external/generated later."
-
-placeholders:
-  functions: []
+  - "Function records are semantic inventory, not full source code."
+  - "Do not expand this layer into complete parser output."
+  - "Do not convert pressure markers into implementation claims."
+  - "Relationship graph remains outside this file."
+  - "Runtime/source code remains absolute authority."
