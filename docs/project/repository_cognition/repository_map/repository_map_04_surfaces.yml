@@ -1,0 +1,32 @@
+# Repository Map Surfaces Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Inventory of DOM, UI, canvas and render surfaces."
+
+stores:
+  - dom_surfaces
+  - canvas_surfaces
+  - overlay_surfaces
+  - selector_groups
+
+must_not_store:
+  - full_css_dumps
+  - generated_dom_snapshots
+  - duplicated_runtime_layouts
+
+record_shape_example:
+  surface_item:
+    surface_id:
+    surface_type:
+    related_files: []
+    selectors: []
+    runtime_role:
+    evidence_refs: []
+
+anti_entropy_notes:
+  - "Keep surface topology compressed."
+  - "Generated UI snapshots belong outside Repository Map v1."
+
+placeholders:
+  surfaces: []
