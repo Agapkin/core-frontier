@@ -8,17 +8,17 @@
 
 Detailed source-faithful extraction content lives in bounded batch files:
 
-- `docs/project/architecture/repository_map_discovery_01_runtime_orchestration.md`
-- `docs/project/architecture/repository_map_discovery_02_extracted_systems.md`
-- `docs/project/architecture/repository_map_discovery_03_ui_render_control.md`
-- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
-- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
-- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
-- `docs/project/architecture/repository_map_discovery_04_foundation_state.md`
-- `docs/project/architecture/repository_map_discovery_05_wave_manager.md`
-- `docs/project/architecture/repository_map_discovery_06_ui_support.md`
-- `docs/project/architecture/repository_map_discovery_07_panels.md`
-- `docs/project/architecture/repository_map_discovery_08_surface_entry.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_01_runtime_orchestration.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_02_extracted_systems.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03_ui_render_control.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_04_foundation_state.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_manager.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_06_ui_support.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_07_panels.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_entry.md`
 
 Root discovery file exists to preserve:
 
@@ -325,7 +325,7 @@ Correction passes must NOT:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_01_runtime_orchestration.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_01_runtime_orchestration.md`
 
 Owned source files:
 
@@ -346,7 +346,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_02_extracted_systems.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_02_extracted_systems.md`
 
 Owned source files:
 
@@ -367,7 +367,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03_ui_render_control.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03_ui_render_control.md`
 
 Role:
 
@@ -385,7 +385,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03a_ui_controls.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md`
 
 Owned source file:
 
@@ -403,7 +403,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03b_canvas_world.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md`
 
 Owned source file:
 
@@ -421,7 +421,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_03c_canvas_entities.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md`
 
 Owned source file:
 
@@ -439,7 +439,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_04_foundation_state.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_04_foundation_state.md`
 
 Owned source files:
 
@@ -460,7 +460,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_05_wave_manager.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_manager.md`
 
 Owned source file:
 
@@ -478,7 +478,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_06_ui_support.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_06_ui_support.md`
 
 Owned source files:
 
@@ -499,7 +499,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_07_panels.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_07_panels.md`
 
 Owned source file:
 
@@ -518,7 +518,7 @@ Status:
 
 File:
 
-- `docs/project/architecture/repository_map_discovery_08_surface_entry.md`
+- `docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_entry.md`
 
 Owned source files:
 
