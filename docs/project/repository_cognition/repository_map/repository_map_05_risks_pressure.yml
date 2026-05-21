@@ -21,6 +21,11 @@ must_not_store:
   - architecture_commands
   - full_risk_analysis
 
+typing_notes:
+  risk_type_scope: "During this anchor pass, risk_type values may reference either Repository Map vocab risk_types or pressure_marker_types."
+  reason: "01_files.yml uses risk_refs for both diagnostic risks and semantic pressure anchors."
+  constraint: "This is not full risk/pressure population and not a refactor command layer."
+
 risks:
   - risk_id: risk:duplicate-updateResponsiveLayout
     risk_type: duplicate_helper_name_pressure
