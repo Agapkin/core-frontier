@@ -1,8 +1,8 @@
 # Repository Map Functions Layer
-# Stage 0.3.4B — initial semantic function inventory population
+# Stage 0.3.4B — corrected semantic function inventory
 
 meta:
-  status: initially_populated
+  status: corrected_after_reviewer_audit
   purpose: "Bounded semantic inventory of significant runtime functions and orchestration semantics."
   scope: "Semantic function inventory only; not parser dump, full call graph or dependency graph."
   source_of_truth_order:
@@ -10,6 +10,10 @@ meta:
     - discovery_batch_01_08
     - repository_map_vocab
     - neighboring_repository_map_layers
+  correction_pass:
+    missing_render_ui_foundation_functions_added: true
+    synthetic_function_record_removed: fn:js/ui/layout:getPanelStyleFactories
+    pressure_refs_checked_against_vocab: true
 
 stores:
   - function_inventory
@@ -47,6 +51,66 @@ selection_rule:
     - speculative_future_architecture
 
 functions:
+  - function_id: fn:js/data:tileKey
+    file_id: file:js/data
+    name: tileKey
+    function_classes: [helper_function]
+    semantic_role: "Creates stable string key for tile coordinate addressing."
+    owns: "Tile key formatting helper."
+    does_not_own: "Gameplay runtime ownership or map lifecycle."
+    mutates_summary: "None."
+    pressure_refs: []
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch04]
+
+  - function_id: fn:js/data:buildRoadTiles
+    file_id: file:js/data
+    name: buildRoadTiles
+    function_classes: [helper_function]
+    semantic_role: "Builds derived road tile occupancy set from enemyPath."
+    owns: "Initial roadTiles derivation helper."
+    does_not_own: "Runtime pathfinding or gameplay movement."
+    mutates_summary: "Local Set during derivation only."
+    pressure_refs: []
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch04]
+
+  - function_id: fn:js/state:clone
+    file_id: file:js/state
+    name: clone
+    function_classes: [state_helper_function, helper_function]
+    semantic_role: "Creates JSON-safe copy for checkpoint/state restore flows."
+    owns: "Clone helper for current runtime state snapshots."
+    does_not_own: "Generic state store."
+    mutates_summary: "None."
+    pressure_refs: [generic_state_store_pressure]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch04]
+
+  - function_id: fn:js/state:updatePower
+    file_id: file:js/state
+    name: updatePower
+    function_classes: [state_helper_function, mutation_heavy_function]
+    semantic_role: "Recalculates power.used from current towers collection."
+    owns: "Derived power.used recalculation helper."
+    does_not_own: "Foundation state shape or economy engine."
+    mutates_summary: "power.used."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch04]
+
+  - function_id: fn:js/state:updateResponsiveLayout
+    file_id: file:js/state
+    name: updateResponsiveLayout
+    function_classes: [responsive_layout_function, mutation_heavy_function]
+    semantic_role: "Initial state-layer responsive recalculation for uiLayout device/orientation flags."
+    owns: "Initial responsive state helper in state.js."
+    does_not_own: "Later layout.js helper authority or generalized responsive framework."
+    mutates_summary: "uiLayout orientation/device flags."
+    pressure_refs: [responsive_framework_not_implemented]
+    risk_refs: [risk:duplicate-updateResponsiveLayout]
+    evidence_refs: [evidence:discovery:batch04]
+
   - function_id: fn:js/systems/systems:buildTower
     file_id: file:js/systems/systems
     name: buildTower
@@ -54,8 +118,8 @@ functions:
     semantic_role: "Turns on current tower build mode and resets selected tower state."
     owns: "Build-mode command entrypoint."
     does_not_own: "Placement validation or tower creation."
-    mutates_summary: "uiState.selectedTower, selectedMode, selectedTowerType, pendingBuildTile."
-    pressure_refs: []
+    mutates_summary: "uiState selected/build fields."
+    pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -67,6 +131,7 @@ functions:
     owns: "Build mode cancellation."
     does_not_own: "Placement validation or object lifecycle."
     mutates_summary: "uiState.selectedMode, pendingBuildTile."
+    pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -74,10 +139,11 @@ functions:
     file_id: file:js/systems/systems
     name: startWave
     function_classes: [lifecycle_function, orchestration_function, mutation_heavy_function]
-    semantic_role: "Starts a wave, saves checkpoint, resets UI selection, activates waveState and dispatches spawn helpers."
+    semantic_role: "Starts wave lifecycle, checkpoint save, UI reset, waveState activation and spawn dispatch."
     owns: "Wave lifecycle start."
     does_not_own: "Wave composition generation or spawn object construction."
-    mutates_summary: "waveState, uiState selection fields, checkpoint; dispatches updateUI/notify."
+    mutates_summary: "waveState, uiState, checkpoint; dispatches createWave/spawnEnemy/updateUI/notify."
+    pressure_refs: [lifecycle_density_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -87,8 +153,9 @@ functions:
     function_classes: [state_helper_function, lifecycle_function]
     semantic_role: "Captures rollback state before wave start."
     owns: "Checkpoint snapshot creation."
-    does_not_own: "Restart UI rebuild semantics."
+    does_not_own: "Generic state store."
     mutates_summary: "checkpoint snapshot object."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -100,6 +167,7 @@ functions:
     owns: "Retry/rollback flow."
     does_not_own: "Foundation state shape."
     mutates_summary: "resources, base, power, waveState, gameState, gameSpeed, camera, towers, enemies, uiState."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -107,10 +175,11 @@ functions:
     file_id: file:js/systems/systems
     name: restartGame
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Resets runtime state to a new-game baseline and rebuilds UI."
+    semantic_role: "Resets runtime state to new-game baseline and rebuilds UI."
     owns: "Runtime restart flow."
     does_not_own: "Foundation state declaration shape."
-    mutates_summary: "resources, base, power, waveState, gameState, checkpoint, gameSpeed, camera, towers, enemies, uiState."
+    mutates_summary: "Most runtime state collections and uiState."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -118,10 +187,11 @@ functions:
     file_id: file:js/systems/systems
     name: triggerGameOver
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Sets game-over state, clears enemies and selection, updates UI feedback."
+    semantic_role: "Sets game-over state, clears enemies/selection and updates UI feedback."
     owns: "Game over transition."
     does_not_own: "Game-over panel rendering."
     mutates_summary: "gameState.gameOver, waveState.active, base.hp, enemies, uiState."
+    pressure_refs: [lifecycle_density_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -129,11 +199,11 @@ functions:
     file_id: file:js/systems/systems
     name: updateEnemies
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Moves enemies, applies base damage, cleans up dead/reached enemies and completes wave when empty."
+    semantic_role: "Moves enemies, applies base damage, processes death/reward/base-hit flow and completes waves."
     owns: "Enemy update and death/reward/base-hit flow."
     does_not_own: "Enemy spawning or drawing."
-    mutates_summary: "enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
-    pressure_refs: [economy_engine_not_implemented]
+    mutates_summary: "Enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
+    pressure_refs: [economy_engine_not_implemented, entity_framework_not_implemented]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -156,7 +226,7 @@ functions:
     semantic_role: "Updates tower target acquisition and damage application."
     owns: "Current tower combat update."
     does_not_own: "Tower rendering or placement lifecycle."
-    mutates_summary: "enemy hp, tower.target."
+    mutates_summary: "enemy hp and tower.target."
     pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
@@ -169,7 +239,7 @@ functions:
     owns: "Wave composition helper."
     does_not_own: "Wave lifecycle activation."
     mutates_summary: "Local wave array only."
-    pressure_refs: [enemy_wave_scaling_pressure]
+    pressure_refs: [generic_registry_pressure]
     risk_refs: []
     evidence_refs: [evidence:discovery:batch05]
 
@@ -181,6 +251,7 @@ functions:
     owns: "Wave list randomization helper."
     does_not_own: "Runtime waveState lifecycle."
     mutates_summary: "Local copied array only."
+    pressure_refs: []
     risk_refs: []
     evidence_refs: [evidence:discovery:batch05]
 
@@ -212,7 +283,7 @@ functions:
     file_id: file:js/systems/systems_placement
     name: getBuildPanelText
     function_classes: [helper_function, validation_function]
-    semantic_role: "Produces compact build confirm text from current selected tower type and validation result."
+    semantic_role: "Produces build confirm text from current selected tower type and validation result."
     owns: "Build panel status text helper."
     does_not_own: "Panel lifecycle."
     mutates_summary: "None."
@@ -335,7 +406,7 @@ functions:
     semantic_role: "Starts pointer drag/tap tracking and updates hovered tile."
     owns: "Pointer input routing state."
     does_not_own: "Input framework."
-    mutates_summary: "camera dragging/moved/start/last fields, uiState.hoveredTile indirectly."
+    mutates_summary: "camera drag/tap fields, uiState.hoveredTile indirectly."
     pressure_refs: [input_framework_not_implemented]
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
@@ -364,6 +435,30 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:touchStart
+    file_id: file:js/game
+    name: touchStart
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Activates pinch mode for two-finger touch."
+    owns: "Pinch gesture activation state."
+    does_not_own: "Gesture framework."
+    mutates_summary: "camera.pinchActive, dragging, pinchDistance, pinchZoom."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:touchMove
+    file_id: file:js/game
+    name: touchMove
+    function_classes: [bridge_function]
+    semantic_role: "Calculates pinch ratio and dispatches zoomAt."
+    owns: "Pinch zoom routing."
+    does_not_own: "Camera subsystem or gesture framework."
+    mutates_summary: "Indirect via zoomAt."
+    pressure_refs: [gesture_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
   - function_id: fn:js/game:zoomAt
     file_id: file:js/game
     name: zoomAt
@@ -372,6 +467,18 @@ functions:
     owns: "Camera zoom math and camera x/y adjustment."
     does_not_own: "Camera subsystem architecture."
     mutates_summary: "camera.zoom, camera.x, camera.y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:resetZoom
+    file_id: file:js/game
+    name: resetZoom
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Resets camera zoom/position and optionally displays notification."
+    owns: "Camera zoom reset helper."
+    does_not_own: "Camera subsystem architecture."
+    mutates_summary: "camera.zoom/x/y."
     pressure_refs: [camera_subsystem_not_implemented]
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
@@ -472,6 +579,42 @@ functions:
     risk_refs: [risk:bridge_pressure]
     evidence_refs: [evidence:discovery:batch03a]
 
+  - function_id: fn:js/ui/controls:createUtilityControls
+    file_id: file:js/ui/controls
+    name: createUtilityControls
+    function_classes: [helper_function, orchestration_function]
+    semantic_role: "Creates speed and zoom utility control panels."
+    owns: "Utility controls assembly."
+    does_not_own: "Speed or camera runtime semantics."
+    mutates_summary: "Indirect DOM creation through child functions."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createSpeedControls
+    file_id: file:js/ui/controls
+    name: createSpeedControls
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates speed buttons and dispatches gameSpeed changes."
+    owns: "Speed control DOM and callback wiring."
+    does_not_own: "Game loop timing architecture."
+    mutates_summary: "DOM panel and gameSpeed through callbacks."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createZoomControls
+    file_id: file:js/ui/controls
+    name: createZoomControls
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates zoom buttons and dispatches camera zoom helpers."
+    owns: "Zoom control DOM and callback wiring."
+    does_not_own: "Camera subsystem."
+    mutates_summary: "DOM panel; indirect camera mutation via zoomAt/resetZoom."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
   - function_id: fn:js/ui/controls:createTowerActionPanel
     file_id: file:js/ui/controls
     name: createTowerActionPanel
@@ -500,9 +643,9 @@ functions:
     file_id: file:js/ui/layout
     name: updateResponsiveLayout
     function_classes: [responsive_layout_function, mutation_heavy_function]
-    semantic_role: "Updates viewport-dependent uiLayout flags."
-    owns: "Responsive layout state recalculation."
-    does_not_own: "Full responsive framework."
+    semantic_role: "Updates viewport-dependent uiLayout flags in layout.js."
+    owns: "Responsive layout recalculation helper after UI layer load."
+    does_not_own: "State.js initial responsive helper or full responsive framework."
     mutates_summary: "uiLayout width/height/isMobile/isTablet/isLandscape/compact."
     pressure_refs: [layout_engine_not_implemented, responsive_framework_not_implemented]
     risk_refs: [risk:duplicate-updateResponsiveLayout]
@@ -532,6 +675,18 @@ functions:
     risk_refs: [risk:bridge_pressure]
     evidence_refs: [evidence:discovery:batch06]
 
+  - function_id: fn:js/ui/layout:createTopbarChip
+    file_id: file:js/ui/layout
+    name: createTopbarChip
+    function_classes: [helper_function]
+    semantic_role: "Creates one topbar HUD chip with value span id."
+    owns: "Topbar chip DOM helper."
+    does_not_own: "HUD value update semantics."
+    mutates_summary: "DOM chip element and parent append."
+    pressure_refs: [component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch06]
+
   - function_id: fn:js/ui/layout:updateTopbarVisibility
     file_id: file:js/ui/layout
     name: updateTopbarVisibility
@@ -544,14 +699,74 @@ functions:
     risk_refs: [risk:selector_drift_risk]
     evidence_refs: [evidence:discovery:batch06]
 
-  - function_id: fn:js/ui/layout:getPanelStyleFactories
+  - function_id: fn:js/ui/layout:getBottomPanelStyle
     file_id: file:js/ui/layout
-    name: getBottomPanelStyle/getSpeedPanelStyle/getZoomPanelStyle/getBuildPanelStyle/getTowerActionPanelStyle/getSidePanelStyle
+    name: getBottomPanelStyle
     function_classes: [helper_function, responsive_layout_function]
-    semantic_role: "Returns responsive style maps for runtime UI panels without owning panel lifecycle."
-    owns: "Panel style presets."
-    does_not_own: "Panel lifecycle or gameplay callbacks."
-    mutates_summary: "None; returns style objects."
+    semantic_role: "Returns responsive style map for bottom command panel."
+    owns: "Bottom panel style preset."
+    does_not_own: "Bottom panel lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getSpeedPanelStyle
+    file_id: file:js/ui/layout
+    name: getSpeedPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for speed panel."
+    owns: "Speed panel style preset."
+    does_not_own: "Speed panel lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getZoomPanelStyle
+    file_id: file:js/ui/layout
+    name: getZoomPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for zoom panel."
+    owns: "Zoom panel style preset."
+    does_not_own: "Zoom panel lifecycle or camera subsystem."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getBuildPanelStyle
+    file_id: file:js/ui/layout
+    name: getBuildPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for build confirm panel."
+    owns: "Build panel style preset."
+    does_not_own: "Build panel lifecycle or placement validation."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getTowerActionPanelStyle
+    file_id: file:js/ui/layout
+    name: getTowerActionPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for selected tower action panel."
+    owns: "Tower action panel style preset."
+    does_not_own: "Selected object action lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getSidePanelStyle
+    file_id: file:js/ui/layout
+    name: getSidePanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for side/menu/info panels."
+    owns: "Side panel style preset."
+    does_not_own: "Menu/info panel lifecycle."
+    mutates_summary: "None; returns style object."
     pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
     risk_refs: []
     evidence_refs: [evidence:discovery:batch06]
@@ -592,9 +807,238 @@ functions:
     risk_refs: [risk:notification_framework_not_implemented]
     evidence_refs: [evidence:discovery:batch06]
 
+  - function_id: fn:js/ui/canvas_world:drawRectWorld
+    file_id: file:js/ui/canvas_world
+    name: drawRectWorld
+    function_classes: [render_function, helper_function]
+    semantic_role: "Draws camera-aware world-space rectangle primitive."
+    owns: "World render primitive helper."
+    does_not_own: "Gameplay object ownership or camera state."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawTextWorld
+    file_id: file:js/ui/canvas_world
+    name: drawTextWorld
+    function_classes: [render_function, helper_function]
+    semantic_role: "Draws camera-aware world-space text primitive."
+    owns: "World text render helper."
+    does_not_own: "Gameplay or UI text state."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawMap
+    file_id: file:js/ui/canvas_world
+    name: drawMap
+    function_classes: [render_function]
+    semantic_role: "Draws world background and visible map grid."
+    owns: "World/terrain base render."
+    does_not_own: "Map data authority or gameplay terrain rules."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawRoadTiles
+    file_id: file:js/ui/canvas_world
+    name: drawRoadTiles
+    function_classes: [render_function]
+    semantic_role: "Visualizes roadTiles occupancy set as world-space tiles."
+    owns: "Road tile visualization."
+    does_not_own: "Road data generation or pathfinding."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawPathLine
+    file_id: file:js/ui/canvas_world
+    name: drawPathLine
+    function_classes: [render_function]
+    semantic_role: "Draws enemyPath as camera-aware route line."
+    owns: "Path route visualization."
+    does_not_own: "Enemy movement path logic."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBase
+    file_id: file:js/ui/canvas_world
+    name: drawBase
+    function_classes: [render_function]
+    semantic_role: "Draws base marker without owning base gameplay state."
+    owns: "Base visual marker."
+    does_not_own: "Base HP/state semantics."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawTowerRange
+    file_id: file:js/ui/canvas_world
+    name: drawTowerRange
+    function_classes: [render_function]
+    semantic_role: "Visualizes tower range overlay without tower combat ownership."
+    owns: "Tower range visualization."
+    does_not_own: "Tower targeting or combat logic."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, tower_specific_current]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBuildTile
+    file_id: file:js/ui/canvas_world
+    name: drawBuildTile
+    function_classes: [render_function, validation_function]
+    semantic_role: "Visualizes candidate build tile, validation result and tower preview."
+    owns: "Placement preview visualization."
+    does_not_own: "Placement validation decision or tower placement lifecycle."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_placeable_object_pressure, future_generic_render_pressure, generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure, risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBuildOverlay
+    file_id: file:js/ui/canvas_world
+    name: drawBuildOverlay
+    function_classes: [render_function]
+    semantic_role: "Draws hovered and pending placement overlays for build mode."
+    owns: "Build overlay render ordering in current render pass."
+    does_not_own: "Placement lifecycle or validation semantics."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_placeable_object_pressure, future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure, risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_entities:drawTowers
+    file_id: file:js/ui/canvas_entities
+    name: drawTowers
+    function_classes: [render_function]
+    semantic_role: "Visualizes towers, selected tower highlight and target lines."
+    owns: "Tower entity visualization and target line drawing."
+    does_not_own: "Target acquisition, damage, combat rules or selected object actions."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, tower_specific_current, entity_framework_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03c]
+
+  - function_id: fn:js/ui/canvas_entities:drawEnemies
+    file_id: file:js/ui/canvas_entities
+    name: drawEnemies
+    function_classes: [render_function]
+    semantic_role: "Visualizes enemy shapes and HP bars."
+    owns: "Enemy entity visualization and HP bar drawing."
+    does_not_own: "Enemy movement, damage/death flow or status-effect system."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, entity_framework_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03c]
+
+  - function_id: fn:js/ui/panels:createMenuPanel
+    file_id: file:js/ui/panels
+    name: createMenuPanel
+    function_classes: [orchestration_function, bridge_function, callback_target]
+    semantic_role: "Creates menu panel with difficulty/new-game controls and callback wiring."
+    owns: "Menu panel DOM creation."
+    does_not_own: "Gameplay restart implementation or difficulty system ownership."
+    mutates_summary: "DOM panel and callbacks; callbacks mutate gameState/menu state indirectly."
+    pressure_refs: [generic_ui_framework_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:createGameOverPanel
+    file_id: file:js/ui/panels
+    name: createGameOverPanel
+    function_classes: [orchestration_function, bridge_function, callback_target]
+    semantic_role: "Creates game-over DOM panel with retry/new-game controls."
+    owns: "Game-over panel DOM creation."
+    does_not_own: "Retry/restart lifecycle implementation."
+    mutates_summary: "DOM panel and callback wiring only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:updateDomVisibility
+    file_id: file:js/ui/panels
+    name: updateDomVisibility
+    function_classes: [orchestration_function, mutation_heavy_function]
+    semantic_role: "Shows/hides DOM panels and updates build confirm text from runtime state."
+    owns: "DOM panel visibility synchronization."
+    does_not_own: "Generic panel visibility system or gameplay state decisions."
+    mutates_summary: "DOM display/text fields."
+    pressure_refs: [generic_ui_framework_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:updateUI
+    file_id: file:js/ui/panels
+    name: updateUI
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Updates HUD text values from current runtime state."
+    owns: "HUD text synchronization."
+    does_not_own: "Gameplay state mutation."
+    mutates_summary: "DOM text values only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawWaveStatus
+    file_id: file:js/ui/panels
+    name: drawWaveStatus
+    function_classes: [render_function]
+    semantic_role: "Draws canvas HUD wave status and speed."
+    owns: "Wave status canvas overlay."
+    does_not_own: "Wave lifecycle."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawSelectedTowerPanel
+    file_id: file:js/ui/panels
+    name: drawSelectedTowerPanel
+    function_classes: [render_function]
+    semantic_role: "Draws current tower-specific selected object info panel."
+    owns: "Selected tower canvas info overlay."
+    does_not_own: "Selected object actions or generic object panel system."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawInfoPanel
+    file_id: file:js/ui/panels
+    name: drawInfoPanel
+    function_classes: [render_function]
+    semantic_role: "Draws canvas codex/info panel with tower and enemy reference content."
+    owns: "Current codex/info overlay rendering."
+    does_not_own: "Categorized codex system or gameplay data authority."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawGameOver
+    file_id: file:js/ui/panels
+    name: drawGameOver
+    function_classes: [render_function]
+    semantic_role: "Draws canvas dim overlay when game is over."
+    owns: "Game-over canvas overlay."
+    does_not_own: "Game-over lifecycle transition."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
 anti_entropy_notes:
   - "Function records are semantic inventory, not full source code."
   - "Do not expand this layer into complete parser output."
   - "Do not convert pressure markers into implementation claims."
+  - "Function groups must not pretend to be real source functions."
   - "Relationship graph remains outside this file."
   - "Runtime/source code remains absolute authority."
