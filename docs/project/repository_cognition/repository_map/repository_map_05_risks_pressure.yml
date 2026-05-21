@@ -1,0 +1,32 @@
+# Repository Map Risks and Pressure Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Risk markers and semantic pressure inventory."
+
+stores:
+  - synchronization_risks
+  - semantic_pressure_markers
+  - authority_ambiguity
+  - future_refactor_pressure
+
+must_not_store:
+  - speculative_refactor_plans
+  - governance_rules
+  - long_historical_reasoning
+
+record_shape_example:
+  risk_item:
+    risk_id:
+    risk_type:
+    related_refs: []
+    severity:
+    status:
+    evidence_refs: []
+
+anti_entropy_notes:
+  - "Risks are diagnostic markers, not mutation commands."
+  - "Do not convert pressure into automatic refactor logic."
+
+placeholders:
+  risks: []
