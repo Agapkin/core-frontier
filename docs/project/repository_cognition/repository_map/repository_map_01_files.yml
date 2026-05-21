@@ -1,35 +1,473 @@
 # Repository Map Files Layer
+# Stage 0.3.4B — initial file inventory population
 
 meta:
-  status: skeleton_only
-  purpose: "Semantic inventory of repository files and subsystem boundaries."
+  status: initially_populated
+  purpose: "Compact semantic inventory of runtime/surface files and subsystem boundaries."
+  source_of_truth_order:
+    - runtime_source_files
+    - discovery_batch_01_08
+    - repository_map_vocab
+  scope: "File-level records only; not function inventory or relationship graph."
 
 stores:
   - file_entities
   - semantic_roles
   - ownership_boundaries
   - runtime_authority_markers
+  - compact_runtime_contracts
+  - evidence_link_placeholders
 
 must_not_store:
   - full_file_contents
+  - detailed_function_inventory
+  - relationship_graph
   - generated_dependency_dump
   - discovery_reasoning_prose
+  - refactor_plan
+  - automation_logic
 
-record_shape_example:
-  file_entity:
-    file_id:
-    path:
-    semantic_role:
-    owns: []
-    does_not_own: []
-    reads: []
-    mutates: []
+file_entities:
+  - file_id: file:js/data
+    path: js/data.js
+    kind: runtime_source
+    layer: foundation
+    role: "Static gameplay configuration, balance definitions, enemy/tower data and world/path definitions."
+    semantic_status: verified
+    primary_archetype: foundation_data_authority
+    secondary_archetypes:
+      - static_config_authority
+      - derived_road_tile_data_helper
+    owns_summary: "TILE_SIZE, map, difficultyProfiles, gameBalance, tower/enemy definitions, enemyPath, roadTiles generation helpers."
+    does_not_own_summary: "Mutable runtime state, gameplay loops, placement validation, combat execution, rendering, UI lifecycle."
+    reads_summary: "Internal balance references between gameBalance and towerTypes."
+    mutates_summary: "Initial roadTiles derivation only."
+    used_by_summary: "state, systems, ui and game runtime layers."
+    runtime_contract: "Browser-global foundation data layer; loads before state/systems/ui/game."
+    forbidden_changes: "Do not treat as generic registry framework, ECS/entity system or content pipeline."
+    authority_notes:
+      - foundation_data_authority
+    boundary_notes:
+      - generated_data_not_manual_map_data
+      - pressure_marker_not_refactor_command
     risk_refs: []
-    evidence_refs: []
+    evidence_refs:
+      - evidence:discovery:batch04
+
+  - file_id: file:js/state
+    path: js/state.js
+    kind: runtime_source
+    layer: foundation
+    role: "Mutable browser-global runtime state container and initial runtime state definition layer."
+    semantic_status: verified
+    primary_archetype: foundation_state_authority
+    secondary_archetypes:
+      - foundation_state_shape_authority
+      - canvas_context_root
+      - responsive_state_bootstrap
+    owns_summary: "canvas, ctx, camera, uiLayout, uiState, resources, base, power, waveState, gameState, checkpoint, gameSpeed, towers, enemies and small state helpers."
+    does_not_own_summary: "Gameplay rules, placement validation, tower combat, enemy movement, wave generation, rendering implementation, UI panel creation."
+    reads_summary: "document, window, gameBalance and towerTypes."
+    mutates_summary: "Initial uiLayout calculation and derived power.used helper mutation."
+    used_by_summary: "game, systems and ui runtime/render flows."
+    runtime_contract: "Loads after data.js and before systems/ui/game runtime files."
+    forbidden_changes: "Do not change state shape, declaration order, initial values or tower-specific identifiers without semantic migration pass."
+    authority_notes:
+      - foundation_state_authority
+      - foundation_state_shape_authority
+    boundary_notes:
+      - downstream_mutation_not_state_shape_ownership
+      - tower_specific_current_boundary
+    risk_refs:
+      - risk:duplicate-updateResponsiveLayout
+    evidence_refs:
+      - evidence:discovery:batch04
+
+  - file_id: file:js/systems/systems
+    path: js/systems/systems.js
+    kind: runtime_source
+    layer: runtime_orchestration
+    role: "Lifecycle-heavy orchestration for UI commands, wave start, checkpoint/restart/game over, enemy update, reward flow and tower combat."
+    semantic_status: verified
+    primary_archetype: lifecycle_heavy_orchestration
+    secondary_archetypes:
+      - button_command_layer
+      - checkpoint_restart_layer
+      - enemy_update_layer
+      - tower_combat_layer
+    owns_summary: "Build/cancel commands, wave lifecycle start, checkpoint/retry/restart/game over, enemy flow, rewards and tower combat update."
+    does_not_own_summary: "Wave generation helpers, placement lifecycle, selected object actions, UI panels, render layer, data/state definitions."
+    reads_summary: "Shared runtime state, config data, entities, camera and speed state."
+    mutates_summary: "gameState, uiState, waveState, checkpoint, resources, base, power, towers, enemies, camera and gameSpeed."
+    used_by_summary: "controls.js, game.js, runtime button flow and update loop."
+    runtime_contract: "Loads after extracted systems files and before ui/* plus game.js."
+    forbidden_changes: "Do not extract/refactor without separate inspection pass."
+    authority_notes:
+      - lifecycle_authority
+    boundary_notes:
+      - helper_not_lifecycle_authority
+      - pressure_marker_not_refactor_command
+    risk_refs:
+      - risk:lifecycle_density_pressure
+      - risk:mixed_responsibility
+    evidence_refs:
+      - evidence:discovery:batch01
+
+  - file_id: file:js/game
+    path: js/game.js
+    kind: runtime_source
+    layer: runtime_orchestration
+    role: "Runtime bootstrap, init, canvas/input routing, camera helpers, coordinate mapping and main loop sequencing."
+    semantic_status: verified
+    primary_archetype: runtime_bootstrap_orchestration
+    secondary_archetypes:
+      - input_routing_layer
+      - camera_helper_layer
+      - game_loop_sequencing_layer
+    owns_summary: "Canvas resize, runtime init calls, input event binding/routing, camera helpers, coordinate mapping, tap routing and gameLoop order."
+    does_not_own_summary: "Placement validation, tower placement logic, selected object actions, enemy movement, tower combat, wave generation, UI panels, entity/world drawing internals."
+    reads_summary: "canvas, window, camera, uiState, uiLayout, gameState, gameSpeed, map and TILE_SIZE."
+    mutates_summary: "Canvas size, camera interaction state, hovered tile and selected tower clearing."
+    used_by_summary: "Browser runtime startup and requestAnimationFrame loop."
+    runtime_contract: "Loads after data/state/systems/ui layers and starts final gameLoop."
+    forbidden_changes: "Do not change event binding order, input behavior, camera math, tap routing, update/render order or gameLoop sequence without inspection."
+    authority_notes:
+      - runtime_truth
+    boundary_notes:
+      - call_site_not_ownership
+      - pressure_marker_not_refactor_command
+    risk_refs:
+      - risk:input_camera_loop_density
+    evidence_refs:
+      - evidence:discovery:batch01
+
+  - file_id: file:js/systems/systems_wave_manager
+    path: js/systems/systems_wave_manager.js
+    kind: runtime_source
+    layer: extracted_systems
+    role: "Wave composition generation and enemy spawn helper layer."
+    semantic_status: verified
+    primary_archetype: wave_generation_spawn_helper
+    secondary_archetypes:
+      - helper_authority
+    owns_summary: "Wave list creation, wave shuffling and enemy object spawning."
+    does_not_own_summary: "startWave lifecycle, updateEnemies, reward/death flow and game over flow."
+    reads_summary: "difficultyProfiles, gameState, gameBalance, enemyTypes, waveState, enemyPath and TILE_SIZE."
+    mutates_summary: "enemies collection and waveState.spawnedEnemies."
+    used_by_summary: "startWave in systems.js."
+    runtime_contract: "Loads after state.js and before systems.js."
+    forbidden_changes: "Do not change load order without checking startWave."
+    authority_notes:
+      - helper_authority
+    boundary_notes:
+      - helper_not_lifecycle_authority
+    risk_refs: []
+    evidence_refs:
+      - evidence:discovery:batch05
+
+  - file_id: file:js/systems/systems_placement
+    path: js/systems/systems_placement.js
+    kind: runtime_source
+    layer: extracted_systems
+    role: "Build tile selection, placement validation and current tower object placement lifecycle."
+    semantic_status: verified
+    primary_archetype: placement_lifecycle_boundary
+    secondary_archetypes:
+      - tower_specific_current
+      - future_placeable_object_pressure
+    owns_summary: "Current tower placement lifecycle, validation, cost/payment helpers, tower occupancy lookup and tower object creation."
+    does_not_own_summary: "Object registry, selected object actions, tower combat, UI panels, render overlay and update loop."
+    reads_summary: "uiState, towerTypes, resources, power, towers, map, roadTiles, base and TILE_SIZE."
+    mutates_summary: "pendingBuildTile, selectedTower, selectedMode, resources, power.used and towers."
+    used_by_summary: "systems.js, panels.js, canvas_world.js and game.js."
+    runtime_contract: "Loads after state.js and before systems.js."
+    forbidden_changes: "Do not change load order without checking build flow."
+    authority_notes:
+      - lifecycle_authority
+    boundary_notes:
+      - tower_specific_current_boundary
+      - pressure_marker_not_refactor_command
+      - generic_object_system_not_implemented
+    risk_refs:
+      - risk:future_placeable_object_pressure
+    evidence_refs:
+      - evidence:discovery:batch02
+
+  - file_id: file:js/systems/systems_selected_object_actions
+    path: js/systems/systems_selected_object_actions.js
+    kind: runtime_source
+    layer: extracted_systems
+    role: "Actions for the selected placed object; current implementation remains tower-specific."
+    semantic_status: verified
+    primary_archetype: selected_object_actions_boundary
+    secondary_archetypes:
+      - tower_specific_current
+    owns_summary: "Current selected tower selection and selling action."
+    does_not_own_summary: "Object registry, placement lifecycle, tower combat, UI panels, render highlight and update loop."
+    reads_summary: "gameState, uiState, towerTypes, resources, power and towers."
+    mutates_summary: "selectedTower, selectedMode, pendingBuildTile, resources, power.used and towers."
+    used_by_summary: "game.js and controls.js."
+    runtime_contract: "Loads after state.js and before systems.js."
+    forbidden_changes: "Do not rename tower-specific functions without semantic migration pass."
+    authority_notes:
+      - lifecycle_authority
+    boundary_notes:
+      - selected_object_actions_boundary
+      - tower_specific_current_boundary
+      - generic_object_system_not_implemented
+    risk_refs:
+      - risk:selected_object_architecture_not_implemented
+    evidence_refs:
+      - evidence:discovery:batch02
+
+  - file_id: file:js/ui/helpers
+    path: js/ui/helpers.js
+    kind: runtime_source
+    layer: ui_support
+    role: "Compact DOM/UI helper layer for shared UI element operations."
+    semantic_status: verified
+    primary_archetype: ui_helper_layer
+    secondary_archetypes:
+      - dom_helper_layer
+    owns_summary: "Element removal, fixed style application, standard UI button/text helpers and safe text update helper."
+    does_not_own_summary: "Panel lifecycle, UI layout calculation, gameplay callbacks, command dispatch, render/canvas drawing, input handling, game state mutation."
+    reads_summary: "document, uiLayout.compact and function arguments."
+    mutates_summary: "DOM elements, element styles, button.onclick and element.innerText."
+    used_by_summary: "UI controls/panels creation, HUD updates and dynamic UI rebuild flow."
+    runtime_contract: "Loads before UI files that call shared helper functions."
+    forbidden_changes: "Do not change DOM behavior, callback wiring or style values without inspection."
+    authority_notes:
+      - helper_authority
+    boundary_notes:
+      - callback_wiring_not_callback_ownership
+      - helper_not_lifecycle_authority
+    risk_refs: []
+    evidence_refs:
+      - evidence:discovery:batch06
+
+  - file_id: file:js/ui/layout
+    path: js/ui/layout.js
+    kind: runtime_source
+    layer: ui_support
+    role: "Responsive layout state, topbar DOM setup, topbar style sync and panel style factories."
+    semantic_status: verified
+    primary_archetype: layout_helper_layer
+    secondary_archetypes:
+      - responsive_layout_helper
+      - topbar_dom_setup_layer
+      - panel_style_factory_layer
+    owns_summary: "Runtime responsive recalculation helper after load, topbar setup/style sync and panel style presets."
+    does_not_own_summary: "Gameplay logic, runtime commands, render/canvas drawing, panel lifecycle, button callbacks, entity rendering and game state mutation."
+    reads_summary: "window dimensions, document and uiLayout."
+    mutates_summary: "uiLayout responsive flags, topbar DOM content and topbar style fields."
+    used_by_summary: "Dynamic UI rebuild, topbar setup, controls and panels style calculation."
+    runtime_contract: "Loads before UI files that call layout/style helpers."
+    forbidden_changes: "Do not change breakpoints, style values, DOM structure or compact logic without inspection."
+    authority_notes:
+      - helper_authority
+    boundary_notes:
+      - helper_not_lifecycle_authority
+    risk_refs:
+      - risk:duplicate-updateResponsiveLayout
+    evidence_refs:
+      - evidence:discovery:batch06
+
+  - file_id: file:js/ui/controls
+    path: js/ui/controls.js
+    kind: runtime_source
+    layer: ui_control
+    role: "DOM controls layer, runtime command bridge and callback wiring layer."
+    semantic_status: verified
+    primary_archetype: ui_command_bridge
+    secondary_archetypes:
+      - callback_wiring_layer
+      - dynamic_ui_rebuild_layer
+    owns_summary: "Dynamic UI rebuild and creation of bottom, utility, speed, zoom, selected-object action and build-confirm controls."
+    does_not_own_summary: "Gameplay logic, placement validation, tower combat, enemy update, wave lifecycle, camera state ownership, hotkey system, generic object action framework."
+    reads_summary: "uiState, gameState, waveState, gameSpeed, camera, canvas and uiLayout."
+    mutates_summary: "DOM controls/panels, local UI visibility state and runtime command callbacks."
+    used_by_summary: "Runtime UI rebuild, gameplay command dispatch and panels visibility/update flow."
+    runtime_contract: "Loads after runtime systems files and before panels.js/game.js."
+    forbidden_changes: "Do not change runtime callbacks or gameplay dispatch semantics without inspection."
+    authority_notes:
+      - callback_surface_without_ownership
+    boundary_notes:
+      - callback_wiring_not_callback_ownership
+      - call_site_not_ownership
+    risk_refs:
+      - risk:bridge_pressure
+    evidence_refs:
+      - evidence:discovery:batch03a
+
+  - file_id: file:js/ui/panels
+    path: js/ui/panels.js
+    kind: runtime_source
+    layer: ui_panel
+    role: "DOM panels, HUD text updates and canvas overlay panels."
+    semantic_status: verified
+    primary_archetype: mixed_ui_semantic_layer
+    secondary_archetypes:
+      - dom_panel_layer
+      - canvas_hud_overlay_layer
+      - tower_specific_panel_pressure
+    owns_summary: "Menu/game-over panels, DOM visibility, HUD text updates, wave status overlay, selected tower panel, codex/info panel and game-over overlay."
+    does_not_own_summary: "Gameplay logic, placement validation, tower combat, wave lifecycle, reward system and world/entity rendering."
+    reads_summary: "uiState, gameState, waveState, resources, base, power, camera, gameSpeed, difficultyProfiles, towerTypes, enemyTypes, enemies, uiLayout and canvas."
+    mutates_summary: "DOM panel visibility/text, menu difficulty selection and canvas overlay drawing state."
+    used_by_summary: "createDynamicUI, game render/update flow and runtime UI refresh."
+    runtime_contract: "Loads after UI helpers/layout/controls and after runtime systems files."
+    forbidden_changes: "Do not change UI lifecycle or gameplay callbacks without inspection."
+    authority_notes:
+      - semantic_interpretation
+    boundary_notes:
+      - visualization_not_gameplay_ownership
+      - pressure_marker_not_refactor_command
+    risk_refs:
+      - risk:mixed_responsibility
+      - risk:selected_object_architecture_not_implemented
+    evidence_refs:
+      - evidence:discovery:batch07
+
+  - file_id: file:js/ui/canvas_world
+    path: js/ui/canvas_world.js
+    kind: runtime_source
+    layer: ui_render
+    role: "World-space rendering, terrain/tile rendering and placement overlay visualization."
+    semantic_status: verified
+    primary_archetype: canvas_world_render_layer
+    secondary_archetypes:
+      - placement_visualization_layer
+      - render_helper_layer
+    owns_summary: "World render helpers, map/grid, road/path/base render, tower range overlay and build overlay visualization."
+    does_not_own_summary: "Gameplay simulation, placement lifecycle, placement validation, enemy update, tower combat, pathfinding, occupancy rules and camera state ownership."
+    reads_summary: "ctx, canvas, camera, map, TILE_SIZE, roadTiles, enemyPath, base, towerTypes and uiState."
+    mutates_summary: "Canvas drawing state only during render pass."
+    used_by_summary: "Game render flow, world rendering pass and placement overlay rendering."
+    runtime_contract: "Loads after UI helpers/layout and runtime state/functions, before game render usage."
+    forbidden_changes: "Do not change draw order, camera math or placement validation semantics without inspection."
+    authority_notes:
+      - render_authority
+    boundary_notes:
+      - visualization_not_gameplay_ownership
+      - render_only_boundary
+    risk_refs:
+      - risk:future_generic_render_pressure
+    evidence_refs:
+      - evidence:discovery:batch03b
+
+  - file_id: file:js/ui/canvas_entities
+    path: js/ui/canvas_entities.js
+    kind: runtime_source
+    layer: ui_render
+    role: "Entity render-only visualization layer for towers, enemies, target lines and HP bars."
+    semantic_status: verified
+    primary_archetype: canvas_entity_render_layer
+    secondary_archetypes:
+      - render_only_visualization_layer
+    owns_summary: "Tower/enemy rendering, selected tower highlight, target line visualization and HP bars."
+    does_not_own_summary: "Enemy update, tower targeting logic, damage calculation, combat rules, selected object actions, placement lifecycle, tower creation, enemy spawning and gameplay mutations."
+    reads_summary: "towers, towerTypes, selected tower state, enemies, enemyTypes, TILE_SIZE, ctx and render helpers."
+    mutates_summary: "Canvas drawing state only during render pass."
+    used_by_summary: "Game render flow and entity rendering pass."
+    runtime_contract: "Loads after canvas_world helpers and runtime state, before game render usage."
+    forbidden_changes: "Do not change draw order, combat semantics or targeting ownership without inspection."
+    authority_notes:
+      - render_authority
+    boundary_notes:
+      - visualization_not_gameplay_ownership
+      - render_only_boundary
+    risk_refs:
+      - risk:future_generic_render_pressure
+    evidence_refs:
+      - evidence:discovery:batch03c
+
+  - file_id: file:js/ui/notifications
+    path: js/ui/notifications.js
+    kind: runtime_source
+    layer: ui_support
+    role: "Compact canvas notification lifecycle layer."
+    semantic_status: verified
+    primary_archetype: notification_lifecycle_render_layer
+    secondary_archetypes:
+      - canvas_hud_overlay_layer
+    owns_summary: "Notification queue entry creation, lifetime update and canvas notification rendering."
+    does_not_own_summary: "Gameplay decisions that trigger notifications, wave lifecycle, placement lifecycle, game over logic, UI panel lifecycle, DOM control creation and gameplay state mutation."
+    reads_summary: "uiState.notifications, panel flags, uiLayout, canvas width, ctx and notification fields."
+    mutates_summary: "Notification queue/lifetime and canvas drawing state during notification render pass."
+    used_by_summary: "Runtime feedback flow, game update loop and canvas UI render pass."
+    runtime_contract: "notify accepts message intent from other systems but does not own gameplay event causes."
+    forbidden_changes: "Do not change queue size, lifetime, colors, positioning or notification timing without inspection."
+    authority_notes:
+      - helper_authority
+      - render_authority
+    boundary_notes:
+      - visualization_not_gameplay_ownership
+      - pressure_marker_not_refactor_command
+    risk_refs:
+      - risk:notification_framework_not_implemented
+    evidence_refs:
+      - evidence:discovery:batch06
+
+  - file_id: file:index_html
+    path: index.html
+    kind: surface_file
+    layer: surface_entry
+    role: "Browser entrypoint, DOM/canvas root bootstrap and script loading assembly point."
+    semantic_status: verified
+    primary_archetype: runtime_entrypoint_html_shell
+    secondary_archetypes:
+      - dom_root_bootstrap_layer
+      - active_inline_css_authority
+      - script_order_authority
+    owns_summary: "Document shell, viewport meta, active inline CSS shell styles, topbar root, game canvas root and browser-global script order."
+    does_not_own_summary: "Gameplay logic, runtime state, systems execution, rendering implementation, UI component lifecycle and module loading architecture."
+    reads_summary: "Browser HTML/CSS/script loading semantics."
+    mutates_summary: "Initial DOM structure parsed by browser only."
+    used_by_summary: "Browser startup and runtime script assembly."
+    runtime_contract: "Script order is dependency-sensitive for browser-global runtime."
+    forbidden_changes: "Do not change script order, DOM roots, inline CSS behavior or introduce modules/framework wording without inspection."
+    authority_notes:
+      - active_css_authority
+      - surface_authority
+    boundary_notes:
+      - active_authority_not_inactive_artifact
+    risk_refs:
+      - risk:script_order_sensitive
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - file_id: file:css/style
+    path: css/style.css
+    kind: surface_file
+    layer: surface_css
+    role: "Repository CSS surface artifact for page base, canvas root, topbar, buttons, panels and responsive rules."
+    semantic_status: inactive_runtime
+    primary_archetype: inactive_repository_surface_css_layer
+    secondary_archetypes:
+      - page_canvas_base_style_layer
+      - responsive_media_rule_layer
+      - future_css_activation_candidate
+    owns_summary: "Global sizing, page/body/canvas base styles, topbar/chip styling, button states, panel pointer behavior, menu scrollbar and responsive media rules."
+    does_not_own_summary: "Gameplay logic, runtime state, script loading, UI callback behavior, canvas drawing and JS layout calculations."
+    reads_summary: "Browser CSS cascade, viewport size, orientation and safe-area env values."
+    mutates_summary: "Visual presentation/layout only through CSS rules; not active unless linked."
+    used_by_summary: "Repository surface CSS intent; currently not linked by index.html."
+    runtime_contract: "Selectors/classes/ids must stay aligned with index.html and JS-created UI elements if activated."
+    forbidden_changes: "Do not change selectors, responsive breakpoints, pointer/touch behavior or layout values without inspection."
+    authority_notes:
+      - inactive_surface_artifact
+    boundary_notes:
+      - active_authority_not_inactive_artifact
+      - pressure_marker_not_refactor_command
+    risk_refs:
+      - risk:css_activation_migration_pressure
+      - risk:selector_drift_risk
+    evidence_refs:
+      - evidence:discovery:batch08
 
 anti_entropy_notes:
-  - "Keep file records compressed and inventory-oriented."
-  - "Generated details should remain external."
-
-placeholders:
-  file_entities: []
+  - "File records are compact semantic inventory only."
+  - "Do not add function bodies or detailed function records here."
+  - "Do not expand this layer into a relationship graph."
+  - "Discovery prose remains in Discovery; this file stores compressed file-level cognition."
+  - "Runtime/source code remains absolute authority."
