@@ -1,32 +1,161 @@
 # Repository Map Risks and Pressure Layer
+# Stage 0.3.4B — minimal anchors for file inventory refs only
 
 meta:
-  status: skeleton_only
-  purpose: "Risk markers and semantic pressure inventory."
+  status: minimally_anchored_for_file_inventory
+  purpose: "Risk markers and semantic pressure anchors referenced by repository_map_01_files.yml."
+  scope: "Supporting anchors only; not full risks/pressure population."
+  primary_layer: repository_map_01_files.yml
 
 stores:
   - synchronization_risks
   - semantic_pressure_markers
   - authority_ambiguity
   - future_refactor_pressure
+  - file_inventory_anchor_records
 
 must_not_store:
   - speculative_refactor_plans
   - governance_rules
   - long_historical_reasoning
+  - architecture_commands
+  - full_risk_analysis
 
-record_shape_example:
-  risk_item:
-    risk_id:
-    risk_type:
-    related_refs: []
-    severity:
-    status:
-    evidence_refs: []
+risks:
+  - risk_id: risk:duplicate-updateResponsiveLayout
+    risk_type: duplicate_helper_name_pressure
+    related_refs:
+      - file:js/state
+      - file:js/ui/layout
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "Responsive layout update naming/authority requires care because file inventory references duplicate-layout pressure."
+    evidence_refs:
+      - evidence:discovery:batch04
+      - evidence:discovery:batch06
+
+  - risk_id: risk:lifecycle_density_pressure
+    risk_type: lifecycle_density_pressure
+    related_refs:
+      - file:js/systems/systems
+    status: anchored_from_file_inventory
+    severity: high
+    short_description: "systems.js remains lifecycle-heavy and should not be treated as a clean shell."
+    evidence_refs:
+      - evidence:discovery:batch01
+
+  - risk_id: risk:mixed_responsibility
+    risk_type: mixed_responsibility
+    related_refs:
+      - file:js/systems/systems
+      - file:js/ui/panels
+    status: anchored_from_file_inventory
+    severity: high
+    short_description: "Referenced files carry multiple semantic responsibilities and require inspection before mutation."
+    evidence_refs:
+      - evidence:discovery:batch01
+      - evidence:discovery:batch07
+
+  - risk_id: risk:input_camera_loop_density
+    risk_type: mixed_responsibility
+    related_refs:
+      - file:js/game
+    status: anchored_from_file_inventory
+    severity: high
+    short_description: "game.js combines input routing, camera helpers, runtime bootstrap and gameLoop sequencing."
+    evidence_refs:
+      - evidence:discovery:batch01
+
+  - risk_id: risk:future_placeable_object_pressure
+    risk_type: future_placeable_object_pressure
+    related_refs:
+      - file:js/systems/systems_placement
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "Placement currently remains tower-specific while future placeable-object pressure is visible."
+    evidence_refs:
+      - evidence:discovery:batch02
+
+  - risk_id: risk:selected_object_architecture_not_implemented
+    risk_type: selected_object_architecture_not_implemented
+    related_refs:
+      - file:js/systems/systems_selected_object_actions
+      - file:js/ui/panels
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "Selected object semantics exist, but generic selected-object architecture is not implemented."
+    evidence_refs:
+      - evidence:discovery:batch02
+      - evidence:discovery:batch07
+
+  - risk_id: risk:bridge_pressure
+    risk_type: bridge_pressure
+    related_refs:
+      - file:js/ui/controls
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "Controls layer bridges DOM callbacks to runtime commands without owning gameplay logic."
+    evidence_refs:
+      - evidence:discovery:batch03a
+
+  - risk_id: risk:future_generic_render_pressure
+    risk_type: future_generic_render_pressure
+    related_refs:
+      - file:js/ui/canvas_world
+      - file:js/ui/canvas_entities
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "Render files are visualization-only, while future generic render pressure is visible."
+    evidence_refs:
+      - evidence:discovery:batch03b
+      - evidence:discovery:batch03c
+
+  - risk_id: risk:notification_framework_not_implemented
+    risk_type: notification_framework_not_implemented
+    related_refs:
+      - file:js/ui/notifications
+    status: anchored_from_file_inventory
+    severity: low
+    short_description: "Notification layer is compact lifecycle/render logic; full framework/priority/animation systems are not implemented."
+    evidence_refs:
+      - evidence:discovery:batch06
+
+  - risk_id: risk:script_order_sensitive
+    risk_type: synchronization_sensitive
+    related_refs:
+      - file:index_html
+    status: anchored_from_file_inventory
+    severity: high
+    short_description: "Browser-global runtime depends on index.html script loading order."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - risk_id: risk:css_activation_migration_pressure
+    risk_type: css_activation_migration_pressure
+    related_refs:
+      - file:css/style
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "css/style.css is a repository surface artifact and requires care if activated later."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - risk_id: risk:selector_drift_risk
+    risk_type: selector_drift_risk
+    related_refs:
+      - file:css/style
+      - file:index_html
+    status: anchored_from_file_inventory
+    severity: medium
+    short_description: "CSS selectors/classes/ids must stay aligned with HTML roots and JS-created UI if stylesheet is activated."
+    evidence_refs:
+      - evidence:discovery:batch08
 
 anti_entropy_notes:
   - "Risks are diagnostic markers, not mutation commands."
+  - "This file currently anchors only refs used by repository_map_01_files.yml."
   - "Do not convert pressure into automatic refactor logic."
+  - "Do not expand this pass into full risk analysis."
 
 placeholders:
-  risks: []
+  future_risk_population: []
