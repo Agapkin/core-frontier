@@ -1,0 +1,7 @@
+# Repository Map Index
+# Stage 0.3.4B — package skeleton only
+
+meta:
+  package: repository_map
+  status: skeleton_only
+  purpose: "Root navigation for split Repository Map package."
