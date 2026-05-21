@@ -1,0 +1,36 @@
+# Repository Map Functions Layer
+
+meta:
+  status: skeleton_only
+  purpose: "Function inventory and orchestration semantics."
+
+stores:
+  - function_inventory
+  - lifecycle_functions
+  - bridge_functions
+  - helper_functions
+  - mutation_functions
+
+must_not_store:
+  - full_source_code
+  - generated_call_graph_dump
+  - long_reasoning_blocks
+
+record_shape_example:
+  function_item:
+    function_id:
+    file_id:
+    function_name:
+    semantic_role:
+    mutates: []
+    reads: []
+    called_by: []
+    risk_refs: []
+    evidence_refs: []
+
+anti_entropy_notes:
+  - "Function inventory must remain bounded."
+  - "Call-site explosion must remain external/generated later."
+
+placeholders:
+  functions: []
