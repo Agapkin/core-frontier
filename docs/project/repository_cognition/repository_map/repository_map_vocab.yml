@@ -1,25 +1,176 @@
 # Repository Map Vocabulary
-# Stage 0.3.4B — package skeleton only
+# Stage 0.3.4B — initial vocabulary population
 
 meta:
   file: repository_map_vocab.yml
-  status: skeleton_only
-  purpose: "Shared vocabulary and type conventions for the split Repository Map package."
-  scope: "Vocabulary only; not repository data."
+  status: initially_populated
+  purpose: "Shared semantic vocabulary and type conventions for the split Repository Map package."
+  scope: "Vocabulary only; marker/type language, not repository records."
+  derived_from: "Discovery Batch 01-08 recurring semantic classifications."
 
 stores:
-  entity_types: []
-  relationship_types: []
-  risk_types: []
-  authority_types: []
-  surface_types: []
-  source_types: []
+  entity_types:
+    - file
+    - folder
+    - discovery_batch
+    - discovery_sub_batch
+    - source_file
+    - runtime_file
+    - surface_file
+    - function
+    - helper
+    - section
+    - internal_marker
+    - runtime_state_object
+    - config_object
+    - derived_data
+    - dom_root
+    - dom_panel
+    - canvas_surface
+    - canvas_overlay
+    - css_selector
+    - media_rule
+    - callback
+    - runtime_bridge
+    - correction_candidate
+    - hotspot
+  relationship_types:
+    - owns
+    - does_not_own
+    - reads
+    - mutates
+    - used_by
+    - calls
+    - calls_without_ownership
+    - bridges_to
+    - depends_on_load_order
+    - cross_verifies_with
+    - renders
+    - visualizes_without_owning
+    - mutates_without_owning_shape
+    - provides_helper_for
+    - shadows
+    - derived_from
+  authority_types:
+    - runtime_truth
+    - semantic_interpretation
+    - foundation_data_authority
+    - foundation_state_authority
+    - lifecycle_authority
+    - helper_authority
+    - render_authority
+    - surface_authority
+    - active_css_authority
+    - inactive_surface_artifact
+    - callback_surface_without_ownership
+  risk_types:
+    - needs_review
+    - hallucination_risk
+    - implicit_contract
+    - mixed_responsibility
+    - synchronization_sensitive
+    - truncation_prone
+    - overwrite_from_memory_risk
+    - stale_cognition_risk
+    - runtime_authority_ambiguity
+    - selector_drift_risk
+    - unsafe_for_automation
+  pressure_marker_types:
+    - tower_specific_current
+    - future_placeable_object_pressure
+    - selected_object_boundary
+    - generic_object_not_implemented
+    - render_only_boundary
+    - future_generic_render_pressure
+    - lifecycle_density_pressure
+    - bridge_pressure
+    - generic_registry_pressure
+    - generic_state_store_pressure
+    - css_activation_migration_pressure
+    - duplicate_helper_name_pressure
+  boundary_markers:
+    - runtime_truth_not_map
+    - discovery_archival_evidence
+    - call_site_not_ownership
+    - helper_not_lifecycle_authority
+    - visualization_not_gameplay_ownership
+    - active_authority_not_inactive_artifact
+    - pressure_marker_not_refactor_command
+    - generated_data_not_manual_map_data
+  surface_types:
+    - html_shell
+    - dom_root
+    - dom_panel
+    - topbar
+    - canvas_root
+    - canvas_world_render
+    - canvas_entity_render
+    - canvas_hud_overlay
+    - notification_overlay
+    - inline_css
+    - external_css_artifact
+    - selector_group
+    - media_rule_group
+  source_types:
+    - runtime_source
+    - discovery_evidence
+    - repository_map
+    - future_generated_snapshot
+    - workflow_note
+  semantic_status_types:
+    - skeleton_only
+    - initially_populated
+    - source_faithful
+    - verified
+    - needs_review
+    - archival
+    - inactive_runtime
+    - active_runtime
+    - not_implemented
+    - deferred
+  evidence_types:
+    - source_read_status
+    - header_matches_code
+    - section_list_matches_code
+    - function_list_matches_code
+    - selector_list_matches_code
+    - script_order_matches_runtime_structure
+    - code_confirms
+    - code_contradicts
+    - correction_history
+    - confidence
 
 must_not_store:
   - real_repository_entities
+  - file_records
+  - function_records
+  - relationship_records
   - discovery_prose
   - generated_snapshots
   - dependency_graph_dump
+  - refactor_plan
+  - automation_logic
+
+critical_distinctions:
+  - "calls != owns"
+  - "visualization != gameplay ownership"
+  - "helper != lifecycle authority"
+  - "active authority != inactive artifact"
+  - "runtime truth != semantic interpretation"
+  - "pressure marker != refactor command"
+
+normalization_notes:
+  alias_risks:
+    - "tower / placed object / selected object must not be silently normalized."
+    - "helper / lifecycle authority must remain separate."
+    - "orchestration / mixed responsibility must not imply clean architecture."
+    - "render entity / gameplay entity must remain distinct."
+  speculative_terms_blocked:
+    - ecs_runtime
+    - generic_object_system_as_existing
+    - command_router_as_existing
+    - render_engine_as_existing
+    - css_framework_as_existing
 
 id_conventions:
   examples:
@@ -39,8 +190,10 @@ record_shape_example:
 
 anti_entropy_notes:
   - "Keep vocabulary compact and shared."
-  - "Do not store actual map records here."
+  - "Do not attach markers to concrete files here."
   - "Do not copy Discovery prose."
+  - "Do not invent future systems as existing vocabulary facts."
+  - "Pressure vocabulary preserves ambiguity without authorizing refactor."
 
 placeholders:
   pending_vocab_entries: []
