@@ -31,8 +31,8 @@ functions:
     semantic_role: "Turns on current tower build mode and resets selected tower state."
     owns: "Build-mode command entrypoint."
     does_not_own: "Placement validation or tower creation."
-    mutates_summary: "uiState.selectedTower, selectedMode, selectedTowerType, pendingBuildTile."
-    pressure_refs: []
+    mutates_summary: "uiState selected/build fields."
+    pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -44,6 +44,7 @@ functions:
     owns: "Build mode cancellation."
     does_not_own: "Placement validation or object lifecycle."
     mutates_summary: "uiState.selectedMode, pendingBuildTile."
+    pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -51,10 +52,11 @@ functions:
     file_id: file:js/systems/systems
     name: startWave
     function_classes: [lifecycle_function, orchestration_function, mutation_heavy_function]
-    semantic_role: "Starts a wave, saves checkpoint, resets UI selection, activates waveState and dispatches spawn helpers."
+    semantic_role: "Starts wave lifecycle, checkpoint save, UI reset, waveState activation and spawn dispatch."
     owns: "Wave lifecycle start."
     does_not_own: "Wave composition generation or spawn object construction."
-    mutates_summary: "waveState, uiState selection fields, checkpoint; dispatches updateUI/notify."
+    mutates_summary: "waveState, uiState, checkpoint; dispatches createWave/spawnEnemy/updateUI/notify."
+    pressure_refs: [lifecycle_density_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -64,8 +66,9 @@ functions:
     function_classes: [state_helper_function, lifecycle_function]
     semantic_role: "Captures rollback state before wave start."
     owns: "Checkpoint snapshot creation."
-    does_not_own: "Restart UI rebuild semantics."
+    does_not_own: "Generic state store."
     mutates_summary: "checkpoint snapshot object."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -77,6 +80,7 @@ functions:
     owns: "Retry/rollback flow."
     does_not_own: "Foundation state shape."
     mutates_summary: "resources, base, power, waveState, gameState, gameSpeed, camera, towers, enemies, uiState."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -84,10 +88,11 @@ functions:
     file_id: file:js/systems/systems
     name: restartGame
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Resets runtime state to a new-game baseline and rebuilds UI."
+    semantic_role: "Resets runtime state to new-game baseline and rebuilds UI."
     owns: "Runtime restart flow."
     does_not_own: "Foundation state declaration shape."
-    mutates_summary: "resources, base, power, waveState, gameState, checkpoint, gameSpeed, camera, towers, enemies, uiState."
+    mutates_summary: "Most runtime state collections and uiState."
+    pressure_refs: [generic_state_store_pressure]
     risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -95,10 +100,11 @@ functions:
     file_id: file:js/systems/systems
     name: triggerGameOver
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Sets game-over state, clears enemies and selection, updates UI feedback."
+    semantic_role: "Sets game-over state, clears enemies/selection and updates UI feedback."
     owns: "Game over transition."
     does_not_own: "Game-over panel rendering."
     mutates_summary: "gameState.gameOver, waveState.active, base.hp, enemies, uiState."
+    pressure_refs: [lifecycle_density_pressure]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -106,11 +112,11 @@ functions:
     file_id: file:js/systems/systems
     name: updateEnemies
     function_classes: [lifecycle_function, mutation_heavy_function]
-    semantic_role: "Moves enemies, applies base damage, cleans up dead/reached enemies and completes wave when empty."
+    semantic_role: "Moves enemies, applies base damage, processes death/reward/base-hit flow and completes waves."
     owns: "Enemy update and death/reward/base-hit flow."
     does_not_own: "Enemy spawning or drawing."
-    mutates_summary: "enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
-    pressure_refs: [economy_engine_not_implemented]
+    mutates_summary: "Enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
+    pressure_refs: [economy_engine_not_implemented, entity_framework_not_implemented]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
 
@@ -133,7 +139,7 @@ functions:
     semantic_role: "Updates tower target acquisition and damage application."
     owns: "Current tower combat update."
     does_not_own: "Tower rendering or placement lifecycle."
-    mutates_summary: "enemy hp, tower.target."
+    mutates_summary: "enemy hp and tower.target."
     pressure_refs: [tower_specific_current]
     risk_refs: [risk:lifecycle_density_pressure]
     evidence_refs: [evidence:discovery:batch01]
