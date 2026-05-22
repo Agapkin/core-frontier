@@ -1,0 +1,30 @@
+# Repository Map Functions Split — Canvas Render Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: canvas_render_functions
+  purpose: "Future split target for world/entity canvas render function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/ui/canvas_world.js
+    - js/ui/canvas_entities.js
+  expected_future_contents:
+    - world_render_functions
+    - entity_render_functions
+    - render_only_boundaries
+    - visualization_not_gameplay_ownership_distinctions
+
+source_files:
+  - js/ui/canvas_world.js
+  - js/ui/canvas_entities.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Render visualization does not imply gameplay ownership."
+  - "Do not duplicate canvas render records before migration."
+  - "Runtime/source code remains absolute authority."

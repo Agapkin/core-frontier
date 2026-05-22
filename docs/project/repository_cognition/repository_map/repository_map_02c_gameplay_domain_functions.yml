@@ -1,0 +1,33 @@
+# Repository Map Functions Split — Gameplay Domain Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: gameplay_domain_functions
+  purpose: "Future split target for wave, placement and selected-object function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/systems/systems_wave_manager.js
+    - js/systems/systems_placement.js
+    - js/systems/systems_selected_object_actions.js
+  expected_future_contents:
+    - wave_generation_spawn_helpers
+    - placement_lifecycle
+    - placement_validation
+    - selected_object_actions
+    - future_placeable_object_pressure_records
+
+source_files:
+  - js/systems/systems_wave_manager.js
+  - js/systems/systems_placement.js
+  - js/systems/systems_selected_object_actions.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Do not normalize tower-specific current code into generic object implementation."
+  - "Do not duplicate placement/selected-object records before migration."
+  - "Runtime/source code remains absolute authority."
