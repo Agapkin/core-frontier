@@ -80,7 +80,7 @@ functions:
     file_id: file:js/systems/systems_placement
     name: getBuildPanelText
     function_classes: [helper_function, validation_function]
-    semantic_role: "Produces compact build confirm text from current selected tower type and validation result."
+    semantic_role: "Produces build confirm text from current selected tower type and validation result."
     owns: "Build panel status text helper."
     does_not_own: "Panel lifecycle."
     mutates_summary: "None."
