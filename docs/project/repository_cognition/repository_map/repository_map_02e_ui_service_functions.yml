@@ -1,12 +1,14 @@
 # Repository Map Functions Split — UI Service Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — UI service copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: ui_service_functions
-  purpose: "Future split target for UI helper/control/layout/notification function records."
+  purpose: "Split target for copied UI control/layout/notification function records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -22,14 +24,268 @@ future_scope:
     - notification_lifecycle_render_helpers
 
 source_files:
-  - js/ui/helpers.js
   - js/ui/controls.js
   - js/ui/layout.js
   - js/ui/notifications.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/ui/controls:createDynamicUI
+    file_id: file:js/ui/controls
+    name: createDynamicUI
+    function_classes: [orchestration_function, bridge_function]
+    semantic_role: "Rebuilds runtime DOM controls and synchronizes active panels."
+    owns: "Dynamic UI controls rebuild."
+    does_not_own: "Gameplay logic or panel semantic content."
+    mutates_summary: "DOM controls/panels via creation/removal and topbar visibility sync."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createBottomControlPanel
+    file_id: file:js/ui/controls
+    name: createBottomControlPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates bottom command buttons for build, wave, codex and menu actions."
+    owns: "Bottom command panel DOM and callback wiring."
+    does_not_own: "Callback target gameplay ownership."
+    mutates_summary: "DOM and UI panel toggles through callbacks."
+    pressure_refs: [generic_build_category_system_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createUtilityControls
+    file_id: file:js/ui/controls
+    name: createUtilityControls
+    function_classes: [helper_function, orchestration_function]
+    semantic_role: "Creates speed and zoom utility control panels."
+    owns: "Utility controls assembly."
+    does_not_own: "Speed or camera runtime semantics."
+    mutates_summary: "Indirect DOM creation through child functions."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createSpeedControls
+    file_id: file:js/ui/controls
+    name: createSpeedControls
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates speed buttons and dispatches gameSpeed changes."
+    owns: "Speed control DOM and callback wiring."
+    does_not_own: "Game loop timing architecture."
+    mutates_summary: "DOM panel and gameSpeed through callbacks."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createZoomControls
+    file_id: file:js/ui/controls
+    name: createZoomControls
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates zoom buttons and dispatches camera zoom helpers."
+    owns: "Zoom control DOM and callback wiring."
+    does_not_own: "Camera subsystem."
+    mutates_summary: "DOM panel; indirect camera mutation via zoomAt/resetZoom."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createTowerActionPanel
+    file_id: file:js/ui/controls
+    name: createTowerActionPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates selected tower/object action panel with sell and unavailable upgrade button."
+    owns: "Selected object action control surface."
+    does_not_own: "Selected object action implementation or upgrade framework."
+    mutates_summary: "DOM panel and callback wiring only."
+    pressure_refs: [generic_object_action_system_not_implemented, upgrade_runtime_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure, risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/controls:createBuildConfirmPanel
+    file_id: file:js/ui/controls
+    name: createBuildConfirmPanel
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Creates placement confirm/cancel controls and dispatches placement commands."
+    owns: "Build confirm DOM and callback wiring."
+    does_not_own: "Placement validation or tower creation."
+    mutates_summary: "DOM panel; indirect via confirm/cancel callbacks."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch03a]
+
+  - function_id: fn:js/ui/layout:updateResponsiveLayout
+    file_id: file:js/ui/layout
+    name: updateResponsiveLayout
+    function_classes: [responsive_layout_function, mutation_heavy_function]
+    semantic_role: "Updates viewport-dependent uiLayout flags in layout.js."
+    owns: "Responsive layout recalculation helper after UI layer load."
+    does_not_own: "State.js initial responsive helper or full responsive framework."
+    mutates_summary: "uiLayout width/height/isMobile/isTablet/isLandscape/compact."
+    pressure_refs: [layout_engine_not_implemented, responsive_framework_not_implemented]
+    risk_refs: [risk:duplicate-updateResponsiveLayout]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:updateUILayout
+    file_id: file:js/ui/layout
+    name: updateUILayout
+    function_classes: [responsive_layout_function, helper_function]
+    semantic_role: "Layout update wrapper around responsive recalculation."
+    owns: "UI layout refresh helper call."
+    does_not_own: "Layout engine."
+    mutates_summary: "Indirect via updateResponsiveLayout."
+    pressure_refs: [layout_engine_not_implemented]
+    risk_refs: [risk:duplicate-updateResponsiveLayout]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:setupInitialDom
+    file_id: file:js/ui/layout
+    name: setupInitialDom
+    function_classes: [orchestration_function, helper_function]
+    semantic_role: "Creates initial topbar DOM structure and HUD chips."
+    owns: "Initial topbar DOM setup."
+    does_not_own: "HUD value update semantics."
+    mutates_summary: "topbar.innerHTML and topbar child nodes."
+    pressure_refs: [design_system_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:createTopbarChip
+    file_id: file:js/ui/layout
+    name: createTopbarChip
+    function_classes: [helper_function]
+    semantic_role: "Creates one topbar HUD chip with value span id."
+    owns: "Topbar chip DOM helper."
+    does_not_own: "HUD value update semantics."
+    mutates_summary: "DOM chip element and parent append."
+    pressure_refs: [component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:updateTopbarVisibility
+    file_id: file:js/ui/layout
+    name: updateTopbarVisibility
+    function_classes: [responsive_layout_function, helper_function]
+    semantic_role: "Applies responsive fixed style to topbar."
+    owns: "Topbar style sync."
+    does_not_own: "External CSS activation."
+    mutates_summary: "topbar inline style fields."
+    pressure_refs: [responsive_framework_not_implemented]
+    risk_refs: [risk:selector_drift_risk]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getBottomPanelStyle
+    file_id: file:js/ui/layout
+    name: getBottomPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for bottom command panel."
+    owns: "Bottom panel style preset."
+    does_not_own: "Bottom panel lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getSpeedPanelStyle
+    file_id: file:js/ui/layout
+    name: getSpeedPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for speed panel."
+    owns: "Speed panel style preset."
+    does_not_own: "Speed panel lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getZoomPanelStyle
+    file_id: file:js/ui/layout
+    name: getZoomPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for zoom panel."
+    owns: "Zoom panel style preset."
+    does_not_own: "Zoom panel lifecycle or camera subsystem."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getBuildPanelStyle
+    file_id: file:js/ui/layout
+    name: getBuildPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for build confirm panel."
+    owns: "Build panel style preset."
+    does_not_own: "Build panel lifecycle or placement validation."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getTowerActionPanelStyle
+    file_id: file:js/ui/layout
+    name: getTowerActionPanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for selected tower action panel."
+    owns: "Tower action panel style preset."
+    does_not_own: "Selected object action lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/layout:getSidePanelStyle
+    file_id: file:js/ui/layout
+    name: getSidePanelStyle
+    function_classes: [helper_function, responsive_layout_function]
+    semantic_role: "Returns responsive style map for side/menu/info panels."
+    owns: "Side panel style preset."
+    does_not_own: "Menu/info panel lifecycle."
+    mutates_summary: "None; returns style object."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:notify
+    file_id: file:js/ui/notifications
+    name: notify
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Creates notification entry and limits notification queue size."
+    owns: "Notification queue creation."
+    does_not_own: "Gameplay event cause."
+    mutates_summary: "uiState.notifications."
+    pressure_refs: [notification_framework_not_implemented, priority_system_not_implemented, animation_system_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:updateNotifications
+    file_id: file:js/ui/notifications
+    name: updateNotifications
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Decrements notification lifetime and removes expired entries."
+    owns: "Notification lifetime update."
+    does_not_own: "Animation system."
+    mutates_summary: "uiState.notifications entry life and queue contents."
+    pressure_refs: [notification_framework_not_implemented, animation_system_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
+
+  - function_id: fn:js/ui/notifications:drawNotifications
+    file_id: file:js/ui/notifications
+    name: drawNotifications
+    function_classes: [render_function]
+    semantic_role: "Draws active notifications as canvas overlay."
+    owns: "Notification canvas visualization."
+    does_not_own: "Notification lifecycle cause or gameplay ownership."
+    mutates_summary: "Canvas drawing state during render pass only."
+    pressure_refs: [notification_framework_not_implemented]
+    risk_refs: [risk:notification_framework_not_implemented]
+    evidence_refs: [evidence:discovery:batch06]
+
+migration_note: "UI service records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
-  - "Helper functions do not imply UI framework ownership."
-  - "Callback wiring does not imply callback semantic ownership."
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add helpers.js records unless canonical records already exist in repository_map_02_functions.yml."
+  - "Do not add game, canvas render or panel records to this file."
   - "Runtime/source code remains absolute authority."
