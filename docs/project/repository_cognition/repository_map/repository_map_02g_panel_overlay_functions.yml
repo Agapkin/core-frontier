@@ -1,12 +1,14 @@
 # Repository Map Functions Split — Panel Overlay Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — panel overlay copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: panel_overlay_functions
-  purpose: "Future split target for panels.js DOM panel and canvas overlay function records."
+  purpose: "Split target for copied panels.js DOM panel and canvas overlay function records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -20,9 +22,109 @@ future_scope:
 source_files:
   - js/ui/panels.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/ui/panels:createMenuPanel
+    file_id: file:js/ui/panels
+    name: createMenuPanel
+    function_classes: [orchestration_function, bridge_function, callback_target]
+    semantic_role: "Creates menu panel with difficulty/new-game controls and callback wiring."
+    owns: "Menu panel DOM creation."
+    does_not_own: "Gameplay restart implementation or difficulty system ownership."
+    mutates_summary: "DOM panel and callbacks; callbacks mutate gameState/menu state indirectly."
+    pressure_refs: [generic_ui_framework_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:createGameOverPanel
+    file_id: file:js/ui/panels
+    name: createGameOverPanel
+    function_classes: [orchestration_function, bridge_function, callback_target]
+    semantic_role: "Creates game-over DOM panel with retry/new-game controls."
+    owns: "Game-over panel DOM creation."
+    does_not_own: "Retry/restart lifecycle implementation."
+    mutates_summary: "DOM panel and callback wiring only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:updateDomVisibility
+    file_id: file:js/ui/panels
+    name: updateDomVisibility
+    function_classes: [orchestration_function, mutation_heavy_function]
+    semantic_role: "Shows/hides DOM panels and updates build confirm text from runtime state."
+    owns: "DOM panel visibility synchronization."
+    does_not_own: "Generic panel visibility system or gameplay state decisions."
+    mutates_summary: "DOM display/text fields."
+    pressure_refs: [generic_ui_framework_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:updateUI
+    file_id: file:js/ui/panels
+    name: updateUI
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Updates HUD text values from current runtime state."
+    owns: "HUD text synchronization."
+    does_not_own: "Gameplay state mutation."
+    mutates_summary: "DOM text values only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawWaveStatus
+    file_id: file:js/ui/panels
+    name: drawWaveStatus
+    function_classes: [render_function]
+    semantic_role: "Draws canvas HUD wave status and speed."
+    owns: "Wave status canvas overlay."
+    does_not_own: "Wave lifecycle."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawSelectedTowerPanel
+    file_id: file:js/ui/panels
+    name: drawSelectedTowerPanel
+    function_classes: [render_function]
+    semantic_role: "Draws current tower-specific selected object info panel."
+    owns: "Selected tower canvas info overlay."
+    does_not_own: "Selected object actions or generic object panel system."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawInfoPanel
+    file_id: file:js/ui/panels
+    name: drawInfoPanel
+    function_classes: [render_function]
+    semantic_role: "Draws canvas codex/info panel with tower and enemy reference content."
+    owns: "Current codex/info overlay rendering."
+    does_not_own: "Categorized codex system or gameplay data authority."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+  - function_id: fn:js/ui/panels:drawGameOver
+    file_id: file:js/ui/panels
+    name: drawGameOver
+    function_classes: [render_function]
+    semantic_role: "Draws canvas dim overlay when game is over."
+    owns: "Game-over canvas overlay."
+    does_not_own: "Game-over lifecycle transition."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch07]
+
+migration_note: "Panel overlay records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
-  - "Panel DOM creation does not imply gameplay lifecycle ownership."
-  - "Do not duplicate panels.js records before migration."
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add game, UI service or canvas render records to this file."
+  - "DOM panel creation does not imply gameplay lifecycle ownership."
+  - "Canvas overlay render does not imply gameplay lifecycle ownership."
   - "Runtime/source code remains absolute authority."
