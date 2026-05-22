@@ -1,14 +1,15 @@
 # Repository Map Functions Split — Runtime Orchestration Functions
-# Stage 0.3.4B — runtime orchestration copy population
+# Stage 0.3.4B — runtime orchestration split authority alignment
 
 meta:
-  status: populated_copy_verified
+  status: operational_split_inventory
   layer: repository_map_02_functions_split
   future_role: runtime_orchestration_functions
-  purpose: "Split target for copied game.js runtime orchestration, input, camera and loop records."
-  current_authority: repository_map_02_functions.yml
-  population_model: copy_populate_parity_check
-  removal_from_canonical_02: not_performed
+  purpose: "Operational split inventory for game.js runtime orchestration, input, camera and loop records."
+  authority_role: active_semantic_function_layer
+  legacy_02_role: historical_split_bridge_and_lineage_anchor
+  population_model: copy_populate_then_source_verified_transition
+  canonical_reduction_status: not_performed
 
 future_scope:
   expected_sources:
@@ -37,6 +38,42 @@ functions:
     pressure_refs: [responsive_framework_not_implemented]
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:getCanvasPoint
+    file_id: file:js/game
+    name: getCanvasPoint
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Converts client coordinates into canvas-local point for input routing."
+    owns: "Canvas-local input coordinate helper."
+    does_not_own: "Input framework or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:getPointer
+    file_id: file:js/game
+    name: getPointer
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Extracts canvas-local pointer point from pointer event."
+    owns: "Pointer event coordinate helper."
+    does_not_own: "Input framework or command router."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:getTapThreshold
+    file_id: file:js/game
+    name: getTapThreshold
+    function_classes: [helper_function]
+    semantic_role: "Returns movement threshold for tap/drag distinction based on current mode and layout flags."
+    owns: "Tap threshold helper."
+    does_not_own: "Gesture framework or input abstraction."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented, gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
 
   - function_id: fn:js/game:pointerStart
     file_id: file:js/game
@@ -98,6 +135,54 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:touchEnd
+    file_id: file:js/game
+    name: touchEnd
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Disables pinch mode when two-finger touch ends."
+    owns: "Pinch gesture deactivation helper."
+    does_not_own: "Gesture framework or camera subsystem."
+    mutates_summary: "camera.pinchActive."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:touchDistance
+    file_id: file:js/game
+    name: touchDistance
+    function_classes: [helper_function]
+    semantic_role: "Calculates distance between two touch points for pinch zoom routing."
+    owns: "Pinch distance helper."
+    does_not_own: "Gesture engine or camera subsystem."
+    mutates_summary: "None."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:touchCenter
+    file_id: file:js/game
+    name: touchCenter
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Calculates canvas-local center between two touch points."
+    owns: "Pinch center coordinate helper."
+    does_not_own: "Gesture engine, camera subsystem or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [gesture_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:wheelZoom
+    file_id: file:js/game
+    name: wheelZoom
+    function_classes: [bridge_function]
+    semantic_role: "Routes wheel delta into zoomAt around current pointer position."
+    owns: "Wheel zoom routing helper."
+    does_not_own: "Camera subsystem implementation."
+    mutates_summary: "Indirect via zoomAt."
+    pressure_refs: [camera_subsystem_not_implemented, input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
   - function_id: fn:js/game:zoomAt
     file_id: file:js/game
     name: zoomAt
@@ -133,6 +218,18 @@ functions:
     pressure_refs: [camera_subsystem_not_implemented]
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:updateHoveredTile
+    file_id: file:js/game
+    name: updateHoveredTile
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Stores hovered tile derived from screen coordinates."
+    owns: "Hovered tile coordinate sync helper."
+    does_not_own: "Placement validation or gameplay domain ownership."
+    mutates_summary: "uiState.hoveredTile."
+    pressure_refs: [input_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
 
   - function_id: fn:js/game:screenToWorld
     file_id: file:js/game
@@ -170,6 +267,18 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:scaled
+    file_id: file:js/game
+    name: scaled
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Scales value through current camera zoom."
+    owns: "Camera-zoom scaling helper."
+    does_not_own: "Render ownership or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
   - function_id: fn:js/game:handleTap
     file_id: file:js/game
     name: handleTap
@@ -194,10 +303,10 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
-migration_note: "Runtime orchestration records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
+migration_note: "Runtime orchestration records are active in this split file for operational Repository Map navigation. Legacy repository_map_02_functions.yml is preserved as historical bridge, transition manifest and split lineage anchor until a separate integrity pass approves canonical reduction or manifest conversion."
 
 anti_entropy_notes:
-  - "Do not remove records from repository_map_02_functions.yml during copy population."
-  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not treat legacy repository_map_02_functions.yml as the only current function authority after split completeness corrections."
+  - "Do not remove or compact legacy 02 without a separate approved transition pass."
   - "Do not add UI controls, layout, notification, canvas or panel records to this file."
   - "Runtime/source code remains absolute authority."

@@ -1,14 +1,15 @@
 # Repository Map Functions Split — UI Service Functions
-# Stage 0.3.4B — UI service copy population
+# Stage 0.3.4B — UI service split authority alignment
 
 meta:
-  status: populated_copy_verified
+  status: operational_split_inventory
   layer: repository_map_02_functions_split
   future_role: ui_service_functions
-  purpose: "Split target for copied UI control/layout/notification function records."
-  current_authority: repository_map_02_functions.yml
-  population_model: copy_populate_parity_check
-  removal_from_canonical_02: not_performed
+  purpose: "Operational split inventory for UI helper/control/layout/notification function records."
+  authority_role: active_semantic_function_layer
+  legacy_02_role: historical_split_bridge_and_lineage_anchor
+  population_model: copy_populate_then_source_verified_transition
+  canonical_reduction_status: not_performed
 
 future_scope:
   expected_sources:
@@ -24,11 +25,84 @@ future_scope:
     - notification_lifecycle_render_helpers
 
 source_files:
+  - js/ui/helpers.js
   - js/ui/controls.js
   - js/ui/layout.js
   - js/ui/notifications.js
 
 functions:
+  - function_id: fn:js/ui/helpers:removeElement
+    file_id: file:js/ui/helpers
+    name: removeElement
+    function_classes: [helper_function]
+    semantic_role: "Safely removes DOM element by id if it exists."
+    owns: "DOM cleanup helper."
+    does_not_own: "Panel lifecycle or UI framework."
+    mutates_summary: "DOM element removal only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
+  - function_id: fn:js/ui/helpers:applyFixedStyle
+    file_id: file:js/ui/helpers
+    name: applyFixedStyle
+    function_classes: [helper_function]
+    semantic_role: "Applies fixed positioning and style map to a DOM element."
+    owns: "Shared fixed style application helper."
+    does_not_own: "Layout engine or design system."
+    mutates_summary: "DOM element style fields."
+    pressure_refs: [layout_engine_not_implemented, design_system_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
+  - function_id: fn:js/ui/helpers:createUIButton
+    file_id: file:js/ui/helpers
+    name: createUIButton
+    function_classes: [helper_function, callback_target]
+    semantic_role: "Creates standard UI button and attaches callback without owning callback logic."
+    owns: "Shared UI button DOM helper and callback wiring."
+    does_not_own: "Gameplay callback semantics, component framework or reactive UI system."
+    mutates_summary: "DOM button element fields and button.onclick."
+    pressure_refs: [generic_ui_framework_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
+  - function_id: fn:js/ui/helpers:createPanelTitle
+    file_id: file:js/ui/helpers
+    name: createPanelTitle
+    function_classes: [helper_function]
+    semantic_role: "Creates standard panel title DOM element."
+    owns: "Shared panel title element helper."
+    does_not_own: "Panel lifecycle or component framework."
+    mutates_summary: "DOM title element fields."
+    pressure_refs: [generic_ui_framework_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
+  - function_id: fn:js/ui/helpers:createSmallText
+    file_id: file:js/ui/helpers
+    name: createSmallText
+    function_classes: [helper_function]
+    semantic_role: "Creates compact secondary text DOM element."
+    owns: "Shared small text element helper."
+    does_not_own: "HUD/gameplay text authority or component framework."
+    mutates_summary: "DOM text element fields."
+    pressure_refs: [generic_ui_framework_not_implemented, component_architecture_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
+  - function_id: fn:js/ui/helpers:setText
+    file_id: file:js/ui/helpers
+    name: setText
+    function_classes: [helper_function]
+    semantic_role: "Safely updates innerText for DOM element by id."
+    owns: "DOM text update helper."
+    does_not_own: "HUD/gameplay state ownership."
+    mutates_summary: "DOM element innerText only."
+    pressure_refs: [generic_ui_framework_not_implemented]
+    risk_refs: [risk:bridge_pressure]
+    evidence_refs: [evidence:source:ui_helpers]
+
   - function_id: fn:js/ui/controls:createDynamicUI
     file_id: file:js/ui/controls
     name: createDynamicUI
@@ -281,11 +355,11 @@ functions:
     risk_refs: [risk:notification_framework_not_implemented]
     evidence_refs: [evidence:discovery:batch06]
 
-migration_note: "UI service records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
+migration_note: "UI service records are active in this split file for operational Repository Map navigation. Legacy repository_map_02_functions.yml is preserved as historical bridge, transition manifest and split lineage anchor until a separate integrity pass approves canonical reduction or manifest conversion."
 
 anti_entropy_notes:
-  - "Do not remove records from repository_map_02_functions.yml during copy population."
-  - "Do not treat duplication with canonical 02 as migration completion."
-  - "Do not add helpers.js records unless canonical records already exist in repository_map_02_functions.yml."
+  - "Do not treat legacy repository_map_02_functions.yml as the only current function authority after split completeness corrections."
+  - "Do not remove or compact legacy 02 without a separate approved transition pass."
+  - "Helpers.js records in this file are source-code completeness corrections, not legacy 02 split-copy records."
   - "Do not add game, canvas render or panel records to this file."
   - "Runtime/source code remains absolute authority."

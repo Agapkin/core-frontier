@@ -1,14 +1,15 @@
 # Repository Map Functions Split — Gameplay Domain Functions
-# Stage 0.3.4B — gameplay domain copy population
+# Stage 0.3.4B — gameplay domain split authority alignment
 
 meta:
-  status: populated_copy_verified
+  status: operational_split_inventory
   layer: repository_map_02_functions_split
   future_role: gameplay_domain_functions
-  purpose: "Split target for copied wave, placement and selected-object function records."
-  current_authority: repository_map_02_functions.yml
-  population_model: copy_populate_parity_check
-  removal_from_canonical_02: not_performed
+  purpose: "Operational split inventory for wave, placement and selected-object function records."
+  authority_role: active_semantic_function_layer
+  legacy_02_role: historical_split_bridge_and_lineage_anchor
+  population_model: copy_populate_then_source_verified_transition
+  canonical_reduction_status: not_performed
 
 future_scope:
   expected_sources:
@@ -136,6 +137,42 @@ functions:
     risk_refs: [risk:future_placeable_object_pressure]
     evidence_refs: [evidence:discovery:batch02]
 
+  - function_id: fn:js/systems/systems_placement:isRoadTile
+    file_id: file:js/systems/systems_placement
+    name: isRoadTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether tile belongs to roadTiles restriction set during placement validation."
+    owns: "Road restriction lookup helper."
+    does_not_own: "Generic tile collision system or road data generation."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
+  - function_id: fn:js/systems/systems_placement:isBaseTile
+    file_id: file:js/systems/systems_placement
+    name: isBaseTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether tile is occupied by current base during placement validation."
+    owns: "Base restriction lookup helper."
+    does_not_own: "Base gameplay state or generic occupancy framework."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
+  - function_id: fn:js/systems/systems_placement:isTowerTile
+    file_id: file:js/systems/systems_placement
+    name: isTowerTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks current tower occupancy during placement validation."
+    owns: "Tower occupancy restriction helper."
+    does_not_own: "Generic placeable object occupancy framework."
+    mutates_summary: "None."
+    pressure_refs: [generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
   - function_id: fn:js/systems/systems_placement:hasCost
     file_id: file:js/systems/systems_placement
     name: hasCost
@@ -184,10 +221,10 @@ functions:
     risk_refs: [risk:selected_object_architecture_not_implemented]
     evidence_refs: [evidence:discovery:batch02]
 
-migration_note: "Gameplay domain records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
+migration_note: "Gameplay domain records are active in this split file for operational Repository Map navigation. Legacy repository_map_02_functions.yml is preserved as historical bridge, transition manifest and split lineage anchor until a separate integrity pass approves canonical reduction or manifest conversion."
 
 anti_entropy_notes:
-  - "Do not remove records from repository_map_02_functions.yml during copy population."
-  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not treat legacy repository_map_02_functions.yml as the only current function authority after split completeness corrections."
+  - "Do not remove or compact legacy 02 without a separate approved transition pass."
   - "Do not add runtime orchestration, UI, canvas or panel records to this file."
   - "Runtime/source code remains absolute authority."
