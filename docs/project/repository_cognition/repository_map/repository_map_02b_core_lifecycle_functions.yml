@@ -1,0 +1,29 @@
+# Repository Map Functions Split — Core Lifecycle Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: core_lifecycle_functions
+  purpose: "Future split target for systems.js lifecycle-heavy function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/systems/systems.js
+  expected_future_contents:
+    - core_lifecycle_functions
+    - checkpoint_restart_game_over_functions
+    - enemy_update_reward_flow
+    - tower_combat_update
+    - mixed_lifecycle_hotspot_records
+
+source_files:
+  - js/systems/systems.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Do not duplicate systems.js records before migration."
+  - "Do not convert lifecycle pressure into refactor commands."
+  - "Runtime/source code remains absolute authority."

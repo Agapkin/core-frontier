@@ -1,0 +1,28 @@
+# Repository Map Functions Split — Panel Overlay Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: panel_overlay_functions
+  purpose: "Future split target for panels.js DOM panel and canvas overlay function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/ui/panels.js
+  expected_future_contents:
+    - dom_panels
+    - canvas_hud_overlays
+    - selected_tower_info_game_over_overlays
+    - panel_lifecycle_callback_bridge_distinctions
+
+source_files:
+  - js/ui/panels.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Panel DOM creation does not imply gameplay lifecycle ownership."
+  - "Do not duplicate panels.js records before migration."
+  - "Runtime/source code remains absolute authority."

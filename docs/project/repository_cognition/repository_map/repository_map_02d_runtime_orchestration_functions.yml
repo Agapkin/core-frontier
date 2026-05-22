@@ -1,0 +1,31 @@
+# Repository Map Functions Split — Runtime Orchestration Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: runtime_orchestration_functions
+  purpose: "Future split target for game.js runtime orchestration, input, camera and loop records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/game.js
+  expected_future_contents:
+    - bootstrap_resize_orchestration
+    - input_routing
+    - touch_pointer_helpers
+    - camera_helpers
+    - coordinate_mapping
+    - tap_routing
+    - gameLoop_sequencing
+
+source_files:
+  - js/game.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Do not claim scene manager, camera subsystem or input framework implementation."
+  - "Do not duplicate game.js records before migration."
+  - "Runtime/source code remains absolute authority."

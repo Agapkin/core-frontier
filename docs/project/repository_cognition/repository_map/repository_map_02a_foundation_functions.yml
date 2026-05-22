@@ -1,0 +1,30 @@
+# Repository Map Functions Split — Foundation Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: foundation_functions
+  purpose: "Future split target for foundation data/state function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/data.js
+    - js/state.js
+  expected_future_contents:
+    - foundation_data_helpers
+    - state_helpers
+    - power_update_helpers
+    - state_shape_adjacent_semantic_helpers
+
+source_files:
+  - js/data.js
+  - js/state.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Do not duplicate records from repository_map_02_functions.yml during skeleton preparation."
+  - "Do not treat this file as populated until explicit migration occurs."
+  - "Runtime/source code remains absolute authority."

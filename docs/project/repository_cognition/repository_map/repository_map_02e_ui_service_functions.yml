@@ -1,0 +1,35 @@
+# Repository Map Functions Split — UI Service Functions
+# Stage 0.3.4B — skeleton pending migration
+
+meta:
+  status: skeleton_pending_migration
+  layer: repository_map_02_functions_split
+  future_role: ui_service_functions
+  purpose: "Future split target for UI helper/control/layout/notification function records."
+  current_authority: repository_map_02_functions.yml
+
+future_scope:
+  expected_sources:
+    - js/ui/helpers.js
+    - js/ui/controls.js
+    - js/ui/layout.js
+    - js/ui/notifications.js
+  expected_future_contents:
+    - dom_helpers
+    - ui_controls
+    - callback_wiring_helpers
+    - responsive_layout_helpers
+    - notification_lifecycle_render_helpers
+
+source_files:
+  - js/ui/helpers.js
+  - js/ui/controls.js
+  - js/ui/layout.js
+  - js/ui/notifications.js
+
+migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+
+anti_entropy_notes:
+  - "Helper functions do not imply UI framework ownership."
+  - "Callback wiring does not imply callback semantic ownership."
+  - "Runtime/source code remains absolute authority."

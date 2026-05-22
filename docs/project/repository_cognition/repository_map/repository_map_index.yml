@@ -5,7 +5,7 @@ meta:
   package: repository_map
   status: partially_populated
   purpose: "Root manifest and navigation layer for the split Repository Map package."
-  scope: "Compressed operational semantic topology; vocab and file inventory are populated, risks/evidence are minimally anchored for file inventory refs, remaining layers are skeleton-only."
+  scope: "Compressed operational semantic topology; vocab, file inventory and current function inventory are populated; risks/evidence are minimally anchored for file inventory refs; function split skeletons are pending migration; remaining layers are skeleton-only."
 
 package_purpose:
   - "Provide compact navigation across Repository Map package layers."
@@ -30,7 +30,8 @@ package_philosophy:
 layer_separation:
   vocab: "Shared type vocabulary; currently populated."
   files: "File-level semantic inventory; currently populated for Discovery-covered runtime/surface files."
-  functions: "Function inventory survival layer; skeleton-only."
+  functions: "Current canonical full function inventory; populated and not yet migrated to split files."
+  function_split_skeletons: "Prepared future split files for function-layer migration; skeleton_pending_migration only."
   relationships: "Semantic topology links; skeleton-only."
   surfaces: "DOM/CSS/canvas/surface topology; skeleton-only."
   risks_pressure: "Risk and semantic pressure anchors; minimally anchored for file inventory refs only."
@@ -45,8 +46,29 @@ package_file_registry:
     responsibility: "File entities, roles and ownership boundaries."
     status: populated
   - file: repository_map_02_functions.yml
-    responsibility: "Function inventory and semantic function classes."
-    status: skeleton_only
+    responsibility: "Current canonical full function inventory and semantic function classes."
+    status: populated_canonical_pending_future_split
+  - file: repository_map_02a_foundation_functions.yml
+    responsibility: "Future split target for data.js and state.js function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02b_core_lifecycle_functions.yml
+    responsibility: "Future split target for systems.js lifecycle function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02c_gameplay_domain_functions.yml
+    responsibility: "Future split target for wave, placement and selected-object function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02d_runtime_orchestration_functions.yml
+    responsibility: "Future split target for game.js orchestration/input/camera function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02e_ui_service_functions.yml
+    responsibility: "Future split target for UI helper/control/layout/notification function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02f_canvas_render_functions.yml
+    responsibility: "Future split target for canvas world/entity render function records."
+    status: skeleton_pending_migration
+  - file: repository_map_02g_panel_overlay_functions.yml
+    responsibility: "Future split target for panels.js function records."
+    status: skeleton_pending_migration
   - file: repository_map_03_relationships.yml
     responsibility: "Relationships between files, functions and surfaces."
     status: skeleton_only
@@ -69,21 +91,31 @@ anti_entropy_notes:
   - "Do not collapse split package into one giant YAML file."
   - "Do not convert hotspot telemetry into refactor commands."
   - "Do not treat partially populated package as runtime authority."
+  - "Do not duplicate repository_map_02_functions.yml records into split files before explicit migration."
 
 placeholders:
   package_status:
     populated_layers:
       - repository_map_vocab.yml
       - repository_map_01_files.yml
+      - repository_map_02_functions.yml
+    pending_migration_skeletons:
+      - repository_map_02a_foundation_functions.yml
+      - repository_map_02b_core_lifecycle_functions.yml
+      - repository_map_02c_gameplay_domain_functions.yml
+      - repository_map_02d_runtime_orchestration_functions.yml
+      - repository_map_02e_ui_service_functions.yml
+      - repository_map_02f_canvas_render_functions.yml
+      - repository_map_02g_panel_overlay_functions.yml
     minimally_anchored_layers:
       - repository_map_05_risks_pressure.yml
       - repository_map_06_evidence_refs.yml
     skeleton_only_layers:
-      - repository_map_02_functions.yml
       - repository_map_03_relationships.yml
       - repository_map_04_surfaces.yml
       - repository_map_07_hotspots.yml
   package_warnings:
     - "Repository Map remains non-runtime-authoritative."
     - "Risks/evidence anchors are supporting records only."
-    - "Function, relationship, surface and hotspot layers are not populated yet."
+    - "Function split files are skeleton_pending_migration and contain no migrated records yet."
+    - "Current repository_map_02_functions.yml remains canonical full function inventory until future migration pass."
