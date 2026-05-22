@@ -136,6 +136,42 @@ functions:
     risk_refs: [risk:future_placeable_object_pressure]
     evidence_refs: [evidence:discovery:batch02]
 
+  - function_id: fn:js/systems/systems_placement:isRoadTile
+    file_id: file:js/systems/systems_placement
+    name: isRoadTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether tile belongs to roadTiles restriction set during placement validation."
+    owns: "Road restriction lookup helper."
+    does_not_own: "Generic tile collision system or road data generation."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
+  - function_id: fn:js/systems/systems_placement:isBaseTile
+    file_id: file:js/systems/systems_placement
+    name: isBaseTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether tile is occupied by current base during placement validation."
+    owns: "Base restriction lookup helper."
+    does_not_own: "Base gameplay state or generic occupancy framework."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
+  - function_id: fn:js/systems/systems_placement:isTowerTile
+    file_id: file:js/systems/systems_placement
+    name: isTowerTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks current tower occupancy during placement validation."
+    owns: "Tower occupancy restriction helper."
+    does_not_own: "Generic placeable object occupancy framework."
+    mutates_summary: "None."
+    pressure_refs: [generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:source:systems_placement]
+
   - function_id: fn:js/systems/systems_placement:hasCost
     file_id: file:js/systems/systems_placement
     name: hasCost
