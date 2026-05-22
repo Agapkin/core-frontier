@@ -38,6 +38,42 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:getCanvasPoint
+    file_id: file:js/game
+    name: getCanvasPoint
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Converts client coordinates into canvas-local point for input routing."
+    owns: "Canvas-local input coordinate helper."
+    does_not_own: "Input framework or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:getPointer
+    file_id: file:js/game
+    name: getPointer
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Extracts canvas-local pointer point from pointer event."
+    owns: "Pointer event coordinate helper."
+    does_not_own: "Input framework or command router."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:getTapThreshold
+    file_id: file:js/game
+    name: getTapThreshold
+    function_classes: [helper_function]
+    semantic_role: "Returns movement threshold for tap/drag distinction based on current mode and layout flags."
+    owns: "Tap threshold helper."
+    does_not_own: "Gesture framework or input abstraction."
+    mutates_summary: "None."
+    pressure_refs: [input_framework_not_implemented, gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
   - function_id: fn:js/game:pointerStart
     file_id: file:js/game
     name: pointerStart
@@ -98,6 +134,54 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:touchEnd
+    file_id: file:js/game
+    name: touchEnd
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Disables pinch mode when two-finger touch ends."
+    owns: "Pinch gesture deactivation helper."
+    does_not_own: "Gesture framework or camera subsystem."
+    mutates_summary: "camera.pinchActive."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:touchDistance
+    file_id: file:js/game
+    name: touchDistance
+    function_classes: [helper_function]
+    semantic_role: "Calculates distance between two touch points for pinch zoom routing."
+    owns: "Pinch distance helper."
+    does_not_own: "Gesture engine or camera subsystem."
+    mutates_summary: "None."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:touchCenter
+    file_id: file:js/game
+    name: touchCenter
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Calculates canvas-local center between two touch points."
+    owns: "Pinch center coordinate helper."
+    does_not_own: "Gesture engine, camera subsystem or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [gesture_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
+  - function_id: fn:js/game:wheelZoom
+    file_id: file:js/game
+    name: wheelZoom
+    function_classes: [bridge_function]
+    semantic_role: "Routes wheel delta into zoomAt around current pointer position."
+    owns: "Wheel zoom routing helper."
+    does_not_own: "Camera subsystem implementation."
+    mutates_summary: "Indirect via zoomAt."
+    pressure_refs: [camera_subsystem_not_implemented, input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
   - function_id: fn:js/game:zoomAt
     file_id: file:js/game
     name: zoomAt
@@ -134,6 +218,18 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
+  - function_id: fn:js/game:updateHoveredTile
+    file_id: file:js/game
+    name: updateHoveredTile
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Stores hovered tile derived from screen coordinates."
+    owns: "Hovered tile coordinate sync helper."
+    does_not_own: "Placement validation or gameplay domain ownership."
+    mutates_summary: "uiState.hoveredTile."
+    pressure_refs: [input_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
+
   - function_id: fn:js/game:screenToWorld
     file_id: file:js/game
     name: screenToWorld
@@ -169,6 +265,18 @@ functions:
     pressure_refs: [camera_subsystem_not_implemented]
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:scaled
+    file_id: file:js/game
+    name: scaled
+    function_classes: [helper_function, coordinate_mapping_function]
+    semantic_role: "Scales value through current camera zoom."
+    owns: "Camera-zoom scaling helper."
+    does_not_own: "Render ownership or scene manager."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:source:game]
 
   - function_id: fn:js/game:handleTap
     file_id: file:js/game
