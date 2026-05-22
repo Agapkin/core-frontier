@@ -5,7 +5,7 @@ meta:
   package: repository_map
   status: partially_populated
   purpose: "Root manifest and navigation layer for the split Repository Map package."
-  scope: "Compressed operational semantic topology; vocab, file inventory and current function inventory are populated; risks/evidence are minimally anchored for file inventory refs; function split skeletons are pending migration; remaining layers are skeleton-only."
+  scope: "Compressed operational semantic topology; vocab, file inventory and current function inventory are populated; risks/evidence are minimally anchored for file inventory refs; foundation split file is copy-populated for parity verification; remaining function split skeletons are pending migration; remaining layers are skeleton-only."
 
 package_purpose:
   - "Provide compact navigation across Repository Map package layers."
@@ -31,7 +31,7 @@ layer_separation:
   vocab: "Shared type vocabulary; currently populated."
   files: "File-level semantic inventory; currently populated for Discovery-covered runtime/surface files."
   functions: "Current canonical full function inventory; populated and not yet migrated to split files."
-  function_split_skeletons: "Prepared future split files for function-layer migration; skeleton_pending_migration only."
+  function_split_skeletons: "Prepared future split files for function-layer migration; only foundation split file is copy-populated for parity verification."
   relationships: "Semantic topology links; skeleton-only."
   surfaces: "DOM/CSS/canvas/surface topology; skeleton-only."
   risks_pressure: "Risk and semantic pressure anchors; minimally anchored for file inventory refs only."
@@ -49,8 +49,8 @@ package_file_registry:
     responsibility: "Current canonical full function inventory and semantic function classes."
     status: populated_canonical_pending_future_split
   - file: repository_map_02a_foundation_functions.yml
-    responsibility: "Future split target for data.js and state.js function records."
-    status: skeleton_pending_migration
+    responsibility: "Copied foundation function records for data.js and state.js."
+    status: populated_copy_verified
   - file: repository_map_02b_core_lifecycle_functions.yml
     responsibility: "Future split target for systems.js lifecycle function records."
     status: skeleton_pending_migration
@@ -91,7 +91,7 @@ anti_entropy_notes:
   - "Do not collapse split package into one giant YAML file."
   - "Do not convert hotspot telemetry into refactor commands."
   - "Do not treat partially populated package as runtime authority."
-  - "Do not duplicate repository_map_02_functions.yml records into split files before explicit migration."
+  - "Canonical repository_map_02_functions.yml remains unchanged during copy-population passes."
 
 placeholders:
   package_status:
@@ -99,8 +99,9 @@ placeholders:
       - repository_map_vocab.yml
       - repository_map_01_files.yml
       - repository_map_02_functions.yml
-    pending_migration_skeletons:
+    copy_populated_split_layers:
       - repository_map_02a_foundation_functions.yml
+    pending_migration_skeletons:
       - repository_map_02b_core_lifecycle_functions.yml
       - repository_map_02c_gameplay_domain_functions.yml
       - repository_map_02d_runtime_orchestration_functions.yml
@@ -117,5 +118,5 @@ placeholders:
   package_warnings:
     - "Repository Map remains non-runtime-authoritative."
     - "Risks/evidence anchors are supporting records only."
-    - "Function split files are skeleton_pending_migration and contain no migrated records yet."
-    - "Current repository_map_02_functions.yml remains canonical full function inventory until future migration pass."
+    - "02a is copy-populated only; canonical 02 still contains the same foundation records."
+    - "Full migration/removal from canonical 02 has not occurred yet."
