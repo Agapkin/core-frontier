@@ -1,14 +1,15 @@
 # Repository Map Functions Split — Runtime Orchestration Functions
-# Stage 0.3.4B — runtime orchestration copy population
+# Stage 0.3.4B — runtime orchestration split authority alignment
 
 meta:
-  status: populated_copy_verified
+  status: operational_split_inventory
   layer: repository_map_02_functions_split
   future_role: runtime_orchestration_functions
-  purpose: "Split target for copied game.js runtime orchestration, input, camera and loop records."
-  current_authority: repository_map_02_functions.yml
-  population_model: copy_populate_parity_check
-  removal_from_canonical_02: not_performed
+  purpose: "Operational split inventory for game.js runtime orchestration, input, camera and loop records."
+  authority_role: active_semantic_function_layer
+  legacy_02_role: historical_split_bridge_and_lineage_anchor
+  population_model: copy_populate_then_source_verified_transition
+  canonical_reduction_status: not_performed
 
 future_scope:
   expected_sources:
@@ -302,10 +303,10 @@ functions:
     risk_refs: [risk:input_camera_loop_density]
     evidence_refs: [evidence:discovery:batch01]
 
-migration_note: "Runtime orchestration records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
+migration_note: "Runtime orchestration records are active in this split file for operational Repository Map navigation. Legacy repository_map_02_functions.yml is preserved as historical bridge, transition manifest and split lineage anchor until a separate integrity pass approves canonical reduction or manifest conversion."
 
 anti_entropy_notes:
-  - "Do not remove records from repository_map_02_functions.yml during copy population."
-  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not treat legacy repository_map_02_functions.yml as the only current function authority after split completeness corrections."
+  - "Do not remove or compact legacy 02 without a separate approved transition pass."
   - "Do not add UI controls, layout, notification, canvas or panel records to this file."
   - "Runtime/source code remains absolute authority."
