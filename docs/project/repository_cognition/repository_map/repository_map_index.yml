@@ -5,7 +5,7 @@ meta:
   package: repository_map
   status: partially_populated
   purpose: "Root manifest and navigation layer for the split Repository Map package."
-  scope: "Compressed operational semantic topology; vocab and file inventory are populated; legacy repository_map_02_functions.yml is preserved as historical bridge / transition manifest / lineage anchor; function split files 02a–02g are operational split inventories / active semantic function layers; risks/evidence are minimally anchored for file inventory refs; remaining non-function layers are skeleton-only."
+  scope: "Compressed operational semantic topology; vocab and file inventory are populated; repository_map_02_functions.yml now operates as transition manifest / historical bridge / lineage anchor for split function inventories 02a–02g; operational function cognition lives in 02a–02g; risks/evidence are minimally anchored for file inventory refs; remaining non-function layers are skeleton-only."
 
 package_purpose:
   - "Provide compact navigation across Repository Map package layers."
@@ -30,8 +30,8 @@ package_philosophy:
 layer_separation:
   vocab: "Shared type vocabulary; currently populated."
   files: "File-level semantic inventory; currently populated for Discovery-covered runtime/surface files."
-  functions: "Legacy function inventory preserved as historical bridge, transition manifest and lineage anchor."
-  function_split_files: "Function split files 02a–02g are operational split inventories / active semantic function layers."
+  functions: "Transition manifest / historical bridge / lineage anchor for split function group 02a–02g."
+  function_split_files: "Operational split inventories / active semantic function layers for current function cognition."
   relationships: "Semantic topology links; skeleton-only."
   surfaces: "DOM/CSS/canvas/surface topology; skeleton-only."
   risks_pressure: "Risk and semantic pressure anchors; minimally anchored for file inventory refs only."
@@ -46,7 +46,7 @@ package_file_registry:
     responsibility: "File entities, roles and ownership boundaries."
     status: populated
   - file: repository_map_02_functions.yml
-    responsibility: "Legacy full function inventory preserved as historical bridge, transition manifest and split lineage anchor."
+    responsibility: "Transition manifest / historical bridge / lineage anchor for function split inventories 02a–02g."
     status: transition_manifest_preserved
   - file: repository_map_02a_foundation_functions.yml
     responsibility: "Operational foundation function inventory for data.js and state.js."
@@ -91,8 +91,9 @@ anti_entropy_notes:
   - "Do not collapse split package into one giant YAML file."
   - "Do not convert hotspot telemetry into refactor commands."
   - "Do not treat partially populated package as runtime authority."
-  - "Legacy repository_map_02_functions.yml remains preserved as historical bridge / transition manifest / lineage anchor until a separate integrity pass approves canonical reduction or manifest conversion."
-  - "Operational split files 02a–02g are active semantic function layers, but transition is not finalized until a separate integrity pass completes."
+  - "repository_map_02_functions.yml is now a preserved transition manifest / historical bridge, not the operational function inventory authority."
+  - "Operational function cognition now lives in split layers 02a–02g."
+  - "Future integrity/reduction checks may still be required before considering the transition finalized."
 
 placeholders:
   package_status:
@@ -100,7 +101,7 @@ placeholders:
       - repository_map_vocab.yml
       - repository_map_01_files.yml
       - repository_map_02_functions.yml
-    copy_populated_split_layers:
+    split_operational_layers:
       - repository_map_02a_foundation_functions.yml
       - repository_map_02b_core_lifecycle_functions.yml
       - repository_map_02c_gameplay_domain_functions.yml
@@ -118,7 +119,7 @@ placeholders:
   package_warnings:
     - "Repository Map remains non-runtime-authoritative."
     - "Risks/evidence anchors are supporting records only."
-    - "02a–02g are operational split inventories / active semantic function layers."
-    - "Legacy 02 is still preserved for lineage/provenance and transition safety."
+    - "Operational function cognition now lives in split inventories 02a–02g."
+    - "Legacy 02 remains preserved for lineage/provenance and transition safety."
     - "Canonical reduction/removal from legacy 02 has not occurred yet."
-    - "Function split transition is not finalized until a separate integrity pass is approved and completed."
+    - "Function split transition still requires future integrity/reduction verification before final closure."
