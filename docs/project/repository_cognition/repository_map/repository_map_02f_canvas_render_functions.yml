@@ -1,12 +1,14 @@
 # Repository Map Functions Split — Canvas Render Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — canvas render copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: canvas_render_functions
-  purpose: "Future split target for world/entity canvas render function records."
+  purpose: "Split target for copied world/entity canvas render function records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -22,9 +24,144 @@ source_files:
   - js/ui/canvas_world.js
   - js/ui/canvas_entities.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/ui/canvas_world:drawRectWorld
+    file_id: file:js/ui/canvas_world
+    name: drawRectWorld
+    function_classes: [render_function, helper_function]
+    semantic_role: "Draws camera-aware world-space rectangle primitive."
+    owns: "World render primitive helper."
+    does_not_own: "Gameplay object ownership or camera state."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawTextWorld
+    file_id: file:js/ui/canvas_world
+    name: drawTextWorld
+    function_classes: [render_function, helper_function]
+    semantic_role: "Draws camera-aware world-space text primitive."
+    owns: "World text render helper."
+    does_not_own: "Gameplay or UI text state."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawMap
+    file_id: file:js/ui/canvas_world
+    name: drawMap
+    function_classes: [render_function]
+    semantic_role: "Draws world background and visible map grid."
+    owns: "World/terrain base render."
+    does_not_own: "Map data authority or gameplay terrain rules."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawRoadTiles
+    file_id: file:js/ui/canvas_world
+    name: drawRoadTiles
+    function_classes: [render_function]
+    semantic_role: "Visualizes roadTiles occupancy set as world-space tiles."
+    owns: "Road tile visualization."
+    does_not_own: "Road data generation or pathfinding."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawPathLine
+    file_id: file:js/ui/canvas_world
+    name: drawPathLine
+    function_classes: [render_function]
+    semantic_role: "Draws enemyPath as camera-aware route line."
+    owns: "Path route visualization."
+    does_not_own: "Enemy movement path logic."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBase
+    file_id: file:js/ui/canvas_world
+    name: drawBase
+    function_classes: [render_function]
+    semantic_role: "Draws base marker without owning base gameplay state."
+    owns: "Base visual marker."
+    does_not_own: "Base HP/state semantics."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawTowerRange
+    file_id: file:js/ui/canvas_world
+    name: drawTowerRange
+    function_classes: [render_function]
+    semantic_role: "Visualizes tower range overlay without tower combat ownership."
+    owns: "Tower range visualization."
+    does_not_own: "Tower targeting or combat logic."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, tower_specific_current]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBuildTile
+    file_id: file:js/ui/canvas_world
+    name: drawBuildTile
+    function_classes: [render_function, validation_function]
+    semantic_role: "Visualizes candidate build tile, validation result and tower preview."
+    owns: "Placement preview visualization."
+    does_not_own: "Placement validation decision or tower placement lifecycle."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_placeable_object_pressure, future_generic_render_pressure, generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure, risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_world:drawBuildOverlay
+    file_id: file:js/ui/canvas_world
+    name: drawBuildOverlay
+    function_classes: [render_function]
+    semantic_role: "Draws hovered and pending placement overlays for build mode."
+    owns: "Build overlay render ordering in current render pass."
+    does_not_own: "Placement lifecycle or validation semantics."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_placeable_object_pressure, future_generic_render_pressure]
+    risk_refs: [risk:future_generic_render_pressure, risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch03b]
+
+  - function_id: fn:js/ui/canvas_entities:drawTowers
+    file_id: file:js/ui/canvas_entities
+    name: drawTowers
+    function_classes: [render_function]
+    semantic_role: "Visualizes towers, selected tower highlight and target lines."
+    owns: "Tower entity visualization and target line drawing."
+    does_not_own: "Target acquisition, damage, combat rules or selected object actions."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, tower_specific_current, entity_framework_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03c]
+
+  - function_id: fn:js/ui/canvas_entities:drawEnemies
+    file_id: file:js/ui/canvas_entities
+    name: drawEnemies
+    function_classes: [render_function]
+    semantic_role: "Visualizes enemy shapes and HP bars."
+    owns: "Enemy entity visualization and HP bar drawing."
+    does_not_own: "Enemy movement, damage/death flow or status-effect system."
+    mutates_summary: "Canvas drawing state only."
+    pressure_refs: [future_generic_render_pressure, entity_framework_not_implemented]
+    risk_refs: [risk:future_generic_render_pressure]
+    evidence_refs: [evidence:discovery:batch03c]
+
+migration_note: "Canvas render records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add UI, game or panel records to this file."
   - "Render visualization does not imply gameplay ownership."
-  - "Do not duplicate canvas render records before migration."
   - "Runtime/source code remains absolute authority."

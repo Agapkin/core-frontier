@@ -1,12 +1,14 @@
 # Repository Map Functions Split — Runtime Orchestration Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — runtime orchestration copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: runtime_orchestration_functions
-  purpose: "Future split target for game.js runtime orchestration, input, camera and loop records."
+  purpose: "Split target for copied game.js runtime orchestration, input, camera and loop records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -23,9 +25,179 @@ future_scope:
 source_files:
   - js/game.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/game:resizeCanvas
+    file_id: file:js/game
+    name: resizeCanvas
+    function_classes: [orchestration_function, responsive_layout_function]
+    semantic_role: "Synchronizes canvas size, responsive layout, camera bounds and UI refresh after viewport changes."
+    owns: "Runtime resize orchestration."
+    does_not_own: "Layout engine or UI component architecture."
+    mutates_summary: "canvas size and indirect UI/camera sync."
+    pressure_refs: [responsive_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerStart
+    file_id: file:js/game
+    name: pointerStart
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Starts pointer drag/tap tracking and updates hovered tile."
+    owns: "Pointer input routing state."
+    does_not_own: "Input framework."
+    mutates_summary: "camera drag/tap fields, uiState.hoveredTile indirectly."
+    pressure_refs: [input_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerMove
+    file_id: file:js/game
+    name: pointerMove
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Updates hover, detects drag and pans camera."
+    owns: "Pointer movement routing and camera pan mutation."
+    does_not_own: "Camera subsystem implementation."
+    mutates_summary: "camera.x/y/moved/last fields, uiState.hoveredTile indirectly."
+    pressure_refs: [input_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:pointerEnd
+    file_id: file:js/game
+    name: pointerEnd
+    function_classes: [bridge_function, callback_target]
+    semantic_role: "Ends pointer routing and dispatches tap if drag threshold was not exceeded."
+    owns: "Pointer end routing."
+    does_not_own: "Placement or selected object action semantics."
+    mutates_summary: "camera.dragging and indirect tap dispatch effects."
+    pressure_refs: [input_framework_not_implemented, command_router_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:touchStart
+    file_id: file:js/game
+    name: touchStart
+    function_classes: [bridge_function, mutation_heavy_function]
+    semantic_role: "Activates pinch mode for two-finger touch."
+    owns: "Pinch gesture activation state."
+    does_not_own: "Gesture framework."
+    mutates_summary: "camera.pinchActive, dragging, pinchDistance, pinchZoom."
+    pressure_refs: [gesture_framework_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:touchMove
+    file_id: file:js/game
+    name: touchMove
+    function_classes: [bridge_function]
+    semantic_role: "Calculates pinch ratio and dispatches zoomAt."
+    owns: "Pinch zoom routing."
+    does_not_own: "Camera subsystem or gesture framework."
+    mutates_summary: "Indirect via zoomAt."
+    pressure_refs: [gesture_framework_not_implemented, camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:zoomAt
+    file_id: file:js/game
+    name: zoomAt
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Changes camera zoom while preserving world point under screen position."
+    owns: "Camera zoom math and camera x/y adjustment."
+    does_not_own: "Camera subsystem architecture."
+    mutates_summary: "camera.zoom, camera.x, camera.y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:resetZoom
+    file_id: file:js/game
+    name: resetZoom
+    function_classes: [coordinate_mapping_function, mutation_heavy_function]
+    semantic_role: "Resets camera zoom/position and optionally displays notification."
+    owns: "Camera zoom reset helper."
+    does_not_own: "Camera subsystem architecture."
+    mutates_summary: "camera.zoom/x/y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:clampCamera
+    file_id: file:js/game
+    name: clampCamera
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Constrains camera position inside current map bounds."
+    owns: "Camera bounds helper."
+    does_not_own: "Standalone camera subsystem."
+    mutates_summary: "camera.x, camera.y."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:screenToWorld
+    file_id: file:js/game
+    name: screenToWorld
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts screen coordinates to world coordinates using current camera."
+    owns: "Screen-to-world coordinate mapping."
+    does_not_own: "Render layer."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:screenToTile
+    file_id: file:js/game
+    name: screenToTile
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts screen coordinates to tile coordinates through world coordinates."
+    owns: "Input tile resolution helper."
+    does_not_own: "Placement validation."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:worldToScreen
+    file_id: file:js/game
+    name: worldToScreen
+    function_classes: [coordinate_mapping_function, helper_function]
+    semantic_role: "Converts world coordinates to screen coordinates using current camera."
+    owns: "World-to-screen coordinate mapping."
+    does_not_own: "Entity/world rendering ownership."
+    mutates_summary: "None."
+    pressure_refs: [camera_subsystem_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:handleTap
+    file_id: file:js/game
+    name: handleTap
+    function_classes: [bridge_function, orchestration_function]
+    semantic_role: "Routes tap to placement selection, tower selection or selection clear."
+    owns: "Tap routing between current modes."
+    does_not_own: "Placement validation or selected object implementation."
+    mutates_summary: "uiState.selectedTower in empty-tile case; indirect via selected/placement functions."
+    pressure_refs: [command_router_not_implemented, scene_manager_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/game:gameLoop
+    file_id: file:js/game
+    name: gameLoop
+    function_classes: [orchestration_function, render_function]
+    semantic_role: "Runs fixed update/render/UI overlay sequence and schedules next animation frame."
+    owns: "Main loop sequencing."
+    does_not_own: "Individual update or render internals."
+    mutates_summary: "Indirect via called update/render functions and requestAnimationFrame scheduling."
+    pressure_refs: [game_engine_not_implemented, scene_manager_not_implemented, ecs_not_implemented]
+    risk_refs: [risk:input_camera_loop_density]
+    evidence_refs: [evidence:discovery:batch01]
+
+migration_note: "Runtime orchestration records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
-  - "Do not claim scene manager, camera subsystem or input framework implementation."
-  - "Do not duplicate game.js records before migration."
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add UI controls, layout, notification, canvas or panel records to this file."
   - "Runtime/source code remains absolute authority."

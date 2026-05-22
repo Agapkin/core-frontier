@@ -1,12 +1,14 @@
 # Repository Map Functions Split — Gameplay Domain Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — gameplay domain copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: gameplay_domain_functions
-  purpose: "Future split target for wave, placement and selected-object function records."
+  purpose: "Split target for copied wave, placement and selected-object function records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -25,9 +27,167 @@ source_files:
   - js/systems/systems_placement.js
   - js/systems/systems_selected_object_actions.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/systems/systems_wave_manager:createWave
+    file_id: file:js/systems/systems_wave_manager
+    name: createWave
+    function_classes: [helper_function, future_pressure_function]
+    semantic_role: "Creates wave enemy composition from difficulty and balance data."
+    owns: "Wave composition helper."
+    does_not_own: "Wave lifecycle activation."
+    mutates_summary: "Local wave array only."
+    pressure_refs: [generic_registry_pressure]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_wave_manager:shuffleWave
+    file_id: file:js/systems/systems_wave_manager
+    name: shuffleWave
+    function_classes: [helper_function]
+    semantic_role: "Shuffles a local copy of wave composition."
+    owns: "Wave list randomization helper."
+    does_not_own: "Runtime waveState lifecycle."
+    mutates_summary: "Local copied array only."
+    pressure_refs: []
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_wave_manager:spawnEnemy
+    file_id: file:js/systems/systems_wave_manager
+    name: spawnEnemy
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Creates enemy runtime object and appends it to enemies."
+    owns: "Enemy object spawn helper."
+    does_not_own: "Enemy update, death/reward flow or render."
+    mutates_summary: "enemies, waveState.spawnedEnemies."
+    pressure_refs: [entity_framework_not_implemented]
+    risk_refs: []
+    evidence_refs: [evidence:discovery:batch05]
+
+  - function_id: fn:js/systems/systems_placement:selectBuildTile
+    file_id: file:js/systems/systems_placement
+    name: selectBuildTile
+    function_classes: [lifecycle_function, validation_function]
+    semantic_role: "Sets pending build tile and reports placement validation feedback."
+    owns: "Placement candidate selection."
+    does_not_own: "Tower object creation."
+    mutates_summary: "uiState.pendingBuildTile."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:getBuildPanelText
+    file_id: file:js/systems/systems_placement
+    name: getBuildPanelText
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Produces build confirm text from current selected tower type and validation result."
+    owns: "Build panel status text helper."
+    does_not_own: "Panel lifecycle."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:confirmBuild
+    file_id: file:js/systems/systems_placement
+    name: confirmBuild
+    function_classes: [lifecycle_function, bridge_function]
+    semantic_role: "Confirms pending placement and dispatches tower placement."
+    owns: "Build confirmation step."
+    does_not_own: "Validation details or UI panel creation."
+    mutates_summary: "Indirect via placeTower."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:placeTower
+    file_id: file:js/systems/systems_placement
+    name: placeTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Validates placement, pays cost, creates current tower object and updates selection/build state."
+    owns: "Current tower placement mutation."
+    does_not_own: "Generic placeable object registry."
+    mutates_summary: "resources, power.used, towers, uiState.selectedTower, selectedMode, pendingBuildTile."
+    pressure_refs: [future_placeable_object_pressure, generic_object_system_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:validateBuildTile
+    file_id: file:js/systems/systems_placement
+    name: validateBuildTile
+    function_classes: [validation_function]
+    semantic_role: "Primary source of placement validation for map boundary, restrictions, power and resources."
+    owns: "Placement validation decision."
+    does_not_own: "Render overlay visualization."
+    mutates_summary: "None."
+    pressure_refs: [future_placeable_object_pressure]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:getTowerAtTile
+    file_id: file:js/systems/systems_placement
+    name: getTowerAtTile
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Current tower occupancy lookup by tile."
+    owns: "Tower tile occupancy lookup."
+    does_not_own: "Generic object registry."
+    mutates_summary: "None."
+    pressure_refs: [generic_placeable_registry_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:hasCost
+    file_id: file:js/systems/systems_placement
+    name: hasCost
+    function_classes: [helper_function, validation_function]
+    semantic_role: "Checks whether resources cover placement cost."
+    owns: "Cost availability check."
+    does_not_own: "Economy engine."
+    mutates_summary: "None."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_placement:payCost
+    file_id: file:js/systems/systems_placement
+    name: payCost
+    function_classes: [helper_function, mutation_heavy_function]
+    semantic_role: "Subtracts placement resource cost."
+    owns: "Placement cost mutation helper."
+    does_not_own: "Economy engine or production chain."
+    mutates_summary: "resources entries."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:future_placeable_object_pressure]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_selected_object_actions:selectTower
+    file_id: file:js/systems/systems_selected_object_actions
+    name: selectTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Selects current tower as selected object and clears build state."
+    owns: "Current selected tower selection."
+    does_not_own: "Generic selected object architecture."
+    mutates_summary: "uiState.selectedTower, selectedMode, pendingBuildTile."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch02]
+
+  - function_id: fn:js/systems/systems_selected_object_actions:sellSelectedTower
+    file_id: file:js/systems/systems_selected_object_actions
+    name: sellSelectedTower
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Sells selected tower, returns resources, releases power and clears selection."
+    owns: "Current selected tower sell action."
+    does_not_own: "Generic object action system."
+    mutates_summary: "resources, power.used, towers, uiState.selectedTower."
+    pressure_refs: [selected_object_architecture_not_implemented, generic_object_action_system_not_implemented]
+    risk_refs: [risk:selected_object_architecture_not_implemented]
+    evidence_refs: [evidence:discovery:batch02]
+
+migration_note: "Gameplay domain records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
-  - "Do not normalize tower-specific current code into generic object implementation."
-  - "Do not duplicate placement/selected-object records before migration."
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add runtime orchestration, UI, canvas or panel records to this file."
   - "Runtime/source code remains absolute authority."
