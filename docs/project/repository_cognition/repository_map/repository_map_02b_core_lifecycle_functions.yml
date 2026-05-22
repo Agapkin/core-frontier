@@ -1,12 +1,14 @@
 # Repository Map Functions Split — Core Lifecycle Functions
-# Stage 0.3.4B — skeleton pending migration
+# Stage 0.3.4B — core lifecycle copy population
 
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   layer: repository_map_02_functions_split
   future_role: core_lifecycle_functions
-  purpose: "Future split target for systems.js lifecycle-heavy function records."
+  purpose: "Split target for copied systems.js lifecycle-heavy function records."
   current_authority: repository_map_02_functions.yml
+  population_model: copy_populate_parity_check
+  removal_from_canonical_02: not_performed
 
 future_scope:
   expected_sources:
@@ -21,9 +23,125 @@ future_scope:
 source_files:
   - js/systems/systems.js
 
-migration_note: "No function records are migrated here yet. Current repository_map_02_functions.yml remains canonical full function inventory until a later bounded migration pass."
+functions:
+  - function_id: fn:js/systems/systems:buildTower
+    file_id: file:js/systems/systems
+    name: buildTower
+    function_classes: [callback_target, bridge_function, mutation_heavy_function]
+    semantic_role: "Turns on current tower build mode and resets selected tower state."
+    owns: "Build-mode command entrypoint."
+    does_not_own: "Placement validation or tower creation."
+    mutates_summary: "uiState.selectedTower, selectedMode, selectedTowerType, pendingBuildTile."
+    pressure_refs: []
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:cancelBuildMode
+    file_id: file:js/systems/systems
+    name: cancelBuildMode
+    function_classes: [callback_target, mutation_heavy_function]
+    semantic_role: "Cancels active build mode and clears pending placement candidate."
+    owns: "Build mode cancellation."
+    does_not_own: "Placement validation or object lifecycle."
+    mutates_summary: "uiState.selectedMode, pendingBuildTile."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:startWave
+    file_id: file:js/systems/systems
+    name: startWave
+    function_classes: [lifecycle_function, orchestration_function, mutation_heavy_function]
+    semantic_role: "Starts a wave, saves checkpoint, resets UI selection, activates waveState and dispatches spawn helpers."
+    owns: "Wave lifecycle start."
+    does_not_own: "Wave composition generation or spawn object construction."
+    mutates_summary: "waveState, uiState selection fields, checkpoint; dispatches updateUI/notify."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:saveCheckpoint
+    file_id: file:js/systems/systems
+    name: saveCheckpoint
+    function_classes: [state_helper_function, lifecycle_function]
+    semantic_role: "Captures rollback state before wave start."
+    owns: "Checkpoint snapshot creation."
+    does_not_own: "Restart UI rebuild semantics."
+    mutates_summary: "checkpoint snapshot object."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:retryLastWave
+    file_id: file:js/systems/systems
+    name: retryLastWave
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Restores checkpoint, clears enemies, resets UI selection and rebuilds UI."
+    owns: "Retry/rollback flow."
+    does_not_own: "Foundation state shape."
+    mutates_summary: "resources, base, power, waveState, gameState, gameSpeed, camera, towers, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:restartGame
+    file_id: file:js/systems/systems
+    name: restartGame
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Resets runtime state to a new-game baseline and rebuilds UI."
+    owns: "Runtime restart flow."
+    does_not_own: "Foundation state declaration shape."
+    mutates_summary: "resources, base, power, waveState, gameState, checkpoint, gameSpeed, camera, towers, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure, risk:mixed_responsibility]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:triggerGameOver
+    file_id: file:js/systems/systems
+    name: triggerGameOver
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Sets game-over state, clears enemies and selection, updates UI feedback."
+    owns: "Game over transition."
+    does_not_own: "Game-over panel rendering."
+    mutates_summary: "gameState.gameOver, waveState.active, base.hp, enemies, uiState."
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:updateEnemies
+    file_id: file:js/systems/systems
+    name: updateEnemies
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Moves enemies, applies base damage, cleans up dead/reached enemies and completes wave when empty."
+    owns: "Enemy update and death/reward/base-hit flow."
+    does_not_own: "Enemy spawning or drawing."
+    mutates_summary: "enemy positions/pathIndex/reachedBase, base.hp, waveState, enemies, resources via applyReward."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:applyReward
+    file_id: file:js/systems/systems
+    name: applyReward
+    function_classes: [mutation_heavy_function, helper_function]
+    semantic_role: "Applies difficulty-adjusted resource reward after enemy death."
+    owns: "Reward resource mutation."
+    does_not_own: "Economy engine or production chain."
+    mutates_summary: "resources by reward entries."
+    pressure_refs: [economy_engine_not_implemented]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+  - function_id: fn:js/systems/systems:updateTowers
+    file_id: file:js/systems/systems
+    name: updateTowers
+    function_classes: [lifecycle_function, mutation_heavy_function]
+    semantic_role: "Updates tower target acquisition and damage application."
+    owns: "Current tower combat update."
+    does_not_own: "Tower rendering or placement lifecycle."
+    mutates_summary: "enemy hp, tower.target."
+    pressure_refs: [tower_specific_current]
+    risk_refs: [risk:lifecycle_density_pressure]
+    evidence_refs: [evidence:discovery:batch01]
+
+migration_note: "Core lifecycle records are copied here for split-file population. Current repository_map_02_functions.yml remains canonical full function inventory and was intentionally not modified in this pass."
 
 anti_entropy_notes:
-  - "Do not duplicate systems.js records before migration."
-  - "Do not convert lifecycle pressure into refactor commands."
+  - "Do not remove records from repository_map_02_functions.yml during copy population."
+  - "Do not treat duplication with canonical 02 as migration completion."
+  - "Do not add non-systems.js records to this file."
   - "Runtime/source code remains absolute authority."
