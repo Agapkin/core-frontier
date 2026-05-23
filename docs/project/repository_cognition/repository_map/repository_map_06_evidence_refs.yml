@@ -155,6 +155,27 @@ evidence_refs:
       - index.html
       - css/style.css
 
+  - evidence_id: evidence:source:repository_manifest
+    related_refs:
+      - file:repository_manifest
+    verification_status: verified_against_filesystem_truth
+    source_files:
+      - repository_manifest.yml
+
+  - evidence_id: evidence:source:generate_repository_manifest
+    related_refs:
+      - file:scripts/generate_repository_manifest
+    verification_status: verified_against_source_file
+    source_files:
+      - scripts/generate_repository_manifest.py
+
+  - evidence_id: evidence:source:update_repository_manifest_workflow
+    related_refs:
+      - file:github_workflows/update_repository_manifest
+    verification_status: verified_against_workflow_source
+    source_files:
+      - .github/workflows/update-repository-manifest.yml
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
