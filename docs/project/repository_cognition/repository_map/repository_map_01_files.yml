@@ -487,7 +487,8 @@ file_entities:
       - physical_tree_not_semantic_navigation
       - repository_map_not_runtime_authority
     risk_refs: []
-    evidence_refs: []
+    evidence_refs:
+      - evidence:source:repository_manifest
 
   - file_id: file:scripts/generate_repository_manifest
     path: scripts/generate_repository_manifest.py
@@ -511,7 +512,8 @@ file_entities:
       - automation_not_semantic_reasoning
       - physical_tree_not_semantic_navigation
     risk_refs: []
-    evidence_refs: []
+    evidence_refs:
+      - evidence:source:generate_repository_manifest
 
   - file_id: file:github_workflows/update_repository_manifest
     path: .github/workflows/update-repository-manifest.yml
@@ -535,7 +537,8 @@ file_entities:
       - automation_not_semantic_reasoning
       - manifest_self_loop_protected
     risk_refs: []
-    evidence_refs: []
+    evidence_refs:
+      - evidence:source:update_repository_manifest_workflow
 
 anti_entropy_notes:
   - "File records are compact semantic inventory only."
