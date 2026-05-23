@@ -1,5 +1,17 @@
 # CORE FRONTIER
 
+## Repository Entrypoint
+
+`repository_manifest.yml` является canonical filesystem tree для репозитория.
+
+Manifest автоматически синхронизируется через GitHub Actions workflow после изменений canonical `main` filesystem tree.
+
+Manifest остаётся:
+
+- deterministic
+- filesystem-only
+- tree-only
+
 Прототип модульной стратегии с элементами:
 
 - tower defense
