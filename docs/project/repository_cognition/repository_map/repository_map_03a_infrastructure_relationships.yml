@@ -1,0 +1,35 @@
+meta:
+  status: skeleton_pending_migration
+  stage: "0.3.4B1"
+  role: "Filesystem truth automation and Repository Map internal lineage relationships."
+  purpose: "Store low-entropy infrastructure relationships, including filesystem truth automation and internal Repository Map lineage."
+  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - filesystem_truth_infrastructure
+    - repository_map_function_split
+  allowed_relationship_types:
+    - calls
+    - mutates
+    - derived_from
+    - cross_verifies_with
+  admission_notes:
+    - "Only infrastructure or Repository Map lineage topology belongs here."
+    - "No runtime gameplay relationships."
+    - "Expected future migration: workflow → generator, generator → manifest, 02_functions → 02a–02g."
+
+relationships: []
+
+anti_entropy_notes:
+  - "Skeleton only."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."
