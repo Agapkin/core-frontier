@@ -63,6 +63,32 @@ relationship_groups:
       - provides_helper_for
       - calls
       - mutates
+  runtime_validation_flow:
+    purpose: "Placement/build validation decision chains and validation helper topology."
+    allowed_types:
+      - calls
+      - provides_helper_for
+      - mutates
+      - bridges_to
+  runtime_render_boundaries:
+    purpose: "Visualization/render relationships that must not imply gameplay ownership."
+    allowed_types:
+      - renders
+      - visualizes_without_owning
+      - reads
+      - calls
+  runtime_ui_callback_bridges:
+    purpose: "UI callback/control dispatch topology without gameplay ownership authority."
+    allowed_types:
+      - bridges_to
+      - calls_without_ownership
+      - calls
+      - mutates_without_owning_shape
+  runtime_state_mutation_hotspots:
+    purpose: "High-risk runtime state mutation topology for shared mutable runtime structures."
+    allowed_types:
+      - mutates
+      - mutates_without_owning_shape
 
 admission_rules:
   - "Relationship must be source-confirmed or evidence-confirmed."
@@ -72,6 +98,12 @@ admission_rules:
   - "Relationship must not infer ownership from calls."
   - "Relationship must not convert pressure markers into planned systems."
   - "Relationship must preserve source truth hierarchy."
+  - "Not every reads/mutates summary from 01_files becomes a relationship record."
+  - "Relationships must provide topology, navigation or risk value."
+  - "Helper chains should only be populated when operationally meaningful."
+  - "Render relations must not imply gameplay ownership."
+  - "Callback dispatch must not imply callback ownership."
+  - "Mutation edges must not imply state authority ownership."
 
 stores:
   - ownership_relationships
@@ -82,6 +114,10 @@ stores:
   - load_order_relationships
   - function_split_relationships
   - coordinate_mapping_relationships
+  - validation_flow_relationships
+  - render_boundary_relationships
+  - ui_callback_bridge_relationships
+  - state_mutation_hotspot_relationships
 
 must_not_store:
   - giant_dependency_graphs
@@ -101,6 +137,11 @@ record_shape_example:
     target_ref:
     semantic_strength:
     operational_reason:
+    optional_fields:
+      source_layer:
+      target_layer:
+      population_priority:
+    optional_fields_rule: "source_layer, target_layer and population_priority are optional; use only when future filtering/grouping pressure requires them."
     evidence_refs: []
 
 relationships:
@@ -133,6 +174,12 @@ anti_entropy_notes:
   - "Runtime/source files and repository_manifest.yml remain verification authority."
   - "Do not infer ownership from calls."
   - "Do not populate low-value helper calls."
+  - "Avoid helper explosion."
+  - "Avoid validation helper spam."
+  - "Avoid callback wiring graph explosion."
+  - "Avoid render graph duplication."
+  - "Prefer high-value topology bridges over exhaustive call tracing."
+  - "Preserve compressed cognition rather than exhaustive execution traces."
 
 placeholders:
   future_relationship_population: []
