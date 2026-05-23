@@ -1,4 +1,29 @@
+filesystem_truth_layer:
+  purpose: "physical filesystem tree visibility"
+  source_type: "filesystem_truth"
+  files:
+    - repository_manifest.yml
+    - scripts/generate_repository_manifest.py
+    - .github/workflows/update-repository-manifest.yml
+
+ai_navigation_layer:
+  purpose: "semantic/navigation tree for GPT/Codex workflow"
+  source_type: "semantic_navigation"
+  files:
+    - ai/README.md
+    - ai/current_status.yml
+    - ai/docs_map.yml
+
 primary_entrypoints:
+  repository:
+    - README.md
+    - repository_manifest.yml
+  ai_navigation:
+    - ai/README.md
+    - ai/current_status.yml
+    - ai/docs_map.yml
+  repository_cognition:
+    - docs/project/repository_cognition/repository_map/repository_map_index.yml
   architecture:
     - docs/project/architecture/README.md
   roadmap:
@@ -19,35 +44,130 @@ primary_entrypoints:
   synchronization_protocols:
     - docs/project/architecture/synchronization_protocols.md
 
+runtime_source_tree:
+  surface:
+    - index.html
+    - css/style.css
+  foundation:
+    - js/data.js
+    - js/state.js
+  runtime_orchestration:
+    - js/game.js
+  systems:
+    - js/systems/systems.js
+    - js/systems/systems_wave_manager.js
+    - js/systems/systems_placement.js
+    - js/systems/systems_selected_object_actions.js
+  ui:
+    - js/ui/helpers.js
+    - js/ui/layout.js
+    - js/ui/controls.js
+    - js/ui/panels.js
+    - js/ui/canvas_world.js
+    - js/ui/canvas_entities.js
+    - js/ui/notifications.js
+
+design_package:
+  - docs/design/mechanics.md
+
 architecture_package:
+  - docs/project/architecture/README.md
   - docs/project/architecture/runtime_structure.md
   - docs/project/architecture/docs_structure.md
   - docs/project/architecture/workflow.md
   - docs/project/architecture/ai_navigation_plan.md
+  - docs/project/architecture/repository_map_plan.md
   - docs/project/architecture/synchronization_protocols.md
 
 roadmap_package:
+  - docs/project/roadmap/README.md
   - docs/project/roadmap/completed_stages.md
   - docs/project/roadmap/active_plan.md
   - docs/project/roadmap/future_gameplay.md
   - docs/project/roadmap/publishing_plan.md
 
-active_stage_files:
+repository_cognition_package:
+  root: docs/project/repository_cognition/
+  packages:
+    - docs/project/repository_cognition/discovery/
+    - docs/project/repository_cognition/repository_map/
+
+discovery_package:
+  - docs/project/repository_cognition/discovery/repository_map_discovery.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_01_runtime_orchestration.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_02_extracted_systems.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_03_ui_render_control.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_03a_ui_controls.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_03b_canvas_world.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_03c_canvas_entities.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_04_foundation_state.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_05_wave_manager.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_06_ui_support.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_07_panels.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_08_surface_entry.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_closure.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_future_automation_options.md
+  - docs/project/repository_cognition/discovery/repository_map_discovery_prompt_workflow_notes.md
+
+repository_map_package:
+  - docs/project/repository_cognition/repository_map/repository_map_index.yml
+  - docs/project/repository_cognition/repository_map/repository_map_vocab.yml
+  - docs/project/repository_cognition/repository_map/repository_map_01_files.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02a_foundation_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02b_core_lifecycle_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02c_gameplay_domain_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02d_runtime_orchestration_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02e_ui_service_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02f_canvas_render_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_02g_panel_overlay_functions.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_05_risks_pressure.yml
+  - docs/project/repository_cognition/repository_map/repository_map_06_evidence_refs.yml
+  - docs/project/repository_cognition/repository_map/repository_map_07_hotspots.yml
+  - docs/project/repository_cognition/repository_map/repository_map_population_workflow.md
+
+stage_history:
+  - docs/project/stage_01.md
+  - docs/project/stage_02.md
+  - docs/project/stage_02_1.md
+  - docs/project/stage_02_2.md
+  - docs/project/stage_02_3.md
+  - docs/project/stage_02_4.md
+  - docs/project/stage_02_4_1.md
+  - docs/project/stage_02_4_2.md
+  - docs/project/stage_02_4_3.md
+  - docs/project/stage_02_4_4.md
+  - docs/project/stage_02_4_5.md
+  - docs/project/stage_02_4_5_A.md
+  - docs/project/stage_02_4_6.md
   - docs/project/stage_03.md
   - docs/project/stage_03_1.md
+  - docs/project/stage_03_1_developer_report_01.md
   - docs/project/stage_03_1_final_snapshot.md
   - docs/project/stage_03_2.md
   - docs/project/stage_03_2_pass_01.md
   - docs/project/stage_03_2_pass_b.md
   - docs/project/stage_03_2_runtime_findings_01.md
   - docs/project/stage_03_3.md
+  - docs/project/stage_03_3B_frozen_snapshot.md
   - docs/project/stage_03_4.md
   - docs/project/stage_03_4A_mutation_classes.md
   - docs/project/stage_03_4B_repository_archetypes.md
+  - docs/project/stage_03_developer_report_01.md
 
 current_status_markers:
-  current_stage: Stage 03.4
-  current_phase: planning_discovery_active
-  stage_03_4_execution: not_started
-  stage_03_4A: mutation_classes_planning_created
-  stage_03_4B: repository_archetypes_and_repository_cognition_preparation_created
+  current_stage: "Stage 03.4 / Stage 0.3.4B1 transition"
+  current_phase: "AI navigation synchronization with filesystem truth layer and repository cognition packages"
+  ai_navigation_sync_status: "in_progress"
+  filesystem_truth_layer_status: "operational"
+  repository_manifest_status: "auto_synced canonical main filesystem tree"
+  repository_map_relationships_status: "active working branch exists; not merged into main"
+
+navigation_boundaries:
+  repository_manifest_yml: "physical filesystem tree"
+  ai_docs_map_yml: "semantic/navigation tree"
+  docs_project: "human memory and long-form reasoning layer"
+  repository_cognition: "repository cognition package"
+  runtime_source: "runtime execution truth"
