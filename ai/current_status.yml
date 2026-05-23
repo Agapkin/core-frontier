@@ -1,15 +1,32 @@
-current_stage: "Stage 03.4"
-current_phase: "planning/discovery: repository impact awareness, mutation-class planning and repository cognition preparation"
-workflow_mode: "bounded runtime/surface evolution"
+current_stage: "Stage 03.4 / Stage 0.3.4B1 transition"
+current_phase: "AI navigation synchronization with filesystem truth layer and repository cognition packages"
+workflow_mode: "bounded navigation synchronization"
 runtime_status: "stabilized"
 runtime_evolution_status: "Stage 03.3 runtime foundation stabilized"
 surface_status: "Stage 03.3B repository surface synchronized"
-ai_yaml_navigation_status: "Stage 03.4B planning visibility synchronized"
-docs_navigation_status: "Stage 03.4B synchronization continuing through Protocol 01 segmented execution"
+ai_yaml_navigation_status: "AI navigation filesystem truth synchronization in progress"
+docs_navigation_status: "Repository cognition and filesystem truth layers now require AI navigation synchronization"
 stage_03_4_status: "planning_discovery_active"
 stage_03_4_execution_status: "not_started"
 stage_03_4A_status: "mutation classes and synchronization radius planning document created"
-stage_03_4B_status: "repository archetypes and repository cognition preparation document created"
+stage_03_4B_status: "repository archetypes and repository cognition preparation evolved into Repository Map package work"
+
+filesystem_truth_layer_status: "operational"
+repository_manifest_status: "auto_synced canonical main filesystem tree"
+manifest_generator_status: "operational"
+manifest_workflow_status: "operational"
+branch_cleanup_status: "completed"
+active_branch_state:
+  main: "canonical repository truth"
+  active_working_branch: "repository-map-relationships-stage-0.3.4B1"
+  ai_navigation_sync_branch: "ai-navigation-sync-filesystem-truth"
+ai_navigation_sync_status: "in_progress"
+ai_navigation_sync_passes:
+  pass_01_ai_readme: "completed"
+  pass_02_current_status: "in_progress"
+  pass_03_docs_map: "pending"
+repository_map_relationships_status: "active working branch exists; not merged into main"
+
 current_governance_state:
   pass_01: "completed"
   pass_a_minimal_ai_layer: "completed"
@@ -78,6 +95,10 @@ active_workflow:
   - "Stage 03.4 planning/discovery: repository impact awareness"
   - "Stage 03.4A mutation classes and synchronization radius planning"
   - "Stage 03.4B repository archetypes and repository cognition preparation"
+  - "filesystem truth layer operationalization"
+  - "Repository Map package population and function split transition"
+  - "Stage 0.3.4B1 relationship layer architecture work"
+  - "AI navigation synchronization Pass 01–03"
   - "comments-only marking discipline"
   - "bounded extraction verification workflow"
   - "topology-preserving runtime evolution"
@@ -85,14 +106,16 @@ active_workflow:
   - "runtime topology synchronization"
   - "Protocol 01 new_stage_file segmented synchronization discipline"
 current_safe_direction:
+  - "complete AI navigation synchronization Pass 01–03 without runtime/source mutation"
+  - "preserve repository_manifest.yml as filesystem-only physical tree truth"
+  - "keep ai/ as semantic/navigation layer only"
+  - "continue relationship layer work only in repository-map-relationships-stage-0.3.4B1 until merged"
   - "continue Stage 03.4 planning/discovery without runtime execution"
-  - "use Stage 03.4B as repository archetype extraction and repository cognition preparation artifact"
-  - "complete remaining Protocol 01 mandatory synchronization anchors through bounded segmented execution"
+  - "use Stage 03.4B / Repository Map as repository cognition infrastructure, not runtime authority"
   - "maintain bounded documentation/navigation synchronization discipline"
   - "avoid Stage 03.4 runtime implementation until explicitly started"
   - "preserve browser-global runtime order"
   - "preserve inline CSS / css/style.css relationship unless separate pass changes it"
-  - "do not create repository_map.yml before separate bounded planning/extraction pass"
 known_blockers:
   - "script-order sensitivity"
   - "shared mutable globals"
@@ -100,6 +123,7 @@ known_blockers:
   - "wide extraction risk"
   - "inactive css/style.css can confuse documentation if not explicitly described"
   - "structural documentation mutations create synchronization pressure"
+  - "AI navigation can drift from repository_manifest.yml if not synchronized after package changes"
 deferred_layers:
   - "Stage 03.4 execution/runtime evolution"
   - "ai/repository_map.yml"
@@ -109,13 +133,19 @@ deferred_layers:
   - "ai/runtime_map.yml"
   - "ai/contracts.yml"
   - "logs layer"
-  - "automation rollout"
   - "runtime modularization"
   - "imports/exports migration"
   - "CSS extraction/linking pass"
+operational_layers:
+  filesystem_truth_automation: "operational"
+  repository_manifest: "filesystem-only canonical main tree visibility"
+  manifest_generator: "operational"
+  manifest_workflow: "operational"
 source_of_truth:
   runtime: "index.html, js/, css/"
+  filesystem_tree: "repository_manifest.yml"
   human_memory: "docs/project/"
+  repository_cognition: "docs/project/repository_cognition/"
   ai_navigation: "ai/ only for navigation"
 methodology:
   runtime_evolution_cycle:
@@ -139,6 +169,11 @@ methodology:
     - runtime_truth_vs_interpretation_distinction
     - synchronization_sensitive_classification
     - skeletal_repository_map_planning_discipline
+  filesystem_truth_layer_cycle:
+    - physical_tree_visibility
+    - deterministic_manifest_generation
+    - main_tree_auto_sync
+    - navigation_layer_synchronization
   intentionally_avoided:
     - fake_modularization
     - premature_abstraction
@@ -149,3 +184,4 @@ methodology:
     - fake_repository_map_authority
     - fake_governance_engine
     - premature_parser_scanner_implementation
+    - semantic_overloading_of_repository_manifest
