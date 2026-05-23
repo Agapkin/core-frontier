@@ -1,32 +1,117 @@
 # Repository Map Relationships Layer
 
 meta:
-  status: skeleton_only
-  purpose: "Semantic relationship inventory between repository entities."
+  status: taxonomy_policy_scaffold_only
+  purpose: "Semantic relationship topology between Repository Map entities."
+  scope: "Policy scaffold for future bounded relationship population; not runtime authority or generated dependency graph."
+  verification_model: "Relationships must be source-confirmed or evidence-confirmed before population."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - broad_topology_dump
+    - duplicated_file_or_function_inventory
+
+relationship_type_policy:
+  allowed_types_from_vocab:
+    - owns
+    - does_not_own
+    - reads
+    - mutates
+    - used_by
+    - calls
+    - calls_without_ownership
+    - bridges_to
+    - depends_on_load_order
+    - cross_verifies_with
+    - renders
+    - visualizes_without_owning
+    - mutates_without_owning_shape
+    - provides_helper_for
+    - shadows
+    - derived_from
+  rule: "Do not introduce new relationship types during population without vocab alignment pass."
+
+relationship_groups:
+  filesystem_truth_infrastructure:
+    purpose: "workflow/script/manifest chain"
+    allowed_types:
+      - calls
+      - mutates
+      - derived_from
+      - cross_verifies_with
+  runtime_load_order:
+    purpose: "browser-global script order from index.html"
+    allowed_types:
+      - depends_on_load_order
+  repository_map_function_split:
+    purpose: "relationship between legacy 02 manifest and active 02a-02g split inventories"
+    allowed_types:
+      - derived_from
+      - cross_verifies_with
+  runtime_lifecycle_bridges:
+    purpose: "high-value runtime bridges where orchestration delegates to extracted helpers"
+    allowed_types:
+      - calls
+      - calls_without_ownership
+      - bridges_to
+      - mutates
+  runtime_coordinate_mapping:
+    purpose: "coordinate/camera helper relations where source-confirmed and operationally useful"
+    allowed_types:
+      - provides_helper_for
+      - calls
+      - mutates
+
+admission_rules:
+  - "Relationship must be source-confirmed or evidence-confirmed."
+  - "Relationship must be operationally useful."
+  - "Relationship must not duplicate file/function inventory."
+  - "Relationship must not become a full call graph."
+  - "Relationship must not infer ownership from calls."
+  - "Relationship must not convert pressure markers into planned systems."
+  - "Relationship must preserve source truth hierarchy."
 
 stores:
   - ownership_relationships
   - mutation_relationships
   - bridge_relationships
   - lifecycle_relationships
+  - filesystem_truth_relationships
+  - load_order_relationships
+  - function_split_relationships
+  - coordinate_mapping_relationships
 
 must_not_store:
   - giant_dependency_graphs
   - generated_runtime_traces
   - duplicated_entity_records
+  - duplicated_function_inventory
+  - discovery_reasoning_prose
+  - speculative_topology
+  - parser_generated_call_graph
 
 record_shape_example:
   relationship_item:
     relationship_id:
     relationship_type:
+    relationship_group:
     source_ref:
     target_ref:
     semantic_strength:
+    operational_reason:
     evidence_refs: []
 
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
   - "Avoid graph explosion."
+  - "Keep relationship groups bounded."
+  - "Prefer source/evidence-confirmed high-value relations."
+  - "Use Discovery only as archival pointer, not truth."
+  - "Runtime/source files and repository_manifest.yml remain verification authority."
+  - "Do not infer ownership from calls."
+  - "Do not populate low-value helper calls."
 
 placeholders:
   relationships: []
