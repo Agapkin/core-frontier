@@ -215,6 +215,69 @@ relationships:
     evidence_refs:
       - evidence:discovery:batch08
 
+  - relationship_id: rel:repository_map_02_functions:derived_from:02a_foundation
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02a_foundation_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points operational foundation cognition to 02a split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02b_core_lifecycle
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02b_core_lifecycle_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points operational core lifecycle cognition to 02b split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02c_gameplay_domain
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02c_gameplay_domain_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points gameplay-domain operational cognition to 02c split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02d_runtime_orchestration
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02d_runtime_orchestration_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points runtime orchestration cognition to 02d split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02e_ui_service
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02e_ui_service_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points UI service cognition to 02e split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02f_canvas_render
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02f_canvas_render_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points canvas render cognition to 02f split inventory."
+    evidence_refs: []
+
+  - relationship_id: rel:repository_map_02_functions:derived_from:02g_panel_overlay
+    relationship_group: repository_map_function_split
+    relationship_type: derived_from
+    source_ref: map:repository_map_02_functions
+    target_ref: map:repository_map_02g_panel_overlay_functions
+    semantic_strength: repository_map_confirmed
+    operational_reason: "02_functions transition manifest points panel/overlay cognition to 02g split inventory."
+    evidence_refs: []
+
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
   - "Avoid graph explosion."
