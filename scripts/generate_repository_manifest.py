@@ -8,12 +8,11 @@ physical repository paths and basic tree metadata.
 from __future__ import annotations
 
 import os
-from datetime import datetime, timezone
 from pathlib import Path
 
 MANIFEST_PATH = Path("repository_manifest.yml")
 EXCLUDED_DIRS = {".git", "node_modules", "dist", "build", "__pycache__", "pycache"}
-EXCLUDED_FILES = {".DS_Store"}
+EXCLUDED_FILES = {".DS_Store", "repository_manifest.yml"}
 MANIFEST_VERSION = 1
 
 
@@ -71,9 +70,6 @@ def render_manifest(root: Path, directories: list[str], files: list[dict[str, st
 
     lines.append("meta:")
     lines.append(f"  manifest_version: {MANIFEST_VERSION}")
-    lines.append(
-        f"  generated_at: {yaml_quote(datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z'))}"
-    )
     lines.append(f"  repository_root: {yaml_quote(root.resolve().name)}")
     lines.append(f"  total_directories: {len(directories)}")
     lines.append(f"  total_files: {len(files)}")
