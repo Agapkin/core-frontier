@@ -3,9 +3,51 @@
 
 meta:
   status: minimally_anchored_for_file_inventory
-  purpose: "Lightweight provenance anchors referenced by repository_map_01_files.yml."
-  scope: "Evidence anchors only; not extraction archive or synchronization layer."
+  purpose: "Lightweight source verification index for Repository Map records."
+  scope: "Evidence anchors only; not extraction archive, reasoning archive or synchronization layer."
   primary_layer: repository_map_01_files.yml
+  verification_model: "Evidence records should verify claims against source/runtime/filesystem truth."
+  discovery_role: "Discovery may help locate source truth, but is archival research/provenance pointer only."
+
+source_truth_hierarchy:
+  primary_truth:
+    - runtime_source_files
+    - repository_manifest_yml_for_filesystem_tree
+  supporting_layers:
+    - repository_map_current_cognition
+    - discovery_archival_research_pointer
+  rule: "Discovery may assist locating source truth, but source files / filesystem truth remain verification authority."
+
+source_rebinding_plan:
+  status: planned_not_executed
+  current_legacy_ids:
+    - evidence:discovery:batch01
+    - evidence:discovery:batch02
+    - evidence:discovery:batch03a
+    - evidence:discovery:batch03b
+    - evidence:discovery:batch03c
+    - evidence:discovery:batch04
+    - evidence:discovery:batch05
+    - evidence:discovery:batch06
+    - evidence:discovery:batch07
+    - evidence:discovery:batch08
+  future_direction:
+    - "Replace Discovery-style evidence ids with source-based evidence ids in bounded passes."
+    - "Keep discovery_source only as archival pointer where useful."
+    - "Do not rewrite Discovery files."
+    - "Do not treat Discovery as current truth."
+
+infrastructure_direct_source_evidence:
+  status: planned_not_executed
+  target_files:
+    - repository_manifest.yml
+    - scripts/generate_repository_manifest.py
+    - .github/workflows/update-repository-manifest.yml
+  future_evidence_ids:
+    - evidence:source:repository_manifest
+    - evidence:source:generate_repository_manifest
+    - evidence:source:update_repository_manifest_workflow
+  rule: "These files did not pass through Discovery; their evidence anchors should point directly to source/filesystem truth."
 
 stores:
   - evidence_refs
@@ -118,6 +160,7 @@ anti_entropy_notes:
   - "Evidence references remain lightweight provenance anchors only."
   - "This pass anchors only refs already used by repository_map_01_files.yml."
   - "Do not expand into extraction archive or synchronization engine."
+  - "Source/runtime files and filesystem truth remain verification authority."
 
 placeholders:
   future_evidence_population: []
