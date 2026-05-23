@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Generate a deterministic filesystem-only repository manifest.
+"""Generate a deterministic tree-only repository manifest.
 
 This script intentionally performs no semantic analysis. It records only
-physical repository paths and basic filesystem metadata.
+physical repository paths and basic tree metadata.
 """
 
 from __future__ import annotations
@@ -31,9 +31,9 @@ def should_skip_file(path: Path) -> bool:
     return path.name in EXCLUDED_FILES or any(part in EXCLUDED_DIRS for part in path.parts)
 
 
-def collect_repository_state(root: Path) -> tuple[list[str], list[dict[str, object]]]:
+def collect_repository_state(root: Path) -> tuple[list[str], list[dict[str, str]]]:
     directories: set[str] = {"."}
-    files: list[dict[str, object]] = []
+    files: list[dict[str, str]] = []
 
     for current_root, dirnames, filenames in os.walk(root):
         current_path = Path(current_root).relative_to(root)
@@ -51,8 +51,7 @@ def collect_repository_state(root: Path) -> tuple[list[str], list[dict[str, obje
             if should_skip_file(file_path):
                 continue
 
-            absolute_path = root / file_path
-            extension = absolute_path.suffix[1:] if absolute_path.suffix else ""
+            extension = file_path.suffix[1:] if file_path.suffix else ""
             directory = root_relative(file_path.parent)
 
             files.append(
@@ -60,15 +59,14 @@ def collect_repository_state(root: Path) -> tuple[list[str], list[dict[str, obje
                     "path": root_relative(file_path),
                     "directory": directory,
                     "extension": extension,
-                    "size_bytes": absolute_path.stat().st_size,
                 }
             )
 
-    files.sort(key=lambda item: str(item["path"]))
+    files.sort(key=lambda item: item["path"])
     return sorted(directories), files
 
 
-def render_manifest(root: Path, directories: list[str], files: list[dict[str, object]]) -> str:
+def render_manifest(root: Path, directories: list[str], files: list[dict[str, str]]) -> str:
     lines: list[str] = []
 
     lines.append("meta:")
@@ -91,10 +89,9 @@ def render_manifest(root: Path, directories: list[str], files: list[dict[str, ob
     lines.append("")
     lines.append("files:")
     for item in files:
-        lines.append(f"  - path: {yaml_quote(str(item['path']))}")
-        lines.append(f"    directory: {yaml_quote(str(item['directory']))}")
-        lines.append(f"    extension: {yaml_quote(str(item['extension']))}")
-        lines.append(f"    size_bytes: {int(item['size_bytes'])}")
+        lines.append(f"  - path: {yaml_quote(item['path'])}")
+        lines.append(f"    directory: {yaml_quote(item['directory'])}")
+        lines.append(f"    extension: {yaml_quote(item['extension'])}")
 
     lines.append("")
     return "\n".join(lines)
