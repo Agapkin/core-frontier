@@ -1,9 +1,9 @@
 # Repository Map Relationships Layer
 
 meta:
-  status: taxonomy_policy_scaffold_only
+  status: initially_populated_minimal
   purpose: "Semantic relationship topology between Repository Map entities."
-  scope: "Policy scaffold for future bounded relationship population; not runtime authority or generated dependency graph."
+  scope: "Policy scaffold plus first bounded source-confirmed relationship population; not runtime authority or generated dependency graph."
   verification_model: "Relationships must be source-confirmed or evidence-confirmed before population."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
@@ -103,6 +103,27 @@ record_shape_example:
     operational_reason:
     evidence_refs: []
 
+relationships:
+  - relationship_id: rel:workflow_update_repository_manifest:calls:generate_repository_manifest
+    relationship_group: filesystem_truth_infrastructure
+    relationship_type: calls
+    source_ref: file:github_workflows/update_repository_manifest
+    target_ref: file:scripts/generate_repository_manifest
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Workflow source runs python scripts/generate_repository_manifest.py."
+    evidence_refs:
+      - evidence:source:update_repository_manifest_workflow
+
+  - relationship_id: rel:generate_repository_manifest:mutates:repository_manifest
+    relationship_group: filesystem_truth_infrastructure
+    relationship_type: mutates
+    source_ref: file:scripts/generate_repository_manifest
+    target_ref: file:repository_manifest
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Generator writes repository_manifest.yml from deterministic filesystem traversal."
+    evidence_refs:
+      - evidence:source:generate_repository_manifest
+
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
   - "Avoid graph explosion."
@@ -114,4 +135,4 @@ anti_entropy_notes:
   - "Do not populate low-value helper calls."
 
 placeholders:
-  relationships: []
+  future_relationship_population: []
