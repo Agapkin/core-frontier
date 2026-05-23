@@ -2,7 +2,7 @@
 
 ## Назначение
 
-`ai/` является минимальным navigation layer для GPT/Codex workflow.
+`ai/` является minimal semantic/navigation layer для GPT/Codex workflow.
 
 Его задача:
 
@@ -14,35 +14,59 @@
 
 ---
 
-## Human memory vs AI navigation
+## Layer boundaries
 
-### Human memory layer
+### repository_manifest.yml
 
-Основной long-form context хранится в:
+`repository_manifest.yml`
+является:
 
-- `docs/project/`
-- `docs/design/`
+- canonical physical filesystem tree;
+- deterministic filesystem visibility layer;
+- tree-only repository structure manifest.
 
-Там находятся:
+Manifest НЕ является:
 
-- stages;
-- developer reports;
-- architecture package;
-- roadmap package;
-- design/mechanics notes;
-- historical reasoning.
+- semantic cognition layer;
+- topology layer;
+- Repository Map;
+- Discovery;
+- AI navigation.
 
-### AI navigation layer
+### ai/
 
-`ai/` содержит только compressed navigation files.
+`ai/`
+является:
+
+- compressed navigation layer;
+- semantic navigation layer;
+- quick entrypoint for GPT/Codex workflow.
 
 `ai/` НЕ является:
 
-- reasoning archive;
-- developer report layer;
-- replacement for docs/project;
 - runtime source of truth;
-- giant AI metadata database.
+- reasoning archive;
+- replacement for docs/project;
+- giant metadata database.
+
+### docs/project/
+
+`docs/project/`
+является:
+
+- human memory layer;
+- long-form reasoning layer;
+- historical workflow layer;
+- architectural discussion layer.
+
+### docs/project/repository_cognition/
+
+`repository_cognition`
+является:
+
+- repository cognition package;
+- bounded repository topology/cognition layer;
+- operational repository visibility package.
 
 ---
 
@@ -50,12 +74,11 @@
 
 Recommended first-read order:
 
-1. `ai/current_status.yml`
-2. `ai/docs_map.yml`
-3. `docs/project/roadmap/active_plan.md`
-4. `docs/project/architecture/README.md`
-5. `docs/project/stage_03_2.md`
-6. `docs/project/stage_03_2_pass_01.md`
+1. `README.md`
+2. `repository_manifest.yml`
+3. `ai/current_status.yml`
+4. `ai/docs_map.yml`
+5. `docs/project/repository_cognition/repository_map/repository_map_index.yml`
 
 ---
 
@@ -73,7 +96,14 @@ Deferred intentionally:
 - `ai/contracts.yml`
 - logs layer
 - comments-only markup
-- automation rollout
+
+Old deferred automation rollout wording is no longer fully accurate.
+
+Filesystem truth automation is now operational through:
+
+- `repository_manifest.yml`
+- `scripts/generate_repository_manifest.py`
+- `.github/workflows/update-repository-manifest.yml`
 
 ---
 
@@ -85,6 +115,10 @@ Runtime source of truth:
 - `js/`
 - `css/`
 
+Filesystem structure source of truth:
+
+- `repository_manifest.yml`
+
 Architecture source of truth:
 
 - `docs/project/architecture/`
@@ -92,6 +126,10 @@ Architecture source of truth:
 Roadmap source of truth:
 
 - `docs/project/roadmap/`
+
+Repository cognition source:
+
+- `docs/project/repository_cognition/`
 
 AI navigation source:
 
@@ -105,8 +143,19 @@ Important:
 
 ## Navigation workflow
 
-Use `ai/` to locate the right source.
-Then use primary docs/runtime files for actual decisions.
+Use:
+
+1. `repository_manifest.yml`
+→ for filesystem visibility
+
+2. `ai/`
+→ for compressed semantic navigation
+
+3. `docs/project/`
+→ for long-form reasoning and historical context
+
+4. runtime/source files
+→ for actual execution truth
 
 Do not treat summarized AI navigation files as replacement for bounded inspection.
 
