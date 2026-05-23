@@ -278,6 +278,28 @@ relationships:
     operational_reason: "02_functions transition manifest points panel/overlay cognition to 02g split inventory."
     evidence_refs: []
 
+  - relationship_id: rel:startWave:bridges_to:createWave
+    relationship_group: runtime_lifecycle_bridges
+    relationship_type: bridges_to
+    source_ref: fn:js/systems/systems:startWave
+    target_ref: fn:js/systems/systems_wave_manager:createWave
+    semantic_strength: direct_source_confirmed
+    operational_reason: "startWave orchestrates wave lifecycle and delegates wave composition generation to createWave."
+    evidence_refs:
+      - evidence:discovery:batch01
+      - evidence:discovery:batch05
+
+  - relationship_id: rel:startWave:bridges_to:spawnEnemy
+    relationship_group: runtime_lifecycle_bridges
+    relationship_type: bridges_to
+    source_ref: fn:js/systems/systems:startWave
+    target_ref: fn:js/systems/systems_wave_manager:spawnEnemy
+    semantic_strength: direct_source_confirmed
+    operational_reason: "startWave orchestrates wave lifecycle and delegates enemy object spawning to spawnEnemy."
+    evidence_refs:
+      - evidence:discovery:batch01
+      - evidence:discovery:batch05
+
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
   - "Avoid graph explosion."
