@@ -465,6 +465,78 @@ file_entities:
     evidence_refs:
       - evidence:discovery:batch08
 
+  - file_id: file:repository_manifest
+    path: repository_manifest.yml
+    kind: filesystem_truth_manifest
+    layer: filesystem_truth
+    role: "Canonical physical filesystem tree visibility."
+    semantic_status: verified
+    primary_archetype: filesystem_truth_manifest
+    secondary_archetypes:
+      - deterministic_tree_only_manifest
+    owns_summary: "Physical repository directory and file presence visibility."
+    does_not_own_summary: "Semantic navigation, Repository Map topology, Discovery reasoning, runtime behavior, relationship graph, content-change tracking."
+    reads_summary: "Generated from repository filesystem traversal."
+    mutates_summary: "None; generated artifact only."
+    used_by_summary: "AI navigation, Repository Cognition coverage audit and future topology verification."
+    runtime_contract: "Filesystem-only, deterministic, tree-only manifest for canonical main filesystem truth."
+    forbidden_changes: "Do not add semantic, topology, cognition, timestamp, hash or size/change-detection fields."
+    authority_notes:
+      - filesystem_truth
+    boundary_notes:
+      - physical_tree_not_semantic_navigation
+      - repository_map_not_runtime_authority
+    risk_refs: []
+    evidence_refs: []
+
+  - file_id: file:scripts/generate_repository_manifest
+    path: scripts/generate_repository_manifest.py
+    kind: automation_script
+    layer: filesystem_truth_automation
+    role: "Deterministic tree-only manifest generator."
+    semantic_status: verified
+    primary_archetype: filesystem_manifest_generator
+    secondary_archetypes:
+      - deterministic_filesystem_traversal_script
+    owns_summary: "Generation of repository_manifest.yml from root-relative filesystem tree traversal."
+    does_not_own_summary: "Semantic analysis, topology generation, AI navigation sync, Repository Map population, Discovery, runtime behavior."
+    reads_summary: "Repository filesystem tree excluding configured directories/files."
+    mutates_summary: "Overwrites repository_manifest.yml only when executed."
+    used_by_summary: "Manual regeneration and GitHub Actions manifest synchronization workflow."
+    runtime_contract: "Generator must remain filesystem-only, deterministic and bounded."
+    forbidden_changes: "Do not add semantic fields, topology refs, hashes, timestamps, dynamic summaries or runtime analysis."
+    authority_notes:
+      - filesystem_truth_automation
+    boundary_notes:
+      - automation_not_semantic_reasoning
+      - physical_tree_not_semantic_navigation
+    risk_refs: []
+    evidence_refs: []
+
+  - file_id: file:github_workflows/update_repository_manifest
+    path: .github/workflows/update-repository-manifest.yml
+    kind: github_workflow
+    layer: filesystem_truth_automation
+    role: "GitHub Actions workflow that regenerates and commits repository_manifest.yml after main filesystem changes."
+    semantic_status: verified
+    primary_archetype: filesystem_manifest_sync_workflow
+    secondary_archetypes:
+      - bounded_main_tree_sync_automation
+    owns_summary: "Automatic manifest regeneration trigger, diff check, manifest-only commit and push flow for canonical main."
+    does_not_own_summary: "Runtime/source behavior, semantic navigation, Repository Map topology, Discovery, branch analysis, PR creation, merge behavior."
+    reads_summary: "Canonical main filesystem tree and repository_manifest.yml diff state after generator execution."
+    mutates_summary: "repository_manifest.yml only, and only when generated output differs."
+    used_by_summary: "Filesystem truth layer auto-sync after main filesystem changes."
+    runtime_contract: "Workflow is bounded to repository_manifest.yml and protected against self-trigger loop."
+    forbidden_changes: "Do not expand into CI/CD, semantic analysis, topology generation, AI navigation sync, logs or multi-file automation."
+    authority_notes:
+      - filesystem_truth_automation
+    boundary_notes:
+      - automation_not_semantic_reasoning
+      - manifest_self_loop_protected
+    risk_refs: []
+    evidence_refs: []
+
 anti_entropy_notes:
   - "File records are compact semantic inventory only."
   - "Do not add function bodies or detailed function records here."
