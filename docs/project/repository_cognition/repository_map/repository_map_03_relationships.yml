@@ -1,9 +1,9 @@
 # Repository Map Relationships Layer
 
 meta:
-  status: initially_populated_minimal
+  status: partially_populated_bounded
   purpose: "Semantic relationship topology between Repository Map entities."
-  scope: "Policy scaffold plus first bounded source-confirmed relationship population; not runtime authority or generated dependency graph."
+  scope: "Policy scaffold plus bounded source-confirmed relationship population; not runtime authority or generated dependency graph."
   verification_model: "Relationships must be source-confirmed or evidence-confirmed before population."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
@@ -164,6 +164,56 @@ relationships:
     operational_reason: "Generator writes repository_manifest.yml from deterministic filesystem traversal."
     evidence_refs:
       - evidence:source:generate_repository_manifest
+
+  - relationship_id: rel:load_order:data:before:state
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/data
+    target_ref: file:js/state
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads data.js before state.js as foundation static data before mutable state."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - relationship_id: rel:load_order:state:before:extracted_systems
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/state
+    target_ref: file:js/systems/systems_wave_manager
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads state.js before extracted systems files."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - relationship_id: rel:load_order:extracted_systems:before:systems
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/systems/systems_wave_manager
+    target_ref: file:js/systems/systems
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads extracted systems helpers before systems.js orchestration shell."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - relationship_id: rel:load_order:systems:before:ui_layers
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/systems/systems
+    target_ref: file:js/ui/helpers
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads systems.js before UI helpers/layout/controls/panels/render files."
+    evidence_refs:
+      - evidence:discovery:batch08
+
+  - relationship_id: rel:load_order:ui_layers:before:game
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/ui/notifications
+    target_ref: file:js/game
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads all UI helpers, panels and render layers before game.js starts the runtime loop."
+    evidence_refs:
+      - evidence:discovery:batch08
 
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
