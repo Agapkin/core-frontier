@@ -48,19 +48,23 @@ jobs:
       - name: Commit repository manifest
         if: steps.manifest_diff.outputs.changed == 'true'
         run: |
+          cat > /tmp/manifest_commit_message.txt <<'EOF'
+          Синхронизация filesystem manifest
+
+          Workflow обнаружил изменение canonical main filesystem tree.
+
+          Generator перегенерировал
+          filesystem manifest репозитория.
+
+          Manifest остаётся:
+
+          * deterministic
+          * filesystem-only
+          * tree-only
+          EOF
+
           git add repository_manifest.yml
-          git commit \
-            -m "Синхронизация filesystem manifest" \
-            -m "Workflow обнаружил изменение canonical main filesystem tree.
-
-Generator перегенерировал
-filesystem manifest репозитория.
-
-Manifest остаётся:
-
-* deterministic
-* filesystem-only
-* tree-only"
+          git commit -F /tmp/manifest_commit_message.txt
 
       - name: Push repository manifest
         if: steps.manifest_diff.outputs.changed == 'true'
