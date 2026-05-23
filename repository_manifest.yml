@@ -1,9 +1,8 @@
 meta:
   manifest_version: 1
-  generated_at: "2026-05-23T00:00:00Z"
   repository_root: "core-frontier"
   total_directories: 12
-  total_files: 54
+  total_files: 53
   excluded_dirs:
     - ".git"
     - "__pycache__"
@@ -183,9 +182,6 @@ files:
   - path: "js/ui/panels.js"
     directory: "js/ui"
     extension: "js"
-  - path: "repository_manifest.yml"
-    directory: "."
-    extension: "yml"
   - path: "scripts/generate_repository_manifest.py"
     directory: "scripts"
     extension: "py"
