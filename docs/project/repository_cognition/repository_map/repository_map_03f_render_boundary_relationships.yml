@@ -1,5 +1,5 @@
 meta:
-  status: skeleton_pending_migration
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "Render and visualization non-ownership boundary topology."
   purpose: "Store visualization/render relationships that clarify render ownership boundaries without implying gameplay ownership."
@@ -25,10 +25,50 @@ relationship_scope:
     - "Avoid render graph duplication."
     - "Prefer visualizes_without_owning where render reads gameplay state but does not own lifecycle."
 
-relationships: []
+relationships:
+  - relationship_id: rel:drawBuildTile:visualizes_without_owning:validateBuildTile
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/canvas_world:drawBuildTile
+    relationship_type: visualizes_without_owning
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:systems_placement
+    notes:
+      - "Render function visualizes placement validation result without owning placement validation decision."
+
+  - relationship_id: rel:drawTowerRange:visualizes_without_owning:tower_range
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/canvas_world:drawTowerRange
+    relationship_type: visualizes_without_owning
+    target_ref: state:tower.range
+    evidence_refs:
+      - evidence:source:canvas_world
+    notes:
+      - "Render function visualizes tower range without owning tower combat or tower state lifecycle."
+
+  - relationship_id: rel:drawTowers:visualizes_without_owning:tower_target_state
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/canvas_entities:drawTowers
+    relationship_type: visualizes_without_owning
+    target_ref: state:tower.target
+    evidence_refs:
+      - evidence:source:canvas_entities
+    notes:
+      - "Render function visualizes tower target state without owning target acquisition or combat logic."
+
+  - relationship_id: rel:drawEnemies:visualizes_without_owning:enemy_hp_state
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/canvas_entities:drawEnemies
+    relationship_type: visualizes_without_owning
+    target_ref: state:enemy.hp
+    evidence_refs:
+      - evidence:source:canvas_entities
+    notes:
+      - "Render function visualizes enemy HP state without owning enemy damage, death or lifecycle flow."
 
 anti_entropy_notes:
-  - "Skeleton only."
+  - "Populated with first bounded render boundary records only."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
