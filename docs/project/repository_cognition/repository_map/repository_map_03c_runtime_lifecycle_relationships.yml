@@ -1,9 +1,9 @@
 meta:
-  status: skeleton_pending_migration
+  status: populated_copy_verified
   stage: "0.3.4B1"
   role: "Runtime lifecycle and orchestration delegation topology."
   purpose: "Store high-value lifecycle bridges where orchestration delegates meaningful runtime work."
-  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  migration_note: "Records copied from repository_map_03_relationships.yml while monolith remains authoritative during migration phase."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
@@ -26,7 +26,28 @@ relationship_scope:
     - "Do not mix validation, UI callback, render, or coordinate mapping topology here."
     - "Expected future migration: startWave → createWave, startWave → spawnEnemy."
 
-relationships: []
+relationships:
+  - relationship_id: rel:startWave:bridges_to:createWave
+    relationship_group: runtime_lifecycle_bridges
+    relationship_type: bridges_to
+    source_ref: fn:js/systems/systems:startWave
+    target_ref: fn:js/systems/systems_wave_manager:createWave
+    semantic_strength: direct_source_confirmed
+    operational_reason: "startWave orchestrates wave lifecycle and delegates wave composition generation to createWave."
+    evidence_refs:
+      - evidence:discovery:batch01
+      - evidence:discovery:batch05
+
+  - relationship_id: rel:startWave:bridges_to:spawnEnemy
+    relationship_group: runtime_lifecycle_bridges
+    relationship_type: bridges_to
+    source_ref: fn:js/systems/systems:startWave
+    target_ref: fn:js/systems/systems_wave_manager:spawnEnemy
+    semantic_strength: direct_source_confirmed
+    operational_reason: "startWave orchestrates wave lifecycle and delegates enemy object spawning to spawnEnemy."
+    evidence_refs:
+      - evidence:discovery:batch01
+      - evidence:discovery:batch05
 
 anti_entropy_notes:
   - "Skeleton only."
