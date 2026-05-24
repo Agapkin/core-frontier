@@ -92,9 +92,9 @@ relationship_groups:
 
 split_registry:
   migration_status: "split_records_copied_verified_monolith_cleared"
-  current_population_location: "repository_map_03_relationships.yml"
-  future_index_role: "policy_router_after_record_migration"
-  migration_rule: "Copy records byte-for-byte into split files first; verify identity before removing from monolith."
+  current_population_location: "repository_map_03a-03g split files"
+  future_index_role: "active_policy_router_and_split_registry"
+  migration_rule: "Operational relationship records live in split files; router stores policy, registry and coordination metadata only."
   split_files:
     - file: repository_map_03a_infrastructure_relationships.yml
       role: infrastructure_relationships
@@ -119,26 +119,26 @@ split_registry:
       role: validation_relationships
       relationship_groups:
         - runtime_validation_flow
-      expected_current_record_count_after_copy: 0
+      expected_current_record_count_after_copy: 7
 
     - file: repository_map_03e_ui_callback_relationships.yml
       role: ui_callback_relationships
       relationship_groups:
         - runtime_ui_callback_bridges
-      expected_current_record_count_after_copy: 0
+      expected_current_record_count_after_copy: 10
 
     - file: repository_map_03f_render_boundary_relationships.yml
       role: render_boundary_relationships
       relationship_groups:
         - runtime_render_boundaries
-      expected_current_record_count_after_copy: 0
+      expected_current_record_count_after_copy: 8
 
     - file: repository_map_03g_state_coordinate_hotspot_relationships.yml
       role: state_coordinate_hotspot_relationships
       relationship_groups:
         - runtime_coordinate_mapping
         - runtime_state_mutation_hotspots
-      expected_current_record_count_after_copy: 0
+      expected_current_record_count_after_copy: 13
 
 admission_rules:
   - "Relationship must be source-confirmed or evidence-confirmed."
