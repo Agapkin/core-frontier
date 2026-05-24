@@ -2,13 +2,13 @@
 # Stage 0.3.4B2 — policy router / split registry / schema authority for Repository Map section 04
 
 meta:
-  status: router_split_registry_planned
+  status: router_split_registry_stabilized
   role: "Policy router / split registry / schema authority for Repository Map section 04."
   stage: 0.3.4B2
   purpose: "Coordinate future bounded surface topology records without storing runtime authority, CSS dumps, DOM snapshots, function inventory, call graph or relationship topology."
   primary_layer: repository_map_04_surface_split_package
   verification_model: "Surface records should verify claims through evidence refs and source/runtime authority."
-  population_status: no_04a_04h_records_populated_in_this_pass
+  population_status: bounded_population_completed_for_04a_04h
 
 section_role:
   stores:
@@ -30,41 +30,41 @@ section_role:
     - speculative_future_systems
 
 split_registry:
-  status: planned_not_populated
+  status: populated_source_verified
   router_file: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
   split_files:
     - file: docs/project/repository_cognition/repository_map/repository_map_04a_runtime_shell_surfaces.yml
       layer_id: repository_map_04a_runtime_shell_surfaces
       semantic_domain: runtime_shell_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04b_dom_control_surfaces.yml
       layer_id: repository_map_04b_dom_control_surfaces
       semantic_domain: dom_control_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04c_dom_panel_surfaces.yml
       layer_id: repository_map_04c_dom_panel_surfaces
       semantic_domain: dom_panel_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04d_canvas_world_surfaces.yml
       layer_id: repository_map_04d_canvas_world_surfaces
       semantic_domain: canvas_world_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04e_canvas_entity_surfaces.yml
       layer_id: repository_map_04e_canvas_entity_surfaces
       semantic_domain: canvas_entity_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04f_canvas_hud_overlay_surfaces.yml
       layer_id: repository_map_04f_canvas_hud_overlay_surfaces
       semantic_domain: canvas_hud_overlay_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04g_css_authority_surfaces.yml
       layer_id: repository_map_04g_css_authority_surfaces
       semantic_domain: css_authority_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
     - file: docs/project/repository_cognition/repository_map/repository_map_04h_render_sequence_surfaces.yml
       layer_id: repository_map_04h_render_sequence_surfaces
       semantic_domain: render_sequence_surface
-      status: planned_empty_split_file
+      status: populated_source_verified
 
 required_record_shape:
   surface_id:
@@ -118,10 +118,10 @@ anti_entropy_notes:
   - "04 must remain bounded, source-grounded, machine-readable and topology-oriented."
 
 population_status:
-  current_pass: no_04a_04h_records_populated
-  split_files_created: false
-  surface_records_populated: false
-  next_safe_step: "Create empty split files 04a–04h only after explicit authorization."
+  current_pass: bounded_population_completed_for_04a_04h
+  split_files_created: true
+  surface_records_populated: true
+  next_safe_step: "Continue with bounded stabilization/audit passes only; do not perform additional population or normalization without explicit authorization."
 
 placeholders:
   surfaces: []
