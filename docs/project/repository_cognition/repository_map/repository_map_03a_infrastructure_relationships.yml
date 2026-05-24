@@ -3,7 +3,7 @@ meta:
   stage: "0.3.4B1"
   role: "Filesystem truth automation and Repository Map internal lineage relationships."
   purpose: "Store low-entropy infrastructure relationships, including filesystem truth automation and internal Repository Map lineage."
-  migration_note: "Records copied from repository_map_03_relationships.yml. Existing records remain in repository_map_03_relationships.yml until bounded removal pass."
+  migration_note: "Active split relationship records verified for infrastructure and Repository Map function split topology."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
@@ -111,7 +111,7 @@ relationships:
     evidence_refs: []
 
 anti_entropy_notes:
-  - "Skeleton only."
+  - "Populated with bounded source-confirmed records."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
