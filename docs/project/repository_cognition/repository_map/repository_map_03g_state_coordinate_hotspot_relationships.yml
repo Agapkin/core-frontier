@@ -3,7 +3,7 @@ meta:
   stage: "0.3.4B1"
   role: "Coordinate mapping and shared state mutation hotspot topology."
   purpose: "Store coordinate/camera mapping relationships and high-risk shared mutable state topology."
-  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  migration_note: "Active split relationship records verified for coordinate mapping and state mutation hotspot topology."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
