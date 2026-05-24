@@ -1,5 +1,5 @@
 # Repository Map 04a Runtime Shell Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -55,7 +55,7 @@ required_record_shape:
 anti_entropy_notes:
   - "Keep 04a records bounded and source-grounded."
   - "Do not store DOM snapshots, CSS dumps or gameplay ownership claims."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:shell:index_html
@@ -195,6 +195,3 @@ surface_records:
     notes:
       - "Active inline CSS authority in index.html."
       - "css/style.css exists as a separate artifact but is not activated by a link tag in index.html."
-
-placeholders:
-  surface_records: []
