@@ -1,0 +1,61 @@
+# Repository Map 04a Runtime Shell Surfaces
+# Stage 0.3.4B2 — planned empty split scaffold
+
+meta:
+  status: planned_empty_split_file
+  stage: 0.3.4B2
+  role: "Runtime shell surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  authority_model: "Runtime/source files remain truth."
+  population_status: no_surface_records_populated_in_this_pass
+
+scope:
+  stores:
+    - index_html_shell
+    - topbar_root
+    - game_root
+    - active_inline_css_shell
+    - shell_sequencing_visibility
+  domain_notes:
+    - "This split is reserved for runtime shell surface topology only."
+    - "index.html shell visibility does not imply gameplay, state or rendering implementation ownership."
+
+must_not_store:
+  - gameplay_logic
+  - runtime_state
+  - rendering_implementation
+  - gameplay_orchestration
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+  - raw_discovery_prose
+  - refactor_commands
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+anti_entropy_notes:
+  - "Keep 04a records bounded and source-grounded."
+  - "Do not store DOM snapshots, CSS dumps or gameplay ownership claims."
+  - "Do not populate records until explicitly authorized."
+
+placeholders:
+  surface_records: []
