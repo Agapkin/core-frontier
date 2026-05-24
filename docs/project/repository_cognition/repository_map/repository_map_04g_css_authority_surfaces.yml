@@ -2,12 +2,12 @@
 # Stage 0.3.4B2 — planned empty split scaffold
 
 meta:
-  status: planned_empty_split_file
+  status: populated_source_verified
   stage: 0.3.4B2
   role: "CSS authority surfaces split for Repository Map section 04."
   parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
   authority_model: "Runtime/source files remain truth."
-  population_status: no_surface_records_populated_in_this_pass
+  population_status: first_bounded_css_authority_surfaces_populated
 
 scope:
   stores:
@@ -17,6 +17,7 @@ scope:
     - responsive_media_rule_pressure
   domain_notes:
     - "Active inline CSS and inactive css/style.css artifact remain operationally distinct."
+    - "CSS visibility remains topology/authority-oriented and must not become CSS dump or framework ownership."
 
 must_not_store:
   - gameplay_ownership
@@ -47,7 +48,184 @@ required_record_shape:
   notes: []
 
 anti_entropy_notes:
+  - "Keep 04g records bounded and source-grounded."
+  - "Do not dump CSS rules or enumerate all selectors."
+  - "Do not convert CSS visibility into design-system, framework or gameplay ownership."
   - "Do not populate records until explicitly authorized."
+
+surface_records:
+  - surface_id: surface:css:inline_runtime_styles
+    surface_type: inline_css
+    semantic_domain: css_authority_surface
+    status: active_runtime
+    authority_type: active_css_authority
+    owner_refs:
+      - file:index_html
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+    source_selectors:
+      - html
+      - body
+      - canvas
+      - ".topbar"
+      - ".resource"
+      - button
+    runtime_roots:
+      - html
+      - body
+      - "#topbar"
+      - "#game"
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+    risk_refs:
+      - risk:css_activation_migration_pressure
+      - risk:selector_drift_risk
+    pressure_refs: []
+    does_not_own:
+      - design_system
+      - theme_engine
+      - component_framework
+      - layout_engine
+      - render_engine
+    notes:
+      - "Active inline runtime CSS surface only."
+      - "Represents the currently active style runtime authority inside index.html."
+      - "css/style.css exists separately but is not linked from index.html."
+
+  - surface_id: surface:css:external_stylesheet_artifact
+    surface_type: external_css_artifact
+    semantic_domain: css_authority_surface
+    status: inactive_runtime
+    authority_type: inactive_surface_artifact
+    owner_refs:
+      - file:css/style
+    created_by_refs:
+      - file:css/style
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - css/style.css
+    source_selectors:
+      - html
+      - body
+      - canvas
+      - ".topbar"
+      - ".cf-chip"
+      - button
+      - "#menu-panel"
+      - "#game-over-panel"
+    runtime_roots: []
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:css_style
+    risk_refs:
+      - risk:css_activation_migration_pressure
+      - risk:selector_drift_risk
+    pressure_refs: []
+    does_not_own:
+      - active_runtime_authority
+      - stylesheet_loading_lifecycle
+      - css_framework
+      - responsive_engine
+    notes:
+      - "Inactive external stylesheet artifact only."
+      - "css/style.css exists in repository but is not linked from index.html."
+      - "This record does not activate or imply runtime stylesheet authority."
+
+  - surface_id: surface:css:selector_alignment_surface
+    surface_type: selector_group
+    semantic_domain: css_authority_surface
+    status: needs_review
+    authority_type: semantic_interpretation
+    owner_refs:
+      - file:index_html
+      - file:css/style
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+      - css/style.css
+    source_selectors:
+      - "#topbar"
+      - "#game"
+      - ".topbar"
+      - ".resource"
+      - ".cf-chip"
+      - "#bottom-control-panel"
+      - "#tower-action-panel"
+      - "#build-confirm-panel"
+      - "#menu-panel"
+      - "#game-over-panel"
+    runtime_roots:
+      - "#topbar"
+      - "#game"
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+      - evidence:source:css_style
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:css_activation_migration_pressure
+    pressure_refs: []
+    does_not_own:
+      - dom_lifecycle
+      - layout_calculations
+      - js_orchestration
+      - selector_engine_implementation
+    notes:
+      - "Selector/class/id alignment pressure visibility only."
+      - "Represents synchronization pressure between index.html, JS-created DOM and css/style.css."
+      - "This record intentionally does not enumerate all selectors or implement selector validation."
+
+  - surface_id: surface:css:responsive_media_rules
+    surface_type: media_rule_group
+    semantic_domain: css_authority_surface
+    status: needs_review
+    authority_type: semantic_interpretation
+    owner_refs:
+      - file:index_html
+      - file:css/style
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+      - css/style.css
+    source_selectors:
+      - "@media (max-width: 760px)"
+      - "@media (max-width: 760px) and (orientation: landscape)"
+      - "@media (max-width: 768px)"
+      - "@media (max-width: 950px) and (orientation: landscape)"
+      - "@media (min-width: 769px) and (max-width: 1180px)"
+      - "@media (min-width: 1181px)"
+    runtime_roots: []
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+      - evidence:source:css_style
+    risk_refs:
+      - risk:css_activation_migration_pressure
+      - risk:future_generic_render_pressure
+    pressure_refs: []
+    does_not_own:
+      - responsive_framework
+      - adaptive_layout_engine
+      - viewport_manager
+      - device_abstraction_system
+    notes:
+      - "Responsive media-rule visibility surface only."
+      - "Responsive media rules are direct CSS media rules, not a responsive framework."
+      - "This record preserves media-rule topology visibility without dumping full CSS blocks."
 
 placeholders:
   surface_records: []
