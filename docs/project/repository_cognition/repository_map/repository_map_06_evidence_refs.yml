@@ -225,6 +225,13 @@ evidence_refs:
     source_files:
       - js/systems/systems_selected_object_actions.js
 
+  - evidence_id: evidence:source:game
+    related_refs:
+      - file:js/game
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/game.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
