@@ -68,20 +68,20 @@ relationships:
     notes:
       - "Hovered tile update consumes tile coordinate mapping without owning placement or gameplay domain logic."
 
-  - relationship_id: rel:wheelZoom:bridges_to:zoomAt
+  - relationship_id: rel:wheelZoom:calls:zoomAt
     relationship_group: runtime_coordinate_mapping
     source_ref: fn:js/game:wheelZoom
-    relationship_type: bridges_to
+    relationship_type: calls
     target_ref: fn:js/game:zoomAt
     evidence_refs:
       - evidence:source:game
     notes:
       - "Wheel event zoom routing bridges into camera zoom helper without implying camera subsystem ownership."
 
-  - relationship_id: rel:touchMove:bridges_to:zoomAt
+  - relationship_id: rel:touchMove:calls:zoomAt
     relationship_group: runtime_coordinate_mapping
     source_ref: fn:js/game:touchMove
-    relationship_type: bridges_to
+    relationship_type: calls
     target_ref: fn:js/game:zoomAt
     evidence_refs:
       - evidence:source:game
