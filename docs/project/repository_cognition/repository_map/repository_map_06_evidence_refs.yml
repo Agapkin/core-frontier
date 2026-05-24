@@ -246,6 +246,34 @@ evidence_refs:
     source_files:
       - js/ui/canvas_entities.js
 
+  - evidence_id: evidence:source:css_style
+    related_refs:
+      - file:css/style
+    verification_status: verified_against_runtime_source
+    source_files:
+      - css/style.css
+
+  - evidence_id: evidence:source:ui_helpers
+    related_refs:
+      - file:js/ui/helpers
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/helpers.js
+
+  - evidence_id: evidence:source:ui_layout
+    related_refs:
+      - file:js/ui/layout
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/layout.js
+
+  - evidence_id: evidence:source:ui_notifications
+    related_refs:
+      - file:js/ui/notifications
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/notifications.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
