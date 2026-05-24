@@ -1,5 +1,5 @@
 meta:
-  status: populated_copy_verified
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "Runtime lifecycle and orchestration delegation topology."
   purpose: "Store high-value lifecycle bridges where orchestration delegates meaningful runtime work."
@@ -24,7 +24,7 @@ relationship_scope:
     - "Prioritize orchestration delegation over local helper coordination."
     - "Do not add full call graph."
     - "Do not mix validation, UI callback, render, or coordinate mapping topology here."
-    - "Expected future migration: startWave → createWave, startWave → spawnEnemy."
+    - "Future bounded lifecycle topology expansion requires separate audit-first pass."
 
 relationships:
   - relationship_id: rel:startWave:bridges_to:createWave
