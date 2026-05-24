@@ -1,11 +1,11 @@
 # Repository Map Evidence References Layer
-# Stage 0.3.4B — minimal evidence anchors for file inventory refs only
+# Stage 0.3.4B1 — source evidence router for Repository Map records
 
 meta:
-  status: minimally_anchored_for_file_inventory
+  status: source_evidence_router_active
   purpose: "Lightweight source verification index for Repository Map records."
   scope: "Evidence anchors only; not extraction archive, reasoning archive or synchronization layer."
-  primary_layer: repository_map_01_files.yml
+  primary_layer: repository_map_03_relationship_split_package
   verification_model: "Evidence records should verify claims against source/runtime/filesystem truth."
   discovery_role: "Discovery may help locate source truth, but is archival research/provenance pointer only."
 
@@ -249,7 +249,7 @@ evidence_refs:
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
-  - "This pass anchors only refs already used by repository_map_01_files.yml."
+  - "Source evidence anchors support active Repository Map records, including 03a–03g relationship topology."
   - "Do not expand into extraction archive or synchronization engine."
   - "Source/runtime files and filesystem truth remain verification authority."
 
