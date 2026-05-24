@@ -35,8 +35,8 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "startWave orchestrates wave lifecycle and delegates wave composition generation to createWave."
     evidence_refs:
-      - evidence:discovery:batch01
-      - evidence:discovery:batch05
+      - evidence:source:systems_runtime
+      - evidence:source:systems_wave_manager
 
   - relationship_id: rel:startWave:bridges_to:spawnEnemy
     relationship_group: runtime_lifecycle_bridges
@@ -46,8 +46,8 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "startWave orchestrates wave lifecycle and delegates enemy object spawning to spawnEnemy."
     evidence_refs:
-      - evidence:discovery:batch01
-      - evidence:discovery:batch05
+      - evidence:source:systems_runtime
+      - evidence:source:systems_wave_manager
 
 anti_entropy_notes:
   - "Skeleton only."
