@@ -2,12 +2,12 @@
 # Stage 0.3.4B2 — planned empty split scaffold
 
 meta:
-  status: planned_empty_split_file
+  status: populated_source_verified
   stage: 0.3.4B2
   role: "DOM panel surfaces split for Repository Map section 04."
   parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
   authority_model: "Runtime/source files remain truth."
-  population_status: no_surface_records_populated_in_this_pass
+  population_status: first_bounded_dom_panel_surfaces_populated
 
 scope:
   stores:
@@ -17,6 +17,7 @@ scope:
     - hud_text_sync
   domain_notes:
     - "This split is reserved for DOM panel topology only."
+    - "Canvas overlay drawing remains reserved for 04f canvas HUD overlay surfaces."
 
 must_not_store:
   - gameplay_ownership
@@ -47,7 +48,172 @@ required_record_shape:
   notes: []
 
 anti_entropy_notes:
+  - "Keep 04c records bounded and source-grounded."
+  - "Do not store canvas overlay drawing logic as DOM panel surface topology."
   - "Do not populate records until explicitly authorized."
+
+surface_records:
+  - surface_id: surface:dom:menu_panel
+    surface_type: dom_panel
+    semantic_domain: dom_panel_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:js/ui/layout
+    created_by_refs:
+      - function:createMenuPanel
+    updated_by_refs:
+      - function:updateDomVisibility
+    rendered_by_refs: []
+    source_files:
+      - js/ui/panels.js
+      - js/ui/layout.js
+    source_selectors:
+      - "#menu-panel"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createMenuPanel
+      - function:updateDomVisibility
+      - function:getSidePanelStyle
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:ui_layout
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - gameplay_logic
+      - wave_lifecycle
+      - difficulty_simulation
+      - nested_menu_framework
+      - runtime_orchestration
+    notes:
+      - "Persistent DOM menu panel surface only."
+      - "Difficulty and restart callbacks do not make this surface gameplay or runtime orchestration authority."
+
+  - surface_id: surface:dom:game_over_panel
+    surface_type: dom_panel
+    semantic_domain: dom_panel_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/panels
+    created_by_refs:
+      - function:createGameOverPanel
+    updated_by_refs:
+      - function:updateDomVisibility
+    rendered_by_refs: []
+    source_files:
+      - js/ui/panels.js
+    source_selectors:
+      - "#game-over-panel"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createGameOverPanel
+      - function:updateDomVisibility
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - retry_execution
+      - restart_execution
+      - game_over_lifecycle_authority
+      - overlay_rendering
+    notes:
+      - "Persistent DOM game over panel surface only."
+      - "Retry/restart callbacks do not make this surface retry, restart or game-over lifecycle authority."
+
+  - surface_id: surface:dom:visibility_sync
+    surface_type: dom_panel
+    semantic_domain: dom_panel_surface
+    status: active_runtime
+    authority_type: helper_authority
+    owner_refs:
+      - file:js/ui/panels
+    created_by_refs: []
+    updated_by_refs:
+      - function:updateDomVisibility
+    rendered_by_refs: []
+    source_files:
+      - js/ui/panels.js
+    source_selectors:
+      - "#tower-action-panel"
+      - "#build-confirm-panel"
+      - "#build-confirm-text"
+      - "#menu-panel"
+      - "#game-over-panel"
+    runtime_roots: []
+    function_refs:
+      - function:updateDomVisibility
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - panel_lifecycle_authority
+      - gameplay_state
+      - generic_panel_framework
+      - overlay_orchestration
+    notes:
+      - "DOM visibility synchronization surface only."
+      - "Visibility sync reads runtime/UI state but does not own panel lifecycle or gameplay state."
+
+  - surface_id: surface:dom:hud_text_sync
+    surface_type: dom_panel
+    semantic_domain: dom_panel_surface
+    status: active_runtime
+    authority_type: helper_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:index_html
+    created_by_refs: []
+    updated_by_refs:
+      - function:updateUI
+    rendered_by_refs: []
+    source_files:
+      - js/ui/panels.js
+      - index.html
+    source_selectors:
+      - "#wood"
+      - "#stone"
+      - "#food"
+      - "#hp"
+      - "#wave"
+      - "#power"
+      - "#difficulty"
+      - "#zoom"
+    runtime_roots:
+      - "#topbar"
+    function_refs:
+      - function:updateUI
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:index_html
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - gameplay_state
+      - resource_simulation
+      - wave_lifecycle
+      - render_overlay_drawing
+    notes:
+      - "HUD text synchronization surface only."
+      - "HUD text sync updates text values but does not own gameplay state, resource simulation or canvas overlay drawing."
 
 placeholders:
   surface_records: []
