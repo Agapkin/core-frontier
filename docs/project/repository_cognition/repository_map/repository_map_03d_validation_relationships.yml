@@ -97,7 +97,7 @@ relationships:
       - evidence:source:systems_placement
 
 anti_entropy_notes:
-  - "Skeleton only."
+  - "Populated with bounded source-confirmed records."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
