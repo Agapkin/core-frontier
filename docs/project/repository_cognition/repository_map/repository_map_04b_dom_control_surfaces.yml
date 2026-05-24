@@ -1,0 +1,38 @@
+# Repository Map 04b DOM Control Surfaces
+
+meta:
+  status: planned_empty_split_file
+  stage: 0.3.4B2
+  role: "DOM control surfaces split for Repository Map section 04."
+  authority_model: "Runtime/source files remain truth."
+
+scope:
+  stores:
+    - bottom_control_panel
+    - speed_panel
+    - zoom_panel
+    - build_confirm_panel
+    - tower_action_panel
+    - topbar_chips
+
+must_not_store:
+  - gameplay_ownership
+  - function_inventory
+  - call_graph_structures
+  - raw_discovery_prose
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  evidence_refs: []
+  notes: []
+
+anti_entropy_notes:
+  - "Do not populate surface records in this pass."
+
+placeholders:
+  surface_records: []
