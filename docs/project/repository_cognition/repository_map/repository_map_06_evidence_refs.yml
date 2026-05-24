@@ -232,6 +232,20 @@ evidence_refs:
     source_files:
       - js/game.js
 
+  - evidence_id: evidence:source:canvas_world
+    related_refs:
+      - file:js/ui/canvas_world
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_world.js
+
+  - evidence_id: evidence:source:canvas_entities
+    related_refs:
+      - file:js/ui/canvas_entities
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_entities.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
