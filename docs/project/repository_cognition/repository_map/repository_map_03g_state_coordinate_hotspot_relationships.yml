@@ -118,8 +118,48 @@ relationships:
     notes:
       - "Zoom reset helper clamps camera after reset without implying camera subsystem ownership."
 
+  - relationship_id: rel:createSpeedControls:mutates_without_owning_shape:gameSpeed
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/ui/controls:createSpeedControls
+    relationship_type: mutates_without_owning_shape
+    target_ref: state:gameSpeed
+    evidence_refs:
+      - evidence:source:ui_controls
+    notes:
+      - "Speed control callbacks mutate gameSpeed without owning game loop timing architecture or state shape."
+
+  - relationship_id: rel:createMenuPanel:mutates_without_owning_shape:gameState_difficulty
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/ui/panels:createMenuPanel
+    relationship_type: mutates_without_owning_shape
+    target_ref: state:gameState.difficulty
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Menu panel callback mutates difficulty state without owning difficulty system or gameState shape."
+
+  - relationship_id: rel:pointerStart:mutates:camera_drag_tracking_state
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/game:pointerStart
+    relationship_type: mutates
+    target_ref: state:camera.drag_tracking
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer start mutates camera drag tracking fields without defining a full input framework."
+
+  - relationship_id: rel:pointerMove:mutates:camera_position_state
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/game:pointerMove
+    relationship_type: mutates
+    target_ref: state:camera.position
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer move mutates camera position during drag without owning standalone camera subsystem architecture."
+
 anti_entropy_notes:
-  - "Populated with first bounded coordinate/camera mapping records only."
+  - "Populated with first bounded coordinate/camera mapping and state mutation hotspot records only."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
