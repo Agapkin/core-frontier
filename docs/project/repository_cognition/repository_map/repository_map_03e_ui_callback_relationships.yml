@@ -114,6 +114,28 @@ relationships:
     notes:
       - "Game-over panel callback dispatches restart command without implying runtime ownership."
 
+  - relationship_id: rel:createZoomControls:bridges_to:zoomAt
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createZoomControls
+    relationship_type: bridges_to
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:game
+    notes:
+      - "Zoom control callback dispatches camera zoom command without implying camera subsystem ownership."
+
+  - relationship_id: rel:createZoomControls:bridges_to:resetZoom
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createZoomControls
+    relationship_type: bridges_to
+    target_ref: fn:js/game:resetZoom
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:game
+    notes:
+      - "Zoom control callback dispatches camera reset command without implying camera subsystem ownership."
+
 anti_entropy_notes:
   - "Populated with first bounded UI callback bridge records only."
   - "Do not convert into call graph."
