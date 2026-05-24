@@ -1,9 +1,9 @@
 # Repository Map Relationships Layer
 
 meta:
-  status: partially_populated_bounded
+  status: split_index_router_pending_future_population
   purpose: "Semantic relationship topology between Repository Map entities."
-  scope: "Policy scaffold plus bounded source-confirmed relationship population; not runtime authority or generated dependency graph."
+  scope: "Policy scaffold, split registry and bounded relationship routing layer; operational records live in 03a–03g split files."
   verification_model: "Relationships must be source-confirmed or evidence-confirmed before population."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
@@ -91,7 +91,7 @@ relationship_groups:
       - mutates_without_owning_shape
 
 split_registry:
-  migration_status: "split_skeleton_created_records_not_moved"
+  migration_status: "split_records_copied_verified_monolith_cleared"
   current_population_location: "repository_map_03_relationships.yml"
   future_index_role: "policy_router_after_record_migration"
   migration_rule: "Copy records byte-for-byte into split files first; verify identity before removing from monolith."
@@ -194,161 +194,7 @@ record_shape_example:
     optional_fields_rule: "source_layer, target_layer and population_priority are optional; use only when future filtering/grouping pressure requires them."
     evidence_refs: []
 
-relationships:
-  - relationship_id: rel:workflow_update_repository_manifest:calls:generate_repository_manifest
-    relationship_group: filesystem_truth_infrastructure
-    relationship_type: calls
-    source_ref: file:github_workflows/update_repository_manifest
-    target_ref: file:scripts/generate_repository_manifest
-    semantic_strength: direct_source_confirmed
-    operational_reason: "Workflow source runs python scripts/generate_repository_manifest.py."
-    evidence_refs:
-      - evidence:source:update_repository_manifest_workflow
-
-  - relationship_id: rel:generate_repository_manifest:mutates:repository_manifest
-    relationship_group: filesystem_truth_infrastructure
-    relationship_type: mutates
-    source_ref: file:scripts/generate_repository_manifest
-    target_ref: file:repository_manifest
-    semantic_strength: direct_source_confirmed
-    operational_reason: "Generator writes repository_manifest.yml from deterministic filesystem traversal."
-    evidence_refs:
-      - evidence:source:generate_repository_manifest
-
-  - relationship_id: rel:load_order:data:before:state
-    relationship_group: runtime_load_order
-    relationship_type: depends_on_load_order
-    source_ref: file:js/data
-    target_ref: file:js/state
-    semantic_strength: direct_source_confirmed
-    operational_reason: "index.html loads data.js before state.js as foundation static data before mutable state."
-    evidence_refs:
-      - evidence:discovery:batch08
-
-  - relationship_id: rel:load_order:state:before:extracted_systems
-    relationship_group: runtime_load_order
-    relationship_type: depends_on_load_order
-    source_ref: file:js/state
-    target_ref: file:js/systems/systems_wave_manager
-    semantic_strength: direct_source_confirmed
-    operational_reason: "index.html loads state.js before extracted systems files."
-    evidence_refs:
-      - evidence:discovery:batch08
-
-  - relationship_id: rel:load_order:extracted_systems:before:systems
-    relationship_group: runtime_load_order
-    relationship_type: depends_on_load_order
-    source_ref: file:js/systems/systems_wave_manager
-    target_ref: file:js/systems/systems
-    semantic_strength: direct_source_confirmed
-    operational_reason: "index.html loads extracted systems helpers before systems.js orchestration shell."
-    evidence_refs:
-      - evidence:discovery:batch08
-
-  - relationship_id: rel:load_order:systems:before:ui_layers
-    relationship_group: runtime_load_order
-    relationship_type: depends_on_load_order
-    source_ref: file:js/systems/systems
-    target_ref: file:js/ui/helpers
-    semantic_strength: direct_source_confirmed
-    operational_reason: "index.html loads systems.js before UI helpers/layout/controls/panels/render files."
-    evidence_refs:
-      - evidence:discovery:batch08
-
-  - relationship_id: rel:load_order:ui_layers:before:game
-    relationship_group: runtime_load_order
-    relationship_type: depends_on_load_order
-    source_ref: file:js/ui/notifications
-    target_ref: file:js/game
-    semantic_strength: direct_source_confirmed
-    operational_reason: "index.html loads all UI helpers, panels and render layers before game.js starts the runtime loop."
-    evidence_refs:
-      - evidence:discovery:batch08
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02a_foundation
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02a_foundation_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points operational foundation cognition to 02a split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02b_core_lifecycle
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02b_core_lifecycle_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points operational core lifecycle cognition to 02b split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02c_gameplay_domain
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02c_gameplay_domain_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points gameplay-domain operational cognition to 02c split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02d_runtime_orchestration
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02d_runtime_orchestration_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points runtime orchestration cognition to 02d split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02e_ui_service
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02e_ui_service_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points UI service cognition to 02e split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02f_canvas_render
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02f_canvas_render_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points canvas render cognition to 02f split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:repository_map_02_functions:derived_from:02g_panel_overlay
-    relationship_group: repository_map_function_split
-    relationship_type: derived_from
-    source_ref: map:repository_map_02_functions
-    target_ref: map:repository_map_02g_panel_overlay_functions
-    semantic_strength: repository_map_confirmed
-    operational_reason: "02_functions transition manifest points panel/overlay cognition to 02g split inventory."
-    evidence_refs: []
-
-  - relationship_id: rel:startWave:bridges_to:createWave
-    relationship_group: runtime_lifecycle_bridges
-    relationship_type: bridges_to
-    source_ref: fn:js/systems/systems:startWave
-    target_ref: fn:js/systems/systems_wave_manager:createWave
-    semantic_strength: direct_source_confirmed
-    operational_reason: "startWave orchestrates wave lifecycle and delegates wave composition generation to createWave."
-    evidence_refs:
-      - evidence:discovery:batch01
-      - evidence:discovery:batch05
-
-  - relationship_id: rel:startWave:bridges_to:spawnEnemy
-    relationship_group: runtime_lifecycle_bridges
-    relationship_type: bridges_to
-    source_ref: fn:js/systems/systems:startWave
-    target_ref: fn:js/systems/systems_wave_manager:spawnEnemy
-    semantic_strength: direct_source_confirmed
-    operational_reason: "startWave orchestrates wave lifecycle and delegates enemy object spawning to spawnEnemy."
-    evidence_refs:
-      - evidence:discovery:batch01
-      - evidence:discovery:batch05
+relationships: []
 
 anti_entropy_notes:
   - "Relationships should stay operationally meaningful."
