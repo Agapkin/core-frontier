@@ -204,6 +204,27 @@ evidence_refs:
     source_files:
       - js/systems/systems_placement.js
 
+  - evidence_id: evidence:source:ui_controls
+    related_refs:
+      - file:js/ui/controls
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/controls.js
+
+  - evidence_id: evidence:source:ui_panels
+    related_refs:
+      - file:js/ui/panels
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/panels.js
+
+  - evidence_id: evidence:source:systems_selected_object_actions
+    related_refs:
+      - file:js/systems/systems_selected_object_actions
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_selected_object_actions.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
