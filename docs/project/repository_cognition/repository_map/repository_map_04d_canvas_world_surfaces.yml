@@ -1,0 +1,22 @@
+meta:
+  status: planned_empty_split_file
+  stage: 0.3.4B2
+  role: "Canvas world surfaces split for Repository Map section 04."
+  authority_model: "Runtime/source files remain truth."
+scope:
+  stores:
+    - map_grid
+    - road_path_base
+    - tower_range_overlay
+    - build_placement_overlay
+    - world_render_helpers
+must_not_store:
+  - gameplay_ownership
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+anti_entropy_notes:
+  - "No population in this pass."
+placeholders:
+  surface_records: []
