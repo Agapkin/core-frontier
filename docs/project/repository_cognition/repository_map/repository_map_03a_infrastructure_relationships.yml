@@ -1,5 +1,5 @@
 meta:
-  status: populated_copy_verified
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "Filesystem truth automation and Repository Map internal lineage relationships."
   purpose: "Store low-entropy infrastructure relationships, including filesystem truth automation and internal Repository Map lineage."
