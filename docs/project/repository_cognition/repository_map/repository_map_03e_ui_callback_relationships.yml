@@ -28,20 +28,20 @@ relationship_scope:
 relationships:
   - relationship_id: rel:createBottomControlPanel:bridges_to:buildTower
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createBottomControlPanel
+    source_ref: fn:js/ui/controls:createBottomControlPanel
     relationship_type: bridges_to
-    to_ref: function:buildTower
+    target_ref: fn:js/systems/systems:buildTower
     evidence_refs:
       - evidence:source:ui_controls
-      - evidence:source:systems_placement
+      - evidence:source:systems_runtime
     notes:
       - "UI control callback dispatches build tower command without implying gameplay ownership."
 
   - relationship_id: rel:createBottomControlPanel:bridges_to:startWave
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createBottomControlPanel
+    source_ref: fn:js/ui/controls:createBottomControlPanel
     relationship_type: bridges_to
-    to_ref: function:startWave
+    target_ref: fn:js/systems/systems:startWave
     evidence_refs:
       - evidence:source:ui_controls
       - evidence:source:systems_runtime
@@ -50,42 +50,42 @@ relationships:
 
   - relationship_id: rel:createBuildConfirmPanel:bridges_to:confirmBuild
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createBuildConfirmPanel
+    source_ref: fn:js/ui/controls:createBuildConfirmPanel
     relationship_type: bridges_to
-    to_ref: function:confirmBuild
+    target_ref: fn:js/systems/systems_placement:confirmBuild
     evidence_refs:
-      - evidence:source:ui_panels
+      - evidence:source:ui_controls
       - evidence:source:systems_placement
     notes:
       - "Panel callback dispatches build confirmation command without implying validation or placement ownership."
 
   - relationship_id: rel:createBuildConfirmPanel:bridges_to:cancelBuildMode
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createBuildConfirmPanel
+    source_ref: fn:js/ui/controls:createBuildConfirmPanel
     relationship_type: bridges_to
-    to_ref: function:cancelBuildMode
+    target_ref: fn:js/systems/systems:cancelBuildMode
     evidence_refs:
-      - evidence:source:ui_panels
-      - evidence:source:systems_placement
+      - evidence:source:ui_controls
+      - evidence:source:systems_runtime
     notes:
       - "Panel callback dispatches build cancellation command without implying build-mode ownership."
 
   - relationship_id: rel:createTowerActionPanel:bridges_to:sellSelectedTower
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createTowerActionPanel
+    source_ref: fn:js/ui/controls:createTowerActionPanel
     relationship_type: bridges_to
-    to_ref: function:sellSelectedTower
+    target_ref: fn:js/systems/systems_selected_object_actions:sellSelectedTower
     evidence_refs:
-      - evidence:source:ui_panels
+      - evidence:source:ui_controls
       - evidence:source:systems_selected_object_actions
     notes:
       - "Panel callback dispatches selected tower sell command without implying selected-object action ownership."
 
   - relationship_id: rel:createMenuPanel:bridges_to:restartGame
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createMenuPanel
+    source_ref: fn:js/ui/panels:createMenuPanel
     relationship_type: bridges_to
-    to_ref: function:restartGame
+    target_ref: fn:js/systems/systems:restartGame
     evidence_refs:
       - evidence:source:ui_panels
       - evidence:source:systems_runtime
@@ -94,9 +94,9 @@ relationships:
 
   - relationship_id: rel:createGameOverPanel:bridges_to:retryLastWave
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createGameOverPanel
+    source_ref: fn:js/ui/panels:createGameOverPanel
     relationship_type: bridges_to
-    to_ref: function:retryLastWave
+    target_ref: fn:js/systems/systems:retryLastWave
     evidence_refs:
       - evidence:source:ui_panels
       - evidence:source:systems_runtime
@@ -105,9 +105,9 @@ relationships:
 
   - relationship_id: rel:createGameOverPanel:bridges_to:restartGame
     relationship_group: runtime_ui_callback_bridges
-    from_ref: function:createGameOverPanel
+    source_ref: fn:js/ui/panels:createGameOverPanel
     relationship_type: bridges_to
-    to_ref: function:restartGame
+    target_ref: fn:js/systems/systems:restartGame
     evidence_refs:
       - evidence:source:ui_panels
       - evidence:source:systems_runtime
