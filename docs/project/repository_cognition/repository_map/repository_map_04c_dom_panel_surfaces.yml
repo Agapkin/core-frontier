@@ -1,5 +1,5 @@
 # Repository Map 04c DOM Panel Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -50,7 +50,7 @@ required_record_shape:
 anti_entropy_notes:
   - "Keep 04c records bounded and source-grounded."
   - "Do not store canvas overlay drawing logic as DOM panel surface topology."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:dom:menu_panel
@@ -214,6 +214,3 @@ surface_records:
     notes:
       - "HUD text synchronization surface only."
       - "HUD text sync updates text values but does not own gameplay state, resource simulation or canvas overlay drawing."
-
-placeholders:
-  surface_records: []
