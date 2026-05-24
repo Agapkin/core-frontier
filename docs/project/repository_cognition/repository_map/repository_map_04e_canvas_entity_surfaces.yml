@@ -1,8 +1,14 @@
+# Repository Map 04e Canvas Entity Surfaces
+# Stage 0.3.4B2 — planned empty split scaffold
+
 meta:
   status: planned_empty_split_file
   stage: 0.3.4B2
   role: "Canvas entity surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
   authority_model: "Runtime/source files remain truth."
+  population_status: no_surface_records_populated_in_this_pass
+
 scope:
   stores:
     - towers
@@ -10,14 +16,39 @@ scope:
     - selected_tower_highlight
     - target_lines
     - hp_bars
+  domain_notes:
+    - "Render visualization does not imply gameplay subsystem ownership."
+
 must_not_store:
   - ecs_architecture
   - gameplay_ownership
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+
 required_record_shape:
   surface_id:
   surface_type:
   semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
 anti_entropy_notes:
-  - "No population in this pass."
+  - "Do not populate records until explicitly authorized."
+
 placeholders:
   surface_records: []
