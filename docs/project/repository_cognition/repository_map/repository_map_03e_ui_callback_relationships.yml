@@ -1,9 +1,9 @@
 meta:
-  status: skeleton_pending_migration
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "UI callback and runtime command dispatch bridge topology."
   purpose: "Store UI controls/panels/callback relationships that dispatch runtime commands without implying gameplay ownership."
-  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  migration_note: "First bounded source-confirmed UI callback bridge records populated in Stage 0.3.4B1 / Pass 03E-P1."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
@@ -25,10 +25,97 @@ relationship_scope:
     - "Avoid callback wiring graph explosion."
     - "Do not store every DOM event listener unless operationally significant."
 
-relationships: []
+relationships:
+  - relationship_id: rel:createBottomControlPanel:bridges_to:buildTower
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createBottomControlPanel
+    relationship_type: bridges_to
+    to_ref: function:buildTower
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_placement
+    notes:
+      - "UI control callback dispatches build tower command without implying gameplay ownership."
+
+  - relationship_id: rel:createBottomControlPanel:bridges_to:startWave
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createBottomControlPanel
+    relationship_type: bridges_to
+    to_ref: function:startWave
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_runtime
+    notes:
+      - "UI control callback dispatches wave start command without implying lifecycle ownership."
+
+  - relationship_id: rel:createBuildConfirmPanel:bridges_to:confirmBuild
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createBuildConfirmPanel
+    relationship_type: bridges_to
+    to_ref: function:confirmBuild
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_placement
+    notes:
+      - "Panel callback dispatches build confirmation command without implying validation or placement ownership."
+
+  - relationship_id: rel:createBuildConfirmPanel:bridges_to:cancelBuildMode
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createBuildConfirmPanel
+    relationship_type: bridges_to
+    to_ref: function:cancelBuildMode
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_placement
+    notes:
+      - "Panel callback dispatches build cancellation command without implying build-mode ownership."
+
+  - relationship_id: rel:createTowerActionPanel:bridges_to:sellSelectedTower
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createTowerActionPanel
+    relationship_type: bridges_to
+    to_ref: function:sellSelectedTower
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_selected_object_actions
+    notes:
+      - "Panel callback dispatches selected tower sell command without implying selected-object action ownership."
+
+  - relationship_id: rel:createMenuPanel:bridges_to:restartGame
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createMenuPanel
+    relationship_type: bridges_to
+    to_ref: function:restartGame
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Panel callback dispatches restart command without implying runtime ownership."
+
+  - relationship_id: rel:createGameOverPanel:bridges_to:retryLastWave
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createGameOverPanel
+    relationship_type: bridges_to
+    to_ref: function:retryLastWave
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Game-over panel callback dispatches retry command without implying wave lifecycle ownership."
+
+  - relationship_id: rel:createGameOverPanel:bridges_to:restartGame
+    relationship_group: runtime_ui_callback_bridges
+    from_ref: function:createGameOverPanel
+    relationship_type: bridges_to
+    to_ref: function:restartGame
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Game-over panel callback dispatches restart command without implying runtime ownership."
 
 anti_entropy_notes:
-  - "Skeleton only."
-  - "Do not populate without source-confirmed bounded migration pass."
+  - "Populated with first bounded UI callback bridge records only."
   - "Do not convert into call graph."
+  - "Do not add helper callback relationships without a separate bounded pass."
   - "Do not duplicate inventory layers."
