@@ -1,0 +1,34 @@
+meta:
+  status: skeleton_pending_migration
+  stage: "0.3.4B1"
+  role: "Render and visualization non-ownership boundary topology."
+  purpose: "Store visualization/render relationships that clarify render ownership boundaries without implying gameplay ownership."
+  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_render_boundaries
+  allowed_relationship_types:
+    - renders
+    - visualizes_without_owning
+    - reads
+    - calls
+  admission_notes:
+    - "Render relations must not imply gameplay ownership."
+    - "Avoid render graph duplication."
+    - "Prefer visualizes_without_owning where render reads gameplay state but does not own lifecycle."
+
+relationships: []
+
+anti_entropy_notes:
+  - "Skeleton only."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."
