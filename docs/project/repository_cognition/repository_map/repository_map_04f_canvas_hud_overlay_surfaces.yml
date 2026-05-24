@@ -1,0 +1,22 @@
+meta:
+  status: planned_empty_split_file
+  stage: 0.3.4B2
+  role: "Canvas HUD overlay surfaces split for Repository Map section 04."
+  authority_model: "Runtime/source files remain truth."
+scope:
+  stores:
+    - wave_status_overlay
+    - selected_tower_info_overlay
+    - codex_overlay
+    - game_over_dim_overlay
+    - notifications
+must_not_store:
+  - gameplay_ownership
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+anti_entropy_notes:
+  - "No population in this pass."
+placeholders:
+  surface_records: []
