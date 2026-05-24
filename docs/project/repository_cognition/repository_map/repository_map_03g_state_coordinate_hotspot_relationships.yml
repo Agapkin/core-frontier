@@ -76,7 +76,7 @@ relationships:
     evidence_refs:
       - evidence:source:game
     notes:
-      - "Wheel event zoom routing bridges into camera zoom helper without implying camera subsystem ownership."
+      - "Wheel event zoom routing routes zoom gesture handling through zoomAt without implying camera subsystem ownership."
 
   - relationship_id: rel:touchMove:calls:zoomAt
     relationship_group: runtime_coordinate_mapping
@@ -86,7 +86,7 @@ relationships:
     evidence_refs:
       - evidence:source:game
     notes:
-      - "Pinch touch movement routes into camera zoom helper without owning gesture or camera subsystem architecture."
+      - "Pinch touch movement routes touch gesture handling through zoomAt without owning gesture or camera subsystem architecture."
 
   - relationship_id: rel:zoomAt:calls:screenToWorld
     relationship_group: runtime_coordinate_mapping
