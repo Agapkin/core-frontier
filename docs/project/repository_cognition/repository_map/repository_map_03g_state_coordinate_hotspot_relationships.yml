@@ -1,0 +1,36 @@
+meta:
+  status: skeleton_pending_migration
+  stage: "0.3.4B1"
+  role: "Coordinate mapping and shared state mutation hotspot topology."
+  purpose: "Store coordinate/camera mapping relationships and high-risk shared mutable state topology."
+  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_coordinate_mapping
+    - runtime_state_mutation_hotspots
+  allowed_relationship_types:
+    - provides_helper_for
+    - calls
+    - mutates
+    - mutates_without_owning_shape
+  admission_notes:
+    - "Coordinate mapping and state mutation records are high entropy."
+    - "Avoid mutation graph explosion."
+    - "Only include relationships with clear topology/risk value."
+    - "If this file grows too large, future split into separate coordinate and mutation files may be required."
+
+relationships: []
+
+anti_entropy_notes:
+  - "Skeleton only."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."
