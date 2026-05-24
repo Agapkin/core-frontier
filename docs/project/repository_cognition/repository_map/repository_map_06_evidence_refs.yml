@@ -274,6 +274,13 @@ evidence_refs:
     source_files:
       - js/ui/notifications.js
 
+  - evidence_id: evidence:source:state
+    related_refs:
+      - file:js/state
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/state.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
