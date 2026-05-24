@@ -1,0 +1,103 @@
+meta:
+  status: populated_source_verified
+  stage: "0.3.4B1"
+  role: "Placement/build validation topology."
+  purpose: "Store validation decision chains and placement/build gating relationships."
+  migration_note: "First bounded validation topology records populated with source evidence routing through 06."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_validation_flow
+  allowed_relationship_types:
+    - calls
+    - provides_helper_for
+    - mutates
+    - bridges_to
+  admission_notes:
+    - "Avoid validation helper spam."
+    - "Only include operationally meaningful decision-chain topology."
+    - "Do not duplicate every validation helper call."
+
+relationships:
+  - relationship_id: rel:selectBuildTile:calls:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: calls
+    source_ref: fn:js/systems/systems_placement:selectBuildTile
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Build tile selection validates candidate placement before feedback."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:getBuildPanelText:calls:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: calls
+    source_ref: fn:js/systems/systems_placement:getBuildPanelText
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Build panel text depends on current placement validation result."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:placeTower:calls:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: calls
+    source_ref: fn:js/systems/systems_placement:placeTower
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Tower placement gates mutation behind placement validation."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:isRoadTile:provides_helper_for:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: provides_helper_for
+    source_ref: fn:js/systems/systems_placement:isRoadTile
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Road restriction helper supports placement validation decision."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:isBaseTile:provides_helper_for:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: provides_helper_for
+    source_ref: fn:js/systems/systems_placement:isBaseTile
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Base restriction helper supports placement validation decision."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:isTowerTile:provides_helper_for:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: provides_helper_for
+    source_ref: fn:js/systems/systems_placement:isTowerTile
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Tower occupancy helper supports placement validation decision."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+  - relationship_id: rel:hasCost:provides_helper_for:validateBuildTile
+    relationship_group: runtime_validation_flow
+    relationship_type: provides_helper_for
+    source_ref: fn:js/systems/systems_placement:hasCost
+    target_ref: fn:js/systems/systems_placement:validateBuildTile
+    semantic_strength: direct_source_confirmed
+    operational_reason: "Resource availability helper supports placement validation decision."
+    evidence_refs:
+      - evidence:source:systems_placement
+
+anti_entropy_notes:
+  - "Populated with bounded source-confirmed records."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."

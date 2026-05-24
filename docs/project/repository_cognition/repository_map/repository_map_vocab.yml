@@ -63,6 +63,19 @@ stores:
     - provides_helper_for
     - shadows
     - derived_from
+  function_class_types:
+    - helper_function
+    - state_helper_function
+    - mutation_heavy_function
+    - callback_target
+    - bridge_function
+    - lifecycle_function
+    - orchestration_function
+    - validation_function
+    - responsive_layout_function
+    - coordinate_mapping_function
+    - render_function
+    - future_pressure_function
   authority_types:
     - runtime_truth
     - semantic_interpretation
@@ -77,6 +90,8 @@ stores:
     - inactive_surface_artifact
     - callback_surface_without_ownership
     - downstream_mutation_without_state_shape_ownership
+    - filesystem_truth
+    - filesystem_truth_automation
   risk_types:
     - needs_review
     - hallucination_risk
@@ -141,6 +156,9 @@ stores:
     - placement_lifecycle_boundary
     - selected_object_actions_boundary
     - tower_specific_current_boundary
+    - physical_tree_not_semantic_navigation
+    - automation_not_semantic_reasoning
+    - manifest_self_loop_protected
   surface_types:
     - html_shell
     - dom_root

@@ -1,0 +1,165 @@
+meta:
+  status: populated_source_verified
+  stage: "0.3.4B1"
+  role: "Coordinate mapping and shared state mutation hotspot topology."
+  purpose: "Store coordinate/camera mapping relationships and high-risk shared mutable state topology."
+  migration_note: "Active split relationship records verified for coordinate mapping and state mutation hotspot topology."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_coordinate_mapping
+    - runtime_state_mutation_hotspots
+  allowed_relationship_types:
+    - provides_helper_for
+    - calls
+    - mutates
+    - mutates_without_owning_shape
+  admission_notes:
+    - "Coordinate mapping and state mutation records are high entropy."
+    - "Avoid mutation graph explosion."
+    - "Only include relationships with clear topology/risk value."
+    - "If this file grows too large, future split into separate coordinate and mutation files may be required."
+
+relationships:
+  - relationship_id: rel:getPointer:calls:getCanvasPoint
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:getPointer
+    relationship_type: calls
+    target_ref: fn:js/game:getCanvasPoint
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer helper routes pointer event coordinates through canvas-local coordinate extraction without owning input framework."
+
+  - relationship_id: rel:touchCenter:calls:getCanvasPoint
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:touchCenter
+    relationship_type: calls
+    target_ref: fn:js/game:getCanvasPoint
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Touch center helper reuses canvas-local coordinate extraction without owning gesture framework."
+
+  - relationship_id: rel:screenToTile:calls:screenToWorld
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:screenToTile
+    relationship_type: calls
+    target_ref: fn:js/game:screenToWorld
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Tile coordinate resolution derives from screen-to-world mapping without owning placement validation."
+
+  - relationship_id: rel:updateHoveredTile:calls:screenToTile
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:updateHoveredTile
+    relationship_type: calls
+    target_ref: fn:js/game:screenToTile
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Hovered tile update consumes tile coordinate mapping without owning placement or gameplay domain logic."
+
+  - relationship_id: rel:wheelZoom:calls:zoomAt
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:wheelZoom
+    relationship_type: calls
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Wheel event zoom routing routes zoom gesture handling through zoomAt without implying camera subsystem ownership."
+
+  - relationship_id: rel:touchMove:calls:zoomAt
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:touchMove
+    relationship_type: calls
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pinch touch movement routes touch gesture handling through zoomAt without owning gesture or camera subsystem architecture."
+
+  - relationship_id: rel:zoomAt:calls:screenToWorld
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:zoomAt
+    relationship_type: calls
+    target_ref: fn:js/game:screenToWorld
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom helper uses screen-to-world mapping to preserve world point under pointer without owning scene manager."
+
+  - relationship_id: rel:zoomAt:calls:clampCamera
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:zoomAt
+    relationship_type: calls
+    target_ref: fn:js/game:clampCamera
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom helper clamps camera after zoom mutation without defining a standalone camera subsystem boundary."
+
+  - relationship_id: rel:resetZoom:calls:clampCamera
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:resetZoom
+    relationship_type: calls
+    target_ref: fn:js/game:clampCamera
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom reset helper clamps camera after reset without implying camera subsystem ownership."
+
+  - relationship_id: rel:createSpeedControls:mutates_without_owning_shape:gameSpeed
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/ui/controls:createSpeedControls
+    relationship_type: mutates_without_owning_shape
+    target_ref: state:gameSpeed
+    evidence_refs:
+      - evidence:source:ui_controls
+    notes:
+      - "Speed control callbacks mutate gameSpeed without owning game loop timing architecture or state shape."
+
+  - relationship_id: rel:createMenuPanel:mutates_without_owning_shape:gameState_difficulty
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/ui/panels:createMenuPanel
+    relationship_type: mutates_without_owning_shape
+    target_ref: state:gameState.difficulty
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Menu panel callback mutates difficulty state without owning difficulty system or gameState shape."
+
+  - relationship_id: rel:pointerStart:mutates:camera_drag_tracking_state
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/game:pointerStart
+    relationship_type: mutates
+    target_ref: state:camera.drag_tracking
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer start mutates camera drag tracking fields without defining a full input framework."
+
+  - relationship_id: rel:pointerMove:mutates:camera_position_state
+    relationship_group: runtime_state_mutation_hotspots
+    source_ref: fn:js/game:pointerMove
+    relationship_type: mutates
+    target_ref: state:camera.position
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer move mutates camera position during drag without owning standalone camera subsystem architecture."
+
+anti_entropy_notes:
+  - "Populated with first bounded coordinate/camera mapping and state mutation hotspot records only."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."

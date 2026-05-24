@@ -1,0 +1,80 @@
+meta:
+  status: populated_source_verified
+  stage: "0.3.4B1"
+  role: "Runtime bootstrap and browser-global script load-order topology."
+  purpose: "Store source-confirmed runtime load-order relationships from index.html."
+  migration_note: "Active split relationship records verified for runtime load-order topology."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_load_order
+  allowed_relationship_types:
+    - depends_on_load_order
+  admission_notes:
+    - "Load order expresses bootstrap sequencing only."
+    - "Load order does not imply ownership, lifecycle authority, or orchestration ownership."
+    - "Expected future migration: data → state → extracted systems → systems → UI layers → game."
+
+relationships:
+  - relationship_id: rel:load_order:data:before:state
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/data
+    target_ref: file:js/state
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads data.js before state.js as foundation static data before mutable state."
+    evidence_refs:
+      - evidence:source:index_html
+
+  - relationship_id: rel:load_order:state:before:extracted_systems
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/state
+    target_ref: file:js/systems/systems_wave_manager
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads state.js before extracted systems files."
+    evidence_refs:
+      - evidence:source:index_html
+
+  - relationship_id: rel:load_order:extracted_systems:before:systems
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/systems/systems_wave_manager
+    target_ref: file:js/systems/systems
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads extracted systems helpers before systems.js orchestration shell."
+    evidence_refs:
+      - evidence:source:index_html
+
+  - relationship_id: rel:load_order:systems:before:ui_layers
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/systems/systems
+    target_ref: file:js/ui/helpers
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads systems.js before UI helpers/layout/controls/panels/render files."
+    evidence_refs:
+      - evidence:source:index_html
+
+  - relationship_id: rel:load_order:ui_layers:before:game
+    relationship_group: runtime_load_order
+    relationship_type: depends_on_load_order
+    source_ref: file:js/ui/notifications
+    target_ref: file:js/game
+    semantic_strength: direct_source_confirmed
+    operational_reason: "index.html loads all UI helpers, panels and render layers before game.js starts the runtime loop."
+    evidence_refs:
+      - evidence:source:index_html
+
+anti_entropy_notes:
+  - "Populated with bounded source-confirmed records."
+  - "Do not populate without source-confirmed bounded migration pass."
+  - "Do not convert into call graph."
+  - "Do not duplicate inventory layers."

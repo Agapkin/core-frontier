@@ -1,11 +1,53 @@
 # Repository Map Evidence References Layer
-# Stage 0.3.4B — minimal evidence anchors for file inventory refs only
+# Stage 0.3.4B1 — source evidence router for Repository Map records
 
 meta:
-  status: minimally_anchored_for_file_inventory
-  purpose: "Lightweight provenance anchors referenced by repository_map_01_files.yml."
-  scope: "Evidence anchors only; not extraction archive or synchronization layer."
-  primary_layer: repository_map_01_files.yml
+  status: source_evidence_router_active
+  purpose: "Lightweight source verification index for Repository Map records."
+  scope: "Evidence anchors only; not extraction archive, reasoning archive or synchronization layer."
+  primary_layer: repository_map_03_relationship_split_package
+  verification_model: "Evidence records should verify claims against source/runtime/filesystem truth."
+  discovery_role: "Discovery may help locate source truth, but is archival research/provenance pointer only."
+
+source_truth_hierarchy:
+  primary_truth:
+    - runtime_source_files
+    - repository_manifest_yml_for_filesystem_tree
+  supporting_layers:
+    - repository_map_current_cognition
+    - discovery_archival_research_pointer
+  rule: "Discovery may assist locating source truth, but source files / filesystem truth remain verification authority."
+
+source_rebinding_plan:
+  status: planned_not_executed
+  current_legacy_ids:
+    - evidence:discovery:batch01
+    - evidence:discovery:batch02
+    - evidence:discovery:batch03a
+    - evidence:discovery:batch03b
+    - evidence:discovery:batch03c
+    - evidence:discovery:batch04
+    - evidence:discovery:batch05
+    - evidence:discovery:batch06
+    - evidence:discovery:batch07
+    - evidence:discovery:batch08
+  future_direction:
+    - "Replace Discovery-style evidence ids with source-based evidence ids in bounded passes."
+    - "Keep discovery_source only as archival pointer where useful."
+    - "Do not rewrite Discovery files."
+    - "Do not treat Discovery as current truth."
+
+infrastructure_direct_source_evidence:
+  status: planned_not_executed
+  target_files:
+    - repository_manifest.yml
+    - scripts/generate_repository_manifest.py
+    - .github/workflows/update-repository-manifest.yml
+  future_evidence_ids:
+    - evidence:source:repository_manifest
+    - evidence:source:generate_repository_manifest
+    - evidence:source:update_repository_manifest_workflow
+  rule: "These files did not pass through Discovery; their evidence anchors should point directly to source/filesystem truth."
 
 stores:
   - evidence_refs
@@ -113,11 +155,103 @@ evidence_refs:
       - index.html
       - css/style.css
 
+  - evidence_id: evidence:source:repository_manifest
+    related_refs:
+      - file:repository_manifest
+    verification_status: verified_against_filesystem_truth
+    source_files:
+      - repository_manifest.yml
+
+  - evidence_id: evidence:source:generate_repository_manifest
+    related_refs:
+      - file:scripts/generate_repository_manifest
+    verification_status: verified_against_source_file
+    source_files:
+      - scripts/generate_repository_manifest.py
+
+  - evidence_id: evidence:source:update_repository_manifest_workflow
+    related_refs:
+      - file:github_workflows/update_repository_manifest
+    verification_status: verified_against_workflow_source
+    source_files:
+      - .github/workflows/update-repository-manifest.yml
+
+  - evidence_id: evidence:source:index_html
+    related_refs:
+      - file:index_html
+    verification_status: verified_against_runtime_source
+    source_files:
+      - index.html
+
+  - evidence_id: evidence:source:systems_runtime
+    related_refs:
+      - file:js/systems/systems
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems.js
+
+  - evidence_id: evidence:source:systems_wave_manager
+    related_refs:
+      - file:js/systems/systems_wave_manager
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_wave_manager.js
+
+  - evidence_id: evidence:source:systems_placement
+    related_refs:
+      - file:js/systems/systems_placement
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_placement.js
+
+  - evidence_id: evidence:source:ui_controls
+    related_refs:
+      - file:js/ui/controls
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/controls.js
+
+  - evidence_id: evidence:source:ui_panels
+    related_refs:
+      - file:js/ui/panels
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/panels.js
+
+  - evidence_id: evidence:source:systems_selected_object_actions
+    related_refs:
+      - file:js/systems/systems_selected_object_actions
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_selected_object_actions.js
+
+  - evidence_id: evidence:source:game
+    related_refs:
+      - file:js/game
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/game.js
+
+  - evidence_id: evidence:source:canvas_world
+    related_refs:
+      - file:js/ui/canvas_world
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_world.js
+
+  - evidence_id: evidence:source:canvas_entities
+    related_refs:
+      - file:js/ui/canvas_entities
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/canvas_entities.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
-  - "This pass anchors only refs already used by repository_map_01_files.yml."
+  - "Source evidence anchors support active Repository Map records, including 03a–03g relationship topology."
   - "Do not expand into extraction archive or synchronization engine."
+  - "Source/runtime files and filesystem truth remain verification authority."
 
 placeholders:
   future_evidence_population: []

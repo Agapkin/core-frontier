@@ -1,0 +1,143 @@
+meta:
+  status: populated_source_verified
+  stage: "0.3.4B1"
+  role: "UI callback and runtime command dispatch bridge topology."
+  purpose: "Store UI controls/panels/callback relationships that dispatch runtime commands without implying gameplay ownership."
+  migration_note: "First bounded source-confirmed UI callback bridge records populated in Stage 0.3.4B1 / Pass 03E-P1."
+  authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
+  non_goals:
+    - runtime_authority
+    - generated_dependency_graph
+    - full_call_graph
+    - parser_dump
+    - speculative_topology
+
+relationship_scope:
+  relationship_groups:
+    - runtime_ui_callback_bridges
+  allowed_relationship_types:
+    - bridges_to
+    - calls_without_ownership
+    - calls
+    - mutates_without_owning_shape
+  admission_notes:
+    - "Callback dispatch does not imply callback ownership."
+    - "Avoid callback wiring graph explosion."
+    - "Do not store every DOM event listener unless operationally significant."
+
+relationships:
+  - relationship_id: rel:createBottomControlPanel:bridges_to:buildTower
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createBottomControlPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:buildTower
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_runtime
+    notes:
+      - "UI control callback dispatches build tower command without implying gameplay ownership."
+
+  - relationship_id: rel:createBottomControlPanel:bridges_to:startWave
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createBottomControlPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:startWave
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_runtime
+    notes:
+      - "UI control callback dispatches wave start command without implying lifecycle ownership."
+
+  - relationship_id: rel:createBuildConfirmPanel:bridges_to:confirmBuild
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createBuildConfirmPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems_placement:confirmBuild
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_placement
+    notes:
+      - "Panel callback dispatches build confirmation command without implying validation or placement ownership."
+
+  - relationship_id: rel:createBuildConfirmPanel:bridges_to:cancelBuildMode
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createBuildConfirmPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:cancelBuildMode
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_runtime
+    notes:
+      - "Panel callback dispatches build cancellation command without implying build-mode ownership."
+
+  - relationship_id: rel:createTowerActionPanel:bridges_to:sellSelectedTower
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createTowerActionPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems_selected_object_actions:sellSelectedTower
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:systems_selected_object_actions
+    notes:
+      - "Panel callback dispatches selected tower sell command without implying selected-object action ownership."
+
+  - relationship_id: rel:createMenuPanel:bridges_to:restartGame
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/panels:createMenuPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:restartGame
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Panel callback dispatches restart command without implying runtime ownership."
+
+  - relationship_id: rel:createGameOverPanel:bridges_to:retryLastWave
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/panels:createGameOverPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:retryLastWave
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Game-over panel callback dispatches retry command without implying wave lifecycle ownership."
+
+  - relationship_id: rel:createGameOverPanel:bridges_to:restartGame
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/panels:createGameOverPanel
+    relationship_type: bridges_to
+    target_ref: fn:js/systems/systems:restartGame
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:systems_runtime
+    notes:
+      - "Game-over panel callback dispatches restart command without implying runtime ownership."
+
+  - relationship_id: rel:createZoomControls:bridges_to:zoomAt
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createZoomControls
+    relationship_type: bridges_to
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:game
+    notes:
+      - "Zoom control callback dispatches camera zoom command without implying camera subsystem ownership."
+
+  - relationship_id: rel:createZoomControls:bridges_to:resetZoom
+    relationship_group: runtime_ui_callback_bridges
+    source_ref: fn:js/ui/controls:createZoomControls
+    relationship_type: bridges_to
+    target_ref: fn:js/game:resetZoom
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:game
+    notes:
+      - "Zoom control callback dispatches camera reset command without implying camera subsystem ownership."
+
+anti_entropy_notes:
+  - "Populated with first bounded UI callback bridge records only."
+  - "Do not convert into call graph."
+  - "Do not add helper callback relationships without a separate bounded pass."
+  - "Do not duplicate inventory layers."
