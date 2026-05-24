@@ -1,7 +1,7 @@
 # Repository Map Relationships Layer
 
 meta:
-  status: split_index_router_pending_future_population
+  status: active_policy_router_and_split_registry
   purpose: "Semantic relationship topology between Repository Map entities."
   scope: "Policy scaffold, split registry and bounded relationship routing layer; operational records live in 03a–03g split files."
   verification_model: "Relationships must be source-confirmed or evidence-confirmed before population."
