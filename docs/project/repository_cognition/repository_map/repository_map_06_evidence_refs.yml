@@ -176,6 +176,27 @@ evidence_refs:
     source_files:
       - .github/workflows/update-repository-manifest.yml
 
+  - evidence_id: evidence:source:index_html
+    related_refs:
+      - file:index_html
+    verification_status: verified_against_runtime_source
+    source_files:
+      - index.html
+
+  - evidence_id: evidence:source:systems_runtime
+    related_refs:
+      - file:js/systems/systems
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems.js
+
+  - evidence_id: evidence:source:systems_wave_manager
+    related_refs:
+      - file:js/systems/systems_wave_manager
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/systems/systems_wave_manager.js
+
 anti_entropy_notes:
   - "Discovery remains archival evidence, not live operational dependency."
   - "Evidence references remain lightweight provenance anchors only."
