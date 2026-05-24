@@ -1,5 +1,5 @@
 meta:
-  status: skeleton_pending_migration
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "Coordinate mapping and shared state mutation hotspot topology."
   purpose: "Store coordinate/camera mapping relationships and high-risk shared mutable state topology."
@@ -27,10 +27,99 @@ relationship_scope:
     - "Only include relationships with clear topology/risk value."
     - "If this file grows too large, future split into separate coordinate and mutation files may be required."
 
-relationships: []
+relationships:
+  - relationship_id: rel:getPointer:calls:getCanvasPoint
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:getPointer
+    relationship_type: calls
+    target_ref: fn:js/game:getCanvasPoint
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pointer helper routes pointer event coordinates through canvas-local coordinate extraction without owning input framework."
+
+  - relationship_id: rel:touchCenter:calls:getCanvasPoint
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:touchCenter
+    relationship_type: calls
+    target_ref: fn:js/game:getCanvasPoint
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Touch center helper reuses canvas-local coordinate extraction without owning gesture framework."
+
+  - relationship_id: rel:screenToTile:calls:screenToWorld
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:screenToTile
+    relationship_type: calls
+    target_ref: fn:js/game:screenToWorld
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Tile coordinate resolution derives from screen-to-world mapping without owning placement validation."
+
+  - relationship_id: rel:updateHoveredTile:calls:screenToTile
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:updateHoveredTile
+    relationship_type: calls
+    target_ref: fn:js/game:screenToTile
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Hovered tile update consumes tile coordinate mapping without owning placement or gameplay domain logic."
+
+  - relationship_id: rel:wheelZoom:bridges_to:zoomAt
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:wheelZoom
+    relationship_type: bridges_to
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Wheel event zoom routing bridges into camera zoom helper without implying camera subsystem ownership."
+
+  - relationship_id: rel:touchMove:bridges_to:zoomAt
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:touchMove
+    relationship_type: bridges_to
+    target_ref: fn:js/game:zoomAt
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Pinch touch movement routes into camera zoom helper without owning gesture or camera subsystem architecture."
+
+  - relationship_id: rel:zoomAt:calls:screenToWorld
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:zoomAt
+    relationship_type: calls
+    target_ref: fn:js/game:screenToWorld
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom helper uses screen-to-world mapping to preserve world point under pointer without owning scene manager."
+
+  - relationship_id: rel:zoomAt:calls:clampCamera
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:zoomAt
+    relationship_type: calls
+    target_ref: fn:js/game:clampCamera
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom helper clamps camera after zoom mutation without defining a standalone camera subsystem boundary."
+
+  - relationship_id: rel:resetZoom:calls:clampCamera
+    relationship_group: runtime_coordinate_mapping
+    source_ref: fn:js/game:resetZoom
+    relationship_type: calls
+    target_ref: fn:js/game:clampCamera
+    evidence_refs:
+      - evidence:source:game
+    notes:
+      - "Zoom reset helper clamps camera after reset without implying camera subsystem ownership."
 
 anti_entropy_notes:
-  - "Skeleton only."
+  - "Populated with first bounded coordinate/camera mapping records only."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
