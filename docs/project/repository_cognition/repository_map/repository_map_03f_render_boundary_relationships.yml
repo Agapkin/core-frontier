@@ -3,7 +3,7 @@ meta:
   stage: "0.3.4B1"
   role: "Render and visualization non-ownership boundary topology."
   purpose: "Store visualization/render relationships that clarify render ownership boundaries without implying gameplay ownership."
-  migration_note: "Records are not moved in this pass. Existing records remain in repository_map_03_relationships.yml until bounded migration passes."
+  migration_note: "Active split relationship records verified for render/non-ownership boundary topology."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
