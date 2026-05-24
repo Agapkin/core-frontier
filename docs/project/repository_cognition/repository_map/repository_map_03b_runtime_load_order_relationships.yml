@@ -31,7 +31,7 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "index.html loads data.js before state.js as foundation static data before mutable state."
     evidence_refs:
-      - evidence:discovery:batch08
+      - evidence:source:index_html
 
   - relationship_id: rel:load_order:state:before:extracted_systems
     relationship_group: runtime_load_order
@@ -41,7 +41,7 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "index.html loads state.js before extracted systems files."
     evidence_refs:
-      - evidence:discovery:batch08
+      - evidence:source:index_html
 
   - relationship_id: rel:load_order:extracted_systems:before:systems
     relationship_group: runtime_load_order
@@ -51,7 +51,7 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "index.html loads extracted systems helpers before systems.js orchestration shell."
     evidence_refs:
-      - evidence:discovery:batch08
+      - evidence:source:index_html
 
   - relationship_id: rel:load_order:systems:before:ui_layers
     relationship_group: runtime_load_order
@@ -61,7 +61,7 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "index.html loads systems.js before UI helpers/layout/controls/panels/render files."
     evidence_refs:
-      - evidence:discovery:batch08
+      - evidence:source:index_html
 
   - relationship_id: rel:load_order:ui_layers:before:game
     relationship_group: runtime_load_order
@@ -71,7 +71,7 @@ relationships:
     semantic_strength: direct_source_confirmed
     operational_reason: "index.html loads all UI helpers, panels and render layers before game.js starts the runtime loop."
     evidence_refs:
-      - evidence:discovery:batch08
+      - evidence:source:index_html
 
 anti_entropy_notes:
   - "Skeleton only."
