@@ -5,7 +5,7 @@ meta:
   package: repository_map
   status: partially_populated
   purpose: "Root manifest and navigation layer for the split Repository Map package."
-  scope: "Compressed operational semantic topology; vocab and file inventory are populated; repository_map_02_functions.yml now operates as transition manifest / historical bridge / lineage anchor for split function inventories 02a–02g; operational function cognition lives in 02a–02g; risks/evidence are minimally anchored for file inventory refs; remaining non-function layers are skeleton-only."
+  scope: "Compressed operational semantic topology; vocab and file inventory are populated; repository_map_02_functions.yml now operates as transition manifest / historical bridge / lineage anchor for split function inventories 02a–02g; operational function cognition lives in 02a–02g; risks are minimally anchored and evidence routing is source-router-backed for active Repository Map topology; remaining non-function layers are skeleton-only."
 
 package_purpose:
   - "Provide compact navigation across Repository Map package layers."
@@ -35,7 +35,7 @@ layer_separation:
   relationships: "Policy router and split registry for active relationship topology package."
   surfaces: "DOM/CSS/canvas/surface topology; skeleton-only."
   risks_pressure: "Risk and semantic pressure anchors; minimally anchored for file inventory refs only."
-  evidence_refs: "Lightweight archival evidence references; minimally anchored for file inventory refs only."
+  evidence_refs: "Lightweight source-routed evidence/provenance layer for active Repository Map topology."
   hotspots: "Cross-layer diagnostic telemetry; skeleton-only."
 
 package_file_registry:
@@ -101,7 +101,7 @@ package_file_registry:
     status: minimally_anchored_for_file_inventory
   - file: repository_map_06_evidence_refs.yml
     responsibility: "Evidence references back to Discovery/source verification."
-    status: minimally_anchored_for_file_inventory
+    status: source_evidence_router_active
   - file: repository_map_07_hotspots.yml
     responsibility: "Diagnostic cross-index for overloaded/high-pressure areas."
     status: skeleton_only
@@ -140,6 +140,7 @@ placeholders:
       - repository_map_03g_state_coordinate_hotspot_relationships.yml
     minimally_anchored_layers:
       - repository_map_05_risks_pressure.yml
+    source_router_layers:
       - repository_map_06_evidence_refs.yml
     skeleton_only_layers:
       - repository_map_04_surfaces.yml
