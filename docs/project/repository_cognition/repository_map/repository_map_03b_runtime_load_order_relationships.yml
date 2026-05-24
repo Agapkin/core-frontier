@@ -11,6 +11,7 @@ meta:
     - full_call_graph
     - parser_dump
     - speculative_topology
+
 relationship_scope:
   relationship_groups:
     - runtime_load_order
@@ -20,7 +21,9 @@ relationship_scope:
     - "Load order expresses bootstrap sequencing only."
     - "Load order does not imply ownership, lifecycle authority, or orchestration ownership."
     - "Expected future migration: data → state → extracted systems → systems → UI layers → game."
+
 relationships: []
+
 anti_entropy_notes:
   - "Skeleton only."
   - "Do not populate without source-confirmed bounded migration pass."
