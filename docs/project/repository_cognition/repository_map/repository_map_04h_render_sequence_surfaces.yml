@@ -2,12 +2,12 @@
 # Stage 0.3.4B2 — planned empty split scaffold
 
 meta:
-  status: planned_empty_split_file
+  status: populated_source_verified
   stage: 0.3.4B2
   role: "Render sequence surfaces split for Repository Map section 04."
   parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
   authority_model: "Runtime/source files remain truth."
-  population_status: no_surface_records_populated_in_this_pass
+  population_status: first_bounded_render_sequence_surfaces_populated
 
 scope:
   stores:
@@ -16,12 +16,16 @@ scope:
     - game_loop_sequence_boundaries
   domain_notes:
     - "Render sequencing visibility does not imply orchestration framework ownership."
+    - "04h stores ordering, topology and visibility boundaries only."
 
 must_not_store:
   - orchestration_framework
   - gameplay_ownership
   - function_inventory
   - relationship_topology
+  - ecs_semantics
+  - scene_manager_semantics
+  - render_engine_ownership
 
 required_record_shape:
   surface_id:
@@ -45,7 +49,205 @@ required_record_shape:
   notes: []
 
 anti_entropy_notes:
+  - "Keep 04h records ordering-oriented, topology-oriented, visibility-oriented and bounded."
+  - "Do not duplicate 04d/04e/04f topology."
+  - "Do not convert sequencing visibility into engine, ECS, scheduler or scene manager architecture."
   - "Do not populate records until explicitly authorized."
+
+surface_records:
+  - surface_id: surface:sequence:script_load_order
+    surface_type: canvas_surface
+    semantic_domain: render_sequence_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:index_html
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+    source_selectors:
+      - script[src]
+    runtime_roots:
+      - browser_global_runtime
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+    risk_refs:
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - module_loader
+      - framework_architecture
+      - dependency_injection_system
+      - orchestration_framework
+    notes:
+      - "Dependency-sensitive browser-global script loading sequence only."
+      - "index.html defines script order but does not establish module loader or framework architecture."
+
+  - surface_id: surface:sequence:update_phase
+    surface_type: canvas_surface
+    semantic_domain: render_sequence_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:js/game
+    created_by_refs: []
+    updated_by_refs:
+      - function:gameLoop
+    rendered_by_refs: []
+    source_files:
+      - js/game.js
+    source_selectors: []
+    runtime_roots:
+      - gameLoop
+    function_refs:
+      - function:gameLoop
+      - function:updateEnemies
+      - function:updateTowers
+      - function:updateNotifications
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:game
+    risk_refs:
+      - risk:script_order_sensitive
+      - risk:future_generic_render_pressure
+    pressure_refs: []
+    does_not_own:
+      - gameplay_engine
+      - ecs_scheduler
+      - runtime_orchestration
+      - simulation_framework
+    notes:
+      - "Ordered update-phase visibility inside gameLoop() only."
+      - "Sequence visibility does not convert gameLoop() into game engine, ECS scheduler or simulation framework ownership."
+
+  - surface_id: surface:sequence:world_entity_render_phase
+    surface_type: canvas_surface
+    semantic_domain: render_sequence_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:js/game
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:gameLoop
+    source_files:
+      - js/game.js
+    source_selectors: []
+    runtime_roots:
+      - gameLoop
+      - canvas
+      - ctx
+    function_refs:
+      - function:gameLoop
+      - function:drawMap
+      - function:drawRoadTiles
+      - function:drawPathLine
+      - function:drawBase
+      - function:drawTowerRange
+      - function:drawBuildOverlay
+      - function:drawTowers
+      - function:drawEnemies
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:game
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - render_engine
+      - layer_manager
+      - scene_graph
+      - rendering_framework
+      - gameplay_rendering_ownership
+    notes:
+      - "Contiguous world/entity render sequencing visibility only."
+      - "This record represents sequencing boundaries, not ownership of world/entity rendering systems."
+
+  - surface_id: surface:sequence:hud_overlay_dom_sync_phase
+    surface_type: canvas_surface
+    semantic_domain: render_sequence_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:js/game
+    created_by_refs: []
+    updated_by_refs:
+      - function:gameLoop
+    rendered_by_refs:
+      - function:gameLoop
+    source_files:
+      - js/game.js
+    source_selectors: []
+    runtime_roots:
+      - gameLoop
+      - canvas
+      - dom
+    function_refs:
+      - function:gameLoop
+      - function:drawWaveStatus
+      - function:drawSelectedTowerPanel
+      - function:drawInfoPanel
+      - function:drawNotifications
+      - function:drawGameOver
+      - function:updateDomVisibility
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:game
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - hud_framework
+      - dom_framework
+      - ui_engine
+      - notification_framework
+      - gameplay_ui_ownership
+    notes:
+      - "Ordered HUD overlay plus DOM visibility synchronization phase only."
+      - "This record represents visibility ordering, not HUD, DOM or notification framework ownership."
+
+  - surface_id: surface:sequence:frame_request_boundary
+    surface_type: canvas_surface
+    semantic_domain: render_sequence_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:js/game
+    created_by_refs: []
+    updated_by_refs:
+      - function:gameLoop
+    rendered_by_refs: []
+    source_files:
+      - js/game.js
+    source_selectors: []
+    runtime_roots:
+      - browser_animation_frame
+      - gameLoop
+    function_refs:
+      - function:gameLoop
+      - function:requestAnimationFrame
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:game
+    risk_refs:
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - browser_scheduler
+      - timing_engine
+      - framerate_controller
+      - runtime_loop_framework
+    notes:
+      - "requestAnimationFrame boundary visibility only."
+      - "gameLoop() requests the next frame but does not own browser scheduler or framerate controller semantics."
 
 placeholders:
   surface_records: []
