@@ -1,5 +1,5 @@
 meta:
-  status: populated_copy_verified
+  status: populated_source_verified
   stage: "0.3.4B1"
   role: "Runtime bootstrap and browser-global script load-order topology."
   purpose: "Store source-confirmed runtime load-order relationships from index.html."
