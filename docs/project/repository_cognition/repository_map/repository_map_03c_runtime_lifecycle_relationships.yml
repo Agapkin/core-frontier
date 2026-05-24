@@ -3,7 +3,7 @@ meta:
   stage: "0.3.4B1"
   role: "Runtime lifecycle and orchestration delegation topology."
   purpose: "Store high-value lifecycle bridges where orchestration delegates meaningful runtime work."
-  migration_note: "Records copied from repository_map_03_relationships.yml while monolith remains authoritative during migration phase."
+  migration_note: "Active split relationship records verified for runtime lifecycle bridge topology."
   authority_model: "Runtime/source files and repository_manifest.yml remain verification authority."
   non_goals:
     - runtime_authority
@@ -50,7 +50,7 @@ relationships:
       - evidence:source:systems_wave_manager
 
 anti_entropy_notes:
-  - "Skeleton only."
+  - "Populated with bounded source-confirmed records."
   - "Do not populate without source-confirmed bounded migration pass."
   - "Do not convert into call graph."
   - "Do not duplicate inventory layers."
