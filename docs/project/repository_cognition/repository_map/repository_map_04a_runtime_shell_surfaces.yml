@@ -59,7 +59,7 @@ anti_entropy_notes:
 
 surface_records:
   - surface_id: surface:shell:index_html
-    surface_type: runtime_shell
+    surface_type: html_shell
     semantic_domain: runtime_shell_surface
     status: active_runtime
     authority_type: surface_authority
