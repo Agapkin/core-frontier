@@ -67,6 +67,46 @@ relationships:
     notes:
       - "Render function visualizes enemy HP state without owning enemy damage, death or lifecycle flow."
 
+  - relationship_id: rel:drawWaveStatus:visualizes_without_owning:wave_state
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/panels:drawWaveStatus
+    relationship_type: visualizes_without_owning
+    target_ref: state:waveState
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Panel overlay render function visualizes wave state without owning wave lifecycle."
+
+  - relationship_id: rel:drawSelectedTowerPanel:visualizes_without_owning:selected_tower_state
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/panels:drawSelectedTowerPanel
+    relationship_type: visualizes_without_owning
+    target_ref: state:uiState.selectedTower
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Panel overlay render function visualizes selected tower state without owning selected-object actions or lifecycle."
+
+  - relationship_id: rel:drawInfoPanel:visualizes_without_owning:codex_data
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/panels:drawInfoPanel
+    relationship_type: visualizes_without_owning
+    target_ref: data:towerTypes_enemyTypes
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Panel overlay render function visualizes tower/enemy reference data without owning codex data authority."
+
+  - relationship_id: rel:drawGameOver:visualizes_without_owning:game_over_state
+    relationship_group: runtime_render_boundaries
+    source_ref: fn:js/ui/panels:drawGameOver
+    relationship_type: visualizes_without_owning
+    target_ref: state:gameState.gameOver
+    evidence_refs:
+      - evidence:source:ui_panels
+    notes:
+      - "Panel overlay render function visualizes game-over state without owning game-over lifecycle transition."
+
 anti_entropy_notes:
   - "Populated with first bounded render boundary records only."
   - "Do not populate without source-confirmed bounded migration pass."
