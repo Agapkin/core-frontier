@@ -96,3 +96,215 @@ surface_records:
     notes:
       - "Bottom gameplay command DOM panel only."
       - "Created by controls.js and styled through layout.js style factory."
+
+  - surface_id: surface:dom:speed_panel
+    surface_type: dom_panel
+    semantic_domain: dom_control_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/controls
+      - file:js/ui/layout
+    created_by_refs:
+      - function:createSpeedControls
+    updated_by_refs:
+      - function:createDynamicUI
+    rendered_by_refs: []
+    source_files:
+      - js/ui/controls.js
+      - js/ui/layout.js
+    source_selectors:
+      - "#speed-panel"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createUtilityControls
+      - function:createSpeedControls
+      - function:getSpeedPanelStyle
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:ui_layout
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - gameSpeed_runtime_authority
+      - gameplay_update_loop
+      - wave_timing_lifecycle
+    notes:
+      - "Runtime speed control DOM surface only."
+      - "Button callbacks dispatch gameSpeed changes but panel does not own runtime speed authority."
+
+  - surface_id: surface:dom:zoom_panel
+    surface_type: dom_panel
+    semantic_domain: dom_control_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/controls
+      - file:js/ui/layout
+    created_by_refs:
+      - function:createZoomControls
+    updated_by_refs:
+      - function:createDynamicUI
+    rendered_by_refs: []
+    source_files:
+      - js/ui/controls.js
+      - js/ui/layout.js
+    source_selectors:
+      - "#zoom-panel"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createUtilityControls
+      - function:createZoomControls
+      - function:getZoomPanelStyle
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:ui_layout
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - camera_state_authority
+      - render_scaling_implementation
+      - viewport_engine
+    notes:
+      - "Camera zoom command DOM surface only."
+      - "Panel dispatches zoom helper calls but does not own camera state authority."
+
+  - surface_id: surface:dom:build_confirm_panel
+    surface_type: dom_panel
+    semantic_domain: dom_control_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/controls
+      - file:js/ui/layout
+    created_by_refs:
+      - function:createBuildConfirmPanel
+    updated_by_refs:
+      - function:createDynamicUI
+    rendered_by_refs: []
+    source_files:
+      - js/ui/controls.js
+      - js/ui/layout.js
+    source_selectors:
+      - "#build-confirm-panel"
+      - "#build-confirm-text"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createDynamicUI
+      - function:createBuildConfirmPanel
+      - function:getBuildPanelStyle
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:ui_layout
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - placement_validation
+      - build_execution_authority
+      - build_mode_lifecycle
+    notes:
+      - "Build confirm/cancel DOM command surface only."
+      - "Confirm/cancel callbacks do not make this surface placement or build execution authority."
+
+  - surface_id: surface:dom:tower_action_panel
+    surface_type: dom_panel
+    semantic_domain: dom_control_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:js/ui/controls
+      - file:js/ui/layout
+    created_by_refs:
+      - function:createTowerActionPanel
+    updated_by_refs:
+      - function:createDynamicUI
+    rendered_by_refs: []
+    source_files:
+      - js/ui/controls.js
+      - js/ui/layout.js
+    source_selectors:
+      - "#tower-action-panel"
+    runtime_roots:
+      - document.body
+    function_refs:
+      - function:createDynamicUI
+      - function:createTowerActionPanel
+      - function:getTowerActionPanelStyle
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_controls
+      - evidence:source:ui_layout
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - upgrade_system
+      - sell_execution_authority
+      - generic_object_action_framework
+    notes:
+      - "Selected tower/object action DOM surface only."
+      - "Current implementation is tower-specific and does not establish generic object action framework ownership."
+
+  - surface_id: surface:dom:topbar_chips
+    surface_type: dom_panel
+    semantic_domain: dom_control_surface
+    status: active_runtime
+    authority_type: helper_authority
+    owner_refs:
+      - file:js/ui/layout
+      - file:index_html
+    created_by_refs:
+      - function:setupInitialDom
+      - function:createTopbarChip
+    updated_by_refs:
+      - function:updateTopbarVisibility
+    rendered_by_refs: []
+    source_files:
+      - js/ui/layout.js
+      - index.html
+    source_selectors:
+      - "#topbar"
+      - ".resource"
+      - "#wood-chip"
+      - "#stone-chip"
+      - "#food-chip"
+      - "#power-chip"
+      - "#hp-chip"
+      - "#wave-chip"
+      - "#difficulty-chip"
+      - "#zoom-chip"
+    runtime_roots:
+      - "#topbar"
+    function_refs:
+      - function:setupInitialDom
+      - function:createTopbarChip
+      - function:updateTopbarVisibility
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_layout
+      - evidence:source:index_html
+    risk_refs:
+      - risk:selector_drift_risk
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - topbar_root_authority
+      - hud_update_orchestration
+      - gameplay_state
+      - resource_simulation
+    notes:
+      - "Dynamically created topbar HUD chip DOM surfaces."
+      - "Topbar root authority remains with index.html shell surface."
