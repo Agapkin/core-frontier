@@ -1,0 +1,21 @@
+meta:
+  status: planned_empty_split_file
+  stage: 0.3.4B2
+  role: "CSS authority surfaces split for Repository Map section 04."
+  authority_model: "Runtime/source files remain truth."
+scope:
+  stores:
+    - active_inline_css
+    - inactive_css_style_artifact
+    - selector_alignment_pressure
+    - responsive_media_rule_pressure
+must_not_store:
+  - gameplay_ownership
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+anti_entropy_notes:
+  - "No population in this pass."
+placeholders:
+  surface_records: []
