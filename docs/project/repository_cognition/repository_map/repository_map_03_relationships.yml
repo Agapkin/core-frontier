@@ -90,6 +90,56 @@ relationship_groups:
       - mutates
       - mutates_without_owning_shape
 
+split_registry:
+  migration_status: "split_skeleton_created_records_not_moved"
+  current_population_location: "repository_map_03_relationships.yml"
+  future_index_role: "policy_router_after_record_migration"
+  migration_rule: "Copy records byte-for-byte into split files first; verify identity before removing from monolith."
+  split_files:
+    - file: repository_map_03a_infrastructure_relationships.yml
+      role: infrastructure_relationships
+      relationship_groups:
+        - filesystem_truth_infrastructure
+        - repository_map_function_split
+      expected_current_record_count_after_copy: 9
+
+    - file: repository_map_03b_runtime_load_order_relationships.yml
+      role: runtime_load_order_relationships
+      relationship_groups:
+        - runtime_load_order
+      expected_current_record_count_after_copy: 5
+
+    - file: repository_map_03c_runtime_lifecycle_relationships.yml
+      role: runtime_lifecycle_relationships
+      relationship_groups:
+        - runtime_lifecycle_bridges
+      expected_current_record_count_after_copy: 2
+
+    - file: repository_map_03d_validation_relationships.yml
+      role: validation_relationships
+      relationship_groups:
+        - runtime_validation_flow
+      expected_current_record_count_after_copy: 0
+
+    - file: repository_map_03e_ui_callback_relationships.yml
+      role: ui_callback_relationships
+      relationship_groups:
+        - runtime_ui_callback_bridges
+      expected_current_record_count_after_copy: 0
+
+    - file: repository_map_03f_render_boundary_relationships.yml
+      role: render_boundary_relationships
+      relationship_groups:
+        - runtime_render_boundaries
+      expected_current_record_count_after_copy: 0
+
+    - file: repository_map_03g_state_coordinate_hotspot_relationships.yml
+      role: state_coordinate_hotspot_relationships
+      relationship_groups:
+        - runtime_coordinate_mapping
+        - runtime_state_mutation_hotspots
+      expected_current_record_count_after_copy: 0
+
 admission_rules:
   - "Relationship must be source-confirmed or evidence-confirmed."
   - "Relationship must be operationally useful."
