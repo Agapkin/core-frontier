@@ -122,6 +122,3 @@ population_status:
   split_files_created: true
   surface_records_populated: true
   next_safe_step: "Continue with bounded stabilization/audit passes only; do not perform additional population or normalization without explicit authorization."
-
-placeholders:
-  surfaces: []
