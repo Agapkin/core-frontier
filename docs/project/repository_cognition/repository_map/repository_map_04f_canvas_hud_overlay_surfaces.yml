@@ -1,0 +1,252 @@
+# Repository Map 04f Canvas HUD Overlay Surfaces
+# Stage 0.3.4B2 — populated/stabilized split topology layer
+
+meta:
+  status: populated_source_verified
+  stage: 0.3.4B2
+  role: "Canvas HUD overlay surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  authority_model: "Runtime/source files remain truth."
+  population_status: first_bounded_canvas_hud_overlay_surfaces_populated
+
+scope:
+  stores:
+    - wave_status_overlay
+    - selected_tower_info_overlay
+    - codex_overlay
+    - game_over_dim_overlay
+    - notifications
+  domain_notes:
+    - "Notification overlays include lifecycle and queue visibility behavior."
+    - "DOM panel, canvas world, canvas entity and render sequencing records remain outside 04f."
+
+must_not_store:
+  - gameplay_ownership
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+anti_entropy_notes:
+  - "Keep 04f records bounded and source-grounded."
+  - "Do not convert canvas HUD overlay visualization into gameplay/system ownership."
+  - "Do not add or change populated records without explicit bounded authorization."
+
+surface_records:
+  - surface_id: surface:canvas:wave_status_overlay
+    surface_type: canvas_hud_overlay
+    semantic_domain: canvas_hud_overlay_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawWaveStatus
+    source_files:
+      - js/ui/panels.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawWaveStatus
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - wave_lifecycle
+      - enemy_lifecycle
+      - game_speed_authority
+      - gameplay_loop
+    notes:
+      - "Canvas HUD wave/status/speed overlay only."
+      - "Reads wave/enemy/speed values for display without owning lifecycle or loop authority."
+
+  - surface_id: surface:canvas:selected_tower_info_overlay
+    surface_type: canvas_hud_overlay
+    semantic_domain: canvas_hud_overlay_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawSelectedTowerPanel
+    source_files:
+      - js/ui/panels.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawSelectedTowerPanel
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - selected_tower_authority
+      - tower_combat
+      - upgrade_system
+      - selected_object_framework
+    notes:
+      - "Selected tower canvas info overlay only."
+      - "Renders selected tower information without owning selection, combat or upgrade semantics."
+
+  - surface_id: surface:canvas:codex_info_overlay
+    surface_type: canvas_hud_overlay
+    semantic_domain: canvas_hud_overlay_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawInfoPanel
+    source_files:
+      - js/ui/panels.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawInfoPanel
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - tower_data_authority
+      - enemy_data_authority
+      - codex_data_model
+      - categorized_encyclopedia_system
+    notes:
+      - "Canvas codex/info overlay only."
+      - "Displays tower/enemy reference data without owning source data authority or codex model."
+
+  - surface_id: surface:canvas:game_over_dim_overlay
+    surface_type: canvas_hud_overlay
+    semantic_domain: canvas_hud_overlay_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/panels
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawGameOver
+    source_files:
+      - js/ui/panels.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawGameOver
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_panels
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - game_over_lifecycle
+      - retry_restart_execution
+      - dom_game_over_panel
+      - game_state_mutation
+    notes:
+      - "Canvas game-over dim overlay only."
+      - "Draws dim overlay when gameState.gameOver is true without owning game-over lifecycle or DOM panel behavior."
+
+  - surface_id: surface:canvas:notifications_overlay
+    surface_type: notification_overlay
+    semantic_domain: canvas_hud_overlay_surface
+    status: active_runtime
+    authority_type: lifecycle_authority
+    owner_refs:
+      - file:js/ui/notifications
+      - file:js/state
+    created_by_refs:
+      - function:notify
+    updated_by_refs:
+      - function:updateNotifications
+    rendered_by_refs:
+      - function:drawNotifications
+    source_files:
+      - js/ui/notifications.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:notify
+      - function:updateNotifications
+      - function:drawNotifications
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:ui_notifications
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - gameplay_event_causes
+      - wave_lifecycle
+      - placement_lifecycle
+      - game_over_logic
+      - dom_control_creation
+      - notification_framework
+      - priority_system
+      - animation_system
+    notes:
+      - "Canvas notification overlay lifecycle/render surface."
+      - "Notifications include queue, lifetime update and canvas rendering visibility without owning gameplay event causes or a notification framework."

@@ -1,25 +1,35 @@
 # Repository Map Evidence References Layer
-# Stage 0.3.4B1 — source evidence router for Repository Map records
+# Stage 0.3.4B2 — active evidence router / provenance index for Repository Map records
 
 meta:
   status: source_evidence_router_active
-  purpose: "Lightweight source verification index for Repository Map records."
-  scope: "Evidence anchors only; not extraction archive, reasoning archive or synchronization layer."
-  primary_layer: repository_map_03_relationship_split_package
-  verification_model: "Evidence records should verify claims against source/runtime/filesystem truth."
-  discovery_role: "Discovery may help locate source truth, but is archival research/provenance pointer only."
+  purpose: "Lightweight evidence router / provenance index for active Repository Map records."
+  scope: "Evidence anchors and provenance links only; not extraction archive, reasoning archive, synchronization layer or runtime authority."
+  primary_layer: active_repository_map_topology
+  verification_model: "Evidence records route claims toward runtime/source truth, filesystem/path truth and archival provenance without replacing any of them."
+  discovery_role: "Discovery evidence ids remain supported as legacy archival provenance anchors only; Discovery may help locate source truth, but must not be treated as current runtime truth."
 
 source_truth_hierarchy:
-  primary_truth:
-    - runtime_source_files
-    - repository_manifest_yml_for_filesystem_tree
+  live_truth:
+    runtime_truth:
+      - runtime_source_files
+      - source_files_declared_in_evidence_refs
+    filesystem_truth:
+      - repository_manifest_yml_for_filesystem_tree
+      - repository_manifest_yml_for_path_navigation
+  router_layer:
+    - repository_map_06_evidence_refs_yml_as_evidence_router
+    - provenance_index_only
+  archival_provenance:
+    - discovery_archival_evidence
+    - legacy_discovery_evidence_ids
   supporting_layers:
     - repository_map_current_cognition
     - discovery_archival_research_pointer
-  rule: "Discovery may assist locating source truth, but source files / filesystem truth remain verification authority."
+  rule: "Runtime/source files remain live runtime_truth; repository_manifest.yml remains filesystem_truth/path navigation truth; 06 routes evidence/provenance only; Discovery remains archival provenance and must not be treated as current runtime truth."
 
 source_rebinding_plan:
-  status: planned_not_executed
+  status: ongoing_supported_transition_not_record_rewrite
   current_legacy_ids:
     - evidence:discovery:batch01
     - evidence:discovery:batch02
@@ -31,23 +41,26 @@ source_rebinding_plan:
     - evidence:discovery:batch06
     - evidence:discovery:batch07
     - evidence:discovery:batch08
-  future_direction:
-    - "Replace Discovery-style evidence ids with source-based evidence ids in bounded passes."
-    - "Keep discovery_source only as archival pointer where useful."
+  current_source_ids: "Source evidence anchors already exist and support active Repository Map records."
+  doctrine:
+    - "Legacy discovery ids remain supported as discovery_archival_evidence / archival provenance anchors."
+    - "Source evidence ids should be preferred for live verification when a runtime/source claim is checked."
+    - "repository_manifest.yml should be used for filesystem_truth and path navigation truth."
     - "Do not rewrite Discovery files."
-    - "Do not treat Discovery as current truth."
+    - "Do not treat Discovery as current runtime truth."
+    - "Do not treat source rebinding as complete forever; future bounded integrity checks may still add or refine evidence routing when explicitly authorized."
 
 infrastructure_direct_source_evidence:
-  status: planned_not_executed
+  status: active_source_evidence_anchors_exist
   target_files:
     - repository_manifest.yml
     - scripts/generate_repository_manifest.py
     - .github/workflows/update-repository-manifest.yml
-  future_evidence_ids:
+  active_evidence_ids:
     - evidence:source:repository_manifest
     - evidence:source:generate_repository_manifest
     - evidence:source:update_repository_manifest_workflow
-  rule: "These files did not pass through Discovery; their evidence anchors should point directly to source/filesystem truth."
+  rule: "Infrastructure/path evidence should route directly to source/filesystem truth; repository_manifest.yml is filesystem_truth/path navigation truth, while 06 remains an evidence router/provenance index only."
 
 stores:
   - evidence_refs
@@ -246,11 +259,49 @@ evidence_refs:
     source_files:
       - js/ui/canvas_entities.js
 
+  - evidence_id: evidence:source:css_style
+    related_refs:
+      - file:css/style
+    verification_status: verified_against_runtime_source
+    source_files:
+      - css/style.css
+
+  - evidence_id: evidence:source:ui_helpers
+    related_refs:
+      - file:js/ui/helpers
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/helpers.js
+
+  - evidence_id: evidence:source:ui_layout
+    related_refs:
+      - file:js/ui/layout
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/layout.js
+
+  - evidence_id: evidence:source:ui_notifications
+    related_refs:
+      - file:js/ui/notifications
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/ui/notifications.js
+
+  - evidence_id: evidence:source:state
+    related_refs:
+      - file:js/state
+    verification_status: verified_against_runtime_source
+    source_files:
+      - js/state.js
+
 anti_entropy_notes:
-  - "Discovery remains archival evidence, not live operational dependency."
-  - "Evidence references remain lightweight provenance anchors only."
-  - "Source evidence anchors support active Repository Map records, including 03a–03g relationship topology."
-  - "Do not expand into extraction archive or synchronization engine."
+  - "Discovery remains archival evidence / provenance pointer, not live operational dependency or current runtime truth."
+  - "Legacy evidence:discovery:* ids remain supported as discovery_archival_evidence anchors."
+  - "Evidence references remain lightweight provenance anchors and routing records only."
+  - "Source evidence anchors support active Repository Map records beyond a single map layer."
+  - "repository_manifest.yml is filesystem_truth / path navigation truth, not runtime behavior authority."
+  - "Do not expand into extraction archive, synchronization engine or automation logic."
+  - "Do not rewrite Discovery files or use Discovery as current runtime truth."
   - "Source/runtime files and filesystem truth remain verification authority."
 
 placeholders:

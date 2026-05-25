@@ -1,0 +1,251 @@
+# Repository Map 04d Canvas World Surfaces
+# Stage 0.3.4B2 — populated/stabilized split topology layer
+
+meta:
+  status: populated_source_verified
+  stage: 0.3.4B2
+  role: "Canvas world surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  authority_model: "Runtime/source files remain truth."
+  population_status: first_bounded_canvas_world_surfaces_populated
+
+scope:
+  stores:
+    - map_grid
+    - road_path_base
+    - tower_range_overlay
+    - build_placement_overlay
+    - world_render_helpers
+  domain_notes:
+    - "Visualization does not imply gameplay ownership."
+    - "Canvas entity, HUD overlay and render sequencing records remain outside 04d."
+
+must_not_store:
+  - gameplay_ownership
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+anti_entropy_notes:
+  - "Keep 04d records bounded and source-grounded."
+  - "Do not convert canvas world visualization into gameplay/system ownership."
+  - "Do not add or change populated records without explicit bounded authorization."
+
+surface_records:
+  - surface_id: surface:canvas:world_grid
+    surface_type: canvas_world_render
+    semantic_domain: canvas_world_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_world
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawMap
+    source_files:
+      - js/ui/canvas_world.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawMap
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - map_data_authority
+      - camera_state_ownership
+      - gameplay_simulation
+      - render_engine
+    notes:
+      - "Map/background/grid canvas world render surface only."
+      - "Uses camera state during rendering but does not own camera state."
+
+  - surface_id: surface:canvas:road_path_base
+    surface_type: canvas_world_render
+    semantic_domain: canvas_world_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_world
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawRoadTiles
+      - function:drawPathLine
+      - function:drawBase
+    source_files:
+      - js/ui/canvas_world.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawRoadTiles
+      - function:drawPathLine
+      - function:drawBase
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - pathfinding
+      - road_occupancy_rules
+      - base_gameplay_state
+      - enemy_movement
+    notes:
+      - "Road tiles, enemy path line and base marker world render surface only."
+      - "Base marker rendering does not own base gameplay state."
+
+  - surface_id: surface:canvas:tower_range_overlay
+    surface_type: canvas_world_render
+    semantic_domain: canvas_world_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_world
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawTowerRange
+    source_files:
+      - js/ui/canvas_world.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawTowerRange
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - tower_combat
+      - targeting_logic
+      - selected_tower_state
+      - range_calculation_authority
+    notes:
+      - "Tower range/highlight world overlay visualization only."
+      - "Range overlay reads tower data but does not own combat, targeting or selected tower state."
+
+  - surface_id: surface:canvas:build_placement_overlay
+    surface_type: canvas_world_render
+    semantic_domain: canvas_world_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_world
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawBuildTile
+      - function:drawBuildOverlay
+    source_files:
+      - js/ui/canvas_world.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawBuildTile
+      - function:drawBuildOverlay
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - placement_validation
+      - placement_lifecycle
+      - build_execution_authority
+      - occupancy_rules
+      - generic_placeable_object_system
+    notes:
+      - "Hovered/pending build placement visualization only."
+      - "drawBuildTile() may reference validateBuildTile(), but this record treats that as visualization dependency only, not validation ownership."
+
+  - surface_id: surface:canvas:world_render_helpers
+    surface_type: canvas_world_render
+    semantic_domain: canvas_world_surface
+    status: active_runtime
+    authority_type: helper_authority
+    owner_refs:
+      - file:js/ui/canvas_world
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - js/ui/canvas_world.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawRectWorld
+      - function:drawTextWorld
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_world
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - camera_state
+      - coordinate_system_authority
+      - render_engine
+      - layer_manager
+    notes:
+      - "Camera-aware world render helper surface boundary only."
+      - "Helpers use transform utilities but do not own camera state, coordinate authority or a layer manager."

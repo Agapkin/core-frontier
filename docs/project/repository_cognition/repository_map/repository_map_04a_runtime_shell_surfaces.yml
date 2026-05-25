@@ -1,0 +1,197 @@
+# Repository Map 04a Runtime Shell Surfaces
+# Stage 0.3.4B2 — populated/stabilized split topology layer
+
+meta:
+  status: populated_source_verified
+  stage: 0.3.4B2
+  role: "Runtime shell surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  authority_model: "Runtime/source files remain truth."
+  population_status: first_bounded_runtime_shell_surfaces_populated
+
+scope:
+  stores:
+    - index_html_shell
+    - topbar_root
+    - game_root
+    - active_inline_css_shell
+    - shell_sequencing_visibility
+  domain_notes:
+    - "This split is reserved for runtime shell surface topology only."
+    - "index.html shell visibility does not imply gameplay, state or rendering implementation ownership."
+
+must_not_store:
+  - gameplay_logic
+  - runtime_state
+  - rendering_implementation
+  - gameplay_orchestration
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+  - raw_discovery_prose
+  - refactor_commands
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+anti_entropy_notes:
+  - "Keep 04a records bounded and source-grounded."
+  - "Do not store DOM snapshots, CSS dumps or gameplay ownership claims."
+  - "Do not add or change populated records without explicit bounded authorization."
+
+surface_records:
+  - surface_id: surface:shell:index_html
+    surface_type: html_shell
+    semantic_domain: runtime_shell_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:index_html
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+    source_selectors: []
+    runtime_roots:
+      - html
+      - body
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+    risk_refs:
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - gameplay_logic
+      - runtime_state
+      - rendering_implementation
+      - module_architecture
+    notes:
+      - "Browser runtime shell entrypoint, DOM/canvas bootstrap shell and script-loading assembly surface."
+      - "Script loading order is dependency-sensitive browser-global runtime assembly."
+
+  - surface_id: surface:dom:topbar_root
+    surface_type: dom_root
+    semantic_domain: runtime_shell_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:index_html
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+    source_selectors:
+      - "#topbar"
+      - ".topbar"
+    runtime_roots:
+      - "#topbar"
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+    risk_refs:
+      - risk:selector_drift_risk
+    pressure_refs: []
+    does_not_own:
+      - chip_lifecycle
+      - gameplay_state
+      - hud_update_orchestration
+    notes:
+      - "Stable DOM HUD root only."
+
+  - surface_id: surface:dom:game_canvas_root
+    surface_type: canvas_root
+    semantic_domain: runtime_shell_surface
+    status: active_runtime
+    authority_type: surface_authority
+    owner_refs:
+      - file:index_html
+      - file:js/state
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+      - js/state.js
+    source_selectors:
+      - "#game"
+    runtime_roots:
+      - "#game"
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+      - evidence:source:state
+    risk_refs:
+      - risk:script_order_sensitive
+      - risk:selector_drift_risk
+    pressure_refs: []
+    does_not_own:
+      - rendering_implementation
+      - camera_state
+      - gameplay_state
+    notes:
+      - "Shared runtime canvas root defined by index.html and bound by js/state.js."
+      - "js/state.js obtains canvas with document.getElementById(\"game\") and creates the shared 2D context."
+
+  - surface_id: surface:css:inline_shell_authority
+    surface_type: inline_css
+    semantic_domain: runtime_shell_surface
+    status: active_runtime
+    authority_type: active_css_authority
+    owner_refs:
+      - file:index_html
+    created_by_refs:
+      - file:index_html
+    updated_by_refs: []
+    rendered_by_refs: []
+    source_files:
+      - index.html
+    source_selectors:
+      - html
+      - body
+      - canvas
+      - ".topbar"
+      - ".resource"
+      - button
+    runtime_roots: []
+    function_refs: []
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:index_html
+    risk_refs:
+      - risk:css_activation_migration_pressure
+      - risk:selector_drift_risk
+    pressure_refs: []
+    does_not_own:
+      - css_framework
+      - design_system
+      - external_stylesheet_activation
+    notes:
+      - "Active inline CSS authority in index.html."
+      - "css/style.css exists as a separate artifact but is not activated by a link tag in index.html."

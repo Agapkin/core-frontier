@@ -5,7 +5,7 @@ meta:
   package: repository_map
   status: partially_populated
   purpose: "Root manifest and navigation layer for the split Repository Map package."
-  scope: "Compressed operational semantic topology; vocab and file inventory are populated; repository_map_02_functions.yml now operates as transition manifest / historical bridge / lineage anchor for split function inventories 02a–02g; operational function cognition lives in 02a–02g; risks are minimally anchored and evidence routing is source-router-backed for active Repository Map topology; remaining non-function layers are skeleton-only."
+  scope: "Compressed operational semantic topology; vocab and file inventory are populated; repository_map_02_functions.yml now operates as transition manifest / historical bridge / lineage anchor for split function inventories 02a–02g; operational function cognition lives in 02a–02g; relationships operate through an active split topology package; surface cognition lives in populated/stabilized split layers 04a–04h; risks/pressure operate as lightweight cross-map diagnostic anchors; evidence routing operates as active evidence router / provenance index for runtime/source truth, filesystem/path truth and Discovery archival provenance; remaining unsynchronized layers remain explicitly bounded."
 
 package_purpose:
   - "Provide compact navigation across Repository Map package layers."
@@ -33,9 +33,9 @@ layer_separation:
   functions: "Transition manifest / historical bridge / lineage anchor for split function group 02a–02g."
   function_split_files: "Operational split inventories / active semantic function layers for current function cognition."
   relationships: "Policy router and split registry for active relationship topology package."
-  surfaces: "DOM/CSS/canvas/surface topology; skeleton-only."
-  risks_pressure: "Risk and semantic pressure anchors; minimally anchored for file inventory refs only."
-  evidence_refs: "Lightweight source-routed evidence/provenance layer for active Repository Map topology."
+  surfaces: "Policy router and populated/stabilized split topology package for surface cognition; operational surface topology lives in 04a–04h and remains non-runtime-authoritative."
+  risks_pressure: "Lightweight cross-map diagnostic risk/pressure anchor layer; supports file inventory, function inventory and topology/surface visibility refs without becoming refactor/governance/runtime authority."
+  evidence_refs: "Active evidence router / provenance index; routes runtime/source verification, filesystem/path truth and Discovery archival provenance without becoming runtime authority or synchronization engine."
   hotspots: "Cross-layer diagnostic telemetry; skeleton-only."
 
 package_file_registry:
@@ -94,13 +94,37 @@ package_file_registry:
     responsibility: "Coordinate mapping and state mutation hotspot relationships."
     status: active
   - file: repository_map_04_surfaces.yml
-    responsibility: "DOM roots, selectors, canvas overlays and surface authority."
-    status: skeleton_only
+    responsibility: "Policy router, split registry and schema authority for Section 04 surface topology package."
+    status: active_split_router
+  - file: repository_map_04a_runtime_shell_surfaces.yml
+    responsibility: "Runtime shell surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04b_dom_control_surfaces.yml
+    responsibility: "DOM control surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04c_dom_panel_surfaces.yml
+    responsibility: "DOM panel surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04d_canvas_world_surfaces.yml
+    responsibility: "Canvas world surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04e_canvas_entity_surfaces.yml
+    responsibility: "Canvas entity surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04f_canvas_hud_overlay_surfaces.yml
+    responsibility: "Canvas HUD overlay surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04g_css_authority_surfaces.yml
+    responsibility: "CSS authority surface topology and navigation boundaries."
+    status: active
+  - file: repository_map_04h_render_sequence_surfaces.yml
+    responsibility: "Render sequence surface topology and navigation boundaries."
+    status: active
   - file: repository_map_05_risks_pressure.yml
-    responsibility: "Needs-review markers, ambiguity and semantic pressure."
-    status: minimally_anchored_for_file_inventory
+    responsibility: "Lightweight reusable cross-map diagnostic risk/pressure anchors for file inventory, function inventory and surface/topology visibility refs."
+    status: lightweight_cross_map_diagnostic_anchor_layer
   - file: repository_map_06_evidence_refs.yml
-    responsibility: "Evidence references back to Discovery/source verification."
+    responsibility: "Active evidence router and provenance index for runtime/source verification routing, filesystem/path truth routing and Discovery archival provenance support."
     status: source_evidence_router_active
   - file: repository_map_07_hotspots.yml
     responsibility: "Diagnostic cross-index for overloaded/high-pressure areas."
@@ -114,6 +138,10 @@ anti_entropy_notes:
   - "Do not treat partially populated package as runtime authority."
   - "repository_map_02_functions.yml is now a preserved transition manifest / historical bridge, not the operational function inventory authority."
   - "Operational function cognition now lives in split layers 02a–02g."
+  - "Operational surface cognition now lives in split layers 04a–04h and remains topology/navigation-oriented only."
+  - "05 risk/pressure anchors are diagnostic-only and must not become governance, automation or refactor-planning authority."
+  - "06 evidence refs are routing/provenance-only and must not become runtime authority, synchronization engine or Discovery rewrite mechanism."
+  - "Runtime/source files remain authoritative truth; repository_manifest.yml remains filesystem/path truth."
   - "Future integrity/reduction checks may still be required before considering the transition finalized."
 
 placeholders:
@@ -123,6 +151,7 @@ placeholders:
       - repository_map_01_files.yml
       - repository_map_02_functions.yml
       - repository_map_03_relationships.yml
+      - repository_map_04_surfaces.yml
     split_operational_layers:
       - repository_map_02a_foundation_functions.yml
       - repository_map_02b_core_lifecycle_functions.yml
@@ -138,17 +167,26 @@ placeholders:
       - repository_map_03e_ui_callback_relationships.yml
       - repository_map_03f_render_boundary_relationships.yml
       - repository_map_03g_state_coordinate_hotspot_relationships.yml
-    minimally_anchored_layers:
+      - repository_map_04a_runtime_shell_surfaces.yml
+      - repository_map_04b_dom_control_surfaces.yml
+      - repository_map_04c_dom_panel_surfaces.yml
+      - repository_map_04d_canvas_world_surfaces.yml
+      - repository_map_04e_canvas_entity_surfaces.yml
+      - repository_map_04f_canvas_hud_overlay_surfaces.yml
+      - repository_map_04g_css_authority_surfaces.yml
+      - repository_map_04h_render_sequence_surfaces.yml
+    diagnostic_support_layers:
       - repository_map_05_risks_pressure.yml
-    source_router_layers:
+    evidence_router_layers:
       - repository_map_06_evidence_refs.yml
     skeleton_only_layers:
-      - repository_map_04_surfaces.yml
       - repository_map_07_hotspots.yml
   package_warnings:
     - "Repository Map remains non-runtime-authoritative."
-    - "Risks/evidence anchors are supporting records only."
+    - "05 risk/pressure anchors are supporting diagnostics only, not mutation commands or refactor permission."
+    - "06 evidence refs route provenance and verification only; runtime/source files and filesystem truth remain external authority."
     - "Operational function cognition now lives in split inventories 02a–02g."
+    - "Operational surface cognition now lives in split inventories 04a–04h and remains non-runtime-authoritative."
     - "Legacy 02 remains preserved for lineage/provenance and transition safety."
     - "Canonical reduction/removal from legacy 02 has not occurred yet."
     - "Function split transition still requires future integrity/reduction verification before final closure."

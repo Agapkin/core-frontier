@@ -1,0 +1,247 @@
+# Repository Map 04e Canvas Entity Surfaces
+# Stage 0.3.4B2 — populated/stabilized split topology layer
+
+meta:
+  status: populated_source_verified
+  stage: 0.3.4B2
+  role: "Canvas entity surfaces split for Repository Map section 04."
+  parent_router: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  authority_model: "Runtime/source files remain truth."
+  population_status: first_bounded_canvas_entity_surfaces_populated
+
+scope:
+  stores:
+    - towers
+    - enemies
+    - selected_tower_highlight
+    - target_lines
+    - hp_bars
+  domain_notes:
+    - "Render visualization does not imply gameplay subsystem ownership."
+    - "Canvas world, HUD overlay and render sequencing records remain outside 04e."
+
+must_not_store:
+  - ecs_architecture
+  - gameplay_ownership
+  - function_inventory
+  - call_graph_structures
+  - relationship_topology
+
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+anti_entropy_notes:
+  - "Keep 04e records bounded and source-grounded."
+  - "Do not convert canvas entity visualization into gameplay/system ownership."
+  - "Do not add or change populated records without explicit bounded authorization."
+
+surface_records:
+  - surface_id: surface:canvas:tower_entities_render
+    surface_type: canvas_entity_render
+    semantic_domain: canvas_entity_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_entities
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawTowers
+    source_files:
+      - js/ui/canvas_entities.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawTowers
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_entities
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - tower_targeting_logic
+      - tower_combat
+      - projectile_system
+      - selected_object_actions
+      - tower_creation_lifecycle
+    notes:
+      - "Tower body/icon entity visualization only."
+      - "drawTowers() renders tower bodies and icons but does not own tower lifecycle or combat semantics."
+
+  - surface_id: surface:canvas:enemy_entities_render
+    surface_type: canvas_entity_render
+    semantic_domain: canvas_entity_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_entities
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawEnemies
+    source_files:
+      - js/ui/canvas_entities.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawEnemies
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_entities
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - enemy_movement
+      - enemy_update_flow
+      - enemy_spawning
+      - combat_rules
+      - status_effect_system
+    notes:
+      - "Enemy body/shape visualization only."
+      - "drawEnemies() renders enemy shapes but does not own enemy movement, update or spawning flow."
+
+  - surface_id: surface:canvas:selected_tower_highlight
+    surface_type: canvas_entity_render
+    semantic_domain: canvas_entity_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_entities
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawTowers
+    source_files:
+      - js/ui/canvas_entities.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawTowers
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_entities
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - selected_tower_authority
+      - object_selection_logic
+      - interaction_framework
+      - gameplay_actions
+    notes:
+      - "Selected tower highlight visualization only."
+      - "Highlight reads selected tower state but does not own selection authority or interaction framework."
+
+  - surface_id: surface:canvas:target_line_visualization
+    surface_type: canvas_entity_render
+    semantic_domain: canvas_entity_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_entities
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawTowers
+    source_files:
+      - js/ui/canvas_entities.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawTowers
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_entities
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - target_acquisition
+      - targeting_logic
+      - combat_semantics
+      - projectile_flow
+    notes:
+      - "Tower target line visualization only."
+      - "Target lines may visualize tower.target but do not claim target acquisition or targeting ownership."
+
+  - surface_id: surface:canvas:enemy_hp_bars
+    surface_type: canvas_entity_render
+    semantic_domain: canvas_entity_surface
+    status: active_runtime
+    authority_type: render_authority
+    owner_refs:
+      - file:js/ui/canvas_entities
+      - file:js/state
+    created_by_refs: []
+    updated_by_refs: []
+    rendered_by_refs:
+      - function:drawEnemies
+    source_files:
+      - js/ui/canvas_entities.js
+      - js/state.js
+    source_selectors: []
+    runtime_roots:
+      - canvas
+      - ctx
+    function_refs:
+      - function:drawEnemies
+    relationship_refs: []
+    evidence_refs:
+      - evidence:source:canvas_entities
+      - evidence:source:state
+    risk_refs:
+      - risk:future_generic_render_pressure
+      - risk:script_order_sensitive
+    pressure_refs: []
+    does_not_own:
+      - health_authority
+      - damage_system
+      - enemy_death_lifecycle
+      - combat_resolution
+    notes:
+      - "Enemy HP bar visualization only."
+      - "HP bars may visualize enemy.hp but do not own damage, death flow or combat resolution."

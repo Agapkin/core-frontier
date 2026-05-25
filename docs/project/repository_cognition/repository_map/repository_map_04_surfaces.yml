@@ -1,32 +1,124 @@
 # Repository Map Surfaces Layer
+# Stage 0.3.4B2 — policy router / split registry / schema authority for Repository Map section 04
 
 meta:
-  status: skeleton_only
-  purpose: "Inventory of DOM, UI, canvas and render surfaces."
+  status: router_split_registry_stabilized
+  role: "Policy router / split registry / schema authority for Repository Map section 04."
+  stage: 0.3.4B2
+  purpose: "Coordinate future bounded surface topology records without storing runtime authority, CSS dumps, DOM snapshots, function inventory, call graph or relationship topology."
+  primary_layer: repository_map_04_surface_split_package
+  verification_model: "Surface records should verify claims through evidence refs and source/runtime authority."
+  population_status: bounded_population_completed_for_04a_04h
 
-stores:
-  - dom_surfaces
-  - canvas_surfaces
-  - overlay_surfaces
-  - selector_groups
+section_role:
+  stores:
+    - surface_entities
+    - surface_authority_boundaries
+    - dom_surface_boundaries
+    - canvas_surface_boundaries
+    - css_surface_authority_boundaries
+    - overlay_boundaries
+    - render_sequence_visibility
+    - source_grounded_surface_topology
+  does_not_store:
+    - runtime_authority
+    - function_inventory
+    - relationship_topology
+    - risk_pressure_authority
+    - evidence_routing_authority
+    - gameplay_ownership
+    - speculative_future_systems
 
-must_not_store:
-  - full_css_dumps
-  - generated_dom_snapshots
-  - duplicated_runtime_layouts
+split_registry:
+  status: populated_source_verified
+  router_file: docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  split_files:
+    - file: docs/project/repository_cognition/repository_map/repository_map_04a_runtime_shell_surfaces.yml
+      layer_id: repository_map_04a_runtime_shell_surfaces
+      semantic_domain: runtime_shell_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04b_dom_control_surfaces.yml
+      layer_id: repository_map_04b_dom_control_surfaces
+      semantic_domain: dom_control_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04c_dom_panel_surfaces.yml
+      layer_id: repository_map_04c_dom_panel_surfaces
+      semantic_domain: dom_panel_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04d_canvas_world_surfaces.yml
+      layer_id: repository_map_04d_canvas_world_surfaces
+      semantic_domain: canvas_world_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04e_canvas_entity_surfaces.yml
+      layer_id: repository_map_04e_canvas_entity_surfaces
+      semantic_domain: canvas_entity_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04f_canvas_hud_overlay_surfaces.yml
+      layer_id: repository_map_04f_canvas_hud_overlay_surfaces
+      semantic_domain: canvas_hud_overlay_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04g_css_authority_surfaces.yml
+      layer_id: repository_map_04g_css_authority_surfaces
+      semantic_domain: css_authority_surface
+      status: populated_source_verified
+    - file: docs/project/repository_cognition/repository_map/repository_map_04h_render_sequence_surfaces.yml
+      layer_id: repository_map_04h_render_sequence_surfaces
+      semantic_domain: render_sequence_surface
+      status: populated_source_verified
 
-record_shape_example:
-  surface_item:
-    surface_id:
-    surface_type:
-    related_files: []
-    selectors: []
-    runtime_role:
-    evidence_refs: []
+required_record_shape:
+  surface_id:
+  surface_type:
+  semantic_domain:
+  status:
+  authority_type:
+  owner_refs: []
+  created_by_refs: []
+  updated_by_refs: []
+  rendered_by_refs: []
+  source_files: []
+  source_selectors: []
+  runtime_roots: []
+  function_refs: []
+  relationship_refs: []
+  evidence_refs: []
+  risk_refs: []
+  pressure_refs: []
+  does_not_own: []
+  notes: []
+
+record_shape_rules:
+  - "surface_type defines broad surface category."
+  - "semantic_domain defines specialized surface meaning."
+  - "notes must remain bounded and operationally relevant."
+  - "Records must remain parser-readable, scanner-readable and source-grounded."
+  - "Free prose must not replace structured fields."
+
+boundary_rules:
+  must_not_duplicate:
+    - repository_map_02_function_inventory
+    - repository_map_03_relationship_topology
+    - repository_map_05_risk_pressure_authority
+    - repository_map_06_evidence_routing_authority
+  runtime_authority_rule: "Runtime/source files remain execution authority."
+  discovery_rule: "Discovery may assist navigation/provenance only; it is not live truth."
+  relationship_rule: "Surface visibility does not imply relationship ownership."
+  gameplay_rule: "Surface rendering does not imply gameplay ownership."
 
 anti_entropy_notes:
-  - "Keep surface topology compressed."
-  - "Generated UI snapshots belong outside Repository Map v1."
+  - "04 must not store full CSS dumps."
+  - "04 must not store generated DOM snapshots."
+  - "04 must not store function inventory."
+  - "04 must not store call graph structures."
+  - "04 must not store relationship graph structures."
+  - "04 must not store gameplay ownership."
+  - "04 must not store speculative future systems."
+  - "04 must not store raw Discovery prose."
+  - "04 must not store refactor commands."
+  - "04 must remain bounded, source-grounded, machine-readable and topology-oriented."
 
-placeholders:
-  surfaces: []
+population_status:
+  current_pass: bounded_population_completed_for_04a_04h
+  split_files_created: true
+  surface_records_populated: true
+  next_safe_step: "Continue with bounded stabilization/audit passes only; do not perform additional population or normalization without explicit authorization."
