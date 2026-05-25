@@ -53,35 +53,48 @@ Current constraint:
 
 ## 3. 05 Risk Policy Debt
 
-Current status:
+B2 outcome:
 
-* 05 currently operates as minimal risk/pressure anchor layer.
+* 05 doctrine/scope stabilization was completed during B2.
+* 05 now operates as a lightweight reusable cross-map diagnostic risk/pressure anchor layer.
+* The reusable role is clarified for file inventory refs, function inventory refs and topology/surface visibility refs.
+* 05 remains diagnostic-only and non-authoritative.
 
-Unresolved question:
+Remaining future-stage pressure:
 
-* future role of 05 as reusable risk/pressure layer remains unstabilized.
+* full future risk/pressure population remains deferred.
+* future passes may still evaluate whether additional risk/pressure anchors are needed.
+* 05 must continue avoiding broad danger/prose accumulation.
 
-Known pressure:
+Current constraint:
 
-* avoid broad danger/prose accumulation.
+* this stabilized role must not be interpreted as implementation roadmap, refactor permission, governance system or automation/reasoning engine.
 
 ---
 
 ## 4. 06 Source Router Expansion Debt
 
-Current status:
+B2 outcome:
 
-* future 04 audit may reveal missing source evidence anchors.
+* 06 evidence-router/provenance doctrine was stabilized during B2.
+* 06 now explicitly distinguishes runtime/source truth, repository_manifest.yml filesystem/path truth, 06 evidence routing and Discovery archival provenance.
+* Source evidence routing for active 04 topology is stabilized enough to support current Section 04 surface records.
+* Discovery evidence ids remain supported as archival provenance anchors only.
 
-Known pressure:
+Remaining future-stage pressure:
 
-* 06 must remain lightweight source router.
+* broader evidence integrity/rebinding remains deferred.
+* 01 and 02 still contain mixed Discovery/source evidence routing pressure.
+* future bounded integrity checks may still add or refine evidence routing when explicitly authorized.
 
-06 must NOT evolve into:
+Current constraint:
 
-* extraction archive;
-* synchronization engine;
-* reasoning storage layer.
+* 06 must remain a lightweight evidence router / provenance index and must NOT evolve into:
+    * extraction archive;
+    * synchronization engine;
+    * reasoning storage layer;
+    * automation logic;
+    * Discovery rewrite mechanism.
 
 ---
 
