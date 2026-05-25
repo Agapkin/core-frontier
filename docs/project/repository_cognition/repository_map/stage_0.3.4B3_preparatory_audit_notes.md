@@ -34,366 +34,358 @@ compressed_operational_audit_memory
 * предотвращения context drift и semantic overload;
 * накопления compressed operational cognition во время аудита.
 
-Документ используется как:
+⸻
 
-* operational audit checkpoint layer;
-* временная audit memory support layer;
-* bounded repository cognition support artifact.
+3. Human-Readable Audit Rewrite
+
+Главный вывод аудита:
+
+Repository Map не считается проваленным или ошибочным.
+
+Проблема, обнаруженная во время Stage 0.3.4B3:
+нехватка human-readable (человеко-читаемого) operational understanding (операционного понимания системы).
+
+Repository Map начал становиться слишком абстрактным для быстрого понимания человеком.
+
+Поэтому цель текущего rewrite (переписывания):
+
+* сохранить реальные выводы аудита;
+* убрать чрезмерно абстрактный язык;
+* вернуть практическую читаемость;
+* объяснить смысл слоёв простым языком.
 
 ⸻
 
-3. Текущее понимание Stage 0.3.4B3
+4. Что такое Repository Map
 
-Предварительное понимание:
+Repository Map — это НЕ:
 
-Stage 0.3.4B3 рассматривается как:
+* вторая игра;
+* второй runtime (исполняемая игровая система);
+* отдельная метавселенная метаданных.
 
-diagnostic completion / hotspot readiness stage
+Repository Map — это:
 
-Основной фокус:
+человеко-читаемый navigation layer (навигационный слой)
+для понимания runtime code (кода, который реально запускает игру).
 
-* завершение diagnostic maturity Repository Map;
-* stabilization 05 / 06 / 07;
-* hotspot visibility;
-* pressure visibility;
-* evidence integrity visibility;
-* debt crystallization;
-* подготовка groundwork для будущих архитектурных решений.
+Главная задача карты:
+помочь понять:
 
-Stage 0.3.4B3 НЕ является:
-
-* runtime refactor stage;
-* architecture execution stage;
-* decomposition implementation stage;
-* automation implementation stage.
+* где находится логика;
+* как системы связаны;
+* где изменения опасны;
+* что может сломаться;
+* где искать подтверждение выводов.
 
 ⸻
 
-4. Основные источники аудита
+5. Упрощённые роли слоёв
 
-4.1 Repository Manifest
+01 — File Layer
+(где физически лежат файлы)
 
-repository_manifest.yml
+02 — Functional Layer
+(что система умеет делать)
 
-Используется как:
+03 — Relationship Layer
+(что с чем operationally связано — то есть что должно взаимодействовать для работы игры)
 
-* filesystem truth layer;
-* navigation recovery layer;
-* repository traversal authority.
+04 — Surface Layer
+(где игрок визуально сталкивается с логикой)
 
-⸻
+05 — Problem Layer
+(что мешает безопасно менять систему)
 
-4.2 Repository Map
+06 — Evidence Layer
+(чем подтверждаются выводы карты)
 
-Слои:
-
-* 01
-* 02
-* 03
-* 04
-* 05
-* 06
-* 07
-
-Используются как:
-
-* semantic topology layer;
-* operational cognition layer;
-* diagnostic interpretation layer.
+07 — Hotspot Layer
+(слой чувствительных узлов, роль которого пока НЕ стабилизирована окончательно)
 
 ⸻
 
-4.3 Discovery
+6. Выводы по слою 02
 
-Discovery используется как:
+Аудит подтвердил:
 
-* historical excavation layer;
-* provenance/history support layer;
-* reasoning lineage support.
+верхний split (разделение) слоя 02 в целом логически правильный.
 
-Discovery НЕ является:
+Главная проблема:
+не неверная структура,
+а слишком большие semantic containers (контейнеры смыслов).
 
-* runtime authority;
-* canonical topology authority.
+Особенно:
 
-⸻
+* 02b;
+* 02d;
+* 02g.
 
-4.4 Runtime / Source Files
+Это означает:
+внутри одного блока находится слишком много разных смыслов и обязанностей.
 
-Runtime/source files остаются:
+Практический вывод:
 
-* execution authority;
-* final verification authority;
-* actual runtime behavior layer.
+02 может стать основой для future runtime decomposition
+(будущего безопасного разделения игрового кода).
 
-⸻
+Но:
 
-5. Границы preparatory audit
-
-Preparatory audit разрешено:
-
-* проводить topology/repository audits;
-* исследовать pressure zones;
-* исследовать hotspot semantics;
-* исследовать decomposition pressure;
-* исследовать evidence integrity;
-* исследовать semantic overlap;
-* фиксировать debts;
-* фиксировать unresolved audit findings.
-
-Preparatory audit НЕ разрешено:
-
-* выполнять runtime refactor;
-* выполнять Repository Map redesign;
-* выполнять code decomposition;
-* создавать final architecture blueprint;
-* создавать automation systems;
-* принимать runtime restructuring decisions.
+НЕ через мгновенное переписывание игры,
+а через постепенное разделение подгрупп.
 
 ⸻
 
-6. Audit Traversal Structure
+7. Выводы по слою 03
 
-PHASE 0 — Navigation Grounding
+03 — это НЕ:
 
-Цель:
+* простой список зависимостей;
+* простой граф вызовов.
 
-* восстановление repository awareness;
-* восстановление layer awareness;
-* восстановление traversal order.
+03 описывает:
 
-Основные источники:
+что должно взаимодействовать,
+чтобы gameplay systems (игровые системы) работали.
 
-* repository_manifest.yml
-* repository_map_index.yml
+Пример:
 
-⸻
+установка башни требует одновременно:
 
-PHASE 1 — Layer Integrity Audit
+* активной игры;
+* ресурсов;
+* выбранной башни;
+* свободной клетки;
+* события ввода;
+* обновления rendering (отрисовки).
 
-Цель:
+То есть:
 
-* определить текущую зрелость слоёв;
-* определить transitional zones;
-* определить unresolved debt zones.
-
-Основные области:
-
-* layer role verification;
-* cross-layer boundary audit;
-* transitional debt audit.
+03 показывает operational interaction
+(операционное взаимодействие систем).
 
 ⸻
 
-PHASE 2 — Diagnostic Layer Audit
+8. Выводы по слою 04
 
-Основной фокус:
+04 НЕ означает:
 
-* 05
-* 06
-* 07
+«всё что видно на экране».
 
-Цель:
+04 означает:
 
-* stabilise diagnostic understanding;
-* выявить pressure visibility gaps;
-* определить hotspot semantics;
-* определить evidence integrity pressure.
+через какие visual surfaces (визуальные поверхности)
+игрок взаимодействует с логикой.
 
-⸻
+Примеры:
 
-PHASE 3 — Semantic Architecture Audit
+* HUD;
+* UI panels (панели интерфейса);
+* DOM;
+* canvas;
+* overlays (поверхностные интерфейсные слои).
 
-Основной фокус:
+Главная задача 04:
 
-* 02
-* 03
-* 04
-* runtime pressure zones
-
-Цель:
-
-* проверить semantic decomposition quality;
-* определить overloaded domains;
-* определить decomposition pressure visibility.
+понимать,
+какие визуальные зоны могут сломаться
+после изменений runtime.
 
 ⸻
 
-PHASE 4 — B3 Scope Crystallization
+9. Выводы по слою 05
 
-Цель:
+Аудит подтвердил:
 
-* определить фактический scope Stage 0.3.4B3;
-* определить deferred areas;
-* определить B4 preparation boundaries;
-* определить будущий B3 artifact scope.
+05 пока НЕ является завершённой risk architecture
+(архитектурой рисков).
 
-⸻
+Сейчас 05 — это:
 
-7. Operational Checkpoint Discipline
+частично стабилизированный operational problem box
+(операционный контейнер проблем).
 
-Во время аудита допускается:
+05 хранит:
 
-* добавление кратких crystallized findings;
-* фиксация phase progression;
-* фиксация confirmed pressure zones;
-* фиксация unresolved audit questions;
-* фиксация deferred decisions.
+* pressure zones (зоны давления);
+* giant-file pressure (давление огромных файлов);
+* bridge warnings (опасные мосты между системами);
+* synchronization-sensitive areas (зоны чувствительные к синхронизации);
+* проблемы локальной изоляции изменений.
 
-НЕ допускается:
+Главное определение:
 
-* reasoning dumps;
-* длинные brainstorm sections;
-* speculative architecture prose;
-* Discovery-style archival accumulation.
+05 = места,
+где текущая структура мешает:
 
-⸻
+* безопасно менять систему;
+* безопасно расширять систему;
+* локально изолировать изменения.
 
-8. Предварительно подтверждённые findings
+Важно:
 
-На текущий момент предварительно подтверждено:
+у 05 пока НЕТ окончательной строгой taxonomy (таксономии).
 
-* 04 stabilized как split topology package;
-* 05 doctrinally stabilized, но partially populated;
-* 06 stabilized как lightweight evidence router, но transitional pressure остаётся;
-* 07 остаётся skeleton_only;
-* 02 содержит mixed evidence routing;
-* future runtime decomposition pressure уже наблюдается;
-* hotspot semantics пока не crystallized.
+Это должно фиксироваться честно,
+а не скрываться.
 
 ⸻
 
-9. Предварительно подтверждённые deferred areas
+10. Выводы по слою 06
 
-На текущий момент предварительно deferred:
+06 стал одним из самых важных слоёв.
 
-* runtime decomposition planning;
-* architecture blueprint generation;
-* automation/scanner implementation;
-* runtime restructuring decisions;
-* final 02 redesign.
+06 — это НЕ архив ссылок.
 
-⸻
+06 — это routing layer
+(слой маршрутизации)
+к реальным runtime/source/discovery доказательствам.
 
-10. Operational Goal
+Упрощённая модель:
 
-Цель preparatory audit:
+02
+→ 06
+→ runtime/source/discovery
 
-получить достаточную repository-grounded diagnostic visibility для безопасного формирования:
+Без 06:
+GPT начинает гадать.
 
-* Stage 0.3.4B3 contract;
-* B3 debt register;
-* B3 doctrine scope;
-* B3 closure criteria;
-* future B4 preparation boundaries.
-
-⸻
-
-PHASE 1 Checkpoint
-
-Завершённые этапы
-
-PHASE 1A — Проверка ролей слоёв
-
-Проверены:
-
-* 05
-* 06
-* 07
-
-Подтверждено:
-
-* 05 operationally active;
-* 06 operationally usable;
-* 07 remains scaffold-only.
+С 06:
+карта становится navigation system
+(системой навигации)
+к реальному коду.
 
 ⸻
 
-PHASE 1B — Проверка границ между слоями
+11. Выводы по слою 07
 
-Проверены:
+Аудит подтвердил:
 
-* 02 ↔ 03
-* 04 ↔ 03
-* 05 ↔ 07
-* 06 ↔ global topology
+07 сейчас имеет несколько конкурирующих трактовок.
 
-Подтверждено:
+Во время аудита 07 рассматривался как:
 
-* 02/03 boundaries stable;
-* 04 boundaries stable;
-* 06 doctrinally stable;
-* 05 partially absorbs hotspot semantics due to unresolved 07 semantics.
+* overloaded zones (перегруженные зоны);
+* dangerous runtime crossings (опасные пересечения логики);
+* mutation-warning layer (слой предупреждений изменений);
+* growth points (точки роста);
+* integration chains (цепочки интеграции).
 
-⸻
+Главный вывод:
 
-PHASE 1C — Аудит переходных долгов
+роль 07 пока НЕ стабилизирована.
 
-Проверены:
+Практический вывод:
 
-* B2 debt register
-* B2 closure report
+07 пока НЕ критичен для:
 
-Подтверждено:
+* архитектурного blueprinting (проектирования архитектуры);
+* понимания карты;
+* первичной подготовки безопасного refactor.
 
-* 02 transition state intentional;
-* 06 rebinding transition intentional;
-* 07 operational semantics unresolved.
+07 может временно остаться:
 
-⸻
+* placeholder (заглушкой);
+* future layer (будущим слоем);
+* registry (реестром) growth points;
+* registry маршрутов изменений.
 
-Главные pressure-зоны
-
-* unresolved hotspot semantics;
-* 05 ↔ 07 overlap pressure;
-* decomposition visibility pressure;
-* scanner/GPT navigation pressure;
-* semantic graph pressure.
+07 нельзя представлять как окончательно решённую истину.
 
 ⸻
 
-Главный вывод PHASE 1
+12. Главный вывод о «плохом коде»
 
-Stage 0.3.4B3:
-не про глобальное переписывание карты.
+Аудит показал:
 
-Основной фокус:
-стабилизация диагностической семантики перед будущими архитектурными решениями.
+проблема НЕ в том,
+что код «плохой потому что работает».
+
+Настоящая проблема:
+
+change boundaries (границы изменений)
+локализованы плохо.
+
+Safe change (безопасное изменение) — это изменение,
+где заранее понятно:
+
+* какой смысл меняется;
+* какие файлы затрагиваются;
+* что рядом может сломаться;
+* как тестировать;
+* как откатывать изменения.
 
 ⸻
 
-PHASE 2 Checkpoint
+13. Главный вывод о монолите
 
-Проверено
+Monolith (монолитная структура) сам по себе
+НЕ является автоматически плохим.
 
-* 05 как слой рисков и давления;
-* 06 как слой маршрутизации к источникам;
-* 07 как слой будущих перегруженных узлов.
+Проблема появляется,
+когда:
 
-Подтверждено
+много разных смыслов и обязанностей
+смешаны вместе
+без понятных границ.
 
-* 05 рабочий, но частично заходит в зону 07.
-* 06 рабочий и должен оставаться маршрутизатором, а не смысловым центром.
-* 07 пока не готов: нет чётких правил, что считать hotspot.
+⸻
 
-Рабочая гипотеза
+14. Финальный вывод о Repository Map
 
-* 05 = что опасно / где есть давление.
-* 06 = где источник подтверждения.
-* 07 = где сходится много рисков, связей и давления.
+Repository Map НЕ заменяет хорошую архитектуру.
 
-Главный риск
+Repository Map делает хаос:
 
-07 нельзя превращать:
+* видимым;
+* объяснимым;
+* navigable (доступным для навигации).
 
-* в дубль 05;
-* в дубль 03;
-* в общий граф всех связей.
+Формула:
 
-Дальше
+bad code + map
+= понятный хаос
 
-Следующий аудит должен проверить:
+good code + map
+= управляемая система
 
-* реальные кандидаты на hotspot;
-* плотность связей;
-* давление будущего разрезания кода.
+good code without map
+= black box (чёрный ящик)
+для человека,
+который не читает runtime напрямую.
+
+⸻
+
+15. Текущий статус Stage 0.3.4B3
+
+Stage 0.3.4B3 НЕ считается полностью завершённым.
+
+Аудит показал:
+
+* требуется stabilisation (стабилизация) human-readable понимания;
+* 05/06/07 остаются частично нерешёнными;
+* понимание 02 стало значительно яснее;
+* future blueprinting (будущее проектирование архитектуры) теперь возможно.
+
+⸻
+
+16. Практический следующий шаг
+
+Следующий шаг — НЕ немедленное разрезание runtime.
+
+Следующий шаг:
+
+создание human-readable architectural blueprint
+(человеко-читаемого архитектурного плана)
+на базе:
+
+* 02;
+* 03;
+* 04;
+* 05;
+* 06.
+
+Только после стабилизации blueprint:
+
+могут начаться bounded runtime refactor passes
+(ограниченные безопасные этапы переработки runtime).
