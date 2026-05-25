@@ -286,3 +286,76 @@ PHASE 4 — B3 Scope Crystallization
 * B3 doctrine scope;
 * B3 closure criteria;
 * future B4 preparation boundaries.
+
+⸻
+
+PHASE 1 Checkpoint
+
+Завершённые этапы
+
+PHASE 1A — Проверка ролей слоёв
+
+Проверены:
+
+* 05
+* 06
+* 07
+
+Подтверждено:
+
+* 05 operationally active;
+* 06 operationally usable;
+* 07 remains scaffold-only.
+
+⸻
+
+PHASE 1B — Проверка границ между слоями
+
+Проверены:
+
+* 02 ↔ 03
+* 04 ↔ 03
+* 05 ↔ 07
+* 06 ↔ global topology
+
+Подтверждено:
+
+* 02/03 boundaries stable;
+* 04 boundaries stable;
+* 06 doctrinally stable;
+* 05 partially absorbs hotspot semantics due to unresolved 07 semantics.
+
+⸻
+
+PHASE 1C — Аудит переходных долгов
+
+Проверены:
+
+* B2 debt register
+* B2 closure report
+
+Подтверждено:
+
+* 02 transition state intentional;
+* 06 rebinding transition intentional;
+* 07 operational semantics unresolved.
+
+⸻
+
+Главные pressure-зоны
+
+* unresolved hotspot semantics;
+* 05 ↔ 07 overlap pressure;
+* decomposition visibility pressure;
+* scanner/GPT navigation pressure;
+* semantic graph pressure.
+
+⸻
+
+Главный вывод PHASE 1
+
+Stage 0.3.4B3:
+не про глобальное переписывание карты.
+
+Основной фокус:
+стабилизация диагностической семантики перед будущими архитектурными решениями.
