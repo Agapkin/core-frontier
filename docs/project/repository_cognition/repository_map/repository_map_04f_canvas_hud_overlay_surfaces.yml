@@ -1,5 +1,5 @@
 # Repository Map 04f Canvas HUD Overlay Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -50,7 +50,7 @@ required_record_shape:
 anti_entropy_notes:
   - "Keep 04f records bounded and source-grounded."
   - "Do not convert canvas HUD overlay visualization into gameplay/system ownership."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:canvas:wave_status_overlay
@@ -250,6 +250,3 @@ surface_records:
     notes:
       - "Canvas notification overlay lifecycle/render surface."
       - "Notifications include queue, lifetime update and canvas rendering visibility without owning gameplay event causes or a notification framework."
-
-placeholders:
-  surface_records: []
