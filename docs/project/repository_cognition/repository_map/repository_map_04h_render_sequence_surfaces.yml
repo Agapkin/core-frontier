@@ -1,5 +1,5 @@
 # Repository Map 04h Render Sequence Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -52,7 +52,7 @@ anti_entropy_notes:
   - "Keep 04h records ordering-oriented, topology-oriented, visibility-oriented and bounded."
   - "Do not duplicate 04d/04e/04f topology."
   - "Do not convert sequencing visibility into engine, ECS, scheduler or scene manager architecture."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:sequence:script_load_order
@@ -248,6 +248,3 @@ surface_records:
     notes:
       - "requestAnimationFrame boundary visibility only."
       - "gameLoop() requests the next frame but does not own browser scheduler or framerate controller semantics."
-
-placeholders:
-  surface_records: []
