@@ -1,18 +1,23 @@
 # Repository Map Risks and Pressure Layer
-# Stage 0.3.4B — minimal anchors for file inventory refs only
+# Stage 0.3.4B2 — lightweight cross-map diagnostic risk/pressure anchor layer
 
 meta:
-  status: minimally_anchored_for_file_inventory
-  purpose: "Risk markers and semantic pressure anchors referenced by repository_map_01_files.yml."
-  scope: "Supporting anchors only; not full risks/pressure population."
-  primary_layer: repository_map_01_files.yml
+  status: lightweight_cross_map_diagnostic_anchor_layer
+  purpose: "Reusable risk/pressure anchor layer referenced by active Repository Map records across file inventory, function inventory and surface/topology visibility layers."
+  scope: "Lightweight diagnostic anchors and semantic pressure markers only; not full risks/pressure population, generic danger registry, refactor command layer, governance system, automation/reasoning engine or speculative redesign archive."
+  primary_layer: active_repository_map_diagnostic_support
+  supports_refs_from:
+    - file_inventory_refs
+    - function_inventory_refs
+    - topology_surface_visibility_refs
+  authority_model: "Runtime/source files remain authoritative truth; 05 does not own runtime architecture decisions."
 
 stores:
-  - synchronization_risks
-  - semantic_pressure_markers
-  - authority_ambiguity
-  - future_refactor_pressure
-  - file_inventory_anchor_records
+  - reusable_diagnostic_risk_anchors
+  - semantic_pressure_visibility_markers
+  - authority_ambiguity_markers
+  - future_refactor_pressure_visibility
+  - cross_map_support_records
 
 must_not_store:
   - speculative_refactor_plans
@@ -20,11 +25,16 @@ must_not_store:
   - long_historical_reasoning
   - architecture_commands
   - full_risk_analysis
+  - generic_danger_registry
+  - automation_logic
+  - reasoning_engine_state
+  - implementation_roadmap
 
 typing_notes:
-  risk_type_scope: "During this anchor pass, risk_type values may reference either Repository Map vocab risk_types or pressure_marker_types."
-  reason: "01_files.yml uses risk_refs for both diagnostic risks and semantic pressure anchors."
-  constraint: "This is not full risk/pressure population and not a refactor command layer."
+  risk_type_scope: "Risk records may use existing Repository Map vocab risk_types and pressure_marker_types where current active map layers already reference them."
+  risk_refs_rule: "risk_refs are diagnostic anchors only; they do not authorize mutation, refactor, redesign or runtime interpretation changes."
+  pressure_refs_rule: "pressure_refs are visibility markers only; they preserve semantic pressure without converting it into implementation roadmap or automatic refactor permission."
+  constraint: "This is lightweight cross-map diagnostic support, not full risk/pressure population and not a refactor command layer."
 
 risks:
   - risk_id: risk:duplicate-updateResponsiveLayout
@@ -158,9 +168,12 @@ risks:
 
 anti_entropy_notes:
   - "Risks are diagnostic markers, not mutation commands."
-  - "This file currently anchors only refs used by repository_map_01_files.yml."
-  - "Do not convert pressure into automatic refactor logic."
-  - "Do not expand this pass into full risk analysis."
+  - "05 supports active cross-map diagnostic anchoring for file inventory, function inventory and topology/surface visibility refs."
+  - "risk_refs do not imply automatic refactor permission."
+  - "pressure_refs preserve visibility only and must not become implementation roadmap."
+  - "Runtime/source files remain authoritative truth; 05 does not own runtime architecture decisions."
+  - "Do not convert 05 into a generic danger registry, governance layer, refactor planner or automation/reasoning engine."
+  - "Do not expand this pass into full risk analysis or speculative redesign archive."
 
 placeholders:
   future_risk_population: []
