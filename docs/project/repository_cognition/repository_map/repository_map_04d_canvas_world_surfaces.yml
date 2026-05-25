@@ -1,5 +1,5 @@
 # Repository Map 04d Canvas World Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -50,7 +50,7 @@ required_record_shape:
 anti_entropy_notes:
   - "Keep 04d records bounded and source-grounded."
   - "Do not convert canvas world visualization into gameplay/system ownership."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:canvas:world_grid
@@ -249,6 +249,3 @@ surface_records:
     notes:
       - "Camera-aware world render helper surface boundary only."
       - "Helpers use transform utilities but do not own camera state, coordinate authority or a layer manager."
-
-placeholders:
-  surface_records: []
