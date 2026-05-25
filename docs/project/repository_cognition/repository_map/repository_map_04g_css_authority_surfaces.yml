@@ -1,5 +1,5 @@
 # Repository Map 04g CSS Authority Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -51,7 +51,7 @@ anti_entropy_notes:
   - "Keep 04g records bounded and source-grounded."
   - "Do not dump CSS rules or enumerate all selectors."
   - "Do not convert CSS visibility into design-system, framework or gameplay ownership."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:css:inline_runtime_styles
@@ -226,6 +226,3 @@ surface_records:
       - "Responsive media-rule visibility surface only."
       - "Responsive media rules are direct CSS media rules, not a responsive framework."
       - "This record preserves media-rule topology visibility without dumping full CSS blocks."
-
-placeholders:
-  surface_records: []
