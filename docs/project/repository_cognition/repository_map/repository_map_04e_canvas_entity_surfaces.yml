@@ -1,5 +1,5 @@
 # Repository Map 04e Canvas Entity Surfaces
-# Stage 0.3.4B2 — planned empty split scaffold
+# Stage 0.3.4B2 — populated/stabilized split topology layer
 
 meta:
   status: populated_source_verified
@@ -51,7 +51,7 @@ required_record_shape:
 anti_entropy_notes:
   - "Keep 04e records bounded and source-grounded."
   - "Do not convert canvas entity visualization into gameplay/system ownership."
-  - "Do not populate records until explicitly authorized."
+  - "Do not add or change populated records without explicit bounded authorization."
 
 surface_records:
   - surface_id: surface:canvas:tower_entities_render
@@ -245,6 +245,3 @@ surface_records:
     notes:
       - "Enemy HP bar visualization only."
       - "HP bars may visualize enemy.hp but do not own damage, death flow or combat resolution."
-
-placeholders:
-  surface_records: []
