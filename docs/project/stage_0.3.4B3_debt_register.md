@@ -422,3 +422,95 @@ js/camera/camera_controller.js
 * добавлять vocab “на всякий случай”;
 * превращать карту в гигантскую schema-system;
 * плодить поля без operational необходимости.
+
+⸻
+
+7. Долг синхронизации evidence после Pass 01A
+
+⸻
+
+Текущее состояние
+
+После Stage 0.3.4B3 / Pass 01A
+слой 07 теперь фиксирует:
+
+* hotspot:js_game:input_camera_loop_density;
+* evidence:source:game;
+* source_boundary для js/game.js;
+* runtime/source verification route.
+
+То есть 07 уже подтверждает,
+что risk:input_camera_loop_density
+имеет source-level подтверждение через js/game.js.
+
+⸻
+
+В чём проблема
+
+Связанные слои карты пока не синхронизированы:
+
+* repository_map_01_files.yml всё ещё опирается на discovery evidence only;
+* repository_map_05_risks_pressure.yml всё ещё опирается на discovery evidence only;
+* source-level evidence уже подтверждено в 07, но ещё не отражено в 01/05.
+
+Из-за этого:
+
+* 07 содержит более свежую evidence-картину;
+* 01 и 05 остаются в transition state;
+* карта временно содержит known synchronization gap.
+
+⸻
+
+Пример
+
+07 содержит:
+
+evidence:source:game
+
+для:
+
+risk:input_camera_loop_density
+
+Но 05 пока не содержит соответствующего source evidence update
+для этого риска.
+
+⸻
+
+Главный вывод
+
+Это не ошибка Pass 01A.
+
+Это отдельный debt:
+
+синхронизировать evidence refs между 07, 01 и 05
+после подтверждения source-level boundary.
+
+⸻
+
+Возможное решение
+
+В будущем потребуется отдельный bounded synchronization pass:
+
+07
+↓
+05 risk evidence update
+↓
+01 file evidence update
+↓
+06 evidence consistency check
+
+⸻
+
+Важное ограничение
+
+В текущем pass нельзя:
+
+* изменять repository_map_01_files.yml;
+* изменять repository_map_05_risks_pressure.yml;
+* смешивать debt-register update с Repository Map YAML mutation.
+
+Сейчас допустимо только:
+
+* зафиксировать debt;
+* оставить 01/05 без изменений;
+* выполнить синхронизацию отдельной bounded задачей позже.
