@@ -1,22 +1,31 @@
 # Repository Map Risks and Pressure Layer
-# Stage 0.3.4B2 — lightweight cross-map diagnostic risk/pressure anchor layer
+# Stage 0.3.4B3 — stabilized diagnostic pressure anchor layer
 
 meta:
-  status: lightweight_cross_map_diagnostic_anchor_layer
-  purpose: "Reusable risk/pressure anchor layer referenced by active Repository Map records across file inventory, function inventory and surface/topology visibility layers."
-  scope: "Lightweight diagnostic anchors and semantic pressure markers only; not full risks/pressure population, generic danger registry, refactor command layer, governance system, automation/reasoning engine or speculative redesign archive."
+  status: stabilized_diagnostic_pressure_anchor_layer
+  stage: "0.3.4B3"
+  purpose: "Reusable diagnostic pressure anchor layer referenced by active Repository Map records across file inventory, function inventory, topology and surface visibility layers."
+  scope: "Diagnostic pressure anchors, cross-layer pressure convergence, admission basis, survivability status, ambiguity status, escalation boundaries and future index anchor hints only."
   primary_layer: active_repository_map_diagnostic_support
+  authority_model: "Runtime/source files remain authoritative truth; 05 does not own runtime architecture decisions."
+  index_readiness: "Prepared for future index-layer readability, but not an index runtime, parser, scanner, automation engine or decision system."
   supports_refs_from:
     - file_inventory_refs
     - function_inventory_refs
     - topology_surface_visibility_refs
-  authority_model: "Runtime/source files remain authoritative truth; 05 does not own runtime architecture decisions."
+    - evidence_refs
+    - future_hotspot_refs
 
 stores:
-  - reusable_diagnostic_risk_anchors
+  - diagnostic_pressure_anchors
   - semantic_pressure_visibility_markers
   - authority_ambiguity_markers
-  - future_refactor_pressure_visibility
+  - cross_layer_pressure_convergence
+  - admission_basis
+  - survivability_status
+  - ambiguity_status
+  - escalation_boundaries
+  - future_index_anchor_hints
   - cross_map_support_records
 
 must_not_store:
@@ -27,153 +36,772 @@ must_not_store:
   - full_risk_analysis
   - generic_danger_registry
   - automation_logic
+  - parser_logic
   - reasoning_engine_state
   - implementation_roadmap
+  - index_runtime_logic
+  - scanner_contract
+  - final_schema_authority
 
-typing_notes:
-  risk_type_scope: "Risk records may use existing Repository Map vocab risk_types and pressure_marker_types where current active map layers already reference them."
-  risk_refs_rule: "risk_refs are diagnostic anchors only; they do not authorize mutation, refactor, redesign or runtime interpretation changes."
-  pressure_refs_rule: "pressure_refs are visibility markers only; they preserve semantic pressure without converting it into implementation roadmap or automatic refactor permission."
-  constraint: "This is lightweight cross-map diagnostic support, not full risk/pressure population and not a refactor command layer."
+record_shape:
+  risk_id: "Stable risk/pressure anchor id. Existing ids must not be renamed without explicit migration."
+  risk_type: "Current Repository Map risk vocabulary type or local pressure risk type pending vocab normalization."
+  pressure_family: "Higher-level pressure family used for 05 admission grouping."
+  related_refs: "Repository Map refs affected by or supporting this pressure."
+  source_layers: "Lower Repository Map layers from which the pressure emerged."
+  admission_basis: "Why this signal deserves 05 visibility."
+  survivability_status: "strong | medium | weak | unresolved"
+  ambiguity_status: "clear | ambiguity_preserved | overinference_risk"
+  escalation_boundary: "What this pressure does not authorize."
+  future_layer_refs: "Soft routing hints toward 06/07/08; not execution authorization."
+  index_anchor_hints: "Hints for future index consumption; not current index behavior."
+  status: "Current stabilization/admission state."
+  severity: "low | medium | high"
+  short_description: "Compact pressure statement."
+  evidence_refs: "Evidence/provenance refs."
+  notes: "Bounded explanatory notes."
+
+pressure_families:
+  runtime_density_pressure:
+    description: "Pressure from lifecycle density, orchestration density, update/render sequencing or runtime concentration."
+  bridge_pressure:
+    description: "Pressure from callback, UI/runtime, command dispatch or cross-domain bridge behavior."
+  render_boundary_pressure:
+    description: "Pressure from render-only or visualization-only boundaries that must not be collapsed into gameplay ownership."
+  synchronization_pressure:
+    description: "Pressure from load order, selector alignment, CSS/HTML/JS activation or runtime synchronization dependency."
+  future_architecture_pressure:
+    description: "Pressure from visible growth vectors where current implementation remains narrower than likely future needs."
+  cognition_distortion_pressure:
+    description: "Pressure from recurring false inference risks in GPT-mediated repository cognition."
+  topology_collapse_pressure:
+    description: "Pressure from reasoning attempts to collapse split topology into premature monolithic or canonical subsystem structures."
+  admission_instability_pressure:
+    description: "Pressure from unstable/manual candidate admission and non-systematic 05 population behavior."
 
 risks:
   - risk_id: risk:duplicate-updateResponsiveLayout
     risk_type: duplicate_helper_name_pressure
+    pressure_family: synchronization_pressure
     related_refs:
       - file:js/state
       - file:js/ui/layout
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+    admission_basis:
+      - anchored_from_existing_file_inventory
+      - naming_authority_ambiguity
+      - responsive_layout_boundary_visibility
+    survivability_status: weak
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_architecture_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+    index_anchor_hints:
+      - requires_name_collision_lookup
+      - requires_source_verification_before_change
+      - preserve_state_layout_authority_boundary
     status: anchored_from_file_inventory
     severity: medium
     short_description: "Responsive layout update naming/authority requires care because file inventory references duplicate-layout pressure."
     evidence_refs:
       - evidence:discovery:batch04
       - evidence:discovery:batch06
+    notes:
+      - "Currently weaker than core B3 pressure archetypes; preserved because active Repository Map records reference this id."
 
   - risk_id: risk:lifecycle_density_pressure
     risk_type: lifecycle_density_pressure
+    pressure_family: runtime_density_pressure
     related_refs:
       - file:js/systems/systems
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+    admission_basis:
+      - cross_layer_convergence
+      - recurring_b3_observation
+      - source_verified_pressure
+      - lifecycle_density_visibility
+    survivability_status: strong
+    ambiguity_status: clear
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_architecture_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_cross_layer_lookup
+      - requires_source_verification
+      - requires_hotspot_confirmation
+    status: stabilized_pressure_anchor
     severity: high
     short_description: "systems.js remains lifecycle-heavy and should not be treated as a clean shell."
     evidence_refs:
       - evidence:discovery:batch01
+    notes:
+      - "Strong survivable pressure anchor; current visibility does not authorize split/refactor without 07 verification and 08 bounded decision."
 
   - risk_id: risk:mixed_responsibility
     risk_type: mixed_responsibility
+    pressure_family: runtime_density_pressure
     related_refs:
       - file:js/systems/systems
       - file:js/ui/panels
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 04_surface_boundary
+    admission_basis:
+      - anchored_from_existing_file_inventory
+      - multi_semantic_responsibility_visibility
+      - mutation_sensitive_area
+    survivability_status: medium
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_generic_bucket
+      - not_architecture_decision
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+    index_anchor_hints:
+      - requires_responsibility_split_lookup
+      - avoid_generic_mixed_responsibility_bucket
+      - requires_source_verification_before_escalation
+    status: needs_refinement
     severity: high
     short_description: "Referenced files carry multiple semantic responsibilities and require inspection before mutation."
     evidence_refs:
       - evidence:discovery:batch01
       - evidence:discovery:batch07
+    notes:
+      - "Useful but broad. Future stabilization should prevent this type from becoming an entropy collector."
 
   - risk_id: risk:input_camera_loop_density
     risk_type: mixed_responsibility
+    pressure_family: runtime_density_pressure
     related_refs:
       - file:js/game
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - cross_layer_convergence
+      - recurring_b3_observation
+      - source_verified_pressure
+      - orchestration_density_visibility
+    survivability_status: strong
+    ambiguity_status: clear
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_camera_subsystem_decision
+      - not_input_framework_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_cross_layer_lookup
+      - requires_source_verification
+      - preserve_input_camera_loop_boundary
+      - avoid_camera_subsystem_hallucination
+    status: stabilized_pressure_anchor
     severity: high
     short_description: "game.js combines input routing, camera helpers, runtime bootstrap and gameLoop sequencing."
     evidence_refs:
       - evidence:discovery:batch01
+    notes:
+      - "Strong B3 pressure archetype. Does not imply existing input framework, camera subsystem, scene manager or game engine."
 
   - risk_id: risk:future_placeable_object_pressure
     risk_type: future_placeable_object_pressure
+    pressure_family: future_architecture_pressure
     related_refs:
       - file:js/systems/systems_placement
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+    admission_basis:
+      - future_growth_vector
+      - tower_specific_current_boundary
+      - recurring_b3_observation
+    survivability_status: medium
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_generic_object_system_decision
+      - not_implementation_roadmap
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_growth_vector_lookup
+      - preserve_tower_specific_current_boundary
+      - verify_before_generic_object_system_inference
+    status: stabilized_pressure_anchor
     severity: medium
     short_description: "Placement currently remains tower-specific while future placeable-object pressure is visible."
     evidence_refs:
       - evidence:discovery:batch02
+    notes:
+      - "Future pressure marker only; does not mean generic placed-object architecture exists."
 
   - risk_id: risk:selected_object_architecture_not_implemented
     risk_type: selected_object_architecture_not_implemented
+    pressure_family: future_architecture_pressure
     related_refs:
       - file:js/systems/systems_selected_object_actions
       - file:js/ui/panels
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 04_surface_boundary
+    admission_basis:
+      - selected_object_boundary_visibility
+      - future_growth_vector
+      - cross_layer_convergence
+    survivability_status: medium
+    ambiguity_status: overinference_risk
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_existing_architecture
+      - not_planned_system
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_selected_object_boundary_lookup
+      - preserve_not_implemented_not_planned_system_distinction
+      - verify_before_architecture_inference
+    status: ambiguity_preserved
     severity: medium
     short_description: "Selected object semantics exist, but generic selected-object architecture is not implemented."
     evidence_refs:
       - evidence:discovery:batch02
       - evidence:discovery:batch07
+    notes:
+      - "Valid future pressure, but must remain explicitly separated from claims that a generic selected-object architecture exists."
 
   - risk_id: risk:bridge_pressure
     risk_type: bridge_pressure
+    pressure_family: bridge_pressure
     related_refs:
       - file:js/ui/controls
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - cross_layer_convergence
+      - recurring_b3_observation
+      - callback_bridge_visibility
+      - non_ownership_boundary_visibility
+    survivability_status: strong
+    ambiguity_status: clear
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_gameplay_authority
+      - not_command_router_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_callback_bridge_lookup
+      - requires_ownership_boundary_preservation
+      - avoid_callback_to_gameplay_authority_collapse
+    status: stabilized_pressure_anchor
     severity: medium
     short_description: "Controls layer bridges DOM callbacks to runtime commands without owning gameplay logic."
     evidence_refs:
       - evidence:discovery:batch03a
+    notes:
+      - "Strong B3 pressure archetype; useful for future index filters that distinguish callback wiring from gameplay authority."
 
   - risk_id: risk:future_generic_render_pressure
     risk_type: future_generic_render_pressure
+    pressure_family: render_boundary_pressure
     related_refs:
       - file:js/ui/canvas_world
       - file:js/ui/canvas_entities
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - render_only_boundary_visibility
+      - recurring_b3_observation
+      - future_growth_vector
+      - cross_layer_convergence
+    survivability_status: strong
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_render_engine_decision
+      - not_gameplay_authority
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_render_boundary_lookup
+      - preserve_visualization_not_gameplay_ownership
+      - avoid_render_engine_hallucination
+    status: stabilized_pressure_anchor
     severity: medium
     short_description: "Render files are visualization-only, while future generic render pressure is visible."
     evidence_refs:
       - evidence:discovery:batch03b
       - evidence:discovery:batch03c
+    notes:
+      - "Strong B3 render-boundary anchor; future pressure only, not evidence of existing render framework."
 
   - risk_id: risk:notification_framework_not_implemented
     risk_type: notification_framework_not_implemented
+    pressure_family: future_architecture_pressure
     related_refs:
       - file:js/ui/notifications
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 04_surface_boundary
+    admission_basis:
+      - anchored_from_existing_file_inventory
+      - not_implemented_boundary_visibility
+      - notification_lifecycle_visibility
+    survivability_status: weak
+    ambiguity_status: overinference_risk
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_existing_framework
+      - not_planned_system
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+    index_anchor_hints:
+      - preserve_not_implemented_not_planned_system_distinction
+      - verify_before_framework_inference
+      - avoid_notification_framework_hallucination
+    status: ambiguity_preserved
     severity: low
     short_description: "Notification layer is compact lifecycle/render logic; full framework/priority/animation systems are not implemented."
     evidence_refs:
       - evidence:discovery:batch06
+    notes:
+      - "Preserved due to active references. Current B3 methodology treats this as a weak/ambiguous pressure anchor and a guardrail against framework over-inference."
 
   - risk_id: risk:script_order_sensitive
     risk_type: synchronization_sensitive
+    pressure_family: synchronization_pressure
     related_refs:
       - file:index_html
-    status: anchored_from_file_inventory
+    source_layers:
+      - 01_file_boundary
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - source_verified_pressure
+      - load_order_dependency_visibility
+      - recurring_b3_observation
+      - sequencing_boundary_visibility
+    survivability_status: strong
+    ambiguity_status: clear
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_module_loader_decision
+      - not_framework_architecture
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_script_order_lookup
+      - requires_source_verification
+      - preserve_browser_global_runtime_boundary
+    status: stabilized_pressure_anchor
     severity: high
     short_description: "Browser-global runtime depends on index.html script loading order."
     evidence_refs:
       - evidence:discovery:batch08
+    notes:
+      - "Strong synchronization pressure anchor; does not imply module loader, dependency injection system or framework architecture."
 
   - risk_id: risk:css_activation_migration_pressure
     risk_type: css_activation_migration_pressure
+    pressure_family: synchronization_pressure
     related_refs:
       - file:css/style
+    source_layers:
+      - 01_file_boundary
+      - 04_surface_boundary
+    admission_basis:
+      - inactive_surface_artifact_visibility
+      - future_activation_vector
+      - selector_alignment_dependency
+    survivability_status: medium
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_css_activation_decision
+      - not_runtime_truth
+      - not_implementation_roadmap
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+    index_anchor_hints:
+      - requires_css_activation_lookup
+      - requires_selector_alignment_lookup
+      - preserve_active_authority_not_inactive_artifact_distinction
     status: anchored_from_file_inventory
     severity: medium
     short_description: "css/style.css is a repository surface artifact and requires care if activated later."
     evidence_refs:
       - evidence:discovery:batch08
+    notes:
+      - "Dormant migration pressure; valid only as future activation visibility, not activation authorization."
 
   - risk_id: risk:selector_drift_risk
     risk_type: selector_drift_risk
+    pressure_family: synchronization_pressure
     related_refs:
       - file:css/style
       - file:index_html
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 04_surface_boundary
+    admission_basis:
+      - selector_alignment_dependency
+      - css_html_js_surface_sync
+      - anchored_from_existing_file_inventory
+    survivability_status: medium
+    ambiguity_status: clear
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_css_activation_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+    index_anchor_hints:
+      - requires_selector_lookup
+      - requires_dom_root_lookup
+      - requires_js_created_ui_lookup
     status: anchored_from_file_inventory
     severity: medium
     short_description: "CSS selectors/classes/ids must stay aligned with HTML roots and JS-created UI if stylesheet is activated."
     evidence_refs:
       - evidence:discovery:batch08
+    notes:
+      - "Valid surface synchronization pressure; future checks should route through evidence/provenance and hotspot verification."
+
+  - risk_id: risk:ownership_inference_pressure
+    risk_type: hallucination_risk
+    pressure_family: cognition_distortion_pressure
+    related_refs:
+      - file:js/game
+      - file:js/state
+      - file:js/systems/systems_placement
+      - file:js/ui/controls
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - recurring_b3_observation
+      - cross_layer_convergence
+      - manual_cognition_guardrail
+      - false_inference_risk
+    survivability_status: strong
+    ambiguity_status: overinference_risk
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_architecture_decision
+      - not_runtime_truth
+      - not_ownership_assignment
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_ownership_boundary_lookup
+      - requires_mutation_without_ownership_detection
+      - preserve_calls_not_owns_distinction
+      - preserve_mutation_not_state_shape_ownership_distinction
+    status: new_b3_cognition_pressure_anchor
+    severity: high
+    short_description: "Repository cognition repeatedly risks inferring ownership or authority from calls, mutation, bridge behavior or downstream state interaction."
+    evidence_refs:
+      - evidence:stage_0.3.4B3_manual_passes
+    notes:
+      - "New B3 cognition-pressure anchor. It captures recurring anti-overinference guardrails discovered during manual stabilization passes."
+
+  - risk_id: risk:render_gameplay_collapse_pressure
+    risk_type: hallucination_risk
+    pressure_family: cognition_distortion_pressure
+    related_refs:
+      - file:js/ui/canvas_world
+      - file:js/ui/canvas_entities
+      - file:js/ui/panels
+      - file:js/ui/notifications
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+    admission_basis:
+      - recurring_b3_observation
+      - render_only_boundary_visibility
+      - manual_cognition_guardrail
+      - false_inference_risk
+    survivability_status: strong
+    ambiguity_status: overinference_risk
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_gameplay_authority
+      - not_render_engine_decision
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_render_boundary_lookup
+      - preserve_visualization_not_gameplay_ownership
+      - avoid_targeting_damage_authority_inference_from_render
+    status: new_b3_cognition_pressure_anchor
+    severity: high
+    short_description: "Render and visualization surfaces repeatedly risk being misread as gameplay, targeting, damage or selected-object authority."
+    evidence_refs:
+      - evidence:stage_0.3.4B3_manual_passes
+    notes:
+      - "New B3 cognition-pressure anchor. Supports future index filters separating visualization from gameplay ownership."
+
+  - risk_id: risk:utility_framework_crystallization_pressure
+    risk_type: hallucination_risk
+    pressure_family: cognition_distortion_pressure
+    related_refs:
+      - file:js/ui/helpers
+      - file:js/ui/layout
+      - file:js/ui/controls
+      - file:js/ui/notifications
+      - file:js/game
+    source_layers:
+      - 01_file_boundary
+      - 02_function_semantics
+      - 04_surface_boundary
+    admission_basis:
+      - recurring_b3_observation
+      - not_implemented_boundary_visibility
+      - manual_cognition_guardrail
+      - false_inference_risk
+    survivability_status: strong
+    ambiguity_status: overinference_risk
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_existing_framework
+      - not_planned_system
+      - not_runtime_truth
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_not_implemented_marker_lookup
+      - preserve_utility_not_framework_distinction
+      - preserve_not_implemented_not_planned_system_distinction
+    status: new_b3_cognition_pressure_anchor
+    severity: medium
+    short_description: "Reusable helpers, local utilities, zoom controls, responsive recalculation and notifications risk being misread as existing framework architecture."
+    evidence_refs:
+      - evidence:stage_0.3.4B3_manual_passes
+    notes:
+      - "New B3 cognition-pressure anchor. It prevents helper accumulation from crystallizing into false framework conclusions."
+
+  - risk_id: risk:topology_reconstruction_pressure
+    risk_type: stale_cognition_risk
+    pressure_family: topology_collapse_pressure
+    related_refs:
+      - file:repository_map_index
+      - file:repository_map_02_functions
+      - file:repository_map_03_relationships
+      - file:repository_map_04_surfaces
+    source_layers:
+      - 02_function_semantics
+      - 03_topology
+      - 04_surface_boundary
+      - repository_map_manifest
+    admission_basis:
+      - recurring_b3_observation
+      - topology_expectation_mismatch
+      - split_topology_preservation
+      - manual_cognition_guardrail
+    survivability_status: strong
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_split_collapse_authorization
+      - not_schema_finalization
+      - not_index_runtime_logic
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_manifest_lookup
+      - preserve_split_topology
+      - avoid_monolithic_inventory_reconstruction
+      - verify_actual_file_names_before_reasoning
+    status: new_b3_cognition_pressure_anchor
+    severity: medium
+    short_description: "Repository cognition repeatedly attempts to reconstruct monolithic or expected semantic topology that may not match the materialized split Repository Map package."
+    evidence_refs:
+      - evidence:stage_0.3.4B3_manual_passes
+      - evidence:source:repository_map_index
+    notes:
+      - "New B3 cognition-pressure anchor. It protects split topology and manifest truth from memory-based reconstruction drift."
+
+  - risk_id: risk:admission_instability_pressure
+    risk_type: stale_cognition_risk
+    pressure_family: admission_instability_pressure
+    related_refs:
+      - file:repository_map_05_risks_pressure
+      - file:repository_map_vocab
+    source_layers:
+      - 05_pressure_synthesis
+      - repository_map_vocab
+      - manual_workflow
+    admission_basis:
+      - recurring_b3_observation
+      - manual_selective_stabilization_limitation
+      - non_systematic_05_population
+      - future_index_readiness_gap
+    survivability_status: strong
+    ambiguity_status: ambiguity_preserved
+    escalation_boundary:
+      - not_refactor_authorization
+      - not_schema_finalization
+      - not_index_implementation
+      - not_automation_logic
+    future_layer_refs:
+      - layer:06_evidence_router
+      - layer:07_hotspot_verification
+      - layer:08_bounded_decision_emergence
+    index_anchor_hints:
+      - requires_admission_basis_tracking
+      - requires_survivability_status_tracking
+      - requires_vocab_normalization
+      - preserve_manual_selective_origin
+    status: new_b3_cognition_pressure_anchor
+    severity: medium
+    short_description: "05 pressure entries were historically admitted through manual selective stabilization, creating a need for explicit admission basis, survivability and ambiguity tracking."
+    evidence_refs:
+      - evidence:stage_0.3.4B3_manual_passes
+    notes:
+      - "New B3 cognition-pressure anchor. This is pressure on 05 itself, not a runtime code risk."
+
+candidate_backlog:
+  - candidate_id: candidate:future_queue_persistence_model
+    pressure_family: admission_instability_pressure
+    status: deferred
+    reason: "Queue persistence behavior remains unresolved and should not be formalized inside 05 yet."
+  - candidate_id: candidate:future_signal_survivability_scoring
+    pressure_family: admission_instability_pressure
+    status: deferred
+    reason: "Survivability scoring requires additional stabilization before schema locking."
+  - candidate_id: candidate:future_index_anchor_normalization
+    pressure_family: topology_collapse_pressure
+    status: deferred
+    reason: "Future index anchor normalization should wait until 06/07/08 behavior is more stable."
+
+vocab_expansion_debt:
+  status: required_later
+  reason: "repository_map_vocab.yml predates the stabilized 05 admission discipline and should be normalized later without blocking 05 meaning preservation."
+
+suggested_new_vocab_groups:
+  - pressure_family_types
+  - admission_basis_types
+  - survivability_status_types
+  - ambiguity_status_types
+  - escalation_boundary_types
+  - index_anchor_hint_types
+  - future_layer_ref_types
+
+suggested_new_pressure_families:
+  - runtime_density_pressure
+  - bridge_pressure
+  - render_boundary_pressure
+  - synchronization_pressure
+  - future_architecture_pressure
+  - cognition_distortion_pressure
+  - topology_collapse_pressure
+  - admission_instability_pressure
+
+suggested_new_admission_basis_types:
+  - cross_layer_convergence
+  - recurring_b3_observation
+  - source_verified_pressure
+  - future_growth_vector
+  - manual_cognition_guardrail
+  - false_inference_risk
+  - topology_expectation_mismatch
+  - manual_selective_stabilization_limitation
+  - non_systematic_05_population
+
+suggested_new_survivability_status_types:
+  - strong
+  - medium
+  - weak
+  - unresolved
+
+suggested_new_ambiguity_status_types:
+  - clear
+  - ambiguity_preserved
+  - overinference_risk
+
+suggested_new_escalation_boundary_types:
+  - not_refactor_authorization
+  - not_architecture_decision
+  - not_runtime_truth
+  - not_implementation_roadmap
+  - not_existing_framework
+  - not_planned_system
+  - not_index_implementation
+  - not_schema_finalization
+  - not_automation_logic
 
 anti_entropy_notes:
   - "Risks are diagnostic markers, not mutation commands."
-  - "05 supports active cross-map diagnostic anchoring for file inventory, function inventory and topology/surface visibility refs."
+  - "05 supports active cross-map diagnostic anchoring for file inventory, function inventory, topology and surface visibility refs."
   - "risk_refs do not imply automatic refactor permission."
   - "pressure_refs preserve visibility only and must not become implementation roadmap."
   - "Runtime/source files remain authoritative truth; 05 does not own runtime architecture decisions."
-  - "Do not convert 05 into a generic danger registry, governance layer, refactor planner or automation/reasoning engine."
-  - "Do not expand this pass into full risk analysis or speculative redesign archive."
-
-placeholders:
-  future_risk_population: []
+  - "Do not convert 05 into a generic danger registry, governance layer, refactor planner, automation engine, reasoning engine, parser or index runtime."
+  - "Do not expand this layer into full risk analysis or speculative redesign archive."
+  - "New B3 cognition-pressure anchors preserve recurring manual stabilization findings without authorizing schema locking."
+  - "Existing risk_id anchors are preserved for compatibility with 01/02/03/04 references."
+  - "Future 06/07/08 refs are soft routing hints only; they do not authorize higher-layer execution."

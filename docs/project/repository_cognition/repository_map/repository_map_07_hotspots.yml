@@ -1,37 +1,234 @@
 # Repository Map Hotspots Layer
+# Stage 0.3.4B3 — first source-boundary verification container
 
 meta:
-  status: skeleton_only
-  purpose: "Cross-layer diagnostic telemetry for overloaded or high-pressure repository areas."
+  status: first_source_boundary_container_populated
+  purpose: "Проверочный слой для участков кода с высокой плотностью ответственности."
+  stage: "0.3.4B3"
+  authority_model: "Код остаётся главным источником правды. 07 не разрешает разрез кода и не принимает архитектурное решение."
 
 stores:
-  - hotspot_signals
-  - cross_layer_density
-  - semantic_pressure_overlap
-  - synchronization_hotspots
+  - hotspot_records
+  - source_boundary_containers
+  - verification_routes
+  - map_gap_notes
+  - runtime_source_evidence_refs
 
 must_not_store:
   - automatic_refactor_commands
   - autonomous_architecture_decisions
   - speculative_mutation_plans
+  - implementation_roadmap
+  - future_architecture_blueprint
 
-telemetry_rules:
-  - "Hotspots are diagnostic telemetry only."
-  - "Hotspots do not authorize refactors."
-  - "Separate audit required before any mutation decisions."
+layer_rules:
+  - "07 начинается от подтверждённой проблемы из 05."
+  - "07 собирает проверочный контейнер участка перед возможным 08."
+  - "07 не решает, резать код или нет."
+  - "07 не заменяет 02/03/04."
+  - "Если карта неполная, 07 обязана идти в runtime/source."
+  - "Если карта и код расходятся, главным считается код."
 
-record_shape_example:
-  hotspot_item:
-    hotspot_id:
-    related_refs: []
-    signal_types: []
-    pressure_markers: []
-    evidence_refs: []
+hotspots:
+  - hotspot_id: hotspot:js_game:input_camera_loop_density
+    status: active
+
+    source_risk_refs:
+      - risk:input_camera_loop_density
+
+    related_refs:
+      - file:js/game
+
+    source_boundary:
+      source_file: js/game.js
+      source_truth_required: true
+      sections:
+        - BOOTSTRAP / RESIZE
+        - RUNTIME INIT
+        - INPUT EVENT BINDING
+        - POINTER INPUT
+        - TOUCH / PINCH INPUT
+        - CAMERA / ZOOM
+        - COORDINATE MAPPING
+        - TAP ROUTING
+        - MAIN LOOP / UPDATE-RENDER SEQUENCING
+
+    key_function_refs:
+      - fn:js/game:resizeCanvas
+      - fn:js/game:getCanvasPoint
+      - fn:js/game:getPointer
+      - fn:js/game:getTapThreshold
+      - fn:js/game:pointerStart
+      - fn:js/game:pointerMove
+      - fn:js/game:pointerEnd
+      - fn:js/game:touchStart
+      - fn:js/game:touchMove
+      - fn:js/game:touchEnd
+      - fn:js/game:touchDistance
+      - fn:js/game:touchCenter
+      - fn:js/game:wheelZoom
+      - fn:js/game:zoomAt
+      - fn:js/game:resetZoom
+      - fn:js/game:clampCamera
+      - fn:js/game:updateHoveredTile
+      - fn:js/game:screenToWorld
+      - fn:js/game:screenToTile
+      - fn:js/game:worldToScreen
+      - fn:js/game:scaled
+      - fn:js/game:handleTap
+      - fn:js/game:gameLoop
+
+    confirmed_internal_calls:
+      - "resizeCanvas -> updateResponsiveLayout"
+      - "resizeCanvas -> updateUILayout"
+      - "resizeCanvas -> clampCamera"
+      - "resizeCanvas -> createDynamicUI"
+      - "resizeCanvas -> updateUI"
+      - "getPointer -> getCanvasPoint"
+      - "pointerStart -> getPointer"
+      - "pointerStart -> updateHoveredTile"
+      - "pointerMove -> getPointer"
+      - "pointerMove -> updateHoveredTile"
+      - "pointerMove -> getTapThreshold"
+      - "pointerMove -> clampCamera"
+      - "pointerEnd -> getPointer"
+      - "pointerEnd -> getTapThreshold"
+      - "pointerEnd -> handleTap"
+      - "touchStart -> touchDistance"
+      - "touchMove -> touchCenter"
+      - "touchMove -> touchDistance"
+      - "touchMove -> zoomAt"
+      - "touchCenter -> getCanvasPoint"
+      - "wheelZoom -> getPointer"
+      - "wheelZoom -> zoomAt"
+      - "zoomAt -> screenToWorld"
+      - "zoomAt -> clampCamera"
+      - "zoomAt -> updateUI"
+      - "resetZoom -> clampCamera"
+      - "resetZoom -> updateUI"
+      - "resetZoom -> notify"
+      - "updateHoveredTile -> screenToTile"
+      - "screenToTile -> screenToWorld"
+      - "handleTap -> screenToTile"
+      - "handleTap -> getTowerAtTile"
+      - "handleTap -> selectBuildTile"
+      - "handleTap -> selectTower"
+
+    external_runtime_calls:
+      - setupInitialDom
+      - createDynamicUI
+      - updatePower
+      - updateUI
+      - notify
+      - updateResponsiveLayout
+      - updateUILayout
+      - getTowerAtTile
+      - selectBuildTile
+      - selectTower
+      - updateEnemies
+      - updateTowers
+      - updateNotifications
+      - drawMap
+      - drawRoadTiles
+      - drawPathLine
+      - drawBase
+      - drawTowerRange
+      - drawBuildOverlay
+      - drawTowers
+      - drawEnemies
+      - drawWaveStatus
+      - drawSelectedTowerPanel
+      - drawInfoPanel
+      - drawNotifications
+      - drawGameOver
+      - updateDomVisibility
+      - requestAnimationFrame
+
+    state_access:
+      reads:
+        - canvas
+        - window
+        - camera
+        - uiState
+        - uiLayout
+        - gameState
+        - gameSpeed
+        - map
+        - TILE_SIZE
+      mutates:
+        - canvas.width
+        - canvas.height
+        - camera.dragging
+        - camera.moved
+        - camera.startX
+        - camera.startY
+        - camera.lastX
+        - camera.lastY
+        - camera.pinchActive
+        - camera.pinchDistance
+        - camera.pinchZoom
+        - camera.zoom
+        - camera.x
+        - camera.y
+        - uiState.hoveredTile
+        - uiState.selectedTower
+
+    map_layer_refs:
+      - repository_map_01_files.yml
+      - repository_map_02d_runtime_orchestration_functions.yml
+      - repository_map_03g_state_coordinate_hotspot_relationships.yml
+      - repository_map_04h_render_sequence_surfaces.yml
+      - repository_map_05_risks_pressure.yml
+      - repository_map_06_evidence_refs.yml
+
+    map_gap_notes:
+      - "05 risk:input_camera_loop_density currently uses discovery evidence only and should later add evidence:source:game."
+      - "01 file:js/game currently uses discovery evidence only, while runtime source confirms the same role."
+      - "02d contains the relevant functions, but evidence routing is mixed."
+      - "03g intentionally does not store a full call graph."
+      - "07 preserves source_boundary because no generated technical code index exists yet."
+
+    verification_route:
+      required_checks:
+        - "Проверить порядок canvas event binding."
+        - "Проверить pointerdown, pointermove, pointerup, pointercancel."
+        - "Проверить touchstart, touchmove, touchend и pinch state."
+        - "Проверить wheel zoom и zoomAt."
+        - "Проверить camera pan, zoom, reset и clamp."
+        - "Проверить screen/world/tile coordinate mapping."
+        - "Проверить tap routing: build mode, tower selection, selection clear."
+        - "Проверить update phase внутри gameLoop."
+        - "Проверить world/entity render phase."
+        - "Проверить HUD overlay и DOM visibility sync."
+        - "Проверить requestAnimationFrame boundary."
+        - "Проверить все external_runtime_calls, если 08 предложит перенос участка."
+
+      source_truth_checks:
+        - "Сверить source_boundary с js/game.js перед созданием 08."
+        - "Если js/game.js изменился после этой записи, считать маршрут требующим повторной проверки."
+        - "Если 02/03/04 расходятся с js/game.js, главным источником считать js/game.js."
+
+    risk_types:
+      - mixed_responsibility
+      - synchronization_sensitive
+
+    pressure_markers:
+      - input_framework_not_implemented
+      - gesture_framework_not_implemented
+      - camera_subsystem_not_implemented
+      - command_router_not_implemented
+      - scene_manager_not_implemented
+      - game_engine_not_implemented
+      - ecs_not_implemented
+
+    evidence_refs:
+      - evidence:source:game
+      - evidence:discovery:batch01
+
     review_required: true
+    mutation_permission: false
 
-anti_entropy_notes:
-  - "Avoid AI refactor escalation from telemetry alone."
-  - "Keep hotspot records bounded and evidence-linked."
-
-placeholders:
-  hotspots: []
+    notes:
+      - "This 07 record is a verification container, not a refactor decision."
+      - "08 may use this record to propose a bounded extraction candidate."
+      - "Runtime/source verification remains mandatory before any code mutation."

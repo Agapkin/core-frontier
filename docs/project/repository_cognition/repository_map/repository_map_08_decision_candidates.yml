@@ -1,0 +1,205 @@
+# Repository Map Decision Candidates Layer
+# Stage 0.3.4B3 — first draft options layer
+
+meta:
+  status: first_draft_options_layer
+  purpose: "Слой предварительных вариантов решения после 07-проверки."
+  stage: "0.3.4B3"
+  authority_model: "08 не меняет код, не утверждает разрез и не заменяет отдельный execution contract."
+
+stores:
+  - decision_candidates
+  - split_options
+  - map_sync_preview
+  - unresolved_decision_questions
+
+must_not_store:
+  - runtime_mutations
+  - final_refactor_commands
+  - autonomous_architecture_decisions
+  - implementation_execution_plan
+
+layer_rules:
+  - "08 создаётся только после 07."
+  - "08 фиксирует варианты решения, а не финальный выбор."
+  - "08 не разрешает mutation."
+  - "08 ссылается на 07 и не дублирует весь проверочный контейнер."
+  - "08 должен показывать, какие слои карты будут затронуты."
+  - "Финальный разрез требует отдельного bounded execution contract."
+
+decision_candidates:
+  - candidate_id: candidate:js_game:runtime_boundary_split_options
+    status: draft_options_not_approved
+
+    source_hotspot_refs:
+      - hotspot:js_game:input_camera_loop_density
+
+    source_risk_refs:
+      - risk:input_camera_loop_density
+
+    source_file:
+      - js/game.js
+
+    source_verification_refs:
+      - repository_map_07_hotspots.yml
+      - evidence:source:game
+
+    decision_question: "Какие границы js/game.js можно рассматривать для будущего безопасного разреза?"
+
+    current_decision:
+      mutation_permission: false
+      selected_option: none
+      requires_human_approval: true
+      requires_runtime_source_recheck: true
+
+    stable_roots_to_keep_in_game_js:
+      - resizeCanvas
+      - runtime init calls
+      - input event binding order until extraction is approved
+      - gameLoop
+      - final gameLoop startup call
+
+    split_options:
+      - option_id: option:a_input_only
+        title: "Вынести только pointer/touch/wheel input routing"
+        includes:
+          - pointerStart
+          - pointerMove
+          - pointerEnd
+          - touchStart
+          - touchMove
+          - touchEnd
+          - touchDistance
+          - touchCenter
+          - wheelZoom
+        keeps_in_game_js:
+          - camera helpers
+          - coordinate mapping
+          - handleTap
+          - gameLoop
+        benefit:
+          - "Уменьшает плотность input-кода в js/game.js."
+          - "Не трогает сразу camera/coordinate boundary."
+        risk:
+          - "wheelZoom зависит от zoomAt."
+          - "pointerMove зависит от clampCamera."
+          - "touchMove зависит от zoomAt."
+        audit_status: needs_deeper_dependency_check
+
+      - option_id: option:b_camera_coordinate_only
+        title: "Вынести camera + coordinate helpers"
+        includes:
+          - zoomAt
+          - resetZoom
+          - clampCamera
+          - updateHoveredTile
+          - screenToWorld
+          - screenToTile
+          - worldToScreen
+          - scaled
+          - getCanvasPoint
+          - getPointer
+        keeps_in_game_js:
+          - event binding
+          - pointer/touch handlers
+          - handleTap
+          - gameLoop
+        benefit:
+          - "Создаёт отдельную техническую границу camera/coordinates."
+          - "Может стать будущей основой для code index anchors."
+        risk:
+          - "coordinate mapping используется input и потенциально render-сценарием."
+          - "getPointer/getCanvasPoint спорно относятся и к input, и к coordinate."
+        audit_status: needs_cross_usage_check
+
+      - option_id: option:c_input_camera_coordinate_bundle
+        title: "Вынести input + camera + coordinate как один связанный runtime boundary"
+        includes:
+          - pointerStart
+          - pointerMove
+          - pointerEnd
+          - touchStart
+          - touchMove
+          - touchEnd
+          - touchDistance
+          - touchCenter
+          - wheelZoom
+          - zoomAt
+          - resetZoom
+          - clampCamera
+          - updateHoveredTile
+          - screenToWorld
+          - screenToTile
+          - worldToScreen
+          - scaled
+          - getCanvasPoint
+          - getPointer
+          - getTapThreshold
+        keeps_in_game_js:
+          - resizeCanvas
+          - runtime init
+          - handleTap
+          - gameLoop
+        benefit:
+          - "Снижает риск разрыва связей input-camera-coordinate."
+          - "Даёт крупный, но понятный boundary."
+        risk:
+          - "Может быть слишком большой первый разрез."
+          - "Сложнее проверить после переноса без generated code index."
+        audit_status: candidate_for_later_not_first_mutation
+
+      - option_id: option:d_tap_routing_separate_later
+        title: "Не выносить handleTap на первом шаге"
+        includes_later:
+          - handleTap
+        reason:
+          - "handleTap связан с placement, tower selection и selected object flow."
+          - "Его нельзя автоматически смешивать с input/camera."
+        benefit:
+          - "Снижает риск затронуть gameplay/selection логику."
+        risk:
+          - "input handlers всё равно будут вызывать handleTap из game.js."
+        audit_status: recommended_first_pass_constraint
+
+    selection_status:
+      selected_option: none
+      reason: "08 фиксирует варианты, не выбирает финальный разрез."
+
+    map_sync_preview:
+      affected_layers:
+        - repository_map_01_files.yml
+        - repository_map_02d_runtime_orchestration_functions.yml
+        - repository_map_03g_state_coordinate_hotspot_relationships.yml
+        - repository_map_04h_render_sequence_surfaces.yml
+        - repository_map_05_risks_pressure.yml
+        - repository_map_06_evidence_refs.yml
+        - repository_map_07_hotspots.yml
+      required_after_split:
+        - "Добавить новые file refs."
+        - "Перенести function refs из file:js/game в новые file refs."
+        - "Обновить relationship refs."
+        - "Обновить evidence refs."
+        - "Проверить, сохраняется ли risk:input_camera_loop_density или распадается на новые risks."
+        - "Обновить 07 hotspot после фактического разреза."
+
+    required_before_any_runtime_mutation:
+      - "Повторно сверить source_boundary из 07 с js/game.js."
+      - "Проверить external_runtime_calls из 07."
+      - "Проверить state_access из 07."
+      - "Проверить cross-file usage выбранных функций."
+      - "Определить, остаётся ли event binding в js/game.js или переносится."
+      - "Подготовить отдельный bounded execution contract."
+
+    unresolved_questions:
+      - "Нужен ли сначала generated code index перед runtime mutation?"
+      - "Выносить input отдельно или camera/coordinate отдельно?"
+      - "Оставлять ли event binding в game.js как orchestration root?"
+      - "Где должна жить coordinate mapping, если её используют и input, и render?"
+      - "Когда handleTap должен стать отдельным candidate?"
+
+    evidence_refs:
+      - evidence:source:game
+      - evidence:discovery:batch01
+
+    review_required: true
+    mutation_permission: false
