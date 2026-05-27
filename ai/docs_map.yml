@@ -31,7 +31,7 @@ primary_entrypoints:
   active_plan:
     - docs/project/roadmap/active_plan.md
   current_stage:
-    - docs/project/stage_03_4.md
+    - docs/project/stage_03_4B4_pre_index_cleanup.md
   governance_passes:
     - docs/project/stage_03_2_pass_01.md
     - docs/project/stage_03_2_pass_b.md
@@ -41,6 +41,10 @@ primary_entrypoints:
     - docs/project/stage_03_4A_mutation_classes.md
   stage_03_4B:
     - docs/project/stage_03_4B_repository_archetypes.md
+    - docs/project/stage_03_4B1_relationship_layer_architecture_design.md
+    - docs/project/stage_03_4B2_surface_layer_planning_contract.md
+    - docs/project/stage_03_4B3_closure_and_pre_index_transition_report.md
+    - docs/project/stage_03_4B4_pre_index_cleanup.md
   synchronization_protocols:
     - docs/project/architecture/synchronization_protocols.md
 
@@ -122,10 +126,26 @@ repository_map_package:
   - docs/project/repository_cognition/repository_map/repository_map_02f_canvas_render_functions.yml
   - docs/project/repository_cognition/repository_map/repository_map_02g_panel_overlay_functions.yml
   - docs/project/repository_cognition/repository_map/repository_map_03_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03a_infrastructure_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03b_runtime_load_order_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03c_runtime_lifecycle_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03d_validation_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03e_ui_callback_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03f_render_boundary_relationships.yml
+  - docs/project/repository_cognition/repository_map/repository_map_03g_state_coordinate_hotspot_relationships.yml
   - docs/project/repository_cognition/repository_map/repository_map_04_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04a_runtime_shell_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04b_dom_control_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04c_dom_panel_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04d_canvas_world_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04e_canvas_entity_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04f_canvas_hud_overlay_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04g_css_authority_surfaces.yml
+  - docs/project/repository_cognition/repository_map/repository_map_04h_render_sequence_surfaces.yml
   - docs/project/repository_cognition/repository_map/repository_map_05_risks_pressure.yml
   - docs/project/repository_cognition/repository_map/repository_map_06_evidence_refs.yml
   - docs/project/repository_cognition/repository_map/repository_map_07_hotspots.yml
+  - docs/project/repository_cognition/repository_map/repository_map_08_decision_candidates.yml
   - docs/project/repository_cognition/repository_map/repository_map_population_workflow.md
 
 stage_history:
@@ -155,15 +175,33 @@ stage_history:
   - docs/project/stage_03_4.md
   - docs/project/stage_03_4A_mutation_classes.md
   - docs/project/stage_03_4B_repository_archetypes.md
+  - docs/project/stage_03_4B1_relationship_layer_architecture_design.md
+  - docs/project/stage_03_4B1_final_stabilization_audit.md
+  - docs/project/stage_03_4B1_pr_summary.md
+  - docs/project/stage_03_4B2_surface_layer_planning_contract.md
+  - docs/project/stage_03_4B2_surface_split_audit.md
+  - docs/project/stage_03_4B2_design_doctrine_notes.md
+  - docs/project/stage_03_4B2_debt_register.md
+  - docs/project/stage_03_4B2_closure_report.md
+  - docs/project/stage_03_4B3_preparatory_audit_notes.md
+  - docs/project/stage_03_4B3_diagnostic_admission_stabilization_and_05_pressure_layer_maturation.md
+  - docs/project/stage_03_4B3_manual_signal_oriented_diagnostic_workflow_stabilization.md
+  - docs/project/stage_03_4B3_pressure_archetype_stabilization.md
+  - docs/project/stage_03_4B3_05_07_08_practical_cycle.md
+  - docs/project/stage_03_4B3_repository_map_decision_contract.md
+  - docs/project/stage_03_4B3_debt_register.md
+  - docs/project/stage_03_4B3_pre_index_stabilization_debt.md
+  - docs/project/stage_03_4B3_closure_and_pre_index_transition_report.md
+  - docs/project/stage_03_4B4_pre_index_cleanup.md
   - docs/project/stage_03_developer_report_01.md
 
 current_status_markers:
-  current_stage: "Stage 03.4 / Stage 0.3.4B1 transition"
-  current_phase: "AI navigation synchronization with filesystem truth layer and repository cognition packages"
-  ai_navigation_sync_status: "completed"
+  current_stage: "Stage 03.4B4 pre-index cleanup"
+  current_phase: "bounded AI navigation synchronization and pre-index stabilization preparation"
+  ai_navigation_sync_status: "active in Stage 03.4B4 bounded synchronization pass"
   filesystem_truth_layer_status: "operational"
-  repository_manifest_status: "auto_synced canonical main filesystem tree"
-  repository_map_relationships_status: "active working branch exists; not merged into main"
+  repository_manifest_status: "canonical filesystem tree visibility layer; branch-local additions may require refresh"
+  repository_map_relationships_status: "B1 relationship layer lineage merged and cleanup-normalized"
 
 navigation_boundaries:
   repository_manifest_yml: "physical filesystem tree"
