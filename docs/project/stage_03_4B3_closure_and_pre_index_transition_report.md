@@ -1,4 +1,4 @@
-stage_0.3.4B3_closure_and_pre_index_transition_report.md
+stage_03_4B3_closure_and_pre_index_transition_report.md
 
 Stage 0.3.4B3 — Closure & Pre-Index Transition Report
 
@@ -41,7 +41,7 @@ This document records:
 
 B3 originally opened through:
 
-stage_0.3.4B3_repository_map_decision_contract.md
+stage_03_4B3_repository_map_decision_contract.md
 
 The original operational goal of B3 was NOT:
 

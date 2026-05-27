@@ -39,7 +39,7 @@ across multiple repository archetypes.
 
 This document directly continues:
 
-stage_0.3.4B3_pressure_archetype_stabilization.md
+stage_03_4B3_pressure_archetype_stabilization.md
 
 The previous document stabilized:
 
