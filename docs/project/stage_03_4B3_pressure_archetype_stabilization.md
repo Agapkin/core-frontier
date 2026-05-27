@@ -1,4 +1,4 @@
-stage_0.3.4B3_pressure_archetype_stabilization.md
+stage_03_4B3_pressure_archetype_stabilization.md
 
 Stage 0.3.4B3 — Pressure Archetype Stabilization
 

@@ -1,4 +1,4 @@
-stage_0.3.4B3_diagnostic_admission_stabilization_and_05_pressure_layer_maturation.md
+stage_03_4B3_diagnostic_admission_stabilization_and_05_pressure_layer_maturation.md
 
 Stage 0.3.4B3 — Diagnostic Admission Stabilization & 05 Pressure Layer Maturation
 
@@ -57,8 +57,8 @@ non-finalized.
 
 This document directly continues:
 
-* stage_0.3.4B3_pressure_archetype_stabilization.md
-* stage_0.3.4B3_manual_signal_oriented_diagnostic_workflow_stabilization.md
+* stage_03_4B3_pressure_archetype_stabilization.md
+* stage_03_4B3_manual_signal_oriented_diagnostic_workflow_stabilization.md
 
 Previous stabilization artifacts established:
 
